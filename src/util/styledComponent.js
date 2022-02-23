@@ -9,3 +9,7 @@ export const VerticalCenterAlignDiv = styled("div")`
 export const CircleImg = styled("img")`
   border-radius: 50%;
 `;
+
+export const GrayBackground = styled('div')`
+  background-color: #F8F8F8;
+`;
