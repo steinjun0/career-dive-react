@@ -1,5 +1,4 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignDiv } from '../../util/styledComponent'
 
 
 const BottomEventCardWrapper = styled('div')`
