@@ -3,7 +3,8 @@ import './App.css';
 import Gnb from './component/gnb'
 import HomeBanner from './component/home/HomeBanner';
 import JobCategoryGroup from './component/home/JobCategoryGroup'
-import { GrayBackground } from './util/styledComponent';
+import FamousMentorGroup from './component/home/FamousMentorGroup'
+import { GrayBackground, MaxWidthDiv } from './util/styledComponent';
 
 function App() {
   return (
@@ -11,7 +12,10 @@ function App() {
       <Gnb />
       <HomeBanner></HomeBanner>
       <GrayBackground>
-        <JobCategoryGroup></JobCategoryGroup>
+        <MaxWidthDiv>
+          <JobCategoryGroup></JobCategoryGroup>
+          <FamousMentorGroup></FamousMentorGroup>
+        </MaxWidthDiv>
       </GrayBackground>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />

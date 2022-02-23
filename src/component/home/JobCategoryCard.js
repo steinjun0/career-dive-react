@@ -1,19 +1,5 @@
 import { styled } from "@mui/material";
 import { VerticalCenterAlignDiv } from '../../util/styledComponent'
-import design from '../../assets/icon/jobCategory/design.svg'
-
-const GnbFullWidthWrapper = styled("div")`
-      position: relative;
-      display:flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      height: 80px;
-      width: 100%;
-      background-color: white;
-      border-bottom: 1px solid #E0E0E0;
-      z-index: 3;
-    `;
 
 const JobCategoryCardWrapper = styled(VerticalCenterAlignDiv)`
   width: 276px;

@@ -11,28 +11,18 @@ import media from '../../assets/icon/jobCategory/media.svg'
 import plan from '../../assets/icon/jobCategory/plan.svg'
 import sales from '../../assets/icon/jobCategory/sales.svg'
 
-
-const GnbFullWidthWrapper = styled("div")`
-      position: relative;
-      display:flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      height: 80px;
-      width: 100%;
-      background-color: white;
-      border-bottom: 1px solid #E0E0E0;
-      z-index: 3;
-    `;
-
 const JobCategoryGroupWrapper = styled(VerticalCenterAlignDiv)`
     flex-direction: column;
     padding-top: 74px;
+    width: 100%;
 `;
 
 const JobCategoryCardLine = styled(VerticalCenterAlignDiv)`
   align-items: center;
   margin-bottom: 25px;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
 `;
 
 function JobCategoryGroup() {
