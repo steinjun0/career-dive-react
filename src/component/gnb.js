@@ -7,9 +7,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../assets/img/logo/careerDiveLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 
-function Gnb() {
-  const GnbFullWidthWrapper = styled("div")`
-      position: absolute;
+const GnbFullWidthWrapper = styled("div")`
+      position: relative;
       display:flex;
       flex-direction: row;
       justify-content: center;
@@ -17,9 +16,11 @@ function Gnb() {
       height: 80px;
       width: 100%;
       background-color: white;
+      border-bottom: 1px solid #E0E0E0;
+      z-index: 3;
     `;
 
-  const GnbWrapper = styled(VerticalCenterAlignDiv)`
+const GnbWrapper = styled(VerticalCenterAlignDiv)`
     display:flex;
     flex-direction: row;
     justify-content: center;
@@ -29,11 +30,11 @@ function Gnb() {
     background-color: white;
   `;
 
-  const CenterGnb = styled(VerticalCenterAlignDiv)`
+const CenterGnb = styled(VerticalCenterAlignDiv)`
     position: absolute;
   `;
 
-  const CenterMenu = styled("ul")`
+const CenterMenu = styled("ul")`
     display:flex;
     flex-direction: row;
     justify-content: space-between;
@@ -48,11 +49,11 @@ function Gnb() {
     background-color: white;
   `;
 
-  const LeftTopGnb = styled(VerticalCenterAlignDiv)`
+const LeftTopGnb = styled(VerticalCenterAlignDiv)`
     margin-right: auto;
   `;
 
-  const RightTopGnb = styled(VerticalCenterAlignDiv)`
+const RightTopGnb = styled(VerticalCenterAlignDiv)`
     display:flex;
     flex-direction: row;
     justify-content: space-between;
@@ -64,14 +65,16 @@ function Gnb() {
     background-color: white;
   `;
 
-  const BlueSpan = styled('span')`
+const BlueSpan = styled('span')`
     color: #698CFF;
   `;
 
-  const ProfileImg = styled(CircleImg)`
+const ProfileImg = styled(CircleImg)`
     width: 48px;
   `;
 
+
+function Gnb() {
   return (
     <GnbFullWidthWrapper>
       <GnbWrapper>

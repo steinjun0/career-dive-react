@@ -1,11 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import Gnb from './component/gnb'
+import HomeBanner from './component/home/HomeBanner';
 
 function App() {
   return (
     <div className="App">
       <Gnb />
+      <HomeBanner></HomeBanner>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
