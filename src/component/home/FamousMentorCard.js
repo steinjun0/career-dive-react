@@ -60,17 +60,17 @@ const RatingWrapper = styled(VerticalCenterAlignDiv)`
     justify-content: end;
 `;
 
-function FamousMentorCard({ icon, name }) {
+function FamousMentorCard({ company = '기업명', department = '부서명', job = '직무', tag = '현직자', name = '이름', rating = 4.5 }) {
     return (
         <FamousMentorCardWrapper>
-            <Company>기업명</Company>
-            <Department>부서명</Department>
-            <Job>직무</Job>
+            <Company>{company}</Company>
+            <Department>{department}</Department>
+            <Job>{job}</Job>
             <ProfileImg src={testMentorImage}></ProfileImg>
-            <Tag>현직자</Tag>
-            <Name>다슬기</Name>
+            <Tag>{tag}</Tag>
+            <Name>{name}</Name>
             <RatingWrapper>
-                <Rating value={4.5} ></Rating>
+                <Rating value={rating} ></Rating>
             </RatingWrapper>
         </FamousMentorCardWrapper>
     );
