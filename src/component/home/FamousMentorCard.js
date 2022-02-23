@@ -12,6 +12,7 @@ const FamousMentorCardWrapper = styled(VerticalCenterAlignDiv)`
     height: 400px;
     background-color: white;
     border-radius: 8px;
+    box-shadow: 10px 20px 40px rgba(130, 130, 130, 0.1);
 `;
 
 const Company = styled('span')`

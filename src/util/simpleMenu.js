@@ -10,12 +10,13 @@ const MenuButton = styled(Button)`
     color: #bdbdbd;
 `
 
-function SimpleMenu({ title, menuItems }) {
+function SimpleMenu({ title, menuItems, func = () => { } }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        func()
     };
     const handleClose = () => {
         setAnchorEl(null);
