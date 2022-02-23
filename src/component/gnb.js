@@ -1,0 +1,100 @@
+import { styled } from "@mui/material";
+import { VerticalCenterAlignDiv, CircleImg } from '../util/styledComponent';
+
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import MenuIcon from '@mui/icons-material/Menu';
+
+import logo from '../assets/img/logo/careerDiveLogo.svg';
+import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
+
+function Gnb() {
+  const GnbFullWidthWrapper = styled("div")`
+      position: absolute;
+      display:flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      height: 80px;
+      width: 100%;
+      background-color: white;
+    `;
+
+  const GnbWrapper = styled(VerticalCenterAlignDiv)`
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 80px;
+    width: 100%;
+    max-width: 1194px;
+    background-color: white;
+  `;
+
+  const CenterGnb = styled(VerticalCenterAlignDiv)`
+    position: absolute;
+  `;
+
+  const CenterMenu = styled("ul")`
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 700;
+    height: 44px;
+    width: 270px;
+    max-width: 1194px;
+    background-color: white;
+  `;
+
+  const LeftTopGnb = styled(VerticalCenterAlignDiv)`
+    margin-right: auto;
+  `;
+
+  const RightTopGnb = styled(VerticalCenterAlignDiv)`
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 41px;
+    width: 251px;
+    margin-left: auto;
+    padding-left: 16px;
+    max-width: 1194px;
+    background-color: white;
+  `;
+
+  const BlueSpan = styled('span')`
+    color: #698CFF;
+  `;
+
+  const ProfileImg = styled(CircleImg)`
+    width: 48px;
+  `;
+
+  return (
+    <GnbFullWidthWrapper>
+      <GnbWrapper>
+        <LeftTopGnb>
+          <img src={logo} alt="커리어 다이브" />
+        </LeftTopGnb>
+        <CenterGnb>
+          <CenterMenu>
+            <li>내 상담</li>
+            <li>찜한 멘토</li>
+            <li>상담 후기</li>
+          </CenterMenu>
+        </CenterGnb>
+        <RightTopGnb>
+          <BlueSpan>멘토 되기</BlueSpan>
+          <NotificationsNoneIcon></NotificationsNoneIcon>
+          <MenuIcon></MenuIcon>
+          <ProfileImg src={testProfileImage} alt="" />
+        </RightTopGnb>
+
+      </GnbWrapper>
+    </GnbFullWidthWrapper>
+  );
+}
+
+export default Gnb;
