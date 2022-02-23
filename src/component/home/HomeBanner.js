@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 import { VerticalCenterAlignDiv } from '../../util/styledComponent';
 
-import SimpleMenu from "../../util/simpleMenu";
+import SimpleMenu from "../../util/SimpleMenu";
 
 import BannerIdCard1 from '../../assets/img/home/BannerIDCard-1.png'
 import BannerIdCard2 from '../../assets/img/home/BannerIDCard-2.png'
