@@ -39,7 +39,7 @@ const SecondBannerIdCard = styled('img')`
   `;
 
 const SearchBar = styled(VerticalCenterAlignDiv)`
-    width: 686px;
+    width: 652px;
     height: 56px;
     justify-content: space-between;
     margin-top: 62px; 

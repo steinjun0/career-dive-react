@@ -67,6 +67,7 @@ const RightTopGnb = styled(VerticalCenterAlignDiv)`
 
 const BlueSpan = styled('span')`
     color: #698CFF;
+    font-weight: 700;
   `;
 
 const ProfileImg = styled(CircleImg)`
