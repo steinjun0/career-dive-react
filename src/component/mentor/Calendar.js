@@ -87,12 +87,12 @@ const AvailableTime = styled(VerticalCenterAlignDiv)`
 function Calendar({ name = '', discription = '' }) {
   const year = 2022;
   const month = 3;
-  const originData = [{ date: 9, availableTime: ['09:00', '09:40'] },
+  const originData = [{ date: 9, availableTime: [['09:00', '09:40']] },
   { date: 10, availableTime: [['09:00', '09:40'], ['12:00', '13:00'], ['13:30', '13:50']] },
   { date: 11, availableTime: [['09:00', '09:40'], ['17:00', '19:00']] },
   { date: 16, availableTime: [['09:00', '09:40'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
-  { date: 17, availableTime: ['09:00', '09:40'] },
-  { date: 18, availableTime: ['09:00', '09:40'] },
+  { date: 17, availableTime: [['09:00', '09:40']] },
+  { date: 18, availableTime: [['09:00', '09:40']] },
   ]
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
   const availableDates = [9, 10, 11, 16, 17, 18];
