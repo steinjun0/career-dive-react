@@ -8,22 +8,24 @@ import MenuItem from '@mui/material/MenuItem';
 
 const MenuButton = styled(Button)`
     color: #bdbdbd;
+    font-weight: ${props => props.fontWeight ? props.fontWeight : 0}
 `
 
-function SimpleMenu({ title, menuItems, func = () => { } }) {
-
+function SimpleMenu({ title, menuItems = [], style = {}, setState = () => { }, endIcon = undefined }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-        func()
     };
-    const handleClose = () => {
+    const handleClose = (element) => {
+        setState(element)
         setAnchorEl(null);
     };
 
     return (<div>
         <MenuButton
+            style={style}
+            endIcon={endIcon}
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -41,7 +43,7 @@ function SimpleMenu({ title, menuItems, func = () => { } }) {
             }}
         >
             {menuItems.map((element, index) =>
-                <MenuItem key={index} onClick={handleClose}>{element}</MenuItem>
+                <MenuItem key={index} onClick={() => { handleClose(element) }}>{element}</MenuItem>
             )}
         </Menu>
     </div>);
