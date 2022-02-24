@@ -14,6 +14,19 @@ export const VerticalFlex = styled(Flex)`
 export const VerticalCenterAlignDiv = styled(Flex)`
   flex-direction: row;
   align-items: center;
+  height: 100%;
+`;
+
+export const FullWidthWrapper = styled(Flex)`
+  justify-content: center;
+  width: 100%;
+`;
+
+export const CenterWidthWrapper = styled(Flex)`
+  flex-direction: column;
+  align-items: start;
+  max-width: 1194px;
+  width: 100%;
 `;
 
 export const CircleImg = styled("img")`

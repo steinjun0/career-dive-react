@@ -1,5 +1,9 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignDiv } from "../../util/styledComponent";
+import {
+  VerticalCenterAlignDiv,
+  FullWidthWrapper,
+  CenterWidthWrapper,
+} from "../../util/styledComponent";
 
 import SimpleMenu from "../../util/SimpleMenu";
 
@@ -7,21 +11,13 @@ import BannerIdCard1 from "../../assets/img/home/BannerIDCard-1.png";
 import BannerIdCard2 from "../../assets/img/home/BannerIDCard-2.png";
 import BannerSearchIcon from "../../assets/icon/bannerSearch.svg";
 
-const HomeBannerFullWidthWrapper = styled("div")`
-  display: flex;
-  justify-content: center;
-  width: 100%;
+const HomeBannerFullWidthWrapper = styled(FullWidthWrapper)`
   height: 600px;
   background-color: white;
 `;
-const HomeBannerWrapper = styled("div")`
+const HomeBannerWrapper = styled(CenterWidthWrapper)`
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  max-width: 1194px;
   height: 640px;
-  width: 100%;
   overflow-x: clip;
 `;
 
