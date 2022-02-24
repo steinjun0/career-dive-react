@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
 
 export const colorCareerDiveBlue = "#698CFF";
@@ -29,4 +30,9 @@ export const MaxWidthDiv = styled(Flex)`
   flex-direction: column;
   max-width: 1194px;
   width: 100%;
+`;
+
+export const LinkNoDeco = styled(Link)`
+  text-decoration: none;
+  color: black;
 `;

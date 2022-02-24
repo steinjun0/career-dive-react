@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
 import { VerticalCenterAlignDiv, CircleImg } from '../util/styledComponent';
 
@@ -7,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../assets/img/logo/careerDiveLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 
-const GnbFullWidthWrapper = styled("div")`
+const GnbFullWidthWrapper = styled("nav")`
       position: relative;
       display:flex;
       flex-direction: row;
