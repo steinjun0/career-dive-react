@@ -1,12 +1,8 @@
 import { styled } from "@mui/material";
-import Button from "@mui/material/Button";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import {
   VerticalCenterAlignDiv,
-  CircleImg,
   VerticalFlex,
-  colorCareerDiveBlue,
 } from "../util/styledComponent";
 
 const CardWrapper = styled(VerticalFlex)`

@@ -1,12 +1,11 @@
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material";
-import Button from "@mui/material/Button";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import Card from '../../util/Card'
+import SimpleMenu from '../../util/SimpleMenu'
 
 import {
   VerticalCenterAlignDiv,
-  CircleImg,
   VerticalFlex,
   colorCareerDiveBlue,
   colorTextLight,
@@ -14,7 +13,8 @@ import {
 } from "../../util/styledComponent";
 
 import { getDifferenceMinutes } from '../../util/util'
-import { useState } from "react";
+
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 const DateWrapper = styled(VerticalFlex)`
   border-bottom: 1px solid #CFD6E0;
@@ -41,7 +41,7 @@ const DayWrapper = styled(Flex)`
   justify-content: space-between;
   font-weight: 700;
   color: black;
-  margin-top: 16px;
+  margin-top: 10px;
 `;
 
 const DayBox = styled(DateBox)`
@@ -84,9 +84,17 @@ const AvailableTime = styled(VerticalCenterAlignDiv)`
   margin-top: 16px;
 `;
 
-function Calendar({ name = '', discription = '' }) {
+const YearMonthMenuWrapper = styled(VerticalCenterAlignDiv)`
+ justify-content: center;
+ margin-top: 10px;
+`
+
+const YearMonthMenu = styled(SimpleMenu)`
+`;
+
+function Calendar() {
   const year = 2022;
-  const month = 3;
+  const [month, setMonth] = useState(`${new Date().getMonth()}월`);
   const originData = [{ date: 9, availableTime: [['09:00', '09:40']] },
   { date: 10, availableTime: [['09:00', '09:40'], ['12:00', '13:00'], ['13:30', '13:50']] },
   { date: 11, availableTime: [['09:00', '09:40'], ['17:00', '19:00']] },
@@ -138,13 +146,30 @@ function Calendar({ name = '', discription = '' }) {
   }
 
 
-  const dates = getDatesOfMonth(year, month)
+  const [dates, setDates] = useState(getDatesOfMonth(year, month))
+
+  useEffect(() => {
+    if (month.length !== 0) {
+      setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
+    }
+  }, [month])
+
   return (
     <Card title={'상담 가능 일정'}>
       <CalendarWrapper>
+        <YearMonthMenuWrapper>
+          <YearMonthMenu
+            style={{ fontWeight: 700, fontSize: 16, color: 'black' }}
+            title={`2022년 ${month}`}
+            menuItems={['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']}
+            setState={setMonth}
+            endIcon={<KeyboardArrowDownIcon />}></YearMonthMenu>
+        </YearMonthMenuWrapper>
+
         <DayWrapper>
           {dayInKorean.map((day, dayIndex) => <DayBox key={`${dayIndex}`}>{day}</DayBox>)}
         </DayWrapper>
+
         <DateWrapper>
           {dates.map((week, weekIndex) =>
             <WeekBox key={weekIndex}>
@@ -167,7 +192,7 @@ function Calendar({ name = '', discription = '' }) {
         </DateWrapper>
         <AvailableTimeOutSideWrapper>
           <DateTitle>
-            2022년 1월 9일
+            2022년 {month} {selectedDate}일
           </DateTitle>
           <AvailableTimeWrapper>
             {availableTime.map((timeRange, index) =>
