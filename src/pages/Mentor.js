@@ -3,9 +3,12 @@ import { styled } from "@mui/material";
 import {
   FullWidthWrapper,
   CenterWidthWrapper,
+  GrayBackground,
+  MaxWidthDiv
 } from "../util/styledComponent";
 
 import MentorProfile from '../component/mentor/Profile'
+import MentorCalendar from '../component/mentor/Calendar'
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -13,6 +16,10 @@ const MetorProfileBanner = styled(CenterWidthWrapper)`
   align-items: center;
 `;
 
+const MentorCalendarWrapper = styled('div')`
+  margin-top: 30px;
+  margin-bottom: 30px;
+`;
 
 function Mentor() {
   return (
@@ -21,6 +28,13 @@ function Mentor() {
         <MetorProfileBanner>
           <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
         </MetorProfileBanner>
+        <GrayBackground>
+          <MaxWidthDiv>
+            <MentorCalendarWrapper>
+              <MentorCalendar></MentorCalendar>
+            </MentorCalendarWrapper>
+          </MaxWidthDiv>
+        </GrayBackground>
       </FullWidthWrapper>
     </div>
   );

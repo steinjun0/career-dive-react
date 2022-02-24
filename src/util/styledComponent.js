@@ -17,8 +17,9 @@ export const VerticalCenterAlignDiv = styled(Flex)`
   height: 100%;
 `;
 
-export const FullWidthWrapper = styled(Flex)`
+export const FullWidthWrapper = styled(VerticalFlex)`
   justify-content: center;
+  align-items: center;
   width: 100%;
 `;
 
@@ -37,6 +38,7 @@ export const GrayBackground = styled(Flex)`
   background-color: #f8f8f8;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 export const MaxWidthDiv = styled(Flex)`

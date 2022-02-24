@@ -50,6 +50,7 @@ const Tag = styled(VerticalCenterAlignDiv)`
   padding: 2px 4px;
   font-size: 12px;
   margin: 24px auto 6px auto;
+  height: 20px;
 `;
 
 const Name = styled("span")`
