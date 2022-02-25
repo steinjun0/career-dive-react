@@ -31,6 +31,9 @@ const CardsWrapper = styled(Flex)`
   margin-bottom: 154px;
 `;
 
+const IntroductionWrapper = styled(Flex)`
+  margin-bottom: 30px;
+`;
 
 function Mentor() {
   return (
@@ -46,21 +49,21 @@ function Mentor() {
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>
                 <Grid container item xs={12} md={6}>
-                  <Grid item xs={12} marginBottom={'30px'}>
+                  <Grid item xs={12} >
                     <HelpCategory></HelpCategory>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <MentorCalendar></MentorCalendar>
+                    <MentorCalendarWrapper>
+                      <MentorCalendar></MentorCalendar>
+                    </MentorCalendarWrapper>
                   </Grid>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Grid container item spacing={2}>
                     <Grid item xs={12}>
+                      <IntroductionWrapper>
+                        <Introduction></Introduction>
+                      </IntroductionWrapper>
                       <Introduction></Introduction>
                     </Grid>
-                    {/* <Grid item xs={12}>
-                    <Introduction></Introduction>
-                  </Grid> */}
                   </Grid>
                 </Grid>
               </Grid>
