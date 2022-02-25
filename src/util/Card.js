@@ -21,7 +21,7 @@ const TitleWrapper = styled(VerticalCenterAlignFlex)`
 `;
 
 const TitleTail = styled(VerticalCenterAlignFlex)`
-
+  margin-left: auto;
 `
 
 function Card(props) {
@@ -29,7 +29,9 @@ function Card(props) {
     <CardWrapper width={582}>
       <TitleWrapper noDivider={props.noDivider}>
         <span>{props.title}</span>
-
+        <TitleTail>
+          {props.titleTail}
+        </TitleTail>
       </TitleWrapper>
       {props.children}
     </CardWrapper>
