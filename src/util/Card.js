@@ -16,15 +16,20 @@ const CardWrapper = styled(VerticalFlex)`
 const TitleWrapper = styled(VerticalCenterAlignDiv)`
   font-size: 20px;
   font-weight: 700;
-  border-bottom: 1px solid #CFD6E0;
+  ${props => props.noDivider ? '' : 'border-bottom: 1px solid #CFD6E0;'}
   padding-bottom: 16px;
 `;
+
+const TitleTail = styled(VerticalCenterAlignDiv)`
+
+`
 
 function Card(props) {
   return (
     <CardWrapper width={582}>
-      <TitleWrapper>
+      <TitleWrapper noDivider={props.noDivider}>
         <span>{props.title}</span>
+
       </TitleWrapper>
       {props.children}
     </CardWrapper>

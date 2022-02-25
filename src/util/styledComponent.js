@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
 
 export const colorCareerDiveBlue = "#698CFF";
+export const colorCareerDivePink = "rgba(226, 93, 125, 1)"
 export const colorTextLight = "#898989";
 
 export const Flex = styled("div")`

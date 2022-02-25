@@ -9,6 +9,7 @@ import {
 
 import MentorProfile from '../component/mentor/Profile'
 import MentorCalendar from '../component/mentor/Calendar'
+import HelpCategory from "../component/mentor/HelpCategory";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -33,6 +34,7 @@ function Mentor() {
             <MentorCalendarWrapper>
               <MentorCalendar></MentorCalendar>
             </MentorCalendarWrapper>
+            <HelpCategory></HelpCategory>
           </MaxWidthDiv>
         </GrayBackground>
       </FullWidthWrapper>
