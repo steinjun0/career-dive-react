@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignDiv } from '../../util/styledComponent'
+import { VerticalCenterAlignFlex } from '../../util/styledComponent'
 import JobCategoryCard from './JobCategoryCard'
 
 import design from '../../assets/icon/jobCategory/design.svg'
@@ -11,13 +11,13 @@ import media from '../../assets/icon/jobCategory/media.svg'
 import plan from '../../assets/icon/jobCategory/plan.svg'
 import sales from '../../assets/icon/jobCategory/sales.svg'
 
-const JobCategoryGroupWrapper = styled(VerticalCenterAlignDiv)`
+const JobCategoryGroupWrapper = styled(VerticalCenterAlignFlex)`
     flex-direction: column;
     padding-top: 74px;
     width: 100%;
 `;
 
-const JobCategoryCardLine = styled(VerticalCenterAlignDiv)`
+const JobCategoryCardLine = styled(VerticalCenterAlignFlex)`
   align-items: center;
   margin-bottom: 25px;
   justify-content: space-between;

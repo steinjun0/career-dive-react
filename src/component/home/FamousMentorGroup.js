@@ -1,18 +1,18 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignDiv } from "../../util/styledComponent";
+import { VerticalCenterAlignFlex } from "../../util/styledComponent";
 import FamousMentorCard from "./FamousMentorCard";
 
-const FamousMentorGroupWrapper = styled(VerticalCenterAlignDiv)`
+const FamousMentorGroupWrapper = styled(VerticalCenterAlignFlex)`
   flex-direction: column;
   align-items: start;
 `;
 
-const FamousMentorCardsWrapper = styled(VerticalCenterAlignDiv)`
+const FamousMentorCardsWrapper = styled(VerticalCenterAlignFlex)`
   justify-content: space-between;
   width: 100%;
 `;
 
-const TopWrapper = styled(VerticalCenterAlignDiv)`
+const TopWrapper = styled(VerticalCenterAlignFlex)`
   justify-content: space-between;
   width: 100%;
 `;

@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 
 import {
-  VerticalCenterAlignDiv,
+  VerticalCenterAlignFlex,
   VerticalFlex,
 } from "../util/styledComponent";
 
@@ -13,14 +13,14 @@ const CardWrapper = styled(VerticalFlex)`
 `;
 
 
-const TitleWrapper = styled(VerticalCenterAlignDiv)`
+const TitleWrapper = styled(VerticalCenterAlignFlex)`
   font-size: 20px;
   font-weight: 700;
   ${props => props.noDivider ? '' : 'border-bottom: 1px solid #CFD6E0;'}
   padding-bottom: 16px;
 `;
 
-const TitleTail = styled(VerticalCenterAlignDiv)`
+const TitleTail = styled(VerticalCenterAlignFlex)`
 
 `
 

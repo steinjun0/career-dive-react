@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import {
-  VerticalCenterAlignDiv,
+  VerticalCenterAlignFlex,
   Flex,
   VerticalFlex,
   colorCareerDiveBlue,
@@ -32,7 +32,7 @@ const FooterBottom = styled(Flex)`
   justify-content: center;
 `;
 
-const FooterWrapper = styled(VerticalCenterAlignDiv)`
+const FooterWrapper = styled(VerticalCenterAlignFlex)`
   flex-direction: row;
   justify-content: start;
   height: 96px;
@@ -40,7 +40,7 @@ const FooterWrapper = styled(VerticalCenterAlignDiv)`
   max-width: 1194px;
 `;
 
-const FooterBottomWrapper = styled(VerticalCenterAlignDiv)`
+const FooterBottomWrapper = styled(VerticalCenterAlignFlex)`
   justify-content: space-between;
   width: 100%;
   max-width: 1194px;
@@ -61,7 +61,7 @@ const ColumnTitle = styled('span')`
   font-weight: 700;
 `
 
-const ContactCCudaButton = styled(VerticalCenterAlignDiv)`
+const ContactCCudaButton = styled(VerticalCenterAlignFlex)`
 
   justify-content: center;
 

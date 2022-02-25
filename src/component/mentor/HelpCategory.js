@@ -1,14 +1,14 @@
 import { styled } from "@mui/material";
 
 import {
-  VerticalCenterAlignDiv,
+  VerticalCenterAlignFlex,
   Flex,
   colorCareerDivePink,
 } from "../../util/styledComponent";
 import Card from "../../util/Card";
 
 
-const Tag = styled(VerticalCenterAlignDiv)`
+const Tag = styled(VerticalCenterAlignFlex)`
   border-radius: 4px;
   padding: 4px 8px;
   font-size: 14px;
@@ -33,12 +33,12 @@ function HelpCategory() {
   const premiumTags = ['자소서 구성', '자소서 첨삭', 'CV 첨삭', '포트폴리오 첨삭', '코드 리뷰', '면접 대비'];
   return (
     <Card noDivider={true} title={'이런 도움을 줄 수 있어요 😀'}>
-      <VerticalCenterAlignDiv>
+      <VerticalCenterAlignFlex>
         {regularTags.map((tag, index) => <RegularTag key={index}>{tag}</RegularTag>)}
-      </VerticalCenterAlignDiv>
-      <VerticalCenterAlignDiv>
+      </VerticalCenterAlignFlex>
+      <VerticalCenterAlignFlex>
         {premiumTags.map((tag, index) => <PremiumTag key={index}>{tag}</PremiumTag>)}
-      </VerticalCenterAlignDiv>
+      </VerticalCenterAlignFlex>
 
     </Card>
   );

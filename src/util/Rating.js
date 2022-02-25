@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignDiv } from './styledComponent'
+import { VerticalCenterAlignFlex } from './styledComponent'
 
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { Rating } from '@mui/material'
@@ -14,7 +14,7 @@ const RatingScore = styled('span')`
 `;
 
 function CustomRating({ value = 0, size = 'small' }) {
-    return (<VerticalCenterAlignDiv>
+    return (<VerticalCenterAlignFlex>
         <Rating name="read-only" value={value} readOnly
             getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
             precision={0.5}
@@ -26,6 +26,6 @@ function CustomRating({ value = 0, size = 'small' }) {
             }}
         />
         <RatingScore>{value}</RatingScore>
-    </VerticalCenterAlignDiv>);
+    </VerticalCenterAlignFlex>);
 }
 export default CustomRating;

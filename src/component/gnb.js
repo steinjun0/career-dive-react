@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
-import { VerticalCenterAlignDiv, CircleImg, LinkNoDeco } from '../util/styledComponent';
+import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco } from '../util/styledComponent';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -21,7 +21,7 @@ const GnbFullWidthWrapper = styled("nav")`
       z-index: 3;
     `;
 
-const GnbWrapper = styled(VerticalCenterAlignDiv)`
+const GnbWrapper = styled(VerticalCenterAlignFlex)`
     display:flex;
     flex-direction: row;
     justify-content: center;
@@ -31,7 +31,7 @@ const GnbWrapper = styled(VerticalCenterAlignDiv)`
     background-color: white;
   `;
 
-const CenterGnb = styled(VerticalCenterAlignDiv)`
+const CenterGnb = styled(VerticalCenterAlignFlex)`
     position: absolute;
   `;
 
@@ -50,11 +50,11 @@ const CenterMenu = styled("ul")`
     background-color: white;
   `;
 
-const LeftTopGnb = styled(VerticalCenterAlignDiv)`
+const LeftTopGnb = styled(VerticalCenterAlignFlex)`
     margin-right: auto;
   `;
 
-const RightTopGnb = styled(VerticalCenterAlignDiv)`
+const RightTopGnb = styled(VerticalCenterAlignFlex)`
     display:flex;
     flex-direction: row;
     justify-content: space-between;

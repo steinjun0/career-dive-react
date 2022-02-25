@@ -5,13 +5,13 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import EditCalandarIcon from "../../assets/icon/editCalandar.svg";
 
 import {
-  VerticalCenterAlignDiv,
+  VerticalCenterAlignFlex,
   CircleImg,
   VerticalFlex,
   colorCareerDiveBlue,
 } from "../../util/styledComponent";
 
-const MentorProfileWrapper = styled(VerticalCenterAlignDiv)`
+const MentorProfileWrapper = styled(VerticalCenterAlignFlex)`
   height: 200px;
   flex-direction: row;
   align-items: center;
@@ -29,7 +29,7 @@ const ProfileTexts = styled(VerticalFlex)`
   align-items: start;
 `;
 
-const Tag = styled(VerticalCenterAlignDiv)`
+const Tag = styled(VerticalCenterAlignFlex)`
   background-color: rgba(105, 140, 255, 0.1);
   color: #698cff;
   border-radius: 4px;
@@ -39,14 +39,14 @@ const Tag = styled(VerticalCenterAlignDiv)`
   margin-bottom: 8px;
 `;
 
-const Name = styled(VerticalCenterAlignDiv)`
+const Name = styled(VerticalCenterAlignFlex)`
   font-weight: 700;
   margin-bottom: 8px;
 `;
 
-const Discription = styled(VerticalCenterAlignDiv)``;
+const Discription = styled(VerticalCenterAlignFlex)``;
 
-const Buttons = styled(VerticalCenterAlignDiv)`
+const Buttons = styled(VerticalCenterAlignFlex)`
   margin-left: auto;
   height: 32px;
   width: 244px;
