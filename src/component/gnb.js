@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
-import { VerticalCenterAlignDiv, CircleImg } from '../util/styledComponent';
+import { VerticalCenterAlignDiv, CircleImg, LinkNoDeco } from '../util/styledComponent';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -81,7 +81,9 @@ function Gnb() {
     <GnbFullWidthWrapper>
       <GnbWrapper>
         <LeftTopGnb>
-          <img src={logo} alt="커리어 다이브" />
+          <LinkNoDeco to={'/'}>
+            <img src={logo} alt="커리어 다이브" />
+          </LinkNoDeco>
         </LeftTopGnb>
         <CenterGnb>
           <CenterMenu>
