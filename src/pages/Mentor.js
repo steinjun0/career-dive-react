@@ -13,6 +13,7 @@ import MentorProfile from '../component/mentor/Profile'
 import MentorCalendar from '../component/mentor/Calendar'
 import HelpCategory from "../component/mentor/HelpCategory";
 import Introduction from "../component/mentor/Introduction";
+import RatingAndReview from "../component/mentor/RatingAndReview";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -62,7 +63,7 @@ function Mentor() {
                       <IntroductionWrapper>
                         <Introduction></Introduction>
                       </IntroductionWrapper>
-                      <Introduction></Introduction>
+                      <RatingAndReview></RatingAndReview>
                     </Grid>
                   </Grid>
                 </Grid>

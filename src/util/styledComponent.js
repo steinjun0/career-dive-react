@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
 
 export const colorCareerDiveBlue = "#698CFF";
-export const colorCareerDivePink = "#E25D7D"
+export const colorCareerDivePink = "#E25D7D";
+export const colorBlueGray = '#CFD6E0';
 export const colorTextLight = "#898989";
 export const colorTextBody = "#4F4F4F";
 
