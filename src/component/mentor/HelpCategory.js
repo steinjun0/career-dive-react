@@ -46,7 +46,6 @@ function HelpCategory() {
   const premiumTags = ['자소서 구성', '자소서 첨삭', 'CV 첨삭', '포트폴리오 첨삭', '코드 리뷰', '면접 대비'];
   return (
     <Card noDivider={true} title={'이런 도움을 줄 수 있어요 😀'}
-      min_width={520}
       titleTail={
         <VerticalCenterAlignFlex>
           <RegularLegend>• 일반</RegularLegend>

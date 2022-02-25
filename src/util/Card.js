@@ -7,7 +7,6 @@ import {
 
 const CardWrapper = styled(VerticalFlex)`
   min-width: ${props => `${props.min_width}px`};
-  width: 100%;
   border-radius: 8px;
   padding: 24px;
   background-color: white;

@@ -29,6 +29,7 @@ const GnbWrapper = styled(VerticalCenterAlignFlex)`
     width: 100%;
     max-width: 1194px;
     background-color: white;
+    padding: 0 30px;
   `;
 
 const CenterGnb = styled(VerticalCenterAlignFlex)`

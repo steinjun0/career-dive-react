@@ -26,52 +26,46 @@ const MentorCalendarWrapper = styled('div')`
 `;
 
 const CardsWrapper = styled(Flex)`
-  margin-top: 30px;
   justify-content: space-between;
+  margin-top: 30px;
+  margin-bottom: 154px;
 `;
 
-const FirstColumnCards = styled(VerticalFlex)`
-  margin-right: 30px;
-`;
 
 function Mentor() {
   return (
     <div>
       <FullWidthWrapper>
-        <MetorProfileBanner>
-          <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
-        </MetorProfileBanner>
+        <MaxWidthDiv>
+          <MetorProfileBanner>
+            <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
+          </MetorProfileBanner>
+        </MaxWidthDiv>
         <GrayBackground>
           <MaxWidthDiv>
             <CardsWrapper>
-              <Grid container spacing={12}>
-                <Grid item xs={6}>
-                  <Grid container spacing={2} >
-                    <Grid itme xs={12}>
-                      <HelpCategory></HelpCategory>
-                    </Grid>
-                    <Grid itme xs={12}>
-                      <MentorCalendarWrapper>
-                        <MentorCalendar></MentorCalendar>
-                      </MentorCalendarWrapper>
-                    </Grid>
+              <Grid container spacing={'30px'} marginTop={0}>
+                <Grid container item xs={12} md={6}>
+                  <Grid item xs={12} marginBottom={'30px'}>
+                    <HelpCategory></HelpCategory>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <MentorCalendar></MentorCalendar>
                   </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <Grid container spacing={2}>
-                    <Grid itme xs={12} marginBottom={'30px'}>
+                <Grid item xs={12} md={6}>
+                  <Grid container item spacing={2}>
+                    <Grid item xs={12}>
                       <Introduction></Introduction>
                     </Grid>
-                    <Grid itme xs={12}>
-                      <Introduction></Introduction>
-                    </Grid>
+                    {/* <Grid item xs={12}>
+                    <Introduction></Introduction>
+                  </Grid> */}
                   </Grid>
                 </Grid>
               </Grid>
-
-
-
             </CardsWrapper>
+
           </MaxWidthDiv>
         </GrayBackground>
       </FullWidthWrapper>

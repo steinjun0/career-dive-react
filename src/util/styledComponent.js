@@ -42,13 +42,15 @@ export const GrayBackground = styled(Flex)`
   background-color: #f8f8f8;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 100vw;
 `;
 
 export const MaxWidthDiv = styled(Flex)`
   flex-direction: column;
-  max-width: 1194px;
+  max-width: 1254px;
   width: 100%;
+  padding: 0 30px;
+  box-sizing: border-box;
 `;
 
 export const LinkNoDeco = styled(Link)`
