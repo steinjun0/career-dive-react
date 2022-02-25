@@ -45,12 +45,14 @@ function HelpCategory() {
   const regularTags = ['직무 소개', '취업 상당', '진로 상담', '이직 준비', '면접 팁', '업계 이야기'];
   const premiumTags = ['자소서 구성', '자소서 첨삭', 'CV 첨삭', '포트폴리오 첨삭', '코드 리뷰', '면접 대비'];
   return (
-    <Card noDivider={true} title={'이런 도움을 줄 수 있어요 😀'} titleTail={
-      <VerticalCenterAlignFlex>
-        <RegularLegend>• 일반</RegularLegend>
-        <PremiumLegend>• 프리미엄</PremiumLegend>
-      </VerticalCenterAlignFlex>
-    }>
+    <Card noDivider={true} title={'이런 도움을 줄 수 있어요 😀'}
+      min_width={520}
+      titleTail={
+        <VerticalCenterAlignFlex>
+          <RegularLegend>• 일반</RegularLegend>
+          <PremiumLegend>• 프리미엄</PremiumLegend>
+        </VerticalCenterAlignFlex>
+      }>
       <VerticalCenterAlignFlex>
         {regularTags.map((tag, index) => <RegularTag key={index}>{tag}</RegularTag>)}
       </VerticalCenterAlignFlex>

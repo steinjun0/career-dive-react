@@ -155,7 +155,7 @@ function Calendar() {
   }, [month])
 
   return (
-    <Card title={'상담 가능 일정'}>
+    <Card title={'상담 가능 일정'} min_width={400}>
       <CalendarWrapper>
         <YearMonthMenuWrapper>
           <YearMonthMenu

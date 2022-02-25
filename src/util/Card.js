@@ -6,7 +6,8 @@ import {
 } from "../util/styledComponent";
 
 const CardWrapper = styled(VerticalFlex)`
-  width: ${props => `${props.width}px`};
+  min-width: ${props => `${props.min_width}px`};
+  width: 100%;
   border-radius: 8px;
   padding: 24px;
   background-color: white;
@@ -26,7 +27,7 @@ const TitleTail = styled(VerticalCenterAlignFlex)`
 
 function Card(props) {
   return (
-    <CardWrapper width={582}>
+    <CardWrapper min_width={props.min_width}>
       <TitleWrapper noDivider={props.noDivider}>
         <span>{props.title}</span>
         <TitleTail>
