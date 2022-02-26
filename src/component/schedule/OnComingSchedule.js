@@ -24,7 +24,7 @@ const ScheduleWrapper = styled(VerticalCenterAlignFlex)`
 `;
 
 const ScheduleDateAndTime = styled(VerticalFlex)`
-
+  
 `;
 
 const ProfileWrapper = styled(VerticalCenterAlignFlex)`
