@@ -108,7 +108,7 @@ function ScheduleList() {
         {schedules.map((schedule, index) => {
           if (category === '전체' || schedule.category === category) {
             return (
-              <Grid item xs={12} md={4} lg={4} xl={3} key={index}>
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3} key={index}>
                 <ScheduleCard>
                   <ScheduleCardTop>
                     <img src={circleCalendarIcon} alt="" />
