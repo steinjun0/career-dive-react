@@ -89,7 +89,7 @@ function MentorProfile({ name = '', discription = '' }) {
           멘토 찜
         </FavoriteMentorButton>
         <ApplyMentoringButton
-          startIcon={<img src={EditCalandarIcon} />}
+          startIcon={<img src={EditCalandarIcon} alt={'calendar'} />}
           disableElevation
         >
           멘토링 신청

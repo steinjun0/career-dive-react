@@ -10,6 +10,7 @@ import Mentor from "./pages/Mentor";
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
+import Schedule from "./pages/Schedule";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -17,6 +18,7 @@ ReactDOM.render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="mentor/:id" element={<Mentor />} />
+      <Route path="schedule/:id" element={<Schedule />} />
     </Routes>
     <Footer />
   </BrowserRouter>,

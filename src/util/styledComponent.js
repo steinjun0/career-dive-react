@@ -84,11 +84,11 @@ export const LinkNoDeco = styled(Link)`
 `;
 
 export const CustomButton = styled(Button)`
-  background-color: ${props => props.backgroundColor ? props.backgroundColor : colorCareerDiveBlue};
-  color: ${props => props.customColor ? props.customColor : 'white'};
+  background-color: ${props => props.background_color ? props.background_color : colorCareerDiveBlue};
+  color: ${props => props.custom_color ? props.custom_color : 'white'};
   &:hover {
-    background-color: ${props => props.backgroundColor ? props.backgroundColor : colorCareerDiveBlue};
-    color: ${props => props.customColor ? props.customColor : 'white'};
+    background-color: ${props => props.background_color ? props.background_color : colorCareerDiveBlue};
+    color: ${props => props.custom_color ? props.custom_color : 'white'};
   }
 
   font-size: 16px;
