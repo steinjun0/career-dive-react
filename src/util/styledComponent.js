@@ -1,13 +1,37 @@
 import { Link } from "react-router-dom";
-import { styled } from "@mui/material";
+import { Button, styled } from "@mui/material";
 
+// color
 export const colorCareerDiveBlue = "#698CFF";
 export const colorCareerDivePink = "#E25D7D";
 export const colorBlueGray = '#CFD6E0';
 export const colorTextLight = "#898989";
 export const colorTextBody = "#4F4F4F";
 
+// text
+export const TextBody1 = styled(`span`)`
+  font-size: 16px;
+  line-height: 24px;
+`;
 
+export const TextBody2 = styled(`span`)`
+  font-size: 14px;
+  line-height: 24px;
+`;
+
+export const TextSubtitle1 = styled(`span`)`
+  font-weight: 700;
+  line-height: 24px;
+`;
+
+export const TextSubtitle2 = styled(`span`)`
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 24px;
+`;
+
+
+// container
 export const Flex = styled("div")`
   display: flex;
 `;
@@ -57,4 +81,16 @@ export const MaxWidthDiv = styled(Flex)`
 export const LinkNoDeco = styled(Link)`
   text-decoration: none;
   color: black;
+`;
+
+export const CustomButton = styled(Button)`
+  background-color: ${props => props.backgroundColor ? props.backgroundColor : colorCareerDiveBlue};
+  color: ${props => props.customColor ? props.customColor : 'white'};
+  &:hover {
+    background-color: ${props => props.backgroundColor ? props.backgroundColor : colorCareerDiveBlue};
+    color: ${props => props.customColor ? props.customColor : 'white'};
+  }
+
+  font-size: 16px;
+  line-height: 24px;
 `;
