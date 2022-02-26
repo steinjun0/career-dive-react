@@ -15,6 +15,7 @@ import HelpCategory from "../component/mentor/HelpCategory";
 import Introduction from "../component/mentor/Introduction";
 import RatingAndReview from "../component/mentor/RatingAndReview";
 import OnComingShedule from "../component/schedule/OnComingSchedule";
+import ScheduleList from "../component/schedule/ScheduleList";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -45,8 +46,11 @@ function Schedule() {
           <MaxWidthDiv>
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12}>
                   <OnComingShedule></OnComingShedule>
+                </Grid>
+                <Grid item xs={12}>
+                  <ScheduleList></ScheduleList>
                 </Grid>
               </Grid>
             </CardsWrapper>

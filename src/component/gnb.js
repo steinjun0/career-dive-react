@@ -74,6 +74,7 @@ const BlueSpan = styled('span')`
 
 const ProfileImg = styled(CircleImg)`
     width: 48px;
+    height: 48px;
   `;
 
 

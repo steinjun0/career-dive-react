@@ -40,6 +40,7 @@ const Job = styled("span")`
 
 const ProfileImg = styled(CircleImg)`
   width: 120px;
+  height: 120px;
   margin: 0 auto;
 `;
 

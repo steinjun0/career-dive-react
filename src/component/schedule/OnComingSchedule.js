@@ -33,6 +33,7 @@ const ProfileWrapper = styled(VerticalCenterAlignFlex)`
 
 const ProfileImg = styled(CircleImg)`
   width: 40px;
+  height: 40px;
   margin-right: 16px;
 `;
 
@@ -68,7 +69,7 @@ function OnComingShedule() {
             </ProfileWrapper>
 
             <Buttons>
-              <CustomButton background_color={'#f4f4f4'} custom_color={'black'} >예약 관리</CustomButton>
+              <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
               <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton>
             </Buttons>
           </ScheduleWrapper>);
