@@ -3,7 +3,7 @@ import { styled } from "@mui/material";
 import {
   VerticalCenterAlignFlex,
   VerticalFlex,
-} from "../util/styledComponent";
+} from "./styledComponent";
 
 const CardWrapper = styled(VerticalFlex)`
   min-width: ${props => `${props.min_width}px`};
