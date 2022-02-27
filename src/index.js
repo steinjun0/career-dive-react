@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Mentor from "./pages/Mentor";
@@ -21,6 +21,7 @@ ReactDOM.render(
       <Route path="/mentor/:id" element={<Mentor />} />
       <Route path="/schedule/:id" element={<Schedule />} />
       <Route path="/mypage/:subPage" element={<MyPage />} />
+      <Route path="/mypage" element={<Navigate replace to="/mypage/profile" />} />
     </Routes>
     <Footer />
   </BrowserRouter>,

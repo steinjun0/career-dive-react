@@ -80,11 +80,13 @@ function Gnb() {
   return (
     <GnbFullWidthWrapper>
       <GnbWrapper>
+
         <LeftTopGnb>
           <LinkNoDeco to={'/'}>
             <img src={logo} alt="커리어 다이브" />
           </LinkNoDeco>
         </LeftTopGnb>
+
         <CenterGnb>
           <CenterMenu>
             <li>내 상담</li>
@@ -92,11 +94,14 @@ function Gnb() {
             <li>상담 후기</li>
           </CenterMenu>
         </CenterGnb>
+
         <RightTopGnb>
           <BlueSpan>멘토 되기</BlueSpan>
-          <NotificationsNoneIcon></NotificationsNoneIcon>
-          <MenuIcon></MenuIcon>
-          <ProfileImg src={testProfileImage} alt="" />
+          <NotificationsNoneIcon />
+          <MenuIcon />
+          <LinkNoDeco to={'mypage/profile'}>
+            <ProfileImg src={testProfileImage} alt="" />
+          </LinkNoDeco>
         </RightTopGnb>
 
       </GnbWrapper>
