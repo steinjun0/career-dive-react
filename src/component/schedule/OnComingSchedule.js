@@ -54,31 +54,33 @@ function OnComingShedule() {
   return (
     <Card no_divider={'true'} title={'다가오는 일정'}>
       <SchedulesWrapper>
-        {schedules.map((schedule, index) => {
-          return (<ScheduleWrapper key={index}>
-            <ScheduleDateAndTime>
-              <TextBody2>{schedule.date}</TextBody2>
-              <TextSubtitle1>{schedule.time}</TextSubtitle1>
-            </ScheduleDateAndTime>
-            <ProfileWrapper>
-              <ProfileImg src={testMentorImage}></ProfileImg>
-              <VerticalFlex>
-                <TextSubtitle2>{schedule.name} 멘토</TextSubtitle2>
-                <TextBody2>{schedule.company}</TextBody2>
-              </VerticalFlex>
-            </ProfileWrapper>
 
-            <Buttons>
-              <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
-              <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton>
-            </Buttons>
-          </ScheduleWrapper>);
+        {schedules.map((schedule, index) => {
+          return (
+            <ScheduleWrapper key={index}>
+
+              <ScheduleDateAndTime>
+                <TextBody2>{schedule.date}</TextBody2>
+                <TextSubtitle1>{schedule.time}</TextSubtitle1>
+              </ScheduleDateAndTime>
+
+              <ProfileWrapper>
+                <ProfileImg src={testMentorImage}></ProfileImg>
+                <VerticalFlex>
+                  <TextSubtitle2>{schedule.name} 멘토</TextSubtitle2>
+                  <TextBody2>{schedule.company}</TextBody2>
+                </VerticalFlex>
+              </ProfileWrapper>
+
+              <Buttons>
+                <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
+                <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton>
+              </Buttons>
+
+            </ScheduleWrapper>);
         })}
 
       </SchedulesWrapper>
-
-
-
     </Card>
   );
 }

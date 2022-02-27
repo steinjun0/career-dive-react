@@ -30,7 +30,6 @@ export const TextSubtitle2 = styled(`span`)`
   line-height: 24px;
 `;
 
-
 // container
 export const Flex = styled("div")`
   display: flex;

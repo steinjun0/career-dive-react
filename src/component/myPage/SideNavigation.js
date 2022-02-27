@@ -26,8 +26,6 @@ const NavigationUndorderedList = styled(UlNoDeco)`
   margin: 0;
 `;
 
-
-
 function SideNavigation() {
   const navigationList = ['프로필', '계정', '후기', '결제'];
   const mapRoutetoSubPage = { 'profile': '프로필', 'account': '계정', 'review': '후기', 'payment': '결제', }
@@ -45,19 +43,23 @@ function SideNavigation() {
         <NavigationUndorderedList>
           {navigationList.map((subPage, index) => {
             if (subPage === mapRoutetoSubPage[params.subPage])
-              return <NavigationListItem key={index}>
-                <SelectedNavigation>
-                  {subPage}
-                </SelectedNavigation>
-              </NavigationListItem>
+              return (
+                <NavigationListItem key={index}>
+                  <SelectedNavigation>
+                    {subPage}
+                  </SelectedNavigation>
+                </NavigationListItem>
+              );
+
             else
-              return <NavigationListItem key={index}>
-                <UnselectedNavigation onClick={() => { onClickListItem(mapSubPageToRoute[subPage]) }}>
-                  {subPage}
-                </UnselectedNavigation>
-              </NavigationListItem>
-          }
-          )}
+              return (
+                <NavigationListItem key={index}>
+                  <UnselectedNavigation onClick={() => { onClickListItem(mapSubPageToRoute[subPage]) }}>
+                    {subPage}
+                  </UnselectedNavigation>
+                </NavigationListItem>
+              );
+          })}
         </NavigationUndorderedList>
       </VerticalFlex>
     </Card>

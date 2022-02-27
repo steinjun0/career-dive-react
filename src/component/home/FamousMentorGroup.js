@@ -36,6 +36,7 @@ function JobCategoryGroup() {
         <Title>추천 인기 멘토</Title>
         <SellAll>전체보기</SellAll>
       </TopWrapper>
+
       <FamousMentorCardsWrapper>
         <FamousMentorCard
           company={"삼성전자"}
@@ -45,10 +46,11 @@ function JobCategoryGroup() {
           name="박서비"
           rating={3.5}
           index={1}
-        ></FamousMentorCard>
-        <FamousMentorCard></FamousMentorCard>
-        <FamousMentorCard></FamousMentorCard>
-        <FamousMentorCard></FamousMentorCard>
+        />
+        <FamousMentorCard />
+        <FamousMentorCard />
+        <FamousMentorCard />
+
       </FamousMentorCardsWrapper>
     </FamousMentorGroupWrapper>
   );

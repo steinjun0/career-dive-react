@@ -136,15 +136,13 @@ function Calendar() {
     setSelectedDate(date);
     let tempAvailableTime = []
 
-    originData.map((element, index) => {
+    originData.forEach((element) => {
       if (element.date === date) {
         tempAvailableTime = element.availableTime;
       }
     })
     setAvailableTime(tempAvailableTime)
-
   }
-
 
   const [dates, setDates] = useState(getDatesOfMonth(year, month))
 
@@ -190,19 +188,18 @@ function Calendar() {
             </WeekBox>
           )}
         </DateWrapper>
+
         <AvailableTimeOutSideWrapper>
           <DateTitle>
-            2022년 {month} {selectedDate}일
+            {year}년 {month} {selectedDate}일
           </DateTitle>
+
           <AvailableTimeWrapper>
             {availableTime.map((timeRange, index) =>
               <AvailableTime key={index}>{timeRange[0]} ~ {timeRange[1]} · {getDifferenceMinutes(timeRange[0], timeRange[1])}분</AvailableTime>)}
           </AvailableTimeWrapper>
 
-
         </AvailableTimeOutSideWrapper>
-
-
       </CalendarWrapper>
     </Card >
   );

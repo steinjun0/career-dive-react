@@ -1,7 +1,6 @@
 import { Button, Grid, styled } from "@mui/material";
 
 import {
-  VerticalCenterAlignFlex,
   VerticalFlex,
   Flex,
   CircleImg,
@@ -42,7 +41,6 @@ const CategoryButton = styled(Button)`
 
   cursor: pointer;
 `;
-
 
 const ScheduleCardTop = styled(Flex)`
   border-bottom: 1px solid ${colorBlueGray};
@@ -110,8 +108,10 @@ function ScheduleList() {
             return (
               <Grid item xs={12} sm={6} md={4} lg={4} xl={3} key={index}>
                 <ScheduleCard>
+                  {/* top */}
                   <ScheduleCardTop>
                     <img src={circleCalendarIcon} alt="" />
+
                     <ContentWrapper>
                       <ScheduleDate>
                         {schedule.date}
@@ -119,14 +119,18 @@ function ScheduleList() {
                       <ScheduleTime>
                         {schedule.time}
                       </ScheduleTime>
+
                       <ManageScheduleButton background_color={'#f4f4f4'} custom_color={'#848484'} >
                         예약 관리
                       </ManageScheduleButton>
+
                     </ContentWrapper>
                   </ScheduleCardTop>
 
+                  {/* bottom */}
                   <ScheduleCardBottom>
                     <ProfileImg src={testMentorImage}></ProfileImg>
+
                     <ContentWrapper>
                       <TextSubtitle2>
                         {schedule.name} 멘토

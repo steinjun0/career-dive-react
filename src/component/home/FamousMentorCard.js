@@ -79,15 +79,19 @@ function FamousMentorCard({
   return (
     <LinkNoDeco to={"/mentor/" + index}>
       <FamousMentorCardWrapper>
+
         <Company>{company}</Company>
         <Department>{department}</Department>
         <Job>{job}</Job>
-        <ProfileImg src={testMentorImage}></ProfileImg>
+
+        <ProfileImg src={testMentorImage} />
         <Tag>{tag}</Tag>
         <Name>{name}</Name>
+
         <RatingWrapper>
-          <Rating value={rating}></Rating>
+          <Rating value={rating} />
         </RatingWrapper>
+
       </FamousMentorCardWrapper>
     </LinkNoDeco>
   );

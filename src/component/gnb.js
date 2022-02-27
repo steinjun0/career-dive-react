@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
 import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco } from '../util/styledComponent';
 
@@ -76,7 +75,6 @@ const ProfileImg = styled(CircleImg)`
     width: 48px;
     height: 48px;
   `;
-
 
 function Gnb() {
   return (

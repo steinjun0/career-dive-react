@@ -13,7 +13,6 @@ const CardWrapper = styled(VerticalFlex)`
   box-shadow: 10px 20px 40px rgba(130, 130, 130, 0.1);
 `;
 
-
 const TitleWrapper = styled(VerticalCenterAlignFlex)`
   font-size: 20px;
   font-weight: 700;
@@ -27,8 +26,6 @@ const TitleHead = styled(VerticalCenterAlignFlex)`
 const TitleTail = styled(VerticalCenterAlignFlex)`
   margin-left: auto;
 `
-
-
 
 function Card(props) {
   return (

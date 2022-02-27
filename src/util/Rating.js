@@ -4,8 +4,6 @@ import { VerticalCenterAlignFlex } from './styledComponent'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { Rating } from '@mui/material'
 
-
-
 const RatingScore = styled('span')`
     font-size: 12px;
     color: #828282;

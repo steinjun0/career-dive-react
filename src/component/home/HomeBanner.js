@@ -65,8 +65,10 @@ function HomeBanner() {
   return (
     <HomeBannerFullWidthWrapper>
       <HomeBannerWrapper>
+
         <FirstBannerIdCard src={BannerIdCard1} alt="" />
         <SecondBannerIdCard src={BannerIdCard2} alt="" />
+
         <SearchBar>
           <VerticalCenterAlignFlex>
             <SearchBarSpan>직무</SearchBarSpan>
@@ -75,6 +77,7 @@ function HomeBanner() {
               menuItems={["개발", "기획", "디자인"]}
             ></SimpleMenu>
           </VerticalCenterAlignFlex>
+
           <VerticalCenterAlignFlex>
             <SearchBarSpan>회사</SearchBarSpan>
             <SimpleMenu
@@ -82,6 +85,7 @@ function HomeBanner() {
               menuItems={["네이버", "삼성전자", "JYP"]}
             ></SimpleMenu>
           </VerticalCenterAlignFlex>
+
           <VerticalCenterAlignFlex>
             <SearchBarSpan>태그</SearchBarSpan>
             <SimpleMenu
@@ -89,13 +93,16 @@ function HomeBanner() {
               menuItems={["취업준비", "이직", "사내 분위기"]}
             ></SimpleMenu>
           </VerticalCenterAlignFlex>
+
           <img src={BannerSearchIcon} alt="" />
         </SearchBar>
+
         <BannerTitle>
           평소 만나고 싶던
           <br />
           현직자를 만나보세요
         </BannerTitle>
+
       </HomeBannerWrapper>
     </HomeBannerFullWidthWrapper>
   );
