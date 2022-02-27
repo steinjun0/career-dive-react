@@ -49,20 +49,18 @@ function Mentor() {
           <MaxWidthDiv>
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>
+
                 <Grid container item xs={12} md={6}>
                   <Grid item xs={12} >
                     <HelpCategory></HelpCategory>
-                    <MentorCalendarWrapper>
-                      <MentorCalendar></MentorCalendar>
-                    </MentorCalendarWrapper>
+                    <MentorCalendar></MentorCalendar>
                   </Grid>
                 </Grid>
+
                 <Grid item xs={12} md={6}>
                   <Grid container item spacing={2}>
                     <Grid item xs={12}>
-                      <IntroductionWrapper>
-                        <Introduction></Introduction>
-                      </IntroductionWrapper>
+                      <Introduction></Introduction>
                       <RatingAndReview></RatingAndReview>
                     </Grid>
                   </Grid>

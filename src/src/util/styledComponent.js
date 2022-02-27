@@ -7,6 +7,7 @@ export const colorCareerDivePink = "#E25D7D";
 export const colorBlueGray = '#CFD6E0';
 export const colorTextLight = "#898989";
 export const colorTextBody = "#4F4F4F";
+export const colorBackgroundGrayLight = "#F8F8F8";
 
 // text
 export const TextBody1 = styled(`span`)`

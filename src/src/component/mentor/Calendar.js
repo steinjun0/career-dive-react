@@ -16,6 +16,11 @@ import { getDifferenceMinutes } from '../../util/util'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
+const CalendarWrapper = styled(Flex)`
+  width: 100%;
+  margin-top: 30px;
+`
+
 const DateWrapper = styled(VerticalFlex)`
   border-bottom: 1px solid #CFD6E0;
   padding-bottom: 16px;
@@ -59,7 +64,7 @@ const SelectedDateBox = styled(DateBox)`
   color: white;
 `;
 
-const CalendarWrapper = styled(VerticalFlex)`
+const CalendarContentWrapper = styled(VerticalFlex)`
   justify-content: space-between;
 `;
 
@@ -153,55 +158,58 @@ function Calendar() {
   }, [month])
 
   return (
-    <Card title={'상담 가능 일정'} min_width={400}>
-      <CalendarWrapper>
-        <YearMonthMenuWrapper>
-          <YearMonthMenu
-            style={{ fontWeight: 700, fontSize: 16, color: 'black' }}
-            title={`2022년 ${month}`}
-            menuItems={['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']}
-            setState={setMonth}
-            endIcon={<KeyboardArrowDownIcon />}></YearMonthMenu>
-        </YearMonthMenuWrapper>
+    <CalendarWrapper>
+      <Card title={'상담 가능 일정'} min_width={400}>
+        <CalendarContentWrapper>
+          <YearMonthMenuWrapper>
+            <YearMonthMenu
+              style={{ fontWeight: 700, fontSize: 16, color: 'black' }}
+              title={`2022년 ${month}`}
+              menuItems={['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']}
+              setState={setMonth}
+              endIcon={<KeyboardArrowDownIcon />}></YearMonthMenu>
+          </YearMonthMenuWrapper>
 
-        <DayWrapper>
-          {dayInKorean.map((day, dayIndex) => <DayBox key={`${dayIndex}`}>{day}</DayBox>)}
-        </DayWrapper>
+          <DayWrapper>
+            {dayInKorean.map((day, dayIndex) => <DayBox key={`${dayIndex}`}>{day}</DayBox>)}
+          </DayWrapper>
 
-        <DateWrapper>
-          {dates.map((week, weekIndex) =>
-            <WeekBox key={weekIndex}>
-              {week.map((date, dateIndex) => {
-                if (date === 0) return <DateBox key={`${weekIndex}${dateIndex}`}></DateBox>
-                else {
-                  if (date === selectedDate) {
-                    return <SelectedDateBox key={`${weekIndex}${dateIndex}`}>{date}</SelectedDateBox>
-                  } else if (availableDates.includes(date)) {
-                    return <AvailableDateBox onClick={() => { onClickAvailableDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
-                  }
+          <DateWrapper>
+            {dates.map((week, weekIndex) =>
+              <WeekBox key={weekIndex}>
+                {week.map((date, dateIndex) => {
+                  if (date === 0) return <DateBox key={`${weekIndex}${dateIndex}`}></DateBox>
                   else {
-                    return <DateBox key={`${weekIndex}${dateIndex}`}>{date}</DateBox>
+                    if (date === selectedDate) {
+                      return <SelectedDateBox key={`${weekIndex}${dateIndex}`}>{date}</SelectedDateBox>
+                    } else if (availableDates.includes(date)) {
+                      return <AvailableDateBox onClick={() => { onClickAvailableDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
+                    }
+                    else {
+                      return <DateBox key={`${weekIndex}${dateIndex}`}>{date}</DateBox>
+                    }
                   }
                 }
-              }
-              )}
-            </WeekBox>
-          )}
-        </DateWrapper>
+                )}
+              </WeekBox>
+            )}
+          </DateWrapper>
 
-        <AvailableTimeOutSideWrapper>
-          <DateTitle>
-            {year}년 {month} {selectedDate}일
-          </DateTitle>
+          <AvailableTimeOutSideWrapper>
+            <DateTitle>
+              {year}년 {month} {selectedDate}일
+            </DateTitle>
 
-          <AvailableTimeWrapper>
-            {availableTime.map((timeRange, index) =>
-              <AvailableTime key={index}>{timeRange[0]} ~ {timeRange[1]} · {getDifferenceMinutes(timeRange[0], timeRange[1])}분</AvailableTime>)}
-          </AvailableTimeWrapper>
+            <AvailableTimeWrapper>
+              {availableTime.map((timeRange, index) =>
+                <AvailableTime key={index}>{timeRange[0]} ~ {timeRange[1]} · {getDifferenceMinutes(timeRange[0], timeRange[1])}분</AvailableTime>)}
+            </AvailableTimeWrapper>
 
-        </AvailableTimeOutSideWrapper>
-      </CalendarWrapper>
-    </Card >
+          </AvailableTimeOutSideWrapper>
+        </CalendarContentWrapper>
+      </Card >
+    </CalendarWrapper>
+
   );
 }
 

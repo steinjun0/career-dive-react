@@ -1,12 +1,18 @@
 import {
   colorBlueGray,
   colorTextBody,
+  Flex,
   VerticalCenterAlignFlex,
   VerticalFlex,
 } from "../../util/styledComponent";
 import Card from "../../util/Card";
 import { styled } from "@mui/material";
 import CustomRating from "../../util/Rating";
+
+const RatingAndReviewWrapper = styled(Flex)`
+  width: 100%;
+  margin-top: 30px;
+`;
 
 const AverageRatingWrapper = styled(VerticalCenterAlignFlex)`
   margin-left: 16px;
@@ -37,32 +43,35 @@ const reviews = [{ author: '장***', rating: 4.5, text: '안녕하세요, 현재
 
 function RatingAndReview() {
   return (
-    <Card title={'만족도 및 리뷰'}
-      titleHead={
-        <AverageRatingWrapper>
-          <CustomRating value={3.5} ></CustomRating>
-        </AverageRatingWrapper>
-      }
-    >
-      {reviews.map((review, index) => {
-        return (
-          <ReviewWrapper key={index}>
-            <VerticalCenterAlignFlex>
-              <NameWrapper>
-                {review.author}
-              </NameWrapper>
-              <CustomRating value={review.rating} ></CustomRating>
-            </VerticalCenterAlignFlex>
-            <TextWrapper>
-              {review.text}
-            </TextWrapper>
-          </ReviewWrapper>
+    <RatingAndReviewWrapper>
+      <Card title={'만족도 및 리뷰'}
+        titleHead={
+          <AverageRatingWrapper>
+            <CustomRating value={3.5} ></CustomRating>
+          </AverageRatingWrapper>
+        }
+      >
+        {reviews.map((review, index) => {
+          return (
+            <ReviewWrapper key={index}>
+              <VerticalCenterAlignFlex>
+                <NameWrapper>
+                  {review.author}
+                </NameWrapper>
+                <CustomRating value={review.rating} ></CustomRating>
+              </VerticalCenterAlignFlex>
+              <TextWrapper>
+                {review.text}
+              </TextWrapper>
+            </ReviewWrapper>
 
-        );
-      })}
+          );
+        })}
 
 
-    </Card>
+      </Card>
+    </RatingAndReviewWrapper>
+
   );
 }
 

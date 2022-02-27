@@ -9,11 +9,17 @@ import {
 
 import SideNavigation from "../component/myPage/SideNavigation";
 import UserProfile from "../component/myPage/UserProfile";
+import MenteeIntroduce from "../component/myPage/MenteeIntroduce";
+import { useParams } from "react-router-dom";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-top: 30px;
   margin-bottom: 154px;
+`;
+
+const CardWrapper = styled(Flex)`
+  margin-bottom: 38px;
 `;
 
 const SideNavigationWrapper = styled(Flex)`
@@ -22,6 +28,7 @@ const SideNavigationWrapper = styled(Flex)`
 `
 
 function MyPage() {
+  const params = useParams();
   return (
     <FullWidthWrapper>
       <GrayBackground>
@@ -34,7 +41,13 @@ function MyPage() {
                 </SideNavigationWrapper>
               </Grid>
               <Grid item xs={9}>
-                <UserProfile />
+                {
+                  params.subPage === 'profile' &&
+                  <div>
+                    <UserProfile />
+                    <MenteeIntroduce />
+                  </div>
+                }
               </Grid>
             </Grid>
 

@@ -17,6 +17,10 @@ import testMentorImage from "../../assets/img/testMentorImage.png";
 import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'
 import { useState } from "react";
 
+const ScheduleListWrapper = styled(Flex)`
+  width: 100%;
+`;
+
 const ScheduleCard = styled(VerticalFlex)`
   border: 1px solid ${colorBlueGray};
   border-radius: 8px;
@@ -92,61 +96,64 @@ function ScheduleList() {
   const categories = ['전체', '예약 성공', '예약 대기', '예약 실패', '상담 완료']
   const [category, setCategory] = useState('전체');
   return (
-    <Card no_divider={'true'} title={'내 신청 내역'}>
-      <Flex>
-        {categories.map((element, index) => {
-          if (element === category) {
-            return <CategoryButton is_selected={'true'} key={`${index}`}>{element}</CategoryButton>;
-          } else {
-            return <CategoryButton is_selected={'false'} key={index} onClick={() => { setCategory(element) }}>{element}</CategoryButton>;
-          }
-        })}
-      </Flex>
-      <Grid container spacing={'30px'} marginTop={0}>
-        {schedules.map((schedule, index) => {
-          if (category === '전체' || schedule.category === category) {
-            return (
-              <Grid item xs={12} sm={6} md={4} lg={4} xl={3} key={index}>
-                <ScheduleCard>
-                  <ScheduleCardTop>
-                    <img src={circleCalendarIcon} alt="" />
+    <ScheduleListWrapper>
+      <Card no_divider={'true'} title={'내 신청 내역'}>
+        <Flex>
+          {categories.map((element, index) => {
+            if (element === category) {
+              return <CategoryButton is_selected={'true'} key={`${index}`}>{element}</CategoryButton>;
+            } else {
+              return <CategoryButton is_selected={'false'} key={index} onClick={() => { setCategory(element) }}>{element}</CategoryButton>;
+            }
+          })}
+        </Flex>
+        <Grid container spacing={'30px'} marginTop={0}>
+          {schedules.map((schedule, index) => {
+            if (category === '전체' || schedule.category === category) {
+              return (
+                <Grid item xs={12} sm={6} md={4} lg={4} xl={3} key={index}>
+                  <ScheduleCard>
+                    <ScheduleCardTop>
+                      <img src={circleCalendarIcon} alt="" />
 
-                    <ContentWrapper>
-                      <ScheduleDate>
-                        {schedule.date}
-                      </ScheduleDate>
-                      <ScheduleTime>
-                        {schedule.time}
-                      </ScheduleTime>
+                      <ContentWrapper>
+                        <ScheduleDate>
+                          {schedule.date}
+                        </ScheduleDate>
+                        <ScheduleTime>
+                          {schedule.time}
+                        </ScheduleTime>
 
-                      <ManageScheduleButton background_color={'#f4f4f4'} custom_color={'#848484'} >
-                        예약 관리
-                      </ManageScheduleButton>
+                        <ManageScheduleButton background_color={'#f4f4f4'} custom_color={'#848484'} >
+                          예약 관리
+                        </ManageScheduleButton>
 
-                    </ContentWrapper>
-                  </ScheduleCardTop>
+                      </ContentWrapper>
+                    </ScheduleCardTop>
 
-                  <ScheduleCardBottom>
-                    <ProfileImg src={testMentorImage}></ProfileImg>
+                    <ScheduleCardBottom>
+                      <ProfileImg src={testMentorImage}></ProfileImg>
 
-                    <ContentWrapper>
-                      <TextSubtitle2>
-                        {schedule.name} 멘토
-                      </TextSubtitle2>
-                      <TextBody2>
-                        {schedule.company}
-                      </TextBody2>
-                    </ContentWrapper>
+                      <ContentWrapper>
+                        <TextSubtitle2>
+                          {schedule.name} 멘토
+                        </TextSubtitle2>
+                        <TextBody2>
+                          {schedule.company}
+                        </TextBody2>
+                      </ContentWrapper>
 
-                  </ScheduleCardBottom>
-                </ScheduleCard>
-              </Grid>
-            );
-          }
+                    </ScheduleCardBottom>
+                  </ScheduleCard>
+                </Grid>
+              );
+            }
 
-        })}
-      </Grid>
-    </Card>
+          })}
+        </Grid>
+      </Card>
+    </ScheduleListWrapper>
+
   );
 }
 

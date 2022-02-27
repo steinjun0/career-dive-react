@@ -1,21 +1,15 @@
 import { Divider, styled } from "@mui/material";
 import testMentorImage from "../../assets/img/testMentorImage.png";
-import Button from "@mui/material/Button";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import EditCalandarIcon from "../../assets/icon/editCalandar.svg";
 
 import {
-  VerticalCenterAlignFlex,
   CircleImg,
-  VerticalFlex,
-  colorCareerDiveBlue,
   TextSubtitle1,
   TextBody1,
   Flex,
 } from "../../util/styledComponent";
 import Card from "../../util/Card";
 
-const UserProfileCard = styled(Card)`
+const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
 `;
 
@@ -26,7 +20,7 @@ const Subtitle = styled(TextSubtitle1)`
 const ProfileImg = styled(CircleImg)`
   width: 120px;
   height: 120px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 `;
 
 const TextContentWrapper = styled(Flex)`
@@ -40,18 +34,23 @@ const EditTextButton = styled(TextBody1)`
 
 function UserProfile() {
   return (
-    <UserProfileCard title={'유저 프로필'}>
-      <Subtitle>프로필 이미지</Subtitle>
-      <ProfileImg src={testMentorImage} alt="profile-image" />
+    <UserProfileCardWrapper>
+      <Card title={'유저 프로필'}>
+        <Subtitle>프로필 이미지</Subtitle>
+        <ProfileImg src={testMentorImage} alt="profile-image" />
 
-      <Divider></Divider>
+        <Divider></Divider>
 
-      <Subtitle>닉네임</Subtitle>
-      <TextContentWrapper>
-        <TextBody1>일하는 베짱이</TextBody1>
-        <EditTextButton>수정</EditTextButton>
-      </TextContentWrapper>
-    </UserProfileCard>
+        <Subtitle>닉네임</Subtitle>
+
+        <TextContentWrapper>
+          <TextBody1>일하는 베짱이</TextBody1>
+          <EditTextButton>수정</EditTextButton>
+        </TextContentWrapper>
+
+      </Card>
+    </UserProfileCardWrapper>
+
   );
 }
 
