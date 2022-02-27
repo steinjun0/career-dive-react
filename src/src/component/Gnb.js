@@ -89,7 +89,9 @@ function Gnb() {
 
         <CenterGnb>
           <CenterMenu>
-            <li>내 상담</li>
+            <LinkNoDeco to={`/schedule/${1}`}>
+              <li>내 상담</li>
+            </LinkNoDeco>
             <li>찜한 멘토</li>
             <li>상담 후기</li>
           </CenterMenu>
