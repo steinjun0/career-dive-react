@@ -3,7 +3,7 @@ node {
     stage ('Pull scource from github'){
         git branch: 'main',
         credentialsId: 'git-ssh',
-        url: 'git@github.com/steinjun0/career-dive-react.git'
+        url: 'git@github.com:steinjun0/career-dive-react.git'
     }
     stage('Build image by kaniko') {
         withKubeConfig([credentialsId: 'kube-config']) {
