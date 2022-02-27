@@ -7,9 +7,8 @@ import {
   Flex
 } from "../util/styledComponent";
 
-import OnComingShedule from "../component/schedule/OnComingSchedule";
-import ScheduleList from "../component/schedule/ScheduleList";
 import SideNavigation from "../component/myPage/SideNavigation";
+import UserProfile from "../component/myPage/UserProfile";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -17,23 +16,28 @@ const CardsWrapper = styled(Flex)`
   margin-bottom: 154px;
 `;
 
+const SideNavigationWrapper = styled(Flex)`
+  width: 276px;
+  height: 288px;
+`
+
 function MyPage() {
   return (
     <FullWidthWrapper>
       <GrayBackground>
         <MaxWidthDiv>
-          <SideNavigation>
-
-          </SideNavigation>
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={12}>
-                <OnComingShedule></OnComingShedule>
+              <Grid item xs={3}>
+                <SideNavigationWrapper>
+                  <SideNavigation />
+                </SideNavigationWrapper>
               </Grid>
-              <Grid item xs={12}>
-                <ScheduleList></ScheduleList>
+              <Grid item xs={9}>
+                <UserProfile />
               </Grid>
             </Grid>
+
           </CardsWrapper>
         </MaxWidthDiv>
       </GrayBackground>

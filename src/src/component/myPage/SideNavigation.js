@@ -8,11 +8,9 @@ import {
 } from "../../util/styledComponent";
 import Card from "../../util/Card";
 
-
 const NavigationListItem = styled(`li`)`
   margin-top: 20px;
 `
-
 const SelectedNavigation = styled(TextSubtitle1)`
   cursor: pointer;
   color: ${colorCareerDiveBlue};
@@ -38,7 +36,7 @@ function SideNavigation() {
   };
 
   return (
-    <Card title={'마이페이지'}>
+    <Card id='my-page-side-nav' title={'마이페이지'}>
       <VerticalFlex>
         <NavigationUndorderedList>
           {navigationList.map((subPage, index) => {

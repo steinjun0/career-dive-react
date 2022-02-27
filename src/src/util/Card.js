@@ -11,6 +11,7 @@ const CardWrapper = styled(VerticalFlex)`
   padding: 24px;
   background-color: white;
   box-shadow: 10px 20px 40px rgba(130, 130, 130, 0.1);
+  width: 100%;
 `;
 
 const TitleWrapper = styled(VerticalCenterAlignFlex)`
