@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { Divider, styled } from "@mui/material";
 import testMentorImage from "../../assets/img/testMentorImage.png";
 import Button from "@mui/material/Button";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -9,93 +9,49 @@ import {
   CircleImg,
   VerticalFlex,
   colorCareerDiveBlue,
+  TextSubtitle1,
+  TextBody1,
+  Flex,
 } from "../../util/styledComponent";
+import Card from "../../util/Card";
 
-const MentorProfileWrapper = styled(VerticalCenterAlignFlex)`
-  height: 200px;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
+const UserProfileCard = styled(Card)`
+  margin-bottom: 38px;
 `;
 
-const MentorProfileImg = styled(CircleImg)`
+const Subtitle = styled(TextSubtitle1)`
+  margin-top: 20px;
+`;
+
+const ProfileImg = styled(CircleImg)`
   width: 120px;
   height: 120px;
+  margin-bottom: 20px;
 `;
 
-const ProfileTexts = styled(VerticalFlex)`
-  height: 84px;
-  margin-left: 30px;
-  align-items: start;
-`;
+const TextContentWrapper = styled(Flex)`
+  margin-top: 20px;
+`
 
-const Tag = styled(VerticalCenterAlignFlex)`
-  background-color: rgba(105, 140, 255, 0.1);
-  color: #698cff;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 12px;
-  height: 20px;
-  margin-bottom: 8px;
-`;
+const EditTextButton = styled(TextBody1)`
+  cursor: pointer;
+  margin-left: 20px;
+`
 
-const Name = styled(VerticalCenterAlignFlex)`
-  font-weight: 700;
-  margin-bottom: 8px;
-`;
-
-const Discription = styled(VerticalCenterAlignFlex)``;
-
-const Buttons = styled(VerticalCenterAlignFlex)`
-  margin-left: auto;
-  height: 32px;
-  width: 244px;
-  justify-content: space-between;
-`;
-
-const FavoriteMentorButton = styled(Button)`
-  width: 92px;
-  height: 32px;
-  background-color: #bdbdbd;
-  color: white;
-  &:hover {
-    background-color: #bdbdbd;
-    color: white;
-  }
-`;
-
-const ApplyMentoringButton = styled(Button)`
-  width: 122px;
-  height: 32px;
-  background-color: ${colorCareerDiveBlue};
-  color: white;
-  &:hover {
-    background-color: ${colorCareerDiveBlue};
-    color: white;
-  }
-`;
-
-function UserProfile({ name = '', discription = '' }) {
+function UserProfile() {
   return (
-    <MentorProfileWrapper>
-      <MentorProfileImg src={testMentorImage} alt="profile-image" />
-      <ProfileTexts>
-        <Tag>현직자</Tag>
-        <Name>{name} 멘토</Name>
-        <Discription>{discription}</Discription>
-      </ProfileTexts>
-      <Buttons>
-        <FavoriteMentorButton startIcon={<FavoriteIcon />} disableElevation>
-          멘토 찜
-        </FavoriteMentorButton>
-        <ApplyMentoringButton
-          startIcon={<img src={EditCalandarIcon} alt={'calendar'} />}
-          disableElevation
-        >
-          멘토링 신청
-        </ApplyMentoringButton>
-      </Buttons>
-    </MentorProfileWrapper>
+    <UserProfileCard title={'유저 프로필'}>
+      <Subtitle>프로필 이미지</Subtitle>
+      <ProfileImg src={testMentorImage} alt="profile-image" />
+
+      <Divider></Divider>
+
+      <Subtitle>닉네임</Subtitle>
+      <TextContentWrapper>
+        <TextBody1>일하는 베짱이</TextBody1>
+        <EditTextButton>수정</EditTextButton>
+      </TextContentWrapper>
+    </UserProfileCard>
   );
 }
 
