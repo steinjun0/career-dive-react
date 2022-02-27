@@ -81,7 +81,12 @@ const ContentWrapper = styled(VerticalFlex)`
   margin-left: 16px;
 `;
 
+
+
 function ScheduleList() {
+  const calendarIcon = circleCalendarIcon;
+  const testProfileIamge = testMentorImage;
+
   const schedules = [
     { category: '예약 성공', date: '2022년 2월 18일', time: '오후 12시 20분', name: '다슬기', company: '(주)다파다' },
     { category: '예약 성공', date: '2022년 2월 5일', time: '오전 10시 40분', name: '고디', company: '(주)더퍼더' },
@@ -114,7 +119,7 @@ function ScheduleList() {
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={3} key={index}>
                   <ScheduleCard>
                     <ScheduleCardTop>
-                      <img src={circleCalendarIcon} alt="" />
+                      <img src={calendarIcon} alt="" />
 
                       <ContentWrapper>
                         <ScheduleDate>
@@ -132,7 +137,7 @@ function ScheduleList() {
                     </ScheduleCardTop>
 
                     <ScheduleCardBottom>
-                      <ProfileImg src={testMentorImage}></ProfileImg>
+                      <ProfileImg src={testProfileIamge}></ProfileImg>
 
                       <ContentWrapper>
                         <TextSubtitle2>

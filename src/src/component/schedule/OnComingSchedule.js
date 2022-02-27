@@ -49,6 +49,7 @@ const Buttons = styled(VerticalCenterAlignFlex)`
   justify-content: space-between;
 `;
 
+const testImage = testMentorImage;
 
 function OnComingShedule() {
   const schedules = [
@@ -71,7 +72,7 @@ function OnComingShedule() {
                 </ScheduleDateAndTime>
 
                 <ProfileWrapper>
-                  <ProfileImg src={testMentorImage}></ProfileImg>
+                  <ProfileImg src={testImage}></ProfileImg>
                   <VerticalFlex>
                     <TextSubtitle2>{schedule.name} 멘토</TextSubtitle2>
                     <TextBody2>{schedule.company}</TextBody2>
