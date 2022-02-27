@@ -1,7 +1,7 @@
 properties([pipelineTriggers([githubPush()])])
 node {
     stage ('Pull scource from github'){
-        git branch: 'main',
+        git branch: 'master',
         credentialsId: 'git-ssh',
         url: 'git@github.com:steinjun0/career-dive-react.git'
     }
