@@ -4,11 +4,11 @@ do
     IFS=" "
     string="`./kubectl get pods --field-selector=status.phase==Succeeded --output=jsonpath={.items[*].metadata.name}`"
     array=( $string )
-    value="kaniko-front"
+    value="kaniko-cd-front"
     echo "${IFS}${array[*]}${IFS}"
     if [[ "${IFS}${array[*]}${IFS}" =~ "${IFS}${value}${IFS}" ]]; then
         echo 'completed' 
-        ./kubectl delete pod kaniko-front
+        ./kubectl delete pod kaniko-cd-front
         exit
     else 
         echo 'running' 
