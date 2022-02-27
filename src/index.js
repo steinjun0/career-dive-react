@@ -11,14 +11,16 @@ import Mentor from "./pages/Mentor";
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
 import Schedule from "./pages/Schedule";
+import MyPage from "./pages/MyPage";
 
 ReactDOM.render(
   <BrowserRouter>
     <Gnb />
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="mentor/:id" element={<Mentor />} />
-      <Route path="schedule/:id" element={<Schedule />} />
+      <Route path="/mentor/:id" element={<Mentor />} />
+      <Route path="/schedule/:id" element={<Schedule />} />
+      <Route path="/mypage/:subPage" element={<MyPage />} />
     </Routes>
     <Footer />
   </BrowserRouter>,

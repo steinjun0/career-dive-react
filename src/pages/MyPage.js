@@ -9,6 +9,7 @@ import {
 
 import OnComingShedule from "../component/schedule/OnComingSchedule";
 import ScheduleList from "../component/schedule/ScheduleList";
+import SideNavigation from "../component/myPage/SideNavigation";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -16,11 +17,14 @@ const CardsWrapper = styled(Flex)`
   margin-bottom: 154px;
 `;
 
-function Schedule() {
+function MyPage() {
   return (
     <FullWidthWrapper>
       <GrayBackground>
         <MaxWidthDiv>
+          <SideNavigation>
+
+          </SideNavigation>
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={12}>
@@ -37,4 +41,4 @@ function Schedule() {
   );
 }
 
-export default Schedule;
+export default MyPage;

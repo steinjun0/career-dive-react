@@ -83,6 +83,11 @@ export const LinkNoDeco = styled(Link)`
   color: black;
 `;
 
+export const UlNoDeco = styled('ul')`
+  list-style: none;
+  padding: 0;
+`;
+
 export const CustomButton = styled(Button)`
   background-color: ${props => props.background_color ? props.background_color : colorCareerDiveBlue};
   color: ${props => props.custom_color ? props.custom_color : 'white'};

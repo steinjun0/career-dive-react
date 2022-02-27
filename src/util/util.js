@@ -1,3 +1,4 @@
+
 export const getDifferenceMinutes = (startTime, finishTime) => {
   // format of input time => 'hh:mm' (String)
   const tempStartDate = new Date(2022, 0, 1, startTime.slice(0, 2), startTime.slice(3, 5))
@@ -6,4 +7,10 @@ export const getDifferenceMinutes = (startTime, finishTime) => {
 
   const mm = Math.floor(diff / 1000 / 60);
   return mm
+}
+
+
+export const getLastPathOfRoute = (location) => {
+  const navigationSplits = location.pathname.split('/');
+  return navigationSplits[navigationSplits.length - 1]
 }
