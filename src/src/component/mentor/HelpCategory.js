@@ -30,6 +30,7 @@ const RegularTag = styled(Tag)`
 const PremiumTag = styled(Tag)`
   background-color: rgba(226, 93, 125, 0.1);
   color: ${colorCareerDivePink};
+  margin-bottom: 0;
 `;
 
 const RegularLegend = styled('span')`
