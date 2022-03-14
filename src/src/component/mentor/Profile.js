@@ -91,13 +91,11 @@ const ApplyMentoringButton = styled(Button)`
 
 function FavoriteButton({ isFavorite, setIsFavorite }) {
   if (isFavorite) {
-    console.log(isFavorite)
     return (<FavoriteMentorButtonClicked disableElevation onClick={() => { setIsFavorite(false) }}>
       <FavoriteIcon style={{ color: colorCareerDivePink }} />
     </FavoriteMentorButtonClicked>)
   }
   else {
-    console.log(isFavorite)
     return (<FavoriteMentorButton disableElevation onClick={() => { setIsFavorite(true) }}>
       <FavoriteIcon style={{ color: colorTextLight }} />
     </FavoriteMentorButton>)
