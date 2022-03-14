@@ -178,14 +178,16 @@ function Calendar() {
   const onClickAvailableDate = (date) => {
     setSelectedDate(date);
     setConsultingTime(0);
+    setConsultingHourAndMin(0);
   }
 
   const [dates, setDates] = useState(getDatesOfMonth(year, month))
-
   const [consultingTime, setConsultingTime] = useState(0);
+  const [consultingHourAndMin, setConsultingHourAndMin] = useState(0);
 
   const handleConsultingTime = (event, consultingTime) => {
     setConsultingTime(consultingTime);
+    setConsultingHourAndMin(0);
 
     let tempAvailableTime = []
 
@@ -216,6 +218,10 @@ function Calendar() {
 
     setAvailableTime(tempAvailableTime)
   };
+
+  const handleConsultingHourAndMin = (event, consultingHourAndMin) => {
+    setConsultingHourAndMin(consultingHourAndMin)
+  }
 
   useEffect(() => {
     if (month.length !== 0) {
@@ -299,41 +305,36 @@ function Calendar() {
               오전
             </DateTitle>
             <TimeButtonWrapper
-              value={consultingTime}
+              value={consultingHourAndMin}
               exclusive
-              onChange={handleConsultingTime}
+              onChange={handleConsultingHourAndMin}
               aria-label="text alignment"
             >
               {
-                availableTime.map((time) => {
-                  <TimeButton value={time} aria-label={`${time}min`}>
-                    {time}분
+                availableTime.map((time, index) => {
+                  return <TimeButton value={time} aria-label={`${time}min`} key={index}>
+                    {time}
                   </TimeButton>
                 })
               }
-              <TimeButton value={20} aria-label="20min">
-                20분
-              </TimeButton>
-              <TimeButton value={40} aria-label="40min">
-                40분
-              </TimeButton>
             </TimeButtonWrapper>
 
             <DateTitle>
               오후
             </DateTitle>
             <TimeButtonWrapper
-              value={consultingTime}
+              value={consultingHourAndMin}
               exclusive
-              onChange={handleConsultingTime}
+              onChange={handleConsultingHourAndMin}
               aria-label="text alignment"
             >
-              <TimeButton value={20} aria-label="20min">
-                20분
-              </TimeButton>
-              <TimeButton value={40} aria-label="40min">
-                40분
-              </TimeButton>
+              {
+                availableTime.map((time, index) => {
+                  return <TimeButton value={time} aria-label={`${time}min`} key={index}>
+                    {time}
+                  </TimeButton>
+                })
+              }
             </TimeButtonWrapper>
           </TimeSelectWrapper>
 
