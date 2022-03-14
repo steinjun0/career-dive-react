@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 import testMentorImage from "../../assets/img/testMentorImage.png";
 import Button from "@mui/material/Button";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteIcon from "@mui/icons-material/FavoriteBorder";
 import EditCalandarIcon from "../../assets/icon/editCalandar.svg";
 
 import {
@@ -9,7 +9,11 @@ import {
   CircleImg,
   VerticalFlex,
   colorCareerDiveBlue,
+  colorBackgroundGrayLight,
+  colorCareerDivePink,
+  colorTextLight
 } from "../../util/styledComponent";
+import { useState } from "react";
 
 const MentorProfileWrapper = styled(VerticalCenterAlignFlex)`
   height: 200px;
@@ -49,17 +53,27 @@ const Discription = styled(VerticalCenterAlignFlex)``;
 const Buttons = styled(VerticalCenterAlignFlex)`
   margin-left: auto;
   height: 32px;
-  width: 244px;
   justify-content: space-between;
 `;
 
 const FavoriteMentorButton = styled(Button)`
-  width: 92px;
-  height: 32px;
-  background-color: #bdbdbd;
+  min-width: 0px;
+  min-height: 0px;
+  background-color: ${colorBackgroundGrayLight};
   color: white;
   &:hover {
-    background-color: #bdbdbd;
+    background-color: ${colorBackgroundGrayLight};
+    color: white;
+  }
+`;
+
+const FavoriteMentorButtonClicked = styled(Button)`
+  min-width: 0px;
+  min-height: 0px;
+  background-color: rgba(226, 93, 125, 0.2);;
+  color: white;
+  &:hover {
+    background-color: rgba(226, 93, 125, 0.2);;
     color: white;
   }
 `;
@@ -75,7 +89,23 @@ const ApplyMentoringButton = styled(Button)`
   }
 `;
 
+function FavoriteButton({ isFavorite, setIsFavorite }) {
+  if (isFavorite) {
+    console.log(isFavorite)
+    return (<FavoriteMentorButtonClicked disableElevation onClick={() => { setIsFavorite(false) }}>
+      <FavoriteIcon style={{ color: colorCareerDivePink }} />
+    </FavoriteMentorButtonClicked>)
+  }
+  else {
+    console.log(isFavorite)
+    return (<FavoriteMentorButton disableElevation onClick={() => { setIsFavorite(true) }}>
+      <FavoriteIcon style={{ color: colorTextLight }} />
+    </FavoriteMentorButton>)
+  }
+}
+
 function MentorProfile({ name = '', discription = '' }) {
+  const [isFavorite, setIsFavorite] = useState(false)
   return (
     <MentorProfileWrapper>
       <MentorProfileImg src={testMentorImage} alt="profile-image" />
@@ -85,15 +115,13 @@ function MentorProfile({ name = '', discription = '' }) {
         <Discription>{discription}</Discription>
       </ProfileTexts>
       <Buttons>
-        <FavoriteMentorButton startIcon={<FavoriteIcon />} disableElevation>
-          멘토 찜
-        </FavoriteMentorButton>
-        <ApplyMentoringButton
+        <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
+        {/* <ApplyMentoringButton
           startIcon={<img src={EditCalandarIcon} alt={'calendar'} />}
           disableElevation
         >
           멘토링 신청
-        </ApplyMentoringButton>
+        </ApplyMentoringButton> */}
       </Buttons>
     </MentorProfileWrapper>
   );
