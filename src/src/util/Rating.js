@@ -6,20 +6,21 @@ import { Rating } from '@mui/material'
 
 const RatingScore = styled('span')`
     font-size: 12px;
-    color: #828282;
     margin-left: 6px;
-    margin-right: 24px;
+    margin-bottom: 2px;
+    // color: #828282;
+    // margin-right: 24px;
 `;
 
-function CustomRating({ value = 0, size = 'small' }) {
+function CustomRating({ value = 0, size = '16px' }) {
     return (<VerticalCenterAlignFlex>
         <Rating name="read-only" value={value} readOnly
             getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
             precision={0.5}
             icon={<FavoriteIcon fontSize="inherit" />}
             emptyIcon={<FavoriteIcon fontSize="inherit" style={{ color: '#EDEDED' }} />}
-            size={size}
             sx={{
+                fontSize: size,
                 color: '#E25D7D'
             }}
         />

@@ -3,6 +3,9 @@ import {
   VerticalCenterAlignFlex,
   CircleImg,
   LinkNoDeco,
+  TextHeading6,
+  TextBody2,
+  colorTextBody
 } from "../../util/styledComponent";
 import testMentorImage from "../../assets/img/testMentorImage.png";
 import Rating from "../../util/Rating";
@@ -13,34 +16,35 @@ const FamousMentorCardWrapper = styled(VerticalCenterAlignFlex)`
   justify-content: space-between;
   align-items: start;
   width: 276px;
-  height: 400px;
+  height: 365px;
   background-color: white;
   border-radius: 8px;
-  box-shadow: 10px 20px 40px rgba(130, 130, 130, 0.1);
+  // box-shadow: 10px 20px 40px rgba(130, 130, 130, 0.1);
 `;
 
-const Company = styled("span")`
-  font-weight: 700;
+const Company = styled(TextHeading6)`
   margin-left: 24px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   margin-top: 28px;
 `;
 
-const Department = styled("span")`
+const Department = styled(TextBody2)`
   font-size: 14px;
+  color: ${colorTextBody};
   margin-left: 24px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 `;
 
 const Job = styled("span")`
   font-size: 14px;
+  color: ${colorTextBody};
   margin-left: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 `;
 
 const ProfileImg = styled(CircleImg)`
-  width: 120px;
-  height: 120px;
+  width: 88px;
+  height: 88px;
   margin: 0 auto;
 `;
 
@@ -50,13 +54,13 @@ const Tag = styled(VerticalCenterAlignFlex)`
   border-radius: 4px;
   padding: 2px 4px;
   font-size: 12px;
-  margin: 24px auto 6px auto;
+  margin: 16px auto 6px auto;
   height: 20px;
 `;
 
 const Name = styled("span")`
   margin: 0 auto;
-  margin-bottom: 24px;
+  margin-bottom: 36px;
 `;
 
 const RatingWrapper = styled(VerticalCenterAlignFlex)`
@@ -64,7 +68,7 @@ const RatingWrapper = styled(VerticalCenterAlignFlex)`
   color: #e25d7d;
   border-top: 1px solid #cfd6e0;
   width: 100%;
-  justify-content: end;
+  justify-content: center;
 `;
 
 function FamousMentorCard({
