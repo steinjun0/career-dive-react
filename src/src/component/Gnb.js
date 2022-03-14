@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco } from '../util/styledComponent';
+import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco, colorTextBody } from '../util/styledComponent';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -48,6 +48,9 @@ const CenterMenu = styled("ul")`
     width: 270px;
     max-width: 1194px;
     background-color: white;
+    li {
+      color: ${colorTextBody};
+    }
   `;
 
 const LeftTopGnb = styled(VerticalCenterAlignFlex)`

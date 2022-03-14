@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex } from '../../util/styledComponent'
+import { VerticalCenterAlignFlex, TextSubtitle1 } from '../../util/styledComponent'
 
 const JobCategoryCardWrapper = styled(VerticalCenterAlignFlex)`
   width: 276px;
@@ -7,10 +7,10 @@ const JobCategoryCardWrapper = styled(VerticalCenterAlignFlex)`
 
 const CategoryIcon = styled('img')`
   align-items: center;
-  margin-right: 30px;
+  margin-right: 16px;
 `;
 
-const CategoryName = styled('span')`
+const CategoryName = styled('TextSubtitle1')`
   align-items: center;
   margin-right: 30px;
   font-weight: 700;

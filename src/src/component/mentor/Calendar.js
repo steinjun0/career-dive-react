@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { styled } from "@mui/material";
+import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 import Card from '../../util/Card'
 import SimpleMenu from '../../util/SimpleMenu'
@@ -9,7 +9,8 @@ import {
   VerticalFlex,
   colorCareerDiveBlue,
   colorTextLight,
-  Flex
+  Flex,
+  colorBackgroundGrayLight
 } from "../../util/styledComponent";
 
 import { getDifferenceMinutes } from '../../util/util'
@@ -18,7 +19,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 const CalendarWrapper = styled(Flex)`
   width: 100%;
-  margin-top: 30px;
+  // margin-top: 30px;
+  transition: all 0.3s ease-out;
 `
 
 const DateWrapper = styled(VerticalFlex)`
@@ -65,12 +67,16 @@ const SelectedDateBox = styled(DateBox)`
 `;
 
 const CalendarContentWrapper = styled(VerticalFlex)`
-  justify-content: space-between;
+  justify-content: start;
 `;
 
-const AvailableTimeOutSideWrapper = styled(VerticalFlex)`
+const TimeSelectWrapper = styled(VerticalFlex)`
   margin-top: 16px;
-  margin-bottom:
+  transition: height 0.3s ease;
+  height: ${props => props.is_show === 'true' ? props.height + 'px' : '0px'};
+  overflow: hidden;
+  // overflow: ${props => props.is_show === 'true' ? '' : 'hidden'};
+  // height: ${props => props.is_show === 'true' ? '200px' : '100px'};
 `;
 
 const AvailableTimeWrapper = styled(Flex)`
@@ -91,26 +97,58 @@ const AvailableTime = styled(VerticalCenterAlignFlex)`
 
 const YearMonthMenuWrapper = styled(VerticalCenterAlignFlex)`
  justify-content: center;
- margin-top: 10px;
+ margin: 16px 0;
+ height: 24px;
 `
 
 const YearMonthMenu = styled(SimpleMenu)`
 `;
 
+const TimeButton = styled(ToggleButton)`
+ justify-content: center;
+ width: 76px;
+ margin: 16px 0;
+ margin-right: 16px;
+ height: 44px;
+ background-color: ${colorBackgroundGrayLight};
+ color: ${colorTextLight};
+ border: solid 1px ${colorBackgroundGrayLight};
+ border-radius: 8px !important;
+
+ &.Mui-selected {
+  color: ${colorCareerDiveBlue};
+  border: 1px ${colorCareerDiveBlue} solid !important;
+  background-color: rgba(105, 140, 255, 0.2);
+ }
+ &.Mui-selected:hover {
+  color: ${colorCareerDiveBlue};
+  border: 1px ${colorCareerDiveBlue} solid !important;
+  background-color: rgba(105, 140, 255, 0.3);
+ }
+
+`
+
+const TimeButtonWrapper = styled(ToggleButtonGroup)`
+  display: flex;
+`
+
+
+
 function Calendar() {
   const year = 2022;
   const [month, setMonth] = useState(`${new Date().getMonth()}월`);
-  const originData = [{ date: 9, availableTime: [['09:00', '09:40']] },
-  { date: 10, availableTime: [['09:00', '09:40'], ['12:00', '13:00'], ['13:30', '13:50']] },
-  { date: 11, availableTime: [['09:00', '09:40'], ['17:00', '19:00']] },
-  { date: 16, availableTime: [['09:00', '09:40'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
-  { date: 17, availableTime: [['09:00', '09:40']] },
-  { date: 18, availableTime: [['09:00', '09:40']] },
+  const originData = [{ date: 9, availableTime: [['09:00', '09:30']] },
+  { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
+  { date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
+  { date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
+  { date: 17, availableTime: [['09:00', '09:30']] },
+  { date: 18, availableTime: [['09:00', '09:30']] },
   ]
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
   const availableDates = [9, 10, 11, 16, 17, 18];
-  const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
-  const [availableTime, setAvailableTime] = useState(availableDates.length !== 0 ? originData[0].availableTime : []);
+  // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
+  const [selectedDate, setSelectedDate] = useState(0);
+  const [availableTime, setAvailableTime] = useState([]);
 
   // const availableTime = [['09:00', '09:40'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']]
 
@@ -139,23 +177,62 @@ function Calendar() {
 
   const onClickAvailableDate = (date) => {
     setSelectedDate(date);
-    let tempAvailableTime = []
-
-    originData.forEach((element) => {
-      if (element.date === date) {
-        tempAvailableTime = element.availableTime;
-      }
-    })
-    setAvailableTime(tempAvailableTime)
+    setConsultingTime(0);
+    setConsultingHourAndMin(0);
   }
 
   const [dates, setDates] = useState(getDatesOfMonth(year, month))
+  const [consultingTime, setConsultingTime] = useState(0);
+  const [consultingHourAndMin, setConsultingHourAndMin] = useState(0);
+
+  const handleConsultingTime = (event, consultingTime) => {
+    setConsultingTime(consultingTime);
+    setConsultingHourAndMin(0);
+
+    let tempAvailableTime = []
+
+    originData.forEach((element) => {
+      if (element.date === selectedDate) {
+        for (const time of element.availableTime) {
+          let termCount = 0
+          console.log('time', time)
+          while (new Date(`2021/01/01 ${time[1]}`) - new Date(`2021/01/01 ${time[0]}`) > (consultingTime * 60 * 1000 + 10) * (termCount + 1)) {
+            const addingTime = Number(time[0].slice(3)) + termCount * 30
+            let addedHour = Number(time[0].slice(0, 2)) + parseInt(addingTime / 60)
+            let addedMin
+            if (addingTime % 60 == 30) {
+              addedMin = '30'
+            } else if (addingTime % 60 == 0) {
+              addedMin = '00'
+            }
+            addedHour = `${addedHour}`.padStart(2, '0')
+
+            const addedTime = addedHour + ':' + addedMin
+            tempAvailableTime.push(addedTime)
+            termCount += 1
+          }
+        }
+        console.log('tempAvailableTime', tempAvailableTime)
+      }
+    })
+
+    setAvailableTime(tempAvailableTime)
+  };
+
+  const handleConsultingHourAndMin = (event, consultingHourAndMin) => {
+    setConsultingHourAndMin(consultingHourAndMin)
+  }
 
   useEffect(() => {
     if (month.length !== 0) {
       setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
     }
   }, [month])
+
+  const [amLines, setAmLines] = useState(1)
+  const [pmLines, setPmLines] = useState(1)
+
+
 
   return (
     <CalendarWrapper>
@@ -195,17 +272,76 @@ function Calendar() {
             )}
           </DateWrapper>
 
-          <AvailableTimeOutSideWrapper>
-            <DateTitle>
-              {year}년 {month} {selectedDate}일
-            </DateTitle>
 
-            <AvailableTimeWrapper>
+          <TimeSelectWrapper
+            is_show={(selectedDate != 0).toString()}
+            height={84}
+          >
+            <DateTitle>
+              상담 시간
+            </DateTitle>
+            <TimeButtonWrapper
+              value={consultingTime}
+              exclusive
+              onChange={handleConsultingTime}
+              aria-label="text alignment"
+            >
+              <TimeButton value={20} aria-label="20min">
+                20분
+              </TimeButton>
+              <TimeButton value={40} aria-label="40min">
+                40분
+              </TimeButton>
+            </TimeButtonWrapper>
+
+
+          </TimeSelectWrapper>
+
+          <TimeSelectWrapper
+            is_show={(consultingTime != 0).toString()}
+            height={24 + (44 + 16) * amLines + 16 + (44 + 16) * pmLines + 24}
+          >
+            <DateTitle>
+              오전
+            </DateTitle>
+            <TimeButtonWrapper
+              value={consultingHourAndMin}
+              exclusive
+              onChange={handleConsultingHourAndMin}
+              aria-label="text alignment"
+            >
+              {
+                availableTime.map((time, index) => {
+                  return <TimeButton value={time} aria-label={`${time}min`} key={index}>
+                    {time}
+                  </TimeButton>
+                })
+              }
+            </TimeButtonWrapper>
+
+            <DateTitle>
+              오후
+            </DateTitle>
+            <TimeButtonWrapper
+              value={consultingHourAndMin}
+              exclusive
+              onChange={handleConsultingHourAndMin}
+              aria-label="text alignment"
+            >
+              {
+                availableTime.map((time, index) => {
+                  return <TimeButton value={time} aria-label={`${time}min`} key={index}>
+                    {time}
+                  </TimeButton>
+                })
+              }
+            </TimeButtonWrapper>
+          </TimeSelectWrapper>
+
+          {/* <AvailableTimeWrapper>
               {availableTime.map((timeRange, index) =>
                 <AvailableTime key={index}>{timeRange[0]} ~ {timeRange[1]} · {getDifferenceMinutes(timeRange[0], timeRange[1])}분</AvailableTime>)}
-            </AvailableTimeWrapper>
-
-          </AvailableTimeOutSideWrapper>
+            </AvailableTimeWrapper> */}
         </CalendarContentWrapper>
       </Card >
     </CalendarWrapper>

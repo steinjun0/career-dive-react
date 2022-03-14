@@ -8,6 +8,7 @@ export const colorBlueGray = '#CFD6E0';
 export const colorTextLight = "#898989";
 export const colorTextBody = "#4F4F4F";
 export const colorBackgroundGrayLight = "#F8F8F8";
+export const colorBackgroundGrayDark = "#E6E6E6";
 
 // text
 export const TextBody1 = styled(`span`)`
@@ -29,6 +30,12 @@ export const TextSubtitle2 = styled(`span`)`
   font-size: 14px;
   font-weight: 700;
   line-height: 24px;
+`;
+
+export const TextHeading6 = styled(`span`)`
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
 `;
 
 // container

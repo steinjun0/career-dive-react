@@ -53,15 +53,15 @@ function Mentor() {
                 <Grid container item xs={12} md={6}>
                   <Grid item xs={12} >
                     <HelpCategory></HelpCategory>
-                    <MentorCalendar></MentorCalendar>
+                    <Introduction></Introduction>
+                    <RatingAndReview></RatingAndReview>
                   </Grid>
                 </Grid>
 
                 <Grid item xs={12} md={6}>
                   <Grid container item spacing={2}>
                     <Grid item xs={12}>
-                      <Introduction></Introduction>
-                      <RatingAndReview></RatingAndReview>
+                      <MentorCalendar></MentorCalendar>
                     </Grid>
                   </Grid>
                 </Grid>
