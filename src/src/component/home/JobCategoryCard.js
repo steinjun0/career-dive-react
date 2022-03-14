@@ -8,6 +8,8 @@ const JobCategoryCardWrapper = styled(VerticalCenterAlignFlex)`
 const CategoryIcon = styled('img')`
   align-items: center;
   margin-right: 30px;
+  width: 54px;
+  height: 54px;
 `;
 
 const CategoryName = styled('span')`

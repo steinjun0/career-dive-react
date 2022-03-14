@@ -2,14 +2,14 @@ import { styled } from "@mui/material";
 import { VerticalCenterAlignFlex } from '../../util/styledComponent'
 import JobCategoryCard from './JobCategoryCard'
 
-import design from '../../assets/icon/jobCategory/design.svg'
-import dev from '../../assets/icon/jobCategory/dev.svg'
-import finance from '../../assets/icon/jobCategory/finance.svg'
-import manufacturing from '../../assets/icon/jobCategory/manufacturing.svg'
-import marketing from '../../assets/icon/jobCategory/marketing.svg'
-import media from '../../assets/icon/jobCategory/media.svg'
-import plan from '../../assets/icon/jobCategory/plan.svg'
-import sales from '../../assets/icon/jobCategory/sales.svg'
+import design from '../../assets/icon/jobCategory/design.png'
+import dev from '../../assets/icon/jobCategory/dev.png'
+import finance from '../../assets/icon/jobCategory/finance.png'
+import manufacturing from '../../assets/icon/jobCategory/manufacturing.png'
+import marketing from '../../assets/icon/jobCategory/marketing.png'
+import media from '../../assets/icon/jobCategory/media.png'
+import plan from '../../assets/icon/jobCategory/plan.png'
+import sales from '../../assets/icon/jobCategory/sales.png'
 
 const JobCategoryGroupWrapper = styled(VerticalCenterAlignFlex)`
     flex-direction: column;
