@@ -11,6 +11,11 @@ import media from '../../assets/icon/jobCategory/media.png'
 import plan from '../../assets/icon/jobCategory/plan.png'
 import sales from '../../assets/icon/jobCategory/sales.png'
 
+// change job category icon svg to png
+// before svg file is from figma, which is converted from image not vector
+// because of that, it created blurry image.
+// So I decide change image png to svg, although it increases file size
+
 const JobCategoryGroupWrapper = styled(VerticalCenterAlignFlex)`
     flex-direction: column;
     padding-top: 74px;
