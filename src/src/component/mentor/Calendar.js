@@ -312,9 +312,11 @@ function Calendar() {
             >
               {
                 availableTime.map((time, index) => {
-                  return <TimeButton value={time} aria-label={`${time}min`} key={index}>
-                    {time}
-                  </TimeButton>
+                  if (Number(time.slice(0, 2)) < 12) {
+                    return <TimeButton value={time} aria-label={`${time}min`} key={index}>
+                      {time}
+                    </TimeButton>
+                  }
                 })
               }
             </TimeButtonWrapper>
@@ -330,9 +332,11 @@ function Calendar() {
             >
               {
                 availableTime.map((time, index) => {
-                  return <TimeButton value={time} aria-label={`${time}min`} key={index}>
-                    {time}
-                  </TimeButton>
+                  if (Number(time.slice(0, 2)) >= 12) {
+                    return <TimeButton value={time} aria-label={`${time}min`} key={index}>
+                      {time}
+                    </TimeButton>
+                  }
                 })
               }
             </TimeButtonWrapper>
