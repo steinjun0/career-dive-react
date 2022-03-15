@@ -64,6 +64,7 @@ const AvailableDateBox = styled(DateBox)`
 const SelectedDateBox = styled(DateBox)`
   background-color:${colorCareerDiveBlue};
   color: white;
+  cursor: pointer;
 `;
 
 const CalendarContentWrapper = styled(VerticalFlex)`
