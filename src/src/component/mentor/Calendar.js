@@ -131,8 +131,39 @@ const TimeButton = styled(ToggleButton)`
 const TimeButtonWrapper = styled(ToggleButtonGroup)`
   display: flex;
 `
+function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin, onClickConsultingHourAndMin }) {
+  let isAM = false
+  if (title === '오전') {
+    isAM = true
+  }
+  if (timeArray.length == 0) {
+    return <div></div>
+  } else {
 
+    return (
+      <VerticalFlex>
+        <DateTitle>
+          {title}
+        </DateTitle>
+        <TimeButtonWrapper
+          value={consultingHourAndMin}
+          exclusive
+          onChange={onClickConsultingHourAndMin}
+          aria-label="text alignment"
+        >
+          {
+            timeArray.map((time, index) => {
+              return <TimeButton value={time} aria-label={`${time}min`} key={index}>
+                {time}
+              </TimeButton>
+            })
+          }
+        </TimeButtonWrapper>
+      </VerticalFlex>
+    )
+  }
 
+}
 
 function Calendar() {
   const year = 2022;
@@ -149,6 +180,29 @@ function Calendar() {
   // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
   const [selectedDate, setSelectedDate] = useState(0);
   const [availableTime, setAvailableTime] = useState([]);
+
+  const [availableAMTime, setAvailableAMTime] = useState([]);
+  const [availablePMTime, setAvailablePMTime] = useState([]);
+
+  const [amLines, setAMLines] = useState(1)
+  const [pmLines, setPMLines] = useState(1)
+
+  const getTimeSelectWrapperHeight = (amLines, pmLines) => {
+    // margin-top
+    // amLines height
+    // gap margin
+    // pmLines height
+    // bottom margin
+    if (amLines === 0 && pmLines === 0) {
+      return 0
+    } else if (amLines !== 0 && pmLines === 0) {
+      return 24 + (44 + 16) * amLines
+    } else if (amLines === 0 && pmLines !== 0) {
+      return 24 + (44 + 16) * pmLines
+    } else {
+      return 24 + (44 + 16) * amLines + 24 + (44 + 16) * pmLines + 12
+    }
+  }
 
   // const availableTime = [['09:00', '09:40'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']]
 
@@ -177,26 +231,31 @@ function Calendar() {
 
   const onClickAvailableDate = (date) => {
     setSelectedDate(date);
+
     setConsultingTime(0);
     setConsultingHourAndMin(0);
+    setAvailableAMTime([])
+    setAvailablePMTime([])
   }
 
   const [dates, setDates] = useState(getDatesOfMonth(year, month))
   const [consultingTime, setConsultingTime] = useState(0);
   const [consultingHourAndMin, setConsultingHourAndMin] = useState(0);
 
-  const handleConsultingTime = (event, consultingTime) => {
-    setConsultingTime(consultingTime);
+  const onClickConsultingTime = (event, newConsultingTime) => {
+    if (newConsultingTime === null) {
+      setConsultingTime(0);
+      return
+    }
+    setConsultingTime(newConsultingTime);
     setConsultingHourAndMin(0);
 
     let tempAvailableTime = []
-
     originData.forEach((element) => {
       if (element.date === selectedDate) {
         for (const time of element.availableTime) {
           let termCount = 0
-          console.log('time', time)
-          while (new Date(`2021/01/01 ${time[1]}`) - new Date(`2021/01/01 ${time[0]}`) > (consultingTime * 60 * 1000 + 10) * (termCount + 1)) {
+          while (new Date(`2021/01/01 ${time[1]}`) - new Date(`2021/01/01 ${time[0]}`) > (newConsultingTime * 60 * 1000 + 10) * (termCount + 1)) {
             const addingTime = Number(time[0].slice(3)) + termCount * 30
             let addedHour = Number(time[0].slice(0, 2)) + parseInt(addingTime / 60)
             let addedMin
@@ -212,14 +271,47 @@ function Calendar() {
             termCount += 1
           }
         }
-        console.log('tempAvailableTime', tempAvailableTime)
       }
     })
-
     setAvailableTime(tempAvailableTime)
+
+    let tempAvailableAMTime = []
+    let tempAvailablePMTime = []
+    tempAvailableTime.forEach((element) => {
+      if (Number(element.slice(0, 2)) < 12) {
+        tempAvailableAMTime.push(element)
+      } else {
+        tempAvailablePMTime.push(element)
+      }
+    })
+    setAvailableAMTime(tempAvailableAMTime)
+    setAvailablePMTime(tempAvailablePMTime)
+    // window.innerWidth / 2 : 6 grid
+    // - 48 : card padding
+    // - 60 : page padding
+    if (tempAvailableAMTime.length === 0) {
+      setAMLines(0)
+    }
+    else {
+      setAMLines(1 + parseInt((tempAvailableAMTime.length * 76) / ((window.innerWidth / 2) - 48 - 60)))
+    }
+
+    if (tempAvailablePMTime.length === 0) {
+      setPMLines(0)
+    }
+    else {
+      setPMLines(1 + parseInt((tempAvailablePMTime.length * 76) / ((window.innerWidth / 2) - 48 - 60)))
+    }
+    console.log('availablePMTime.length', tempAvailablePMTime.length)
+    console.log('availableAMTime.length', tempAvailableAMTime.length)
+    console.log('(availablePMTime.length * 76) % (window.innerWidth / 2 - 48)', parseInt((tempAvailablePMTime.length * 76) / (window.innerWidth / 2 - 48)))
+    console.log('(availableAMTime.length * 76) % (window.innerWidth / 2 - 48)', parseInt((tempAvailableAMTime.length * 76) / (window.innerWidth / 2 - 48)))
+
+
+    console.log('height', 24 + (44 + 16) * amLines + 24 + (44 + 16) * pmLines + 24)
   };
 
-  const handleConsultingHourAndMin = (event, consultingHourAndMin) => {
+  const onClickConsultingHourAndMin = (event, consultingHourAndMin) => {
     setConsultingHourAndMin(consultingHourAndMin)
   }
 
@@ -228,10 +320,6 @@ function Calendar() {
       setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
     }
   }, [month])
-
-  const [amLines, setAmLines] = useState(1)
-  const [pmLines, setPmLines] = useState(1)
-
 
 
   return (
@@ -283,7 +371,7 @@ function Calendar() {
             <TimeButtonWrapper
               value={consultingTime}
               exclusive
-              onChange={handleConsultingTime}
+              onChange={onClickConsultingTime}
               aria-label="text alignment"
             >
               <TimeButton value={20} aria-label="20min">
@@ -299,47 +387,21 @@ function Calendar() {
 
           <TimeSelectWrapper
             is_show={(consultingTime != 0).toString()}
-            height={24 + (44 + 16) * amLines + 16 + (44 + 16) * pmLines + 24}
+            height={getTimeSelectWrapperHeight(amLines, pmLines)}
           >
-            <DateTitle>
-              오전
-            </DateTitle>
-            <TimeButtonWrapper
-              value={consultingHourAndMin}
-              exclusive
-              onChange={handleConsultingHourAndMin}
-              aria-label="text alignment"
-            >
-              {
-                availableTime.map((time, index) => {
-                  if (Number(time.slice(0, 2)) < 12) {
-                    return <TimeButton value={time} aria-label={`${time}min`} key={index}>
-                      {time}
-                    </TimeButton>
-                  }
-                })
-              }
-            </TimeButtonWrapper>
+            <SelectionConsultingHourAndMin
+              title={'오전'}
+              consultingHourAndMin={consultingHourAndMin}
+              onClickConsultingHourAndMin={onClickConsultingHourAndMin}
+              timeArray={availableAMTime}
+            />
 
-            <DateTitle>
-              오후
-            </DateTitle>
-            <TimeButtonWrapper
-              value={consultingHourAndMin}
-              exclusive
-              onChange={handleConsultingHourAndMin}
-              aria-label="text alignment"
-            >
-              {
-                availableTime.map((time, index) => {
-                  if (Number(time.slice(0, 2)) >= 12) {
-                    return <TimeButton value={time} aria-label={`${time}min`} key={index}>
-                      {time}
-                    </TimeButton>
-                  }
-                })
-              }
-            </TimeButtonWrapper>
+            <SelectionConsultingHourAndMin
+              title={'오후'}
+              consultingHourAndMin={consultingHourAndMin}
+              onClickConsultingHourAndMin={onClickConsultingHourAndMin}
+              timeArray={availablePMTime}
+            />
           </TimeSelectWrapper>
 
           {/* <AvailableTimeWrapper>
