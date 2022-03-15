@@ -10,7 +10,7 @@ const CategoryIcon = styled('img')`
   margin-right: 16px;
 `;
 
-const CategoryName = styled('TextSubtitle1')`
+const CategoryName = styled(TextSubtitle1)`
   align-items: center;
   margin-right: 30px;
   font-weight: 700;
