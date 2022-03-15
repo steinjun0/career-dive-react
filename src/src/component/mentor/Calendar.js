@@ -72,7 +72,7 @@ const CalendarContentWrapper = styled(VerticalFlex)`
 `;
 
 const TimeSelectWrapper = styled(VerticalFlex)`
-  margin-top: 16px;
+  // margin-top: 16px;
   transition: height 0.3s ease;
   height: ${props => props.is_show === 'true' ? props.height + 'px' : '0px'};
   overflow: hidden;
@@ -88,6 +88,7 @@ const AvailableTimeWrapper = styled(Flex)`
 
 const DateTitle = styled('span')`
   font-weight: 700;
+  margin-top: 16px;
 `;
 
 const AvailableTime = styled(VerticalCenterAlignFlex)`
@@ -108,7 +109,8 @@ const YearMonthMenu = styled(SimpleMenu)`
 const TimeButton = styled(ToggleButton)`
  justify-content: center;
  width: 76px;
- margin: 16px 0;
+ min-width: 76px;
+ margin-top: 16px;
  margin-right: 16px;
  height: 44px;
  background-color: ${colorBackgroundGrayLight};
@@ -131,6 +133,8 @@ const TimeButton = styled(ToggleButton)`
 
 const TimeButtonWrapper = styled(ToggleButtonGroup)`
   display: flex;
+  flex-wrap: wrap;
+  margin-right: -16px;
 `
 function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin, onClickConsultingHourAndMin }) {
   let isAM = false
@@ -190,18 +194,19 @@ function Calendar() {
 
   const getTimeSelectWrapperHeight = (amLines, pmLines) => {
     // margin-top
+    // line-height
     // amLines height
     // gap margin
+    // line-height
     // pmLines height
-    // bottom margin
     if (amLines === 0 && pmLines === 0) {
       return 0
     } else if (amLines !== 0 && pmLines === 0) {
-      return 24 + (44 + 16) * amLines
+      return 16 + 24 + (44 + 16) * amLines
     } else if (amLines === 0 && pmLines !== 0) {
-      return 24 + (44 + 16) * pmLines
+      return 16 + 24 + (44 + 16) * pmLines
     } else {
-      return 24 + (44 + 16) * amLines + 24 + (44 + 16) * pmLines + 12
+      return 16 + 24 + (44 + 16) * amLines + 16 + 24 + (44 + 16) * pmLines
     }
   }
 
@@ -290,26 +295,26 @@ function Calendar() {
     // window.innerWidth / 2 : 6 grid
     // - 48 : card padding
     // - 60 : page padding
+    let cardWidth = 0
+    if (window.innerWidth > 1194) {
+      cardWidth = (1194 / 2) - 48 - 60
+    } else {
+      cardWidth = (window.innerWidth / 2) - 48 - 60
+    }
+
     if (tempAvailableAMTime.length === 0) {
       setAMLines(0)
     }
     else {
-      setAMLines(1 + parseInt((tempAvailableAMTime.length * 76) / ((window.innerWidth / 2) - 48 - 60)))
+      setAMLines(1 + parseInt((tempAvailableAMTime.length * 76) / cardWidth))
     }
 
     if (tempAvailablePMTime.length === 0) {
       setPMLines(0)
     }
     else {
-      setPMLines(1 + parseInt((tempAvailablePMTime.length * 76) / ((window.innerWidth / 2) - 48 - 60)))
+      setPMLines(1 + parseInt((tempAvailablePMTime.length * 76) / cardWidth))
     }
-    console.log('availablePMTime.length', tempAvailablePMTime.length)
-    console.log('availableAMTime.length', tempAvailableAMTime.length)
-    console.log('(availablePMTime.length * 76) % (window.innerWidth / 2 - 48)', parseInt((tempAvailablePMTime.length * 76) / (window.innerWidth / 2 - 48)))
-    console.log('(availableAMTime.length * 76) % (window.innerWidth / 2 - 48)', parseInt((tempAvailableAMTime.length * 76) / (window.innerWidth / 2 - 48)))
-
-
-    console.log('height', 24 + (44 + 16) * amLines + 24 + (44 + 16) * pmLines + 24)
   };
 
   const onClickConsultingHourAndMin = (event, consultingHourAndMin) => {
@@ -319,6 +324,7 @@ function Calendar() {
   useEffect(() => {
     if (month.length !== 0) {
       setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
+      setSelectedDate(0)
     }
   }, [month])
 
@@ -364,7 +370,7 @@ function Calendar() {
 
           <TimeSelectWrapper
             is_show={(selectedDate != 0).toString()}
-            height={84}
+            height={100}
           >
             <DateTitle>
               상담 시간
