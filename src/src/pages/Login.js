@@ -36,9 +36,20 @@ const ButtonWrapper = styled(VerticalFlex)`
   margin-top: 20px;
 `
 
-const postLogin = (email, password) => {
-    console.log(email);
-    API.postLogin(email, password);
+const postLogin = async (email, password) => {
+    try {
+        const loginResponse = await API.postLogin(email, password);
+        if (loginResponse.status === 200) {
+            window.localStorage.setItem('user_id', loginResponse.data.user_id)
+            window.localStorage.setItem('access_token', loginResponse.data.access_token)
+            window.localStorage.setItem('refresh_token', loginResponse.data.refresh_token)
+        }
+    }
+    catch {
+
+    }
+
+
 }
 
 function App() {
