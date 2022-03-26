@@ -28,7 +28,7 @@ export default {
     this.refreshUserData()
     try {
       const res = tokenHeader ? await axios.get(url, tokenHeader) : await axios.get(url)
-      return res.data
+      return res
     } catch (e) {
       return { error: getValidError(e) }
     }
@@ -47,7 +47,7 @@ export default {
     this.refreshUserData()
     try {
       const res = user.token ? await axios.get(url, { headers: { Authorization: `Bearer ${user.token}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
-      return res.data
+      return res
     } catch (e) {
       return { error: getValidError(e) }
     }
@@ -58,7 +58,7 @@ export default {
       const res = await axios.get(url, {
         params: param,
       }, tokenHeader)
-      return res.data
+      return res
     } catch (e) {
       return { error: getValidError(e) }
     }
@@ -67,7 +67,7 @@ export default {
     this.refreshUserData()
     try {
       const res = tokenHeader ? await axios.post(url, data, tokenHeader) : await axios.post(url, data)
-      return res.data
+      return res
     } catch (e) {
       return { error: getValidError(e) }
     }
@@ -76,7 +76,7 @@ export default {
     this.refreshUserData()
     try {
       const res = user.token ? await axios.post(url, data, { headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
-      return res.data
+      return res
     } catch (e) {
       return { error: getValidError(e) }
     }
@@ -85,7 +85,7 @@ export default {
     this.refreshUserData()
     try {
       const res = tokenHeader ? await axios.patch(url, data, tokenHeader) : await axios.patch(url, data)
-      return res.data
+      return res
     } catch (e) {
       return { error: getValidError(e) }
     }
@@ -94,20 +94,22 @@ export default {
     this.refreshUserData()
     try {
       const res = user.token ? await axios.patch(url, data, { headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
-      return res.data
+      return res
     } catch (e) {
       return { error: getValidError(e) }
     }
   },
+
   async putAxios(url) {
     this.refreshUserData()
     try {
       const res = tokenHeader ? await axios.put(url, tokenHeader) : await axios.put(url)
-      return res.data
+      return res
     } catch (e) {
       return { error: getValidError(e) }
     }
   },
+
   async deleteAxios(url) {
     this.refreshUserData()
     try {
@@ -123,7 +125,7 @@ export default {
     return loginRes
   },
 
-  async postLogin({ email, password }) {
+  async postLogin(email, password) {
     const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/login`, { email, password })
     return loginRes
   },
