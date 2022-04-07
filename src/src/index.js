@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
+import Login from "./pages/Login";
 import Mentor from "./pages/Mentor";
 
 import Gnb from "./component/Gnb";
@@ -18,6 +19,7 @@ ReactDOM.render(
     <Gnb />
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/mentor/:id" element={<Mentor />} />
       <Route path="/schedule/:id" element={<Schedule />} />
       <Route path="/mypage/:subPage" element={<MyPage />} />

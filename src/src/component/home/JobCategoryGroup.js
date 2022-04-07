@@ -35,17 +35,17 @@ function JobCategoryGroup() {
         <JobCategoryGroupWrapper>
 
             <JobCategoryCardLine>
-                <JobCategoryCard icon={marketing} name={'마케팅/광고/홍보'} ></JobCategoryCard>
-                <JobCategoryCard icon={plan} name={'기획/전략'} ></JobCategoryCard>
-                <JobCategoryCard icon={media} name={'방송/미디어'} ></JobCategoryCard>
-                <JobCategoryCard icon={finance} name={'은행/금융'} ></JobCategoryCard>
+                <JobCategoryCard icon={marketing} name={'마케팅·광고·홍보'} ></JobCategoryCard>
+                <JobCategoryCard icon={plan} name={'서비스·콘텐츠 기획'} ></JobCategoryCard>
+                <JobCategoryCard icon={media} name={'방송·미디어'} ></JobCategoryCard>
+                <JobCategoryCard icon={finance} name={'은행·금융'} ></JobCategoryCard>
             </JobCategoryCardLine>
 
             <JobCategoryCardLine>
-                <JobCategoryCard icon={dev} name={'개발/IT'} ></JobCategoryCard>
-                <JobCategoryCard icon={manufacturing} name={'제조/생산'} ></JobCategoryCard>
-                <JobCategoryCard icon={sales} name={'판매/유통/물류'} ></JobCategoryCard>
-                <JobCategoryCard icon={design} name={'문화/예술/디자인'} ></JobCategoryCard>
+                <JobCategoryCard icon={dev} name={'IT·SW'} ></JobCategoryCard>
+                <JobCategoryCard icon={manufacturing} name={'제조·생산·품질'} ></JobCategoryCard>
+                <JobCategoryCard icon={sales} name={'유통·물류·무역'} ></JobCategoryCard>
+                <JobCategoryCard icon={design} name={'디자인'} ></JobCategoryCard>
             </JobCategoryCardLine>
 
         </JobCategoryGroupWrapper>
