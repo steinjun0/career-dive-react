@@ -20,10 +20,13 @@ ReactDOM.render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/mentor/:id" element={<Mentor />} />
-      <Route path="/schedule/:id" element={<Schedule />} />
-      <Route path="/mypage/:subPage" element={<MyPage />} />
-      <Route path="/mypage" element={<Navigate replace to="/mypage/profile" />} />
+      <Route path="/mentee/mentor/profile/:id" element={<Mentor />} />
+      <Route path="/mentee/schedule" element={<Schedule />} />
+      <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
+      <Route path="/mentee/mypage" element={<Navigate replace to="/mentee/mypage/profile" />} />
+
+      <Route path="/mentor/mypage/:subPage" element={<MyPage />} />
+      <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
     </Routes>
     <Footer />
   </BrowserRouter>,
