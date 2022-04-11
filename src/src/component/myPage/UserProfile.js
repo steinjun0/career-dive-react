@@ -1,4 +1,4 @@
-import { Divider, styled } from "@mui/material";
+import { Divider, styled, TextField } from "@mui/material";
 import testMentorImage from "../../assets/img/testMentorImage.png";
 
 import {
@@ -6,15 +6,22 @@ import {
   TextSubtitle1,
   TextBody1,
   Flex,
+  VerticalCenterAlignFlex,
+  colorTextLight
 } from "../../util/styledComponent";
 import Card from "../../util/Card";
+import { useState } from "react";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
 `;
 
-const Subtitle = styled(TextSubtitle1)`
+const SubtitleWarpper = styled(VerticalCenterAlignFlex)`
   margin-top: 20px;
+`
+
+const Subtitle = styled(TextSubtitle1)`
+  // margin-top: 20px;
 `;
 
 const ProfileImg = styled(CircleImg)`
@@ -29,27 +36,40 @@ const TextContentWrapper = styled(Flex)`
 
 const EditTextButton = styled(TextBody1)`
   cursor: pointer;
-  margin-left: 20px;
+  margin-left: auto;
+  color: ${colorTextLight};
+  font-size: 14px;
 `
 
 function UserProfile() {
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
+  const onClickEditNickname = () => {
+    setIsEditingNickname(!isEditingNickname)
+  }
   return (
     <UserProfileCardWrapper>
       <Card title={'유저 프로필'}>
-        <Subtitle>프로필 이미지</Subtitle>
+        <SubtitleWarpper>
+          <Subtitle>프로필 이미지</Subtitle>
+        </SubtitleWarpper>
+
         <ProfileImg src={testMentorImage} alt="profile-image" />
 
         <Divider></Divider>
 
-        <Subtitle>닉네임</Subtitle>
+        <SubtitleWarpper>
+          <Subtitle>닉네임</Subtitle>
+          <EditTextButton onClick={onClickEditNickname}>수정하기</EditTextButton>
+        </SubtitleWarpper>
+
 
         <TextContentWrapper>
-          <TextBody1>일하는 베짱이</TextBody1>
-          <EditTextButton>수정</EditTextButton>
+          {isEditingNickname ? <TextField variant="standard" defaultValue={'일하는 베짱이'}></TextField> : <TextBody1>일하는 베짱이</TextBody1>}
+
         </TextContentWrapper>
 
       </Card>
-    </UserProfileCardWrapper>
+    </UserProfileCardWrapper >
 
   );
 }

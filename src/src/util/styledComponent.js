@@ -88,6 +88,9 @@ export const MaxWidthDiv = styled(Flex)`
 export const LinkNoDeco = styled(Link)`
   text-decoration: none;
   color: black;
+  height: 100%;
+  display:flex;
+  align-items: center;
 `;
 
 export const UlNoDeco = styled('ul')`

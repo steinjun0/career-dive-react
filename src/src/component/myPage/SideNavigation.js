@@ -32,7 +32,7 @@ function SideNavigation() {
   const navigater = useNavigate();
 
   const onClickListItem = (subPage) => {
-    navigater(`/mypage/${subPage}`)
+    navigater(`/mentee/mypage/${subPage}`)
   };
 
   return (
