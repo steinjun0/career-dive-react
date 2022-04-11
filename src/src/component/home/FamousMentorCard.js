@@ -81,7 +81,7 @@ function FamousMentorCard({
   index = 0,
 }) {
   return (
-    <LinkNoDeco to={"/mentor/" + index}>
+    <LinkNoDeco to={"/mentee/mentor/profile/" + index}>
       <FamousMentorCardWrapper>
 
         <Company>{company}</Company>

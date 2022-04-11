@@ -139,7 +139,7 @@ function Gnb() {
           <BlueSpan>멘토 되기</BlueSpan>
           <NotificationsNoneIcon />
           <MenuIcon />
-          <LinkNoDeco to={'mypage/profile'}>
+          <LinkNoDeco to={'mentee/mypage/profile'}>
             <ProfileImg src={testProfileImage} alt="" />
           </LinkNoDeco>
         </RightTopGnb>

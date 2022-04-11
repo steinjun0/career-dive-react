@@ -9,7 +9,7 @@ import {
 import Card from "../../util/Card";
 
 const HelpCategoryWrapper = styled(Flex)`
-
+  margin-bottom: 30px;
 `
 
 const Tag = styled(VerticalCenterAlignFlex)`

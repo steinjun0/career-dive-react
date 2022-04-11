@@ -1,6 +1,7 @@
 import { styled } from "@mui/material";
 
 import {
+  TextHeading6,
   VerticalCenterAlignFlex,
   VerticalFlex,
 } from "./styledComponent";
@@ -32,7 +33,7 @@ function Card(props) {
   return (
     <CardWrapper min_width={props.min_width}>
       <TitleWrapper no_divider={props.no_divider}>
-        <span>{props.title}</span>
+        <TextHeading6>{props.title}</TextHeading6>
         <TitleHead>
           {props.titleHead}
         </TitleHead>
