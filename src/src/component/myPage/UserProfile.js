@@ -38,6 +38,7 @@ const EditTextButton = styled(TextBody1)`
   cursor: pointer;
   margin-left: auto;
   color: ${colorTextLight};
+  font-size: 14px;
 `
 
 function UserProfile() {
