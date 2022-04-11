@@ -19,7 +19,8 @@ const TitleWrapper = styled(VerticalCenterAlignFlex)`
   font-size: 20px;
   font-weight: 700;
   ${props => props.no_divider ? '' : 'border-bottom: 1px solid #CFD6E0;'}
-  padding-bottom: 16px;
+  ${props => props.no_divider ? '' : 'padding-bottom: 16px;'}
+  
 `;
 
 const TitleHead = styled(VerticalCenterAlignFlex)`
