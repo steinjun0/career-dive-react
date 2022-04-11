@@ -1,11 +1,14 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco, colorTextBody } from '../util/styledComponent';
+import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue } from '../util/styledComponent';
+
+import { useLocation } from 'react-router-dom'
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import logo from '../assets/img/logo/careerDiveLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
+
 
 const GnbFullWidthWrapper = styled("nav")`
       position: relative;
@@ -44,10 +47,13 @@ const CenterMenu = styled("ul")`
     padding: 0;
     font-size: 16px;
     font-weight: 700;
-    height: 44px;
+
+    margin: 0;
+    height: 100%;
     width: 270px;
     max-width: 1194px;
     background-color: white;
+    
     li {
       color: ${colorTextBody};
     }
@@ -79,24 +85,53 @@ const ProfileImg = styled(CircleImg)`
     height: 48px;
   `;
 
+const HomeLogo = styled('img')`
+    height: 28px;
+`
+
+const GnbLi = styled('li')`
+  ${props => props.present_link === 'true' ? `
+    color: ${colorCareerDiveBlue} !important;
+  padding-top: 4px;
+  border-bottom: 4px solid ${colorCareerDiveBlue};
+  height: 100%;
+  display:flex;
+  align-items: center;
+  box-sizing: border-box;
+  `: ''
+  }
+  
+`;
+
+
+
 function Gnb() {
+  const location = useLocation().pathname;
+  const isPresentUrl = (url) => {
+    return url === location
+  }
+
   return (
     <GnbFullWidthWrapper>
       <GnbWrapper>
 
         <LeftTopGnb>
           <LinkNoDeco to={'/'}>
-            <img src={logo} alt="커리어 다이브" />
+            <HomeLogo src={logo} alt="커리어 다이브" />
           </LinkNoDeco>
         </LeftTopGnb>
 
         <CenterGnb>
           <CenterMenu>
-            <LinkNoDeco to={`/schedule/${1}`}>
-              <li>내 상담</li>
+            <LinkNoDeco to={`/mentee/schedule`}>
+              <GnbLi present_link={isPresentUrl(`/mentee/schedule`).toString()}>내 상담</GnbLi>
             </LinkNoDeco>
-            <li>찜한 멘토</li>
-            <li>상담 후기</li>
+            <LinkNoDeco to={`/mentee/schedule`}>
+              <GnbLi>찜한 멘토</GnbLi>
+            </LinkNoDeco>
+            <LinkNoDeco to={`/mentee/schedule`}>
+              <GnbLi>상담 후기</GnbLi>
+            </LinkNoDeco>
           </CenterMenu>
         </CenterGnb>
 
