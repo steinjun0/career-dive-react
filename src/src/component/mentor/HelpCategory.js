@@ -5,8 +5,8 @@ import {
   colorCareerDivePink,
   colorCareerDiveBlue,
   Flex,
-} from "../../util/styledComponent";
-import Card from "../../util/Card";
+} from "util/styledComponent";
+import Card from "util/Card";
 
 const HelpCategoryWrapper = styled(Flex)`
   margin-bottom: 30px;

@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco } from '../util/styledComponent';
+import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco } from 'util/styledComponent';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';

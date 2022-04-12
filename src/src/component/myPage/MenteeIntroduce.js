@@ -10,8 +10,8 @@ import {
   Flex,
   colorBackgroundGrayLight,
   colorTextLight,
-} from "../../util/styledComponent";
-import Card from "../../util/Card";
+} from "util/styledComponent";
+import Card from "util/Card";
 
 const MenteeIntroduceWrapper = styled(Flex)`
   width: 100%;

@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex } from '../../util/styledComponent'
+import { VerticalCenterAlignFlex } from 'util/styledComponent'
 import JobCategoryCard from './JobCategoryCard'
 
 import design from '../../assets/icon/jobCategory/design.png'

@@ -5,10 +5,10 @@ import {
   GrayBackground,
   MaxWidthDiv,
   Flex
-} from "../util/styledComponent";
+} from "util/styledComponent";
 
-import OnComingShedule from "../component/schedule/OnComingSchedule";
-import ScheduleList from "../component/schedule/ScheduleList";
+import OnComingShedule from "component/schedule/OnComingSchedule";
+import ScheduleList from "component/schedule/ScheduleList";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;

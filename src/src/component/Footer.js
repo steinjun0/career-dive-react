@@ -4,7 +4,7 @@ import {
   Flex,
   VerticalFlex,
   colorCareerDiveBlue,
-} from "../util/styledComponent";
+} from "util/styledComponent";
 
 import speechBubble from "../assets/icon/speechBubble.svg";
 

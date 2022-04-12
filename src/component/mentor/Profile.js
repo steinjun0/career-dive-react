@@ -9,7 +9,7 @@ import {
   CircleImg,
   VerticalFlex,
   colorCareerDiveBlue,
-} from "../../util/styledComponent";
+} from "util/styledComponent";
 
 const MentorProfileWrapper = styled(VerticalCenterAlignFlex)`
   height: 200px;

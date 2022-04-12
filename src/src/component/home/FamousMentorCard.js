@@ -6,9 +6,9 @@ import {
   TextHeading6,
   TextBody2,
   colorTextBody
-} from "../../util/styledComponent";
+} from "util/styledComponent";
 import testMentorImage from "../../assets/img/testMentorImage.png";
-import Rating from "../../util/Rating";
+import Rating from "util/Rating";
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
 const FamousMentorCardWrapper = styled(VerticalCenterAlignFlex)`
