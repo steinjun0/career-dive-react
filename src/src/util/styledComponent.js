@@ -74,7 +74,7 @@ export const GrayBackground = styled(Flex)`
   background-color: #f8f8f8;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
+  width: 100%;
 `;
 
 export const MaxWidthDiv = styled(Flex)`
