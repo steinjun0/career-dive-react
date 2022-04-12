@@ -10,7 +10,7 @@ import {
 import SideNavigation from "component/myPage/SideNavigation";
 import UserProfile from "component/myPage/UserProfile";
 import MenteeIntroduce from "component/myPage/MenteeIntroduce";
-import Account from 'component/myPage/Account'
+import AccountInfo from 'component/myPage/AccountInfo'
 import { useLocation, useParams } from "react-router-dom";
 
 const CardsWrapper = styled(Flex)`
@@ -48,8 +48,7 @@ function MyPage() {
                 {
                   params.subPage === 'account' &&
                   <div>
-                    <Account />
-                    <MenteeIntroduce />
+                    <AccountInfo />
                   </div>
                 }
               </Grid>
