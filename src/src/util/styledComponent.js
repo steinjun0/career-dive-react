@@ -38,6 +38,13 @@ export const TextHeading6 = styled(`span`)`
   line-height: 32px;
 `;
 
+export const TextButton = styled(`span`)`
+  font-size: 14px;
+  line-height: 20px;
+  color: ${colorTextLight};
+  font-weight: 500;
+`;
+
 // container
 export const Flex = styled("div")`
   display: flex;
