@@ -18,13 +18,8 @@ const CardsWrapper = styled(Flex)`
   margin-bottom: 154px;
 `;
 
-const CardWrapper = styled(Flex)`
-  margin-bottom: 38px;
-`;
-
 const SideNavigationWrapper = styled(Flex)`
   width: 276px;
-  height: 288px;
 `
 
 function MyPage() {

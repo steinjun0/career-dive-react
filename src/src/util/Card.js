@@ -7,6 +7,7 @@ import {
 } from "./styledComponent";
 
 const CardWrapper = styled(VerticalFlex)`
+  justify-content: start;
   min-width: ${props => `${props.min_width}px`};
   border-radius: 8px;
   padding: 24px;
