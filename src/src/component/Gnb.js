@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue } from '../util/styledComponent';
+import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue } from 'util/styledComponent';
 
 import { useLocation } from 'react-router-dom'
 

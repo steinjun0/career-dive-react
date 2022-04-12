@@ -5,11 +5,13 @@ import {
   GrayBackground,
   MaxWidthDiv,
   Flex
-} from "../util/styledComponent";
+} from "util/styledComponent";
 
-import SideNavigation from "../component/myPage/SideNavigation";
-import UserProfile from "../component/myPage/UserProfile";
-import MenteeIntroduce from "../component/myPage/MenteeIntroduce";
+import SideNavigation from "component/myPage/SideNavigation";
+import UserProfile from "component/myPage/UserProfile";
+import MenteeIntroduce from "component/myPage/MenteeIntroduce";
+import AccountInfo from 'component/myPage/AccountInfo'
+import ReceiveAgreement from 'component/myPage/ReceiveAgreement'
 import { useParams } from "react-router-dom";
 
 const CardsWrapper = styled(Flex)`
@@ -18,17 +20,13 @@ const CardsWrapper = styled(Flex)`
   margin-bottom: 154px;
 `;
 
-const CardWrapper = styled(Flex)`
-  margin-bottom: 38px;
-`;
-
 const SideNavigationWrapper = styled(Flex)`
   width: 276px;
-  height: 288px;
 `
 
 function MyPage() {
   const params = useParams();
+
   return (
     <FullWidthWrapper>
       <GrayBackground>
@@ -48,9 +46,15 @@ function MyPage() {
                     <MenteeIntroduce />
                   </div>
                 }
+                {
+                  params.subPage === 'account' &&
+                  <div>
+                    <AccountInfo />
+                    <ReceiveAgreement />
+                  </div>
+                }
               </Grid>
             </Grid>
-
           </CardsWrapper>
         </MaxWidthDiv>
       </GrayBackground>

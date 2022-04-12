@@ -3,9 +3,9 @@ import {
   VerticalCenterAlignFlex,
   FullWidthWrapper,
   CenterWidthWrapper,
-} from "../../util/styledComponent";
+} from "util/styledComponent";
 
-import SimpleMenu from "../../util/SimpleMenu";
+import SimpleMenu from "util/SimpleMenu";
 
 import BannerIdCard1 from "../../assets/img/home/BannerIDCard-1.png";
 import BannerIdCard2 from "../../assets/img/home/BannerIDCard-2.png";

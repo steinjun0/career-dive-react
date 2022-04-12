@@ -12,7 +12,7 @@ import {
     colorBackgroundGrayLight,
     colorTextLight,
     CustomButton
-} from "../util/styledComponent";
+} from "util/styledComponent";
 import { useState } from 'react';
 
 

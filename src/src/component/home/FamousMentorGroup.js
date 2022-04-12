@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex } from "../../util/styledComponent";
+import { VerticalCenterAlignFlex } from "util/styledComponent";
 import FamousMentorCard from "./FamousMentorCard";
 
 const FamousMentorGroupWrapper = styled(VerticalCenterAlignFlex)`

@@ -12,7 +12,7 @@ import {
   colorBackgroundGrayLight,
   colorCareerDivePink,
   colorTextLight
-} from "../../util/styledComponent";
+} from "util/styledComponent";
 import { useState } from "react";
 
 const MentorProfileWrapper = styled(VerticalCenterAlignFlex)`

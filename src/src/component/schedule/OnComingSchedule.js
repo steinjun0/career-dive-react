@@ -9,8 +9,8 @@ import {
   TextSubtitle1,
   TextSubtitle2,
   CustomButton,
-} from "../../util/styledComponent";
-import Card from "../../util/Card";
+} from "util/styledComponent";
+import Card from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
 import CallOutlinedIcon from '@mui/icons-material/CallOutlined';

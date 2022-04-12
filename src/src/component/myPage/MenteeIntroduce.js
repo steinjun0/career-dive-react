@@ -1,5 +1,4 @@
 import { Divider, styled } from "@mui/material";
-import testMentorImage from "../../assets/img/testMentorImage.png";
 import TextField from '@mui/material/TextField';
 import Dropzone from 'react-dropzone'
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -10,8 +9,8 @@ import {
   Flex,
   colorBackgroundGrayLight,
   colorTextLight,
-} from "../../util/styledComponent";
-import Card from "../../util/Card";
+} from "util/styledComponent";
+import Card from "util/Card";
 
 const MenteeIntroduceWrapper = styled(Flex)`
   width: 100%;

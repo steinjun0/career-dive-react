@@ -5,8 +5,8 @@ import {
   TextSubtitle1,
   colorCareerDiveBlue,
   UlNoDeco,
-} from "../../util/styledComponent";
-import Card from "../../util/Card";
+} from "util/styledComponent";
+import Card from "util/Card";
 
 const NavigationListItem = styled(`li`)`
   margin-top: 20px;

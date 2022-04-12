@@ -38,6 +38,19 @@ export const TextHeading6 = styled(`span`)`
   line-height: 32px;
 `;
 
+export const TextButton = styled(`span`)`
+  font-size: 14px;
+  line-height: 20px;
+  color: ${colorTextLight};
+  font-weight: 500;
+`;
+
+export const TextCaption = styled(`span`)`
+  font-size: 12px;
+  color: ${colorTextLight};
+`;
+
+
 // container
 export const Flex = styled("div")`
   display: flex;
@@ -74,7 +87,7 @@ export const GrayBackground = styled(Flex)`
   background-color: #f8f8f8;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
+  width: 100%;
 `;
 
 export const MaxWidthDiv = styled(Flex)`
@@ -85,6 +98,24 @@ export const MaxWidthDiv = styled(Flex)`
   box-sizing: border-box;
 `;
 
+export const EmptyHeight = styled(Flex)`
+  min-height: ${props => props.height};
+`
+
+export const EmptyWidth = styled(Flex)`
+  min-width: ${props => props.width};
+`
+
+export const WidthFixerWrapper = styled(Flex)`
+  min-width: ${props => props.width};
+  min-height: ${props => props.height};
+  
+  max-width: ${props => props.width};
+  max-height: ${props => props.height};
+`
+
+
+// components
 export const LinkNoDeco = styled(Link)`
   text-decoration: none;
   color: black;

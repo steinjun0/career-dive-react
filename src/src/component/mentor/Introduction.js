@@ -2,8 +2,8 @@ import {
   colorTextBody,
   Flex,
   VerticalFlex,
-} from "../../util/styledComponent";
-import Card from "../../util/Card";
+} from "util/styledComponent";
+import Card from "util/Card";
 import { styled } from "@mui/material";
 
 const IntroductionWrapper = styled(Flex)`
