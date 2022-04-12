@@ -11,7 +11,8 @@ import SideNavigation from "component/myPage/SideNavigation";
 import UserProfile from "component/myPage/UserProfile";
 import MenteeIntroduce from "component/myPage/MenteeIntroduce";
 import AccountInfo from 'component/myPage/AccountInfo'
-import { useLocation, useParams } from "react-router-dom";
+import ReceiveAgreement from 'component/myPage/ReceiveAgreement'
+import { useParams } from "react-router-dom";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -49,6 +50,7 @@ function MyPage() {
                   params.subPage === 'account' &&
                   <div>
                     <AccountInfo />
+                    <ReceiveAgreement />
                   </div>
                 }
               </Grid>

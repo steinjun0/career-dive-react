@@ -1,5 +1,4 @@
 import { Divider, styled } from "@mui/material";
-import testMentorImage from "../../assets/img/testMentorImage.png";
 import TextField from '@mui/material/TextField';
 import Dropzone from 'react-dropzone'
 import FileUploadIcon from '@mui/icons-material/FileUpload';

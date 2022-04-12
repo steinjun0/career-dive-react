@@ -1,20 +1,14 @@
-import { Divider, styled, TextField } from "@mui/material";
-import testMentorImage from "../../assets/img/testMentorImage.png";
+import { Divider, styled, } from "@mui/material";
 
 import {
-  CircleImg,
-  TextSubtitle1,
-  TextBody1,
   Flex,
   VerticalCenterAlignFlex,
-  colorTextLight,
   TextButton,
   TextSubtitle2,
   TextBody2,
   EmptyHeight
 } from "util/styledComponent";
 import Card from "util/Card";
-import { useState } from "react";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
