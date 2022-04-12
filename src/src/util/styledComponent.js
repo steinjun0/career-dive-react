@@ -92,6 +92,11 @@ export const MaxWidthDiv = styled(Flex)`
   box-sizing: border-box;
 `;
 
+export const EmptyHeight = styled(Flex)`
+  min-height: ${props => props.height};
+`
+
+// components
 export const LinkNoDeco = styled(Link)`
   text-decoration: none;
   color: black;
