@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import { colorCareerDiveBlue } from './styledComponent';
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
+export const CustomToggleButton = styled(Switch)(({ theme }) => ({
   width: 36,
   height: 20,
   padding: 0,
@@ -47,4 +47,6 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default AntSwitch
+export const onChangeToggle = (event, state, setState) => {
+  setState(!state)
+}
