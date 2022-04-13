@@ -6,7 +6,8 @@ import {
   TextButton,
   TextSubtitle2,
   TextBody2,
-  EmptyHeight
+  EmptyHeight,
+  LinkNoDeco
 } from "util/styledComponent";
 import Card from "util/Card";
 
@@ -24,7 +25,10 @@ const CustomTextSubtitle2 = styled(TextSubtitle2)`
 function UserProfile() {
   return (
     <UserProfileCardWrapper>
-      <Card title={'계정 정보'} titleTail={<TextButton>변경</TextButton>}>
+      <Card title={'계정 정보'} titleTail={
+        <LinkNoDeco to={'/mentee/mypage/account/change'}>
+          <TextButton>변경</TextButton>
+        </LinkNoDeco>}>
         <SubtitleWarpper>
           <CustomTextSubtitle2>이름</CustomTextSubtitle2>
           <TextBody2>김인종</TextBody2>
