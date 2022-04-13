@@ -141,3 +141,13 @@ export const CustomButton = styled(Button)`
   font-size: 16px;
   line-height: 24px;
 `;
+
+export const TextFieldWrapper = styled(Flex)`
+  margin-top: 20px;
+  
+  width: 100%;
+  .MuiInputBase-multiline,.MuiInputBase-input{
+    padding-top:8px;
+    background-color: ${colorBackgroundGrayLight};
+  }
+`;

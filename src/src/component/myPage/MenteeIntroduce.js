@@ -9,6 +9,7 @@ import {
   Flex,
   colorBackgroundGrayLight,
   colorTextLight,
+  TextFieldWrapper
 } from "util/styledComponent";
 import Card from "util/Card";
 
@@ -22,15 +23,6 @@ const Subtitle = styled(TextSubtitle2)`
   margin-bottom: 20px;
 `;
 
-const TextFieldWrapper = styled(Flex)`
-  margin-top: 20px;
-  
-  width: 100%;
-  .MuiInputBase-multiline,.MuiInputBase-input{
-    padding-top:8px;
-    background-color: ${colorBackgroundGrayLight};
-  }
-`;
 
 const DropzoneWrapper = styled(Flex)`
   justify-content: center;
