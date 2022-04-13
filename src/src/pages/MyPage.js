@@ -5,7 +5,8 @@ import {
   GrayBackground,
   MaxWidthDiv,
   Flex,
-  TextHeading6
+  TextHeading6,
+  LinkNoDeco
 } from "util/styledComponent";
 
 import SideNavigation from "component/myPage/SideNavigation";
@@ -61,10 +62,12 @@ function MyPage() {
                   isInAccountChange() &&
                   <div>
                     <SideNavigationWrapper>
-                      <MoveBackButtonWrapper>
-                        <ChevronLeftIcon />
-                      </MoveBackButtonWrapper>
-                      <TextHeading6>마이페이지</TextHeading6>
+                      <LinkNoDeco to={'/mentee/mypage/account'}>
+                        <MoveBackButtonWrapper>
+                          <ChevronLeftIcon />
+                        </MoveBackButtonWrapper>
+                        <TextHeading6>마이페이지</TextHeading6>
+                      </LinkNoDeco>
                     </SideNavigationWrapper>
                   </div>
                 }
