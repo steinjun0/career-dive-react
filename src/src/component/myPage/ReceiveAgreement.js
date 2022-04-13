@@ -52,10 +52,8 @@ function UserProfile() {
           <EmptyWidth width={'8px'}></EmptyWidth>
           <TextCaption style={{ color: isMarketingPushAgree ? colorCareerDiveBlue : colorTextLight }}>선택</TextCaption>
         </SubtitleWarpper>
-
       </Card>
     </UserProfileCardWrapper >
-
   );
 }
 

@@ -65,7 +65,6 @@ function UserProfile() {
 
         <TextContentWrapper>
           {isEditingNickname ? <TextField variant="standard" defaultValue={'일하는 베짱이'}></TextField> : <TextBody1>일하는 베짱이</TextBody1>}
-
         </TextContentWrapper>
 
       </Card>
