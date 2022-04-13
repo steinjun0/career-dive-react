@@ -23,14 +23,26 @@ const CustomTextSubtitle2 = styled(TextSubtitle2)`
   margin-right: 20px;
 `
 
+const CustomTextField = styled(TextField)`
+  .MuiFilledInput-input{
+    height: 32px;
+    padding: 10px 20px;
+  }
+`;
+
 function UserProfile() {
   return (
     <UserProfileCardWrapper>
-      <Card title={'비밀번호 변경'} no_divider={true}>
-        <SubtitleWarpper>
-          <CustomTextSubtitle2>이름</CustomTextSubtitle2>
-          <TextBody2>김인종</TextBody2>
-        </SubtitleWarpper>
+      <Card title={'비밀번호 변경'} no_divider={'true'}>
+        <TextFieldWrapper>
+          <CustomTextField
+            placeholder="변경 할 비밀번호"
+            variant="filled"
+            InputProps={{ disableUnderline: true }}
+            rows={1}
+            fullWidth={true}
+          />
+        </TextFieldWrapper>
 
         <EmptyHeight height={'20px'}></EmptyHeight>
         <Divider></Divider>
@@ -38,8 +50,7 @@ function UserProfile() {
 
         <TextHeading6>이메일 변경</TextHeading6>
         <TextFieldWrapper>
-          <TextField
-            id="outlined-textarea"
+          <CustomTextField
             placeholder=""
             variant="filled"
             InputProps={{ disableUnderline: true }}
@@ -56,11 +67,6 @@ function UserProfile() {
         <TextHeading6>휴대전화 변경</TextHeading6>
         <EmptyHeight height={'8px'}></EmptyHeight>
         <TextBody2 style={{ color: colorTextLight }}>본인인증을 통해 자동 저장됩니다.</TextBody2>
-
-        <SubtitleWarpper>
-          <CustomTextSubtitle2>휴대전화</CustomTextSubtitle2>
-          <TextBody2>010-2392-2429</TextBody2>
-        </SubtitleWarpper>
 
       </Card>
     </UserProfileCardWrapper >
