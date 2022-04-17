@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Button, styled } from "@mui/material";
+import { styled } from "@mui/material";
 
 // color
 export const colorCareerDiveBlue = "#698CFF";
@@ -32,10 +32,11 @@ export const TextSubtitle2 = styled(`span`)`
   line-height: 24px;
 `;
 
-export const TextHeading6 = styled(`span`)`
+export const TextHeading6 = styled(`h6`)`
   font-size: 20px;
   font-weight: 700;
   line-height: 32px;
+  margin: 0;
 `;
 
 export const TextButton = styled(`span`)`
