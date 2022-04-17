@@ -9,11 +9,13 @@ import {
   TextFieldWrapper,
   colorBackgroundGrayLight,
   EmptyWidth,
-  colorCareerDiveBlue
+  colorCareerDiveBlue,
+  TextSubtitle2
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
 import { CustomTextField } from 'util/Custom/CustomTextField';
+import { useState } from "react";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
@@ -21,20 +23,32 @@ const UserProfileCardWrapper = styled(Flex)`
 `;
 
 function UserProfile() {
-
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const isEditing = (value) => {
+    return value !== ''
+  }
   return (
     <UserProfileCardWrapper>
       <Card title={'비밀번호 변경'} no_divider={'true'} max_width={'583px'}>
         <TextFieldWrapper>
           <CustomTextField
             placeholder="변경 할 비밀번호"
+            onChange={(event) => { setPassword(event.target.value) }}
             variant="filled"
             InputProps={{ disableUnderline: true }}
             rows={1}
             fullWidth={true}
           />
           <EmptyWidth width={'16px'} />
-          <CustomButton width={'83px'} custom_color={colorTextLight} background_color={colorBackgroundGrayLight}>저장</CustomButton>
+          <CustomButton
+            width={'83px'}
+            custom_color={isEditing(password) ? 'white' : colorTextLight}
+            background_color={isEditing(password) ? colorCareerDiveBlue : colorBackgroundGrayLight}>
+            <TextSubtitle2>
+              저장
+            </TextSubtitle2>
+          </CustomButton>
         </TextFieldWrapper>
 
         <EmptyHeight height={'20px'}></EmptyHeight>
@@ -44,6 +58,7 @@ function UserProfile() {
         <TextHeading6>이메일 변경</TextHeading6>
         <TextFieldWrapper>
           <CustomTextField
+            onChange={(event) => { setEmail(event.target.value) }}
             placeholder="birdrick@gamil.com"
             variant="filled"
             InputProps={{ disableUnderline: true }}
@@ -51,7 +66,14 @@ function UserProfile() {
             fullWidth={true}
           />
           <EmptyWidth width={'16px'} />
-          <CustomButton width={'83px'} custom_color={colorTextLight} background_color={colorBackgroundGrayLight}>저장</CustomButton>
+          <CustomButton
+            width={'83px'}
+            custom_color={isEditing(email) ? 'white' : colorTextLight}
+            background_color={isEditing(email) ? colorCareerDiveBlue : colorBackgroundGrayLight}>
+            <TextSubtitle2>
+              저장
+            </TextSubtitle2>
+          </CustomButton>
         </TextFieldWrapper>
 
 
