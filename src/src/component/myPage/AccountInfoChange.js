@@ -12,8 +12,8 @@ import {
   colorCareerDiveBlue
 } from "util/styledComponent";
 import { Card } from "util/Card";
-import { CustomButton } from "util/CustomButton";
-import { CustomTextField } from 'util/CustomTextField';
+import { CustomButton } from "util/Custom/CustomButton";
+import { CustomTextField } from 'util/Custom/CustomTextField';
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;

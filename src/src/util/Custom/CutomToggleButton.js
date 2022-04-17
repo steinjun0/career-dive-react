@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
-import { colorCareerDiveBlue } from './styledComponent';
+import { colorCareerDiveBlue } from 'util/styledComponent';
 
 export const CustomToggleButton = styled(Switch)(({ theme }) => ({
   width: 36,

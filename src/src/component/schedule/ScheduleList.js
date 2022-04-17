@@ -10,7 +10,7 @@ import {
   colorBlueGray,
   colorCareerDiveBlue,
 } from "util/styledComponent";
-import { CustomButton } from 'util/CustomButton'
+import { CustomButton } from 'util/Custom/CustomButton'
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";

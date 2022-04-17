@@ -1,5 +1,5 @@
 import { Button, styled } from "@mui/material";
-import { colorCareerDiveBlue } from './styledComponent';
+import { colorCareerDiveBlue } from '../styledComponent';
 
 export const CustomButton = styled(Button)`
   background-color: ${props => props.background_color ? props.background_color : colorCareerDiveBlue};

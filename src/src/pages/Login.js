@@ -11,7 +11,7 @@ import {
     Flex,
     colorBackgroundGrayLight,
 } from "util/styledComponent";
-import { CustomButton } from 'util/CustomButton'
+import { CustomButton } from 'util/Custom/CustomButton'
 
 
 const LoginWrapper = styled(VerticalFlex)`
