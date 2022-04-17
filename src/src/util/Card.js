@@ -31,7 +31,7 @@ const TitleTail = styled(VerticalCenterAlignFlex)`
   margin-left: auto;
 `
 
-function Card(props) {
+export function Card(props) {
   return (
     <CardWrapper min_width={props.min_width}>
       <TitleWrapper no_divider={props.no_divider}>
@@ -47,5 +47,3 @@ function Card(props) {
     </CardWrapper>
   );
 }
-
-export default Card;

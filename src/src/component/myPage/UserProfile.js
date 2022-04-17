@@ -9,7 +9,7 @@ import {
   VerticalCenterAlignFlex,
   colorTextLight
 } from "util/styledComponent";
-import Card from "util/Card";
+import { Card } from "util/Card";
 import { useState } from "react";
 
 const UserProfileCardWrapper = styled(Flex)`

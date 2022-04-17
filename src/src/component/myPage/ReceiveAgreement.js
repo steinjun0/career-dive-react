@@ -11,7 +11,7 @@ import {
   colorTextLight
 } from "util/styledComponent";
 import { CustomToggleButton, onChangeToggle } from 'util/CutomToggleButton';
-import Card from "util/Card";
+import { Card } from "util/Card";
 import { useState } from "react";
 
 const UserProfileCardWrapper = styled(Flex)`

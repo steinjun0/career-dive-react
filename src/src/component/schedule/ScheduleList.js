@@ -7,11 +7,11 @@ import {
   TextBody2,
   TextSubtitle1,
   TextSubtitle2,
-  CustomButton,
   colorBlueGray,
   colorCareerDiveBlue,
 } from "util/styledComponent";
-import Card from "util/Card";
+import { CustomButton } from 'util/CustomButton'
+import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
 import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'

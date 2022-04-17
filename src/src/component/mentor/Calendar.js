@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
-import Card from 'util/Card'
-import SimpleMenu from 'util/SimpleMenu'
+import { Card } from "util/Card"
+import SimpleMenu from "util/SimpleMenu"
 
 import {
   VerticalCenterAlignFlex,
@@ -12,8 +12,6 @@ import {
   Flex,
   colorBackgroundGrayLight
 } from "util/styledComponent";
-
-import { getDifferenceMinutes } from 'util/util'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 

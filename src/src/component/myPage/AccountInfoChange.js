@@ -10,18 +10,12 @@ import {
   TextHeading6,
   TextFieldWrapper
 } from "util/styledComponent";
-import Card from "util/Card";
+import { Card } from "util/Card";
+import { CustomButton } from "util/CustomButton";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
 `;
-
-const SubtitleWarpper = styled(VerticalCenterAlignFlex)`
-  margin-top: 20px;
-`
-const CustomTextSubtitle2 = styled(TextSubtitle2)`
-  margin-right: 20px;
-`
 
 const CustomTextField = styled(TextField)`
   .MuiFilledInput-input{
@@ -42,6 +36,7 @@ function UserProfile() {
             rows={1}
             fullWidth={true}
           />
+          <CustomButton />
         </TextFieldWrapper>
 
         <EmptyHeight height={'20px'}></EmptyHeight>
