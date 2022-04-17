@@ -329,7 +329,7 @@ function Calendar() {
 
   return (
     <CalendarWrapper>
-      <Card title={'상담 가능 일정'} min_width={400}>
+      <Card title={'상담 가능 일정'} min_width={'400px'}>
         <CalendarContentWrapper>
           <YearMonthMenuWrapper>
             <YearMonthMenu
