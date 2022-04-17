@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import API from '../API.js'
-import { Grid, styled, TextField } from "@mui/material";
+import { Checkbox, Grid, styled, TextField } from "@mui/material";
 
 import {
     FullWidthWrapper,
@@ -10,9 +10,15 @@ import {
     TextHeading6,
     Flex,
     colorBackgroundGrayLight,
+    TextBody2,
+    VerticalCenterAlignFlex,
+    colorTextLight,
+
+    EmptyWidth,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
-
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const LoginWrapper = styled(VerticalFlex)`
   width: 100%;
@@ -30,9 +36,22 @@ const TextFieldWrapper = styled(Flex)`
   }
 `
 
+const SubButtonsWrapper = styled(VerticalCenterAlignFlex)`
+  justify-content: space-between;
+`;
+
+const SubButtons = styled(TextBody2)`
+  color: ${colorTextLight};
+  cursor: pointer;
+`;
+
 const ButtonWrapper = styled(VerticalFlex)`
-  margin-top: 20px;
+//   margin-top: 20px;
 `
+
+const FullHeightFullWidthWrapper = styled(FullWidthWrapper)`
+  height: calc(100vh - 80px - 214px);
+`;
 
 const postLogin = async (email, password) => {
     try {
@@ -46,19 +65,17 @@ const postLogin = async (email, password) => {
     catch {
 
     }
-
-
 }
 
 function App() {
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isAutoLogin, setIsAutoLogin] = useState(false);
     return (
-        <FullWidthWrapper>
+        <FullHeightFullWidthWrapper>
             <MaxWidthDiv>
                 <Grid justifyContent="center" container spacing={'30px'} marginTop={0}>
-                    <Grid container item xs={8} md={4}>
+                    <Grid container item xs={4} md={4}>
                         <LoginWrapper>
                             <VerticalFlex>
                                 <TextHeading6>
@@ -68,16 +85,36 @@ function App() {
                                     <TextField onChange={(event) => { setEmail(event.target.value) }} variant="filled" InputProps={{ disableUnderline: true, }} fullWidth={true} margin="dense" size="small" hiddenLabel placeholder="이메일" />
                                     <TextField onChange={(event) => { setPassword(event.target.value) }} variant="filled" InputProps={{ disableUnderline: true, }} fullWidth={true} margin="dense" size="small" hiddenLabel placeholder="비밀번호" />
                                 </TextFieldWrapper>
+                                <SubButtonsWrapper>
+                                    <VerticalCenterAlignFlex>
+                                        <Checkbox
+                                            disableRipple
+                                            checked={isAutoLogin}
+                                            onChange={() => { setIsAutoLogin(!isAutoLogin) }}
+                                            style={{ paddingLeft: 0 }}
+                                            icon={<CheckCircleOutlineIcon fontSize={'small'} style={{ color: '#BDBDBD' }} />}
+                                            checkedIcon={<CheckCircleIcon fontSize={'small'} color='primary' />}
+                                        />
+                                        <SubButtons onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
+                                    </VerticalCenterAlignFlex>
+
+                                    <Flex>
+                                        <SubButtons>이메일 찾기</SubButtons>
+                                        <EmptyWidth width="16px"></EmptyWidth>
+                                        <SubButtons>비밀번호 찾기</SubButtons>
+                                    </Flex>
+                                </SubButtonsWrapper>
                                 <ButtonWrapper>
                                     <CustomButton onClick={() => { postLogin(email, password) }} height="50px">로그인</CustomButton>
                                 </ButtonWrapper>
+
                             </VerticalFlex>
                         </LoginWrapper>
 
                     </Grid>
                 </Grid>
             </MaxWidthDiv>
-        </FullWidthWrapper>
+        </FullHeightFullWidthWrapper >
 
     );
 }
