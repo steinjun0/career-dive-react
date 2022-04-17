@@ -5,7 +5,7 @@ import {
   VerticalCenterAlignFlex,
   VerticalFlex,
 } from "util/styledComponent";
-import Card from "util/Card";
+import { Card } from "util/Card";
 import { styled } from "@mui/material";
 import CustomRating from "util/Rating";
 

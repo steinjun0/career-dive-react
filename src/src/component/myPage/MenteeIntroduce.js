@@ -11,7 +11,7 @@ import {
   colorTextLight,
   TextFieldWrapper
 } from "util/styledComponent";
-import Card from "util/Card";
+import { Card } from "util/Card";
 
 const MenteeIntroduceWrapper = styled(Flex)`
   width: 100%;

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
-import Card from 'util/Card'
-import SimpleMenu from 'util/SimpleMenu'
+import { Card } from "util/Card"
+import SimpleMenu from "util/SimpleMenu"
 
 import {
   VerticalCenterAlignFlex,
@@ -12,8 +12,6 @@ import {
   Flex,
   colorBackgroundGrayLight
 } from "util/styledComponent";
-
-import { getDifferenceMinutes } from 'util/util'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
@@ -331,7 +329,7 @@ function Calendar() {
 
   return (
     <CalendarWrapper>
-      <Card title={'상담 가능 일정'} min_width={400}>
+      <Card title={'상담 가능 일정'} min_width={'400px'}>
         <CalendarContentWrapper>
           <YearMonthMenuWrapper>
             <YearMonthMenu

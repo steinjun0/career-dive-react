@@ -8,7 +8,8 @@ import {
 
 const CardWrapper = styled(VerticalFlex)`
   justify-content: start;
-  min-width: ${props => `${props.min_width}px`};
+  min-width: ${props => `${props.min_width}`};
+  max-width: ${props => `${props.max_width}`};
   border-radius: 8px;
   padding: 24px;
   background-color: white;
@@ -31,9 +32,9 @@ const TitleTail = styled(VerticalCenterAlignFlex)`
   margin-left: auto;
 `
 
-function Card(props) {
+export function Card(props) {
   return (
-    <CardWrapper min_width={props.min_width}>
+    <CardWrapper max_width={props.max_width} min_width={props.min_width}>
       <TitleWrapper no_divider={props.no_divider}>
         <TextHeading6>{props.title}</TextHeading6>
         <TitleHead>
@@ -47,5 +48,3 @@ function Card(props) {
     </CardWrapper>
   );
 }
-
-export default Card;

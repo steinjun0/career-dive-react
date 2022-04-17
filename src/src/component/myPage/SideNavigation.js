@@ -6,7 +6,7 @@ import {
   colorCareerDiveBlue,
   UlNoDeco,
 } from "util/styledComponent";
-import Card from "util/Card";
+import { Card } from "util/Card";
 
 const NavigationListItem = styled(`li`)`
   margin-top: 20px;

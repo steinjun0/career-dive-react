@@ -9,7 +9,7 @@ import {
   EmptyHeight,
   LinkNoDeco
 } from "util/styledComponent";
-import Card from "util/Card";
+import { Card } from "util/Card";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;

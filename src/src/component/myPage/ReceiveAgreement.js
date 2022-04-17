@@ -10,8 +10,8 @@ import {
   colorCareerDiveBlue,
   colorTextLight
 } from "util/styledComponent";
-import { CustomToggleButton, onChangeToggle } from 'util/CutomToggleButton';
-import Card from "util/Card";
+import { CustomToggleButton, onChangeToggle } from 'util/Custom/CutomToggleButton';
+import { Card } from "util/Card";
 import { useState } from "react";
 
 const UserProfileCardWrapper = styled(Flex)`
