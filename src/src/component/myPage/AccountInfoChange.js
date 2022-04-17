@@ -17,13 +17,14 @@ import { CustomTextField } from 'util/Custom/CustomTextField';
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
+  justify-content:center;
 `;
 
 function UserProfile() {
 
   return (
     <UserProfileCardWrapper>
-      <Card title={'비밀번호 변경'} no_divider={'true'}>
+      <Card title={'비밀번호 변경'} no_divider={'true'} max_width={'583px'}>
         <TextFieldWrapper>
           <CustomTextField
             placeholder="변경 할 비밀번호"
