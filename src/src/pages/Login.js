@@ -25,6 +25,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 
 const LoginWrapper = styled(VerticalFlex)`
   width: 100%;
@@ -93,27 +94,7 @@ function App() {
                                 </TextHeading6>
                                 <TextFieldWrapper>
                                     <CustomTextField height={'26px'} onChange={(event) => { setEmail(event.target.value) }} variant="filled" InputProps={{ disableUnderline: true, }} fullWidth={true} margin="dense" size="small" hiddenLabel placeholder="이메일" />
-                                    <CustomTextField
-                                        height={'26px'}
-                                        onChange={(event) => { setPassword(event.target.value) }}
-                                        variant="filled"
-                                        InputProps={{
-                                            disableUnderline: true,
-                                            type: showPassword ? 'text' : 'password',
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        aria-label="toggle password visibility"
-                                                        onClick={() => { setShowPassword(!showPassword) }}
-                                                    >
-                                                        {showPassword ? <VisibilityOff style={{ color: colorCareerDiveBlue }} /> : <Visibility style={{ color: colorCareerDiveBlue }} />}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            )
-                                        }}
-                                        fullWidth={true}
-                                        margin="dense" size="small" hiddenLabel placeholder="비밀번호"
-                                    />
+                                    <CustomPasswordTextField password={password} setPassword={setPassword} />
                                 </TextFieldWrapper>
                                 <EmptyHeight height={'8px'} />
                                 <SubButtonsWrapper>
