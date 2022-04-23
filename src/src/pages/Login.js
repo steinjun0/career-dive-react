@@ -1,11 +1,10 @@
 import { useState } from 'react';
 
 import API from '../API.js'
-import { Checkbox, Grid, IconButton, InputAdornment, styled, TextField } from "@mui/material";
+import { Checkbox, Grid, styled, } from "@mui/material";
 
 import {
     FullHeightFullWidthWrapper,
-    FullWidthWrapper,
     MaxWidthDiv,
     VerticalFlex,
     TextHeading6,
@@ -14,9 +13,7 @@ import {
     TextBody2,
     RowAlignCenterFlex,
     colorTextLight,
-
     EmptyWidth,
-    colorCareerDiveBlue,
     EmptyHeight,
     ColumnAlignCenterFlex,
 } from "util/styledComponent";
@@ -24,8 +21,8 @@ import { CustomButton } from 'util/Custom/CustomButton'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
+import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
 
 const LoginWrapper = styled(VerticalFlex)`
   width: 100%;
@@ -80,7 +77,6 @@ const postLogin = async (email, password) => {
 function App() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
     const [isAutoLogin, setIsAutoLogin] = useState(false);
     return (
         <FullHeightFullWidthWrapper>
@@ -93,20 +89,26 @@ function App() {
                                     로그인
                                 </TextHeading6>
                                 <TextFieldWrapper>
-                                    <CustomTextField height={'26px'} onChange={(event) => { setEmail(event.target.value) }} variant="filled" InputProps={{ disableUnderline: true, }} fullWidth={true} margin="dense" size="small" hiddenLabel placeholder="이메일" />
-                                    <CustomPasswordTextField password={password} setPassword={setPassword} />
+                                    <CustomTextField
+                                        height={'26px'}
+                                        onChange={(event) => { setEmail(event.target.value) }}
+                                        variant="filled"
+                                        InputProps={{ disableUnderline: true, }}
+                                        fullWidth={true}
+                                        margin="dense"
+                                        size="small"
+                                        hiddenLabel
+                                        placeholder="이메일"
+                                    />
+                                    <CustomPasswordTextField
+                                        password={password}
+                                        setPassword={setPassword}
+                                    />
                                 </TextFieldWrapper>
                                 <EmptyHeight height={'8px'} />
                                 <SubButtonsWrapper>
                                     <RowAlignCenterFlex>
-                                        <Checkbox
-                                            disableRipple
-                                            checked={isAutoLogin}
-                                            onChange={() => { setIsAutoLogin(!isAutoLogin) }}
-                                            style={{ paddingLeft: 0 }}
-                                            icon={<CheckCircleOutlineIcon fontSize={'small'} style={{ color: '#BDBDBD' }} />}
-                                            checkedIcon={<CheckCircleIcon fontSize={'small'} />}
-                                        />
+                                        <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
                                         <SubButtons onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
                                     </RowAlignCenterFlex>
 
@@ -118,7 +120,11 @@ function App() {
                                 </SubButtonsWrapper>
                                 <EmptyHeight height={'8px'} />
                                 <ButtonWrapper>
-                                    <CustomButton onClick={() => { postLogin(email, password) }} height="50px">로그인</CustomButton>
+                                    <CustomButton
+                                        onClick={() => { postLogin(email, password) }}
+                                        height="50px">
+                                        로그인
+                                    </CustomButton>
                                 </ButtonWrapper>
                                 <EmptyHeight height={'29px'} />
                                 <ColumnAlignCenterFlex>
