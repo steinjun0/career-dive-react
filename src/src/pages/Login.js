@@ -15,6 +15,8 @@ import {
     colorTextLight,
 
     EmptyWidth,
+    colorCareerDiveBlue,
+    EmptyHeight,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -99,7 +101,7 @@ function App() {
                                                         aria-label="toggle password visibility"
                                                         onClick={() => { setShowPassword(!showPassword) }}
                                                     >
-                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                        {showPassword ? <VisibilityOff style={{ color: colorCareerDiveBlue }} /> : <Visibility style={{ color: colorCareerDiveBlue }} />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             )
@@ -108,6 +110,7 @@ function App() {
                                         margin="dense" size="small" hiddenLabel placeholder="비밀번호"
                                     />
                                 </TextFieldWrapper>
+                                <EmptyHeight height={'8px'} />
                                 <SubButtonsWrapper>
                                     <VerticalCenterAlignFlex>
                                         <Checkbox
@@ -116,7 +119,7 @@ function App() {
                                             onChange={() => { setIsAutoLogin(!isAutoLogin) }}
                                             style={{ paddingLeft: 0 }}
                                             icon={<CheckCircleOutlineIcon fontSize={'small'} style={{ color: '#BDBDBD' }} />}
-                                            checkedIcon={<CheckCircleIcon fontSize={'small'} color='primary' />}
+                                            checkedIcon={<CheckCircleIcon fontSize={'small'} />}
                                         />
                                         <SubButtons onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
                                     </VerticalCenterAlignFlex>
@@ -127,9 +130,14 @@ function App() {
                                         <SubButtons>비밀번호 찾기</SubButtons>
                                     </Flex>
                                 </SubButtonsWrapper>
+                                <EmptyHeight height={'8px'} />
                                 <ButtonWrapper>
                                     <CustomButton onClick={() => { postLogin(email, password) }} height="50px">로그인</CustomButton>
                                 </ButtonWrapper>
+                                <VerticalFlex>
+                                    <TextBody2>아직 회원이 아니신가요?</TextBody2>
+                                    <span>회원가입</span>
+                                </VerticalFlex>
 
                             </VerticalFlex>
                         </LoginWrapper>

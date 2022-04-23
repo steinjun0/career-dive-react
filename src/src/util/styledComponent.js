@@ -16,9 +16,10 @@ export const TextBody1 = styled(`span`)`
   line-height: 24px;
 `;
 
-export const TextBody2 = styled(`span`)`
+export const TextBody2 = styled(`p`)`
   font-size: 14px;
   line-height: 24px;
+  margin: 0;
 `;
 
 export const TextSubtitle1 = styled(`span`)`
