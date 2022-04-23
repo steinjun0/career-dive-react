@@ -6,7 +6,7 @@ import {
   TextSubtitle1,
   TextBody1,
   Flex,
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   colorTextLight
 } from "util/styledComponent";
 import { Card } from "util/Card";
@@ -16,7 +16,7 @@ const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
 `;
 
-const SubtitleWarpper = styled(VerticalCenterAlignFlex)`
+const SubtitleWarpper = styled(RowAlignCenterFlex)`
   margin-top: 20px;
 `
 

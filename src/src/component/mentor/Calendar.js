@@ -5,7 +5,7 @@ import { Card } from "util/Card"
 import SimpleMenu from "util/SimpleMenu"
 
 import {
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   VerticalFlex,
   colorCareerDiveBlue,
   colorTextLight,
@@ -26,7 +26,7 @@ const DateWrapper = styled(VerticalFlex)`
   padding-bottom: 16px;
 `;
 
-const WeekBox = styled(VerticalCenterAlignFlex)`
+const WeekBox = styled(RowAlignCenterFlex)`
   justify-content: space-between;
   // width: 534px;
   height: 44px;
@@ -34,7 +34,7 @@ const WeekBox = styled(VerticalCenterAlignFlex)`
   margin-top: 16px;
 `;
 
-const DateBox = styled(VerticalCenterAlignFlex)`
+const DateBox = styled(RowAlignCenterFlex)`
   justify-content: center;
   width: 32px;
   height: 32px;
@@ -89,13 +89,13 @@ const DateTitle = styled('span')`
   margin-top: 16px;
 `;
 
-const AvailableTime = styled(VerticalCenterAlignFlex)`
+const AvailableTime = styled(RowAlignCenterFlex)`
   width: 50%;
   height: 24px;
   margin-top: 16px;
 `;
 
-const YearMonthMenuWrapper = styled(VerticalCenterAlignFlex)`
+const YearMonthMenuWrapper = styled(RowAlignCenterFlex)`
  justify-content: center;
  margin: 16px 0;
  height: 24px;

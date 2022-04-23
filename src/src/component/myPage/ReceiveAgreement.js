@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 
 import {
   Flex,
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   TextSubtitle2,
   TextCaption,
   EmptyWidth,
@@ -18,7 +18,7 @@ const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
 `;
 
-const SubtitleWarpper = styled(VerticalCenterAlignFlex)`
+const SubtitleWarpper = styled(RowAlignCenterFlex)`
   margin-top: 20px;
 `
 const CustomTextSubtitle2 = styled(TextSubtitle2)`

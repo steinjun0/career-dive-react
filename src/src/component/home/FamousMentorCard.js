@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import {
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   CircleImg,
   LinkNoDeco,
   TextHeading6,
@@ -11,7 +11,7 @@ import testMentorImage from "../../assets/img/testMentorImage.png";
 import Rating from "util/Rating";
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
-const FamousMentorCardWrapper = styled(VerticalCenterAlignFlex)`
+const FamousMentorCardWrapper = styled(RowAlignCenterFlex)`
   flex-direction: column;
   justify-content: space-between;
   align-items: start;
@@ -48,7 +48,7 @@ const ProfileImg = styled(CircleImg)`
   margin: 0 auto;
 `;
 
-const Tag = styled(VerticalCenterAlignFlex)`
+const Tag = styled(RowAlignCenterFlex)`
   background-color: rgba(105, 140, 255, 0.1);
   color: #698cff;
   border-radius: 4px;
@@ -63,7 +63,7 @@ const Name = styled("span")`
   margin-bottom: 36px;
 `;
 
-const RatingWrapper = styled(VerticalCenterAlignFlex)`
+const RatingWrapper = styled(RowAlignCenterFlex)`
   height: 46px;
   color: #e25d7d;
   border-top: 1px solid #cfd6e0;

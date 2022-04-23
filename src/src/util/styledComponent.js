@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Button, styled } from "@mui/material";
+import { styled } from "@mui/material";
 
 // color
 export const colorCareerDiveBlue = "#698CFF";
@@ -16,9 +16,10 @@ export const TextBody1 = styled(`span`)`
   line-height: 24px;
 `;
 
-export const TextBody2 = styled(`span`)`
+export const TextBody2 = styled(`p`)`
   font-size: 14px;
   line-height: 24px;
+  margin: 0;
 `;
 
 export const TextSubtitle1 = styled(`span`)`
@@ -32,10 +33,11 @@ export const TextSubtitle2 = styled(`span`)`
   line-height: 24px;
 `;
 
-export const TextHeading6 = styled(`span`)`
+export const TextHeading6 = styled(`h6`)`
   font-size: 20px;
   font-weight: 700;
   line-height: 32px;
+  margin: 0;
 `;
 
 export const TextButton = styled(`span`)`
@@ -60,7 +62,13 @@ export const VerticalFlex = styled(Flex)`
   flex-direction: column;
 `;
 
-export const VerticalCenterAlignFlex = styled(Flex)`
+export const ColumnAlignCenterFlex = styled(Flex)`
+  flex-direction: column;
+  align-items: center;
+`;
+
+
+export const RowAlignCenterFlex = styled(Flex)`
   flex-direction: row;
   align-items: center;
   height: 100%;
@@ -70,6 +78,10 @@ export const FullWidthWrapper = styled(VerticalFlex)`
   justify-content: center;
   align-items: center;
   width: 100%;
+`;
+
+export const FullHeightFullWidthWrapper = styled(FullWidthWrapper)`
+  height: calc(100vh - 80px - 214px); // 100vh - header - footer
 `;
 
 export const CenterWidthWrapper = styled(Flex)`
@@ -130,12 +142,4 @@ export const UlNoDeco = styled('ul')`
 `;
 
 
-export const TextFieldWrapper = styled(Flex)`
-  margin-top: 20px;
-  
-  width: 100%;
-  .MuiInputBase-multiline,.MuiInputBase-input{
-    padding-top:8px;
-    background-color: ${colorBackgroundGrayLight};
-  }
-`;
+

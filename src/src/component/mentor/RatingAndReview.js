@@ -2,7 +2,7 @@ import {
   colorBlueGray,
   colorTextBody,
   Flex,
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   VerticalFlex,
 } from "util/styledComponent";
 import { Card } from "util/Card";
@@ -14,7 +14,7 @@ const RatingAndReviewWrapper = styled(Flex)`
   margin-top: 30px;
 `;
 
-const AverageRatingWrapper = styled(VerticalCenterAlignFlex)`
+const AverageRatingWrapper = styled(RowAlignCenterFlex)`
   margin-left: 16px;
 `;
 
@@ -31,7 +31,7 @@ const NameWrapper = styled('span')`
   margin-right: 14px;
 `;
 
-const TextWrapper = styled(VerticalCenterAlignFlex)`
+const TextWrapper = styled(RowAlignCenterFlex)`
   line-height: 24px;
   color: ${colorTextBody};
   margin-top:12px;
@@ -54,12 +54,12 @@ function RatingAndReview() {
         {reviews.map((review, index) => {
           return (
             <ReviewWrapper key={index}>
-              <VerticalCenterAlignFlex>
+              <RowAlignCenterFlex>
                 <NameWrapper>
                   {review.author}
                 </NameWrapper>
                 <CustomRating value={review.rating} ></CustomRating>
-              </VerticalCenterAlignFlex>
+              </RowAlignCenterFlex>
               <TextWrapper>
                 {review.text}
               </TextWrapper>

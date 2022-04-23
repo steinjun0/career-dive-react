@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 
 import {
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   VerticalFlex,
   Flex,
   CircleImg,
@@ -23,7 +23,7 @@ const SchedulesWrapper = styled(VerticalFlex)`
   width: 100%;
 `;
 
-const ScheduleWrapper = styled(VerticalCenterAlignFlex)`
+const ScheduleWrapper = styled(RowAlignCenterFlex)`
   width: 100%;
   margin-bottom: 22px;
 `;
@@ -32,7 +32,7 @@ const ScheduleDateAndTime = styled(VerticalFlex)`
   
 `;
 
-const ProfileWrapper = styled(VerticalCenterAlignFlex)`
+const ProfileWrapper = styled(RowAlignCenterFlex)`
   margin-left: 30px;
 `;
 
@@ -43,7 +43,7 @@ const ProfileImg = styled(CircleImg)`
 `;
 
 
-const Buttons = styled(VerticalCenterAlignFlex)`
+const Buttons = styled(RowAlignCenterFlex)`
   margin-left: auto;
   width: 210px;
   justify-content: space-between;

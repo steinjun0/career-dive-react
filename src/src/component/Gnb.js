@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue } from 'util/styledComponent';
+import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue } from 'util/styledComponent';
 
 import { useLocation } from 'react-router-dom'
 
@@ -23,7 +23,7 @@ const GnbFullWidthWrapper = styled("nav")`
       z-index: 3;
     `;
 
-const GnbWrapper = styled(VerticalCenterAlignFlex)`
+const GnbWrapper = styled(RowAlignCenterFlex)`
     display:flex;
     flex-direction: row;
     justify-content: center;
@@ -34,7 +34,7 @@ const GnbWrapper = styled(VerticalCenterAlignFlex)`
     padding: 0 30px;
   `;
 
-const CenterGnb = styled(VerticalCenterAlignFlex)`
+const CenterGnb = styled(RowAlignCenterFlex)`
     position: absolute;
   `;
 
@@ -59,11 +59,11 @@ const CenterMenu = styled("ul")`
     }
   `;
 
-const LeftTopGnb = styled(VerticalCenterAlignFlex)`
+const LeftTopGnb = styled(RowAlignCenterFlex)`
     margin-right: auto;
   `;
 
-const RightTopGnb = styled(VerticalCenterAlignFlex)`
+const RightTopGnb = styled(RowAlignCenterFlex)`
     display:flex;
     flex-direction: row;
     justify-content: space-between;

@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import {
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   FullWidthWrapper,
   CenterWidthWrapper,
 } from "util/styledComponent";
@@ -35,7 +35,7 @@ const SecondBannerIdCard = styled("img")`
   right: -123px;
 `;
 
-const SearchBar = styled(VerticalCenterAlignFlex)`
+const SearchBar = styled(RowAlignCenterFlex)`
   width: 652px;
   height: 56px;
   justify-content: space-between;
@@ -70,29 +70,29 @@ function HomeBanner() {
         <SecondBannerIdCard src={BannerIdCard2} alt="" />
 
         <SearchBar>
-          <VerticalCenterAlignFlex>
+          <RowAlignCenterFlex>
             <SearchBarSpan>직무</SearchBarSpan>
             <SimpleMenu
               title="직무를 선택하세요"
               menuItems={["개발", "기획", "디자인"]}
             ></SimpleMenu>
-          </VerticalCenterAlignFlex>
+          </RowAlignCenterFlex>
 
-          <VerticalCenterAlignFlex>
+          <RowAlignCenterFlex>
             <SearchBarSpan>회사</SearchBarSpan>
             <SimpleMenu
               title="회사를 선택하세요"
               menuItems={["네이버", "삼성전자", "JYP"]}
             ></SimpleMenu>
-          </VerticalCenterAlignFlex>
+          </RowAlignCenterFlex>
 
-          <VerticalCenterAlignFlex>
+          <RowAlignCenterFlex>
             <SearchBarSpan>태그</SearchBarSpan>
             <SimpleMenu
               title="태그를 선택하세요"
               menuItems={["취업준비", "이직", "사내 분위기"]}
             ></SimpleMenu>
-          </VerticalCenterAlignFlex>
+          </RowAlignCenterFlex>
 
           <img src={BannerSearchIcon} alt="" />
         </SearchBar>

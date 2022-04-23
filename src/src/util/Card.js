@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 
 import {
   TextHeading6,
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   VerticalFlex,
 } from "./styledComponent";
 
@@ -17,7 +17,7 @@ const CardWrapper = styled(VerticalFlex)`
   width: 100%;
 `;
 
-const TitleWrapper = styled(VerticalCenterAlignFlex)`
+const TitleWrapper = styled(RowAlignCenterFlex)`
   font-size: 20px;
   font-weight: 700;
   ${props => props.no_divider ? '' : 'border-bottom: 1px solid #CFD6E0;'}
@@ -25,10 +25,10 @@ const TitleWrapper = styled(VerticalCenterAlignFlex)`
   
 `;
 
-const TitleHead = styled(VerticalCenterAlignFlex)`
+const TitleHead = styled(RowAlignCenterFlex)`
 `
 
-const TitleTail = styled(VerticalCenterAlignFlex)`
+const TitleTail = styled(RowAlignCenterFlex)`
   margin-left: auto;
 `
 
