@@ -6,7 +6,6 @@ import {
   EmptyHeight,
   colorTextLight,
   TextHeading6,
-  TextFieldWrapper,
   colorBackgroundGrayLight,
   EmptyWidth,
   colorCareerDiveBlue,
@@ -20,6 +19,11 @@ import { useState } from "react";
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
   justify-content:center;
+`;
+
+export const TextFieldWrapper = styled(Flex)`
+  margin-top: 20px;
+  width: 100%;
 `;
 
 function UserProfile() {

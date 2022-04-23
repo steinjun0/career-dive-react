@@ -9,7 +9,6 @@ import {
   Flex,
   colorBackgroundGrayLight,
   colorTextLight,
-  TextFieldWrapper
 } from "util/styledComponent";
 import { Card } from "util/Card";
 
@@ -32,6 +31,11 @@ const DropzoneWrapper = styled(Flex)`
   width: 840px;
   height: 100px;
   border-radius: 8px;
+`;
+
+export const TextFieldWrapper = styled(Flex)`
+  margin-top: 20px;
+  width: 100%;
 `;
 
 const UrlWrapper = styled(TextFieldWrapper)`

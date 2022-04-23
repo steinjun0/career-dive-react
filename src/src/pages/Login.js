@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import API from '../API.js'
-import { Checkbox, Grid, styled, TextField } from "@mui/material";
+import { Checkbox, Grid, IconButton, InputAdornment, styled, TextField } from "@mui/material";
 
 import {
     FullWidthWrapper,
@@ -19,6 +19,8 @@ import {
 import { CustomButton } from 'util/Custom/CustomButton'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { CustomTextField } from 'util/Custom/CustomTextField.js';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 const LoginWrapper = styled(VerticalFlex)`
   width: 100%;
@@ -27,7 +29,7 @@ const LoginWrapper = styled(VerticalFlex)`
 const TextFieldWrapper = styled(Flex)`
   width: 100%;
   margin-top: 32px;
-  height: 118px;
+  min-height: 118px;
   flex-direction: column;
   justify-content: space-between;
   input{
@@ -70,6 +72,7 @@ const postLogin = async (email, password) => {
 function App() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [isAutoLogin, setIsAutoLogin] = useState(false);
     return (
         <FullHeightFullWidthWrapper>
@@ -82,8 +85,28 @@ function App() {
                                     로그인
                                 </TextHeading6>
                                 <TextFieldWrapper>
-                                    <TextField onChange={(event) => { setEmail(event.target.value) }} variant="filled" InputProps={{ disableUnderline: true, }} fullWidth={true} margin="dense" size="small" hiddenLabel placeholder="이메일" />
-                                    <TextField onChange={(event) => { setPassword(event.target.value) }} variant="filled" InputProps={{ disableUnderline: true, }} fullWidth={true} margin="dense" size="small" hiddenLabel placeholder="비밀번호" />
+                                    <CustomTextField height={'26px'} onChange={(event) => { setEmail(event.target.value) }} variant="filled" InputProps={{ disableUnderline: true, }} fullWidth={true} margin="dense" size="small" hiddenLabel placeholder="이메일" />
+                                    <CustomTextField
+                                        height={'26px'}
+                                        onChange={(event) => { setPassword(event.target.value) }}
+                                        variant="filled"
+                                        InputProps={{
+                                            disableUnderline: true,
+                                            type: showPassword ? 'text' : 'password',
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={() => { setShowPassword(!showPassword) }}
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
+                                        }}
+                                        fullWidth={true}
+                                        margin="dense" size="small" hiddenLabel placeholder="비밀번호"
+                                    />
                                 </TextFieldWrapper>
                                 <SubButtonsWrapper>
                                     <VerticalCenterAlignFlex>
