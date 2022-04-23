@@ -4,6 +4,7 @@ import API from '../API.js'
 import { Checkbox, Grid, IconButton, InputAdornment, styled, TextField } from "@mui/material";
 
 import {
+    FullHeightFullWidthWrapper,
     FullWidthWrapper,
     MaxWidthDiv,
     VerticalFlex,
@@ -53,10 +54,6 @@ const SubButtons = styled(TextBody2)`
 const ButtonWrapper = styled(VerticalFlex)`
 //   margin-top: 20px;
 `
-
-const FullHeightFullWidthWrapper = styled(FullWidthWrapper)`
-  height: calc(100vh - 80px - 214px);
-`;
 
 const SignUpText = styled('span')`
   text-decoration: underline;
@@ -147,10 +144,8 @@ function App() {
                                     <TextBody2>아직 회원이 아니신가요?</TextBody2>
                                     <SignUpText>회원가입</SignUpText>
                                 </ColumnAlignCenterFlex>
-
                             </VerticalFlex>
                         </LoginWrapper>
-
                     </Grid>
                 </Grid>
             </MaxWidthDiv>

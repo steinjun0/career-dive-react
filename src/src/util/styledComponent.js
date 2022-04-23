@@ -80,6 +80,10 @@ export const FullWidthWrapper = styled(VerticalFlex)`
   width: 100%;
 `;
 
+export const FullHeightFullWidthWrapper = styled(FullWidthWrapper)`
+  height: calc(100vh - 80px - 214px); // 100vh - header - footer
+`;
+
 export const CenterWidthWrapper = styled(Flex)`
   flex-direction: column;
   align-items: start;
