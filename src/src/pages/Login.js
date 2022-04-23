@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import API from '../API.js'
-import { Checkbox, Grid, styled, } from "@mui/material";
+import { Grid, styled, } from "@mui/material";
 
 import {
     FullHeightFullWidthWrapper,
@@ -18,8 +18,6 @@ import {
     ColumnAlignCenterFlex,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
 import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
