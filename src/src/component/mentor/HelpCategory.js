@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 
 import {
-  VerticalCenterAlignFlex,
+  RowAlignCenterFlex,
   colorCareerDivePink,
   colorCareerDiveBlue,
   Flex,
@@ -12,7 +12,7 @@ const HelpCategoryWrapper = styled(Flex)`
   margin-bottom: 30px;
 `
 
-const Tag = styled(VerticalCenterAlignFlex)`
+const Tag = styled(RowAlignCenterFlex)`
   border-radius: 4px;
   padding: 4px 8px;
   font-weight: 500;
@@ -53,17 +53,17 @@ function HelpCategory() {
     <HelpCategoryWrapper>
       <Card no_divider={'true'} title={'이런 도움을 줄 수 있어요 😀'}
         titleTail={
-          <VerticalCenterAlignFlex>
+          <RowAlignCenterFlex>
             <RegularLegend>• 일반</RegularLegend>
             <PremiumLegend>• 프리미엄</PremiumLegend>
-          </VerticalCenterAlignFlex>
+          </RowAlignCenterFlex>
         }>
-        <VerticalCenterAlignFlex>
+        <RowAlignCenterFlex>
           {regularTags.map((tag, index) => <RegularTag key={index}>{tag}</RegularTag>)}
-        </VerticalCenterAlignFlex>
-        <VerticalCenterAlignFlex>
+        </RowAlignCenterFlex>
+        <RowAlignCenterFlex>
           {premiumTags.map((tag, index) => <PremiumTag key={index}>{tag}</PremiumTag>)}
-        </VerticalCenterAlignFlex>
+        </RowAlignCenterFlex>
 
       </Card>
     </HelpCategoryWrapper>

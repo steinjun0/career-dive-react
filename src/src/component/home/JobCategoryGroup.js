@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex } from 'util/styledComponent'
+import { RowAlignCenterFlex } from 'util/styledComponent'
 import JobCategoryCard from './JobCategoryCard'
 
 import design from '../../assets/icon/jobCategory/design.png'
@@ -16,13 +16,13 @@ import sales from '../../assets/icon/jobCategory/sales.png'
 // because of that, it created blurry image.
 // So I decide change image png to svg, although it increases file size
 
-const JobCategoryGroupWrapper = styled(VerticalCenterAlignFlex)`
+const JobCategoryGroupWrapper = styled(RowAlignCenterFlex)`
     flex-direction: column;
     padding-top: 74px;
     width: 100%;
 `;
 
-const JobCategoryCardLine = styled(VerticalCenterAlignFlex)`
+const JobCategoryCardLine = styled(RowAlignCenterFlex)`
   align-items: center;
   margin-bottom: 25px;
   justify-content: space-between;

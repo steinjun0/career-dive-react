@@ -11,12 +11,13 @@ import {
     Flex,
     colorBackgroundGrayLight,
     TextBody2,
-    VerticalCenterAlignFlex,
+    RowAlignCenterFlex,
     colorTextLight,
 
     EmptyWidth,
     colorCareerDiveBlue,
     EmptyHeight,
+    ColumnAlignCenterFlex,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -40,7 +41,7 @@ const TextFieldWrapper = styled(Flex)`
   }
 `
 
-const SubButtonsWrapper = styled(VerticalCenterAlignFlex)`
+const SubButtonsWrapper = styled(RowAlignCenterFlex)`
   justify-content: space-between;
 `;
 
@@ -56,6 +57,13 @@ const ButtonWrapper = styled(VerticalFlex)`
 const FullHeightFullWidthWrapper = styled(FullWidthWrapper)`
   height: calc(100vh - 80px - 214px);
 `;
+
+const SignUpText = styled('span')`
+  text-decoration: underline;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 6px;
+`
 
 const postLogin = async (email, password) => {
     try {
@@ -112,7 +120,7 @@ function App() {
                                 </TextFieldWrapper>
                                 <EmptyHeight height={'8px'} />
                                 <SubButtonsWrapper>
-                                    <VerticalCenterAlignFlex>
+                                    <RowAlignCenterFlex>
                                         <Checkbox
                                             disableRipple
                                             checked={isAutoLogin}
@@ -122,7 +130,7 @@ function App() {
                                             checkedIcon={<CheckCircleIcon fontSize={'small'} />}
                                         />
                                         <SubButtons onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
-                                    </VerticalCenterAlignFlex>
+                                    </RowAlignCenterFlex>
 
                                     <Flex>
                                         <SubButtons>이메일 찾기</SubButtons>
@@ -134,10 +142,11 @@ function App() {
                                 <ButtonWrapper>
                                     <CustomButton onClick={() => { postLogin(email, password) }} height="50px">로그인</CustomButton>
                                 </ButtonWrapper>
-                                <VerticalFlex>
+                                <EmptyHeight height={'29px'} />
+                                <ColumnAlignCenterFlex>
                                     <TextBody2>아직 회원이 아니신가요?</TextBody2>
-                                    <span>회원가입</span>
-                                </VerticalFlex>
+                                    <SignUpText>회원가입</SignUpText>
+                                </ColumnAlignCenterFlex>
 
                             </VerticalFlex>
                         </LoginWrapper>

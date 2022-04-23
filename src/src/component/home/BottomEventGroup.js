@@ -1,8 +1,8 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex } from 'util/styledComponent'
+import { RowAlignCenterFlex } from 'util/styledComponent'
 import BottomEventCard from './BottomEventCard'
 
-const BottomEventCardsWrapper = styled(VerticalCenterAlignFlex)`
+const BottomEventCardsWrapper = styled(RowAlignCenterFlex)`
     justify-content: space-between;
     width: 100%;
     margin-top: 80px;

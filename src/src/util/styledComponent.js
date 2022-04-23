@@ -62,7 +62,13 @@ export const VerticalFlex = styled(Flex)`
   flex-direction: column;
 `;
 
-export const VerticalCenterAlignFlex = styled(Flex)`
+export const ColumnAlignCenterFlex = styled(Flex)`
+  flex-direction: column;
+  align-items: center;
+`;
+
+
+export const RowAlignCenterFlex = styled(Flex)`
   flex-direction: row;
   align-items: center;
   height: 100%;

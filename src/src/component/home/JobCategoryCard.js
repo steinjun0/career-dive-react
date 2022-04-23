@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
-import { VerticalCenterAlignFlex, TextSubtitle1 } from 'util/styledComponent'
+import { RowAlignCenterFlex, TextSubtitle1 } from 'util/styledComponent'
 
-const JobCategoryCardWrapper = styled(VerticalCenterAlignFlex)`
+const JobCategoryCardWrapper = styled(RowAlignCenterFlex)`
   width: 276px;
 `;
 
