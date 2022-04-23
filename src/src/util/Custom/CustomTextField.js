@@ -2,10 +2,10 @@ import { TextField, styled } from "@mui/material";
 import { colorBackgroundGrayLight } from "util/styledComponent";
 
 export const CustomTextField = styled(TextField)`
-  background-color: ${colorBackgroundGrayLight};
+  background-color: ${colorBackgroundGrayLight} ;
   .MuiFilledInput-root{
     border-radius: 8px;
-    background-color: ${colorBackgroundGrayLight};
+    background-color: ${colorBackgroundGrayLight}!important;
   }
   .MuiFilledInput-input{
     height: ${props => props.height ? props.height : '32px'};
