@@ -23,6 +23,9 @@ const theme = createTheme({
       main: colorCareerDiveBlue
     },
   },
+  typography: {
+    fontFamily: 'Spoqa Han Sans Neo'
+  }
 });
 
 ReactDOM.render(
