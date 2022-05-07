@@ -86,7 +86,28 @@ const postLogin = async (email, password) => {
     }
 }
 
-function App() {
+function SignUp() {
+    const [signUpData, setSignUpData] = useState({});
+    const [signUpStep, setSignUpStep] = useState(1);
+
+    return (
+        <FullHeightFullWidthWrapper>
+            <MaxWidthDiv>
+                <Grid justifyContent="center" container spacing={'30px'} marginTop={0}>
+                    <Grid container item xs={4} md={4}>
+                        <LoginWrapper>
+                            {signUpStep === 1 && <SignUp1stInfo signUpStep={signUpStep} setSignUpStep={setSignUpStep} signUpData={signUpData} setSignUpData={setSignUpData}></SignUp1stInfo>}
+                            {signUpStep === 2 && <SignUp2ndPhone signUpStep={signUpStep} setSignUpStep={setSignUpStep} signUpData={signUpData} setSignUpData={setSignUpData}></SignUp2ndPhone>}
+                            {signUpStep === 3 && <SignUp3rdNickName signUpStep={signUpStep} setSignUpStep={setSignUpStep} signUpData={signUpData} setSignUpData={setSignUpData}></SignUp3rdNickName>}
+                        </LoginWrapper>
+                    </Grid>
+                </Grid>
+            </MaxWidthDiv>
+        </FullHeightFullWidthWrapper>
+    );
+}
+
+function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -95,22 +116,25 @@ function App() {
     const [isCheckMarketing, setIsCheckMarketing] = useState(false);
     const [isCheckAll, setIsCheckAll] = useState(false);
 
+    const updateSignUpData = (signUpData, setSignUpData) => {
+        const updateData = Object.assign(signUpData, { email, password, isCheckUsingTerm, isCheckPersonalData, isCheckMarketing })
+        setSignUpData(updateData);
+    }
+
     const checkAll = () => {
-        if (isCheckAll) {
+        if (!isCheckAll) {
             setIsCheckUsingTerm(true)
             setIsCheckPersonalData(true)
             setIsCheckMarketing(true)
+            setIsCheckAll(true)
         } else {
             setIsCheckUsingTerm(false)
             setIsCheckPersonalData(false)
             setIsCheckMarketing(false)
+            setIsCheckAll(false)
         }
     }
 
-
-    useEffect(() => {
-        checkAll()
-    }, [isCheckAll])
 
     useEffect(() => {
         if (isCheckUsingTerm && isCheckPersonalData && isCheckMarketing) {
@@ -120,102 +144,164 @@ function App() {
         }
     }, [isCheckUsingTerm, isCheckPersonalData, isCheckMarketing])
     return (
-        <FullHeightFullWidthWrapper>
-            <MaxWidthDiv>
-                <Grid justifyContent="center" container spacing={'30px'} marginTop={0}>
-                    <Grid container item xs={4} md={4}>
-                        <LoginWrapper>
-                            <VerticalFlex>
-                                <TextHeading6>
-                                    회원가입
-                                </TextHeading6>
-                                <TextFieldWrapper>
-                                    <CustomTextField
-                                        height={'26px'}
-                                        onChange={(event) => { setEmail(event.target.value) }}
-                                        variant="filled"
-                                        InputProps={{ disableUnderline: true, }}
-                                        fullWidth={true}
-                                        margin="dense"
-                                        size="small"
-                                        hiddenLabel
-                                        placeholder="이메일"
-                                    />
-                                    <EmptyHeight height={'30px'} />
-                                    <TextCaption>
-                                        영문, 숫자, 특수문자 포함 8자 이상
-                                    </TextCaption>
-                                    <EmptyHeight height={'12px'} />
-                                    <CustomPasswordTextField
-                                        password={password}
-                                        setPassword={setPassword}
-                                    />
-                                </TextFieldWrapper>
+        <VerticalFlex>
+            <TextHeading6>
+                회원가입
+            </TextHeading6>
+            <TextFieldWrapper>
+                <CustomTextField
+                    height={'26px'}
+                    onChange={(event) => { setEmail(event.target.value) }}
+                    variant="filled"
+                    InputProps={{ disableUnderline: true, }}
+                    fullWidth={true}
+                    margin="dense"
+                    size="small"
+                    hiddenLabel
+                    placeholder="이메일"
+                />
+                <EmptyHeight height={'30px'} />
+                <TextCaption>
+                    영문, 숫자, 특수문자 포함 8자 이상
+                </TextCaption>
+                <EmptyHeight height={'12px'} />
+                <CustomPasswordTextField
+                    password={password}
+                    setPassword={setPassword}
+                />
+            </TextFieldWrapper>
 
-                                <EmptyHeight height={'30px'} />
-                                <SubButtonsWrapper>
-                                    <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isCheckUsingTerm} setIsChecked={setIsCheckUsingTerm} />
-                                        <SubButtons
-                                            onClick={(e) => { setIsCheckUsingTerm(!isCheckUsingTerm) }}>
-                                            이용 약관 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
-                                        </SubButtons>
-                                    </RowAlignCenterFlex>
+            <EmptyHeight height={'30px'} />
+            <SubButtonsWrapper>
+                <RowAlignCenterFlex>
+                    <CustomCheckbox isChecked={isCheckUsingTerm} setIsChecked={setIsCheckUsingTerm} />
+                    <SubButtons
+                        onClick={(e) => { setIsCheckUsingTerm(!isCheckUsingTerm) }}>
+                        이용 약관 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
+                    </SubButtons>
+                </RowAlignCenterFlex>
 
-                                    <TermsButton>
-                                        약관
-                                    </TermsButton>
-                                </SubButtonsWrapper>
-                                <SubButtonsWrapper>
-                                    <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isCheckPersonalData} setIsChecked={setIsCheckPersonalData} />
-                                        <SubButtons
-                                            onClick={(e) => { setIsCheckPersonalData(!isCheckPersonalData) }}>
-                                            개인 정보 활용 동의 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
-                                        </SubButtons>
-                                    </RowAlignCenterFlex>
+                <TermsButton>
+                    약관
+                </TermsButton>
+            </SubButtonsWrapper>
+            <SubButtonsWrapper>
+                <RowAlignCenterFlex>
+                    <CustomCheckbox isChecked={isCheckPersonalData} setIsChecked={setIsCheckPersonalData} />
+                    <SubButtons
+                        onClick={(e) => { setIsCheckPersonalData(!isCheckPersonalData) }}>
+                        개인 정보 활용 동의 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
+                    </SubButtons>
+                </RowAlignCenterFlex>
 
-                                    <TermsButton>
-                                        약관
-                                    </TermsButton>
-                                </SubButtonsWrapper>
-                                <SubButtonsWrapper>
-                                    <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isCheckMarketing} setIsChecked={setIsCheckMarketing} />
-                                        <SubButtons
-                                            onClick={(e) => { setIsCheckMarketing(!isCheckMarketing) }}>
-                                            마케팅 수신 동의 <SpanWeak>(선택)</SpanWeak>
-                                        </SubButtons>
-                                    </RowAlignCenterFlex>
+                <TermsButton>
+                    약관
+                </TermsButton>
+            </SubButtonsWrapper>
+            <SubButtonsWrapper>
+                <RowAlignCenterFlex>
+                    <CustomCheckbox isChecked={isCheckMarketing} setIsChecked={setIsCheckMarketing} />
+                    <SubButtons
+                        onClick={(e) => { setIsCheckMarketing(!isCheckMarketing) }}>
+                        마케팅 수신 동의 <SpanWeak>(선택)</SpanWeak>
+                    </SubButtons>
+                </RowAlignCenterFlex>
 
-                                    <TermsButton>
-                                        약관
-                                    </TermsButton>
-                                </SubButtonsWrapper>
-                                <Divider style={{ margin: '8px 0 8px 0' }}></Divider>
-                                <SubButtonsWrapper>
-                                    <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} />
-                                        <SubButtons onClick={(e) => { setIsCheckAll(!isCheckAll) }}>전체 동의</SubButtons>
-                                    </RowAlignCenterFlex>
-                                </SubButtonsWrapper>
-                                <EmptyHeight height={'16px'} />
-                                <ButtonWrapper>
-                                    <CustomButton
-                                        onClick={() => { postLogin(email, password) }}
-                                        height="50px">
-                                        다음
-                                    </CustomButton>
-                                </ButtonWrapper>
+                <TermsButton>
+                    약관
+                </TermsButton>
+            </SubButtonsWrapper>
+            <Divider style={{ margin: '8px 0 8px 0' }}></Divider>
+            <SubButtonsWrapper>
+                <RowAlignCenterFlex>
+                    <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} />
+                    <SubButtons onClick={(e) => { checkAll() }}>전체 동의</SubButtons>
+                </RowAlignCenterFlex>
+            </SubButtonsWrapper>
+            <EmptyHeight height={'16px'} />
+            <ButtonWrapper>
+                <CustomButton
+                    onClick={() => {
+                        updateSignUpData(signUpData, setSignUpData);
+                        setSignUpStep(signUpStep + 1)
+                    }}
+                    height="50px">
+                    다음
+                </CustomButton>
+            </ButtonWrapper>
 
-                            </VerticalFlex>
-                        </LoginWrapper>
-                    </Grid>
-                </Grid>
-            </MaxWidthDiv>
-        </FullHeightFullWidthWrapper >
-
+        </VerticalFlex>
     );
 }
 
-export default App;
+function SignUp2ndPhone({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
+    const updateSelfAuth = () => {
+        const updateData = Object.assign(signUpData, { setlAuth: true })
+        setSignUpData(updateData)
+    }
+    return (
+        <VerticalFlex>
+            <TextHeading6>
+                회원가입
+            </TextHeading6>
+
+            <EmptyHeight height={'40px'} />
+            <ButtonWrapper>
+                <CustomButton
+                    onClick={() => { updateSelfAuth(); setSignUpStep(signUpStep + 1) }}
+                    height="50px">
+                    휴대폰 본인 인증
+                </CustomButton>
+            </ButtonWrapper>
+            <EmptyHeight height='30px' />
+            <TextBody2>인증 시 입력한 전화번호는 다른 사용자들에게 공유되지 않습니다.</TextBody2>
+
+        </VerticalFlex>
+    );
+}
+
+function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
+    const [nickName, setNickName] = useState('');
+    const updateNickName = () => {
+        const updateData = Object.assign(signUpData, { nickName })
+        setSignUpData(updateData)
+    }
+    return (
+        <VerticalFlex>
+            <TextHeading6>
+                닉네임
+            </TextHeading6>
+
+            <EmptyHeight height={'40px'} />
+            <TextBody2>닉네임을 자유롭게 설정해보세요.</TextBody2>
+            <EmptyHeight height={'30px'} />
+            <TextCaption>
+                최대 10자
+            </TextCaption>
+            <EmptyHeight height={'12px'} />
+            <CustomTextField
+                height={'26px'}
+                onChange={(event) => { setNickName(event.target.value) }}
+                variant="filled"
+                InputProps={{ disableUnderline: true, }}
+                fullWidth={true}
+                margin="dense"
+                size="small"
+                hiddenLabel
+                placeholder="닉네임(선택)"
+            />
+            <EmptyHeight height={'30px'} />
+            <ButtonWrapper>
+                <CustomButton
+                    onClick={() => { updateNickName() }}
+                    height="50px">
+                    완료
+                </CustomButton>
+            </ButtonWrapper>
+            <EmptyHeight height='30px' />
+
+
+        </VerticalFlex>
+    );
+}
+export default SignUp;
