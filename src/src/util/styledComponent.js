@@ -5,8 +5,8 @@ import { styled } from "@mui/material";
 export const colorCareerDiveBlue = "#698CFF";
 export const colorCareerDivePink = "#E25D7D";
 export const colorBlueGray = '#CFD6E0';
-export const colorTextLight = "#898989";
-export const colorTextBody = "#4F4F4F";
+export const colorTextLight = "#5F6368";
+export const colorTextBody = "#191919";
 export const colorBackgroundGrayLight = "#F8F8F8";
 export const colorBackgroundGrayDark = "#E6E6E6";
 
