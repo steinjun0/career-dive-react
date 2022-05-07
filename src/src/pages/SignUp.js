@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import API from '../API.js'
 import { Grid, styled, Divider } from "@mui/material";
@@ -53,13 +53,6 @@ const ButtonWrapper = styled(VerticalFlex)`
 //   margin-top: 20px;
 `
 
-const SignUpText = styled('span')`
-  text-decoration: underline;
-  font-size: 12px;
-  font-weight: 700;
-  margin-top: 6px;
-`
-
 const TermsButton = styled(Flex)`
   justify-content: center;
   align-items: center;
@@ -96,7 +89,36 @@ const postLogin = async (email, password) => {
 function App() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isAutoLogin, setIsAutoLogin] = useState(false);
+
+    const [isCheckUsingTerm, setIsCheckUsingTerm] = useState(false);
+    const [isCheckPersonalData, setIsCheckPersonalData] = useState(false);
+    const [isCheckMarketing, setIsCheckMarketing] = useState(false);
+    const [isCheckAll, setIsCheckAll] = useState(false);
+
+    const checkAll = () => {
+        if (isCheckAll) {
+            setIsCheckUsingTerm(true)
+            setIsCheckPersonalData(true)
+            setIsCheckMarketing(true)
+        } else {
+            setIsCheckUsingTerm(false)
+            setIsCheckPersonalData(false)
+            setIsCheckMarketing(false)
+        }
+    }
+
+
+    useEffect(() => {
+        checkAll()
+    }, [isCheckAll])
+
+    useEffect(() => {
+        if (isCheckUsingTerm && isCheckPersonalData && isCheckMarketing) {
+            setIsCheckAll(true);
+        } else {
+            setIsCheckAll(false);
+        }
+    }, [isCheckUsingTerm, isCheckPersonalData, isCheckMarketing])
     return (
         <FullHeightFullWidthWrapper>
             <MaxWidthDiv>
@@ -133,9 +155,9 @@ function App() {
                                 <EmptyHeight height={'30px'} />
                                 <SubButtonsWrapper>
                                     <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
+                                        <CustomCheckbox isChecked={isCheckUsingTerm} setIsChecked={setIsCheckUsingTerm} />
                                         <SubButtons
-                                            onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>
+                                            onClick={(e) => { setIsCheckUsingTerm(!isCheckUsingTerm) }}>
                                             이용 약관 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
                                         </SubButtons>
                                     </RowAlignCenterFlex>
@@ -146,9 +168,9 @@ function App() {
                                 </SubButtonsWrapper>
                                 <SubButtonsWrapper>
                                     <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
+                                        <CustomCheckbox isChecked={isCheckPersonalData} setIsChecked={setIsCheckPersonalData} />
                                         <SubButtons
-                                            onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>
+                                            onClick={(e) => { setIsCheckPersonalData(!isCheckPersonalData) }}>
                                             개인 정보 활용 동의 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
                                         </SubButtons>
                                     </RowAlignCenterFlex>
@@ -159,9 +181,9 @@ function App() {
                                 </SubButtonsWrapper>
                                 <SubButtonsWrapper>
                                     <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
+                                        <CustomCheckbox isChecked={isCheckMarketing} setIsChecked={setIsCheckMarketing} />
                                         <SubButtons
-                                            onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>
+                                            onClick={(e) => { setIsCheckMarketing(!isCheckMarketing) }}>
                                             마케팅 수신 동의 <SpanWeak>(선택)</SpanWeak>
                                         </SubButtons>
                                     </RowAlignCenterFlex>
@@ -173,11 +195,11 @@ function App() {
                                 <Divider style={{ margin: '8px 0 8px 0' }}></Divider>
                                 <SubButtonsWrapper>
                                     <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
-                                        <SubButtons onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>전체 동의</SubButtons>
+                                        <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} />
+                                        <SubButtons onClick={(e) => { setIsCheckAll(!isCheckAll) }}>전체 동의</SubButtons>
                                     </RowAlignCenterFlex>
                                 </SubButtonsWrapper>
-                                <EmptyHeight height={'8px'} />
+                                <EmptyHeight height={'16px'} />
                                 <ButtonWrapper>
                                     <CustomButton
                                         onClick={() => { postLogin(email, password) }}
