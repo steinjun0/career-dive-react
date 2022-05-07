@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import SignUp from './pages/SignUp';
 import Mentor from "./pages/Mentor";
 
 import Gnb from "./component/Gnb";
@@ -36,6 +37,7 @@ ReactDOM.render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/mentee/mentor/profile/:id" element={<Mentor />} />
           <Route path="/mentee/schedule" element={<Schedule />} />
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
