@@ -5,8 +5,8 @@ import { styled } from "@mui/material";
 export const colorCareerDiveBlue = "#698CFF";
 export const colorCareerDivePink = "#E25D7D";
 export const colorBlueGray = '#CFD6E0';
-export const colorTextLight = "#898989";
-export const colorTextBody = "#4F4F4F";
+export const colorTextLight = "#5F6368";
+export const colorTextBody = "#191919";
 export const colorBackgroundGrayLight = "#F8F8F8";
 export const colorBackgroundGrayDark = "#E6E6E6";
 
@@ -14,23 +14,27 @@ export const colorBackgroundGrayDark = "#E6E6E6";
 export const TextBody1 = styled(`span`)`
   font-size: 16px;
   line-height: 24px;
+  color: ${props => props.color};
 `;
 
 export const TextBody2 = styled(`p`)`
   font-size: 14px;
   line-height: 24px;
   margin: 0;
+  color: ${props => props.color};
 `;
 
 export const TextSubtitle1 = styled(`span`)`
   font-weight: 700;
   line-height: 24px;
+  color: ${props => props.color};
 `;
 
 export const TextSubtitle2 = styled(`span`)`
   font-size: 14px;
   font-weight: 700;
   line-height: 24px;
+  color: ${props => props.color};
 `;
 
 export const TextHeading6 = styled(`h6`)`
@@ -38,6 +42,7 @@ export const TextHeading6 = styled(`h6`)`
   font-weight: 700;
   line-height: 32px;
   margin: 0;
+  color: ${props => props.color};
 `;
 
 export const TextButton = styled(`span`)`

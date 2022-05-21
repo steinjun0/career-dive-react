@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import SignUp from './pages/SignUp';
 import Mentor from "./pages/Mentor";
 
 import Gnb from "./component/Gnb";
@@ -28,14 +29,26 @@ const theme = createTheme({
   }
 });
 
+export default function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 ReactDOM.render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
+      <ScrollToTop />
       <Gnb />
       <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 214px)' }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/mentee/mentor/profile/:id" element={<Mentor />} />
           <Route path="/mentee/schedule" element={<Schedule />} />
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />

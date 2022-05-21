@@ -16,6 +16,7 @@ import {
     EmptyWidth,
     EmptyHeight,
     ColumnAlignCenterFlex,
+    LinkNoDeco,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
@@ -58,24 +59,26 @@ const SignUpText = styled('span')`
   margin-top: 6px;
 `
 
-const postLogin = async (email, password) => {
-    try {
-        const loginResponse = await API.postLogin(email, password);
-        if (loginResponse.status === 200) {
-            window.localStorage.setItem('user_id', loginResponse.data.user_id)
-            window.localStorage.setItem('access_token', loginResponse.data.access_token)
-            window.localStorage.setItem('refresh_token', loginResponse.data.refresh_token)
-        }
-    }
-    catch {
-
-    }
-}
-
-function App() {
+function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isAutoLogin, setIsAutoLogin] = useState(false);
+
+    const onClickLogin = async () => {
+        try {
+            const loginResponse = await API.postLogin(email, password);
+            if (loginResponse.status === 200) {
+                window.localStorage.setItem('user_id', loginResponse.data.user_id)
+                window.localStorage.setItem('access_token', loginResponse.data.access_token)
+                window.localStorage.setItem('refresh_token', loginResponse.data.refresh_token)
+            } else {
+                alert(loginResponse.error.response.data.error) // 이렇게 복잡해야하는가?
+            }
+        }
+        catch {
+            alert('에러가 발생했습니다. 네트워크 환경을 확인해 주세요')
+        }
+    }
     return (
         <FullHeightFullWidthWrapper>
             <MaxWidthDiv>
@@ -119,7 +122,7 @@ function App() {
                                 <EmptyHeight height={'8px'} />
                                 <ButtonWrapper>
                                     <CustomButton
-                                        onClick={() => { postLogin(email, password) }}
+                                        onClick={onClickLogin}
                                         height="50px">
                                         로그인
                                     </CustomButton>
@@ -127,7 +130,10 @@ function App() {
                                 <EmptyHeight height={'29px'} />
                                 <ColumnAlignCenterFlex>
                                     <TextBody2>아직 회원이 아니신가요?</TextBody2>
-                                    <SignUpText>회원가입</SignUpText>
+                                    <LinkNoDeco to='/signup'>
+                                        <SignUpText>회원가입</SignUpText>
+                                    </LinkNoDeco>
+
                                 </ColumnAlignCenterFlex>
                             </VerticalFlex>
                         </LoginWrapper>
@@ -139,4 +145,4 @@ function App() {
     );
 }
 
-export default App;
+export default Login;

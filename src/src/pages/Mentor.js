@@ -14,6 +14,7 @@ import MentorCalendar from 'component/mentor/Calendar'
 import HelpCategory from "component/mentor/HelpCategory";
 import Introduction from "component/mentor/Introduction";
 import RatingAndReview from "component/mentor/RatingAndReview";
+import Request from "component/mentor/Request";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -47,6 +48,7 @@ function Mentor() {
         </MaxWidthDiv>
         <GrayBackground>
           <MaxWidthDiv>
+            <Request />
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>
 
