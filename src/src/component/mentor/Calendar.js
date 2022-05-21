@@ -10,10 +10,12 @@ import {
   colorCareerDiveBlue,
   colorTextLight,
   Flex,
-  colorBackgroundGrayLight
+  colorBackgroundGrayLight,
+  EmptyHeight
 } from "util/styledComponent";
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { CustomButton } from "util/Custom/CustomButton";
 
 const CalendarWrapper = styled(Flex)`
   width: 100%;
@@ -197,14 +199,18 @@ function Calendar() {
     // gap margin
     // line-height
     // pmLines height
+    let buttonHeight = 0
+    if (consultingHourAndMin !== 0) {
+      buttonHeight = 60
+    }
     if (amLines === 0 && pmLines === 0) {
       return 0
     } else if (amLines !== 0 && pmLines === 0) {
-      return 16 + 24 + (44 + 16) * amLines
+      return 16 + 24 + (44 + 16) * amLines + buttonHeight
     } else if (amLines === 0 && pmLines !== 0) {
-      return 16 + 24 + (44 + 16) * pmLines
+      return 16 + 24 + (44 + 16) * pmLines + buttonHeight
     } else {
-      return 16 + 24 + (44 + 16) * amLines + 16 + 24 + (44 + 16) * pmLines
+      return 16 + 24 + (44 + 16) * amLines + 16 + 24 + (44 + 16) * pmLines + buttonHeight
     }
   }
 
@@ -407,6 +413,8 @@ function Calendar() {
               onClickConsultingHourAndMin={onClickConsultingHourAndMin}
               timeArray={availablePMTime}
             />
+            <EmptyHeight height='16px'></EmptyHeight>
+            <CustomButton>신청</CustomButton>
           </TimeSelectWrapper>
 
           {/* <AvailableTimeWrapper>
