@@ -16,6 +16,7 @@ import {
     EmptyWidth,
     EmptyHeight,
     ColumnAlignCenterFlex,
+    LinkNoDeco,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
@@ -57,10 +58,6 @@ const SignUpText = styled('span')`
   font-weight: 700;
   margin-top: 6px;
 `
-
-const postLogin = async (email, password) => {
-
-}
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -133,7 +130,10 @@ function Login() {
                                 <EmptyHeight height={'29px'} />
                                 <ColumnAlignCenterFlex>
                                     <TextBody2>아직 회원이 아니신가요?</TextBody2>
-                                    <SignUpText>회원가입</SignUpText>
+                                    <LinkNoDeco to='/signup'>
+                                        <SignUpText>회원가입</SignUpText>
+                                    </LinkNoDeco>
+
                                 </ColumnAlignCenterFlex>
                             </VerticalFlex>
                         </LoginWrapper>

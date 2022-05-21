@@ -23,6 +23,7 @@ import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
 import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
+import { useNavigate } from 'react-router-dom';
 
 const LoginWrapper = styled(VerticalFlex)`
   width: 100%;
@@ -72,19 +73,7 @@ const SpanWeak = styled('span')`
 color: #BDBDBD;
 `
 
-const postLogin = async (email, password) => {
-    try {
-        const loginResponse = await API.postLogin(email, password);
-        if (loginResponse.status === 200) {
-            window.localStorage.setItem('user_id', loginResponse.data.user_id)
-            window.localStorage.setItem('access_token', loginResponse.data.access_token)
-            window.localStorage.setItem('refresh_token', loginResponse.data.refresh_token)
-        }
-    }
-    catch {
 
-    }
-}
 
 function SignUp() {
     const [signUpData, setSignUpData] = useState({});
@@ -96,9 +85,21 @@ function SignUp() {
                 <Grid justifyContent="center" container spacing={'30px'} marginTop={0}>
                     <Grid container item xs={4} md={4}>
                         <LoginWrapper>
-                            {signUpStep === 1 && <SignUp1stInfo signUpStep={signUpStep} setSignUpStep={setSignUpStep} signUpData={signUpData} setSignUpData={setSignUpData}></SignUp1stInfo>}
-                            {signUpStep === 2 && <SignUp2ndPhone signUpStep={signUpStep} setSignUpStep={setSignUpStep} signUpData={signUpData} setSignUpData={setSignUpData}></SignUp2ndPhone>}
-                            {signUpStep === 3 && <SignUp3rdNickName signUpStep={signUpStep} setSignUpStep={setSignUpStep} signUpData={signUpData} setSignUpData={setSignUpData}></SignUp3rdNickName>}
+                            {signUpStep === 1 && <SignUp1stInfo
+                                signUpStep={signUpStep}
+                                setSignUpStep={setSignUpStep}
+                                signUpData={signUpData}
+                                setSignUpData={setSignUpData} />}
+                            {signUpStep === 2 && <SignUp2ndPhone
+                                signUpStep={signUpStep}
+                                setSignUpStep={setSignUpStep}
+                                signUpData={signUpData}
+                                setSignUpData={setSignUpData} />}
+                            {signUpStep === 3 && <SignUp3rdNickName
+                                signUpStep={signUpStep}
+                                setSignUpStep={setSignUpStep}
+                                signUpData={signUpData}
+                                setSignUpData={setSignUpData} />}
                         </LoginWrapper>
                     </Grid>
                 </Grid>
@@ -235,8 +236,8 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
 }
 
 function SignUp2ndPhone({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
-    const updateSelfAuth = () => {
-        const updateData = Object.assign(signUpData, { setlAuth: true })
+    const updatePhoneAuth = () => {
+        const updateData = Object.assign(signUpData, { phoneAuth: true })
         setSignUpData(updateData)
     }
     return (
@@ -248,7 +249,7 @@ function SignUp2ndPhone({ signUpStep, setSignUpStep, signUpData, setSignUpData }
             <EmptyHeight height={'40px'} />
             <ButtonWrapper>
                 <CustomButton
-                    onClick={() => { updateSelfAuth(); setSignUpStep(signUpStep + 1) }}
+                    onClick={() => { updatePhoneAuth(); setSignUpStep(signUpStep + 1) }}
                     height="50px">
                     휴대폰 본인 인증
                 </CustomButton>
@@ -261,11 +262,38 @@ function SignUp2ndPhone({ signUpStep, setSignUpStep, signUpData, setSignUpData }
 }
 
 function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
+    let navigate = useNavigate();
     const [nickName, setNickName] = useState('');
     const updateNickName = () => {
         const updateData = Object.assign(signUpData, { nickName })
         setSignUpData(updateData)
     }
+
+    const postAccount = async (email, password) => {
+        try {
+            console.log('signUpData', signUpData)
+            console.log('signUpData', {
+                email: signUpData.email,
+                password: signUpData.password,
+                nickname: signUpData.nickName,
+            })
+            const accountCreateResponse = await API.postAccount(signUpData.email, signUpData.password, signUpData.nickName);
+            if (accountCreateResponse.status === 200) {
+                window.localStorage.setItem('user_id', accountCreateResponse.data.user_id)
+                window.localStorage.setItem('access_token', accountCreateResponse.data.access_token)
+                window.localStorage.setItem('refresh_token', accountCreateResponse.data.refresh_token)
+                alert('회원가입이 완료되었습니다!')
+                navigate('/')
+
+            } else {
+                alert(accountCreateResponse.error.response.data.error) // 이렇게 복잡해야하는가?
+            }
+        }
+        catch {
+
+        }
+    }
+
     return (
         <VerticalFlex>
             <TextHeading6>
@@ -293,7 +321,10 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
             <EmptyHeight height={'30px'} />
             <ButtonWrapper>
                 <CustomButton
-                    onClick={() => { updateNickName() }}
+                    onClick={() => {
+                        updateNickName()
+                        postAccount()
+                    }}
                     height="50px">
                     완료
                 </CustomButton>
