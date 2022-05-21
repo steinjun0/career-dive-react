@@ -11,7 +11,8 @@ import {
   colorTextLight,
   Flex,
   colorBackgroundGrayLight,
-  EmptyHeight
+  EmptyHeight,
+  TextSubtitle1
 } from "util/styledComponent";
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
@@ -201,7 +202,7 @@ function Calendar() {
     // pmLines height
     let buttonHeight = 0
     if (consultingHourAndMin !== 0) {
-      buttonHeight = 60
+      buttonHeight = 80
     }
     if (amLines === 0 && pmLines === 0) {
       return 0
@@ -332,6 +333,14 @@ function Calendar() {
     }
   }, [month])
 
+  const addMinute = (hourAndMin, addingMin) => {
+    const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
+    const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
+
+    const hour = `${'00' + afterDate.getHours()}`.slice(-2)
+    const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
+    return `${hour}:${min}`
+  }
 
   return (
     <CalendarWrapper>
@@ -392,8 +401,19 @@ function Calendar() {
                 40분
               </TimeButton>
             </TimeButtonWrapper>
+          </TimeSelectWrapper>
 
-
+          <TimeSelectWrapper
+            is_show={(selectedDate != 0).toString()}
+            height={consultingHourAndMin == 0 ? 56 : 76}
+          >
+            <DateTitle>
+              상담 시작 시간
+            </DateTitle>
+            <EmptyHeight height='16px' />
+            <TextSubtitle1 color={colorCareerDiveBlue}>
+              {consultingHourAndMin}~{`${addMinute(consultingHourAndMin, consultingTime)}`}
+            </TextSubtitle1>
           </TimeSelectWrapper>
 
           <TimeSelectWrapper
@@ -413,8 +433,8 @@ function Calendar() {
               onClickConsultingHourAndMin={onClickConsultingHourAndMin}
               timeArray={availablePMTime}
             />
-            <EmptyHeight height='16px'></EmptyHeight>
-            <CustomButton>신청</CustomButton>
+            <EmptyHeight height='28px'></EmptyHeight>
+            <CustomButton height='52px'>신청</CustomButton>
           </TimeSelectWrapper>
 
           {/* <AvailableTimeWrapper>
