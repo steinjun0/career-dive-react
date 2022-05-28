@@ -91,7 +91,7 @@ export const FullHeightFullWidthWrapper = styled(FullWidthWrapper)`
 
 export const CenterWidthWrapper = styled(Flex)`
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   max-width: 1194px;
   width: 100%;
 `;

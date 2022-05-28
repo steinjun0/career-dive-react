@@ -3,6 +3,7 @@ import {
   RowAlignCenterFlex,
   FullWidthWrapper,
   CenterWidthWrapper,
+  Flex,
 } from "util/styledComponent";
 
 import SimpleMenu from "util/SimpleMenu";
@@ -15,7 +16,11 @@ const HomeBannerFullWidthWrapper = styled(FullWidthWrapper)`
   height: 600px;
   background-color: white;
 `;
-const HomeBannerWrapper = styled(CenterWidthWrapper)`
+const HomeBannerWrapper = styled(Flex)`
+  flex-direction: column;
+  align-items: start;
+  max-width: 1194px;
+  width: 100%;
   position: relative;
   height: 640px;
   overflow-x: clip;

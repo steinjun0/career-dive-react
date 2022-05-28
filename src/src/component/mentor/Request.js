@@ -22,12 +22,6 @@ const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
 `;
 
-const SubtitleWarpper = styled(RowAlignCenterFlex)`
-  margin-top: 20px;
-`
-const CustomTextSubtitle2 = styled(TextSubtitle2)`
-  margin-right: 20px;
-`
 
 const GrayBackgroundText = styled(Flex)`
   background-color: ${colorBackgroundGrayLight};

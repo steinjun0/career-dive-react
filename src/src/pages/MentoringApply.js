@@ -5,16 +5,12 @@ import {
   CenterWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
-  VerticalFlex,
   Flex
 } from "util/styledComponent";
 
 import MentorProfile from 'component/mentor/Profile'
 import MentorCalendar from 'component/mentor/Calendar'
-import HelpCategory from "component/mentor/HelpCategory";
-import Introduction from "component/mentor/Introduction";
-import RatingAndReview from "component/mentor/RatingAndReview";
-import Request from "component/mentor/Request";
+import { useLocation } from "react-router-dom";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -31,6 +27,7 @@ const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-top: 30px;
   margin-bottom: 154px;
+  width: 582px;
 `;
 
 const IntroductionWrapper = styled(Flex)`
@@ -38,6 +35,8 @@ const IntroductionWrapper = styled(Flex)`
 `;
 
 function Mentor() {
+  const location = useLocation();
+  console.log('location', location)
   return (
     <div>
       <FullWidthWrapper>
@@ -47,29 +46,12 @@ function Mentor() {
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
-          <MaxWidthDiv>
+          <CenterWidthWrapper>
             <CardsWrapper>
-              <Grid container spacing={'30px'} marginTop={0}>
-
-                <Grid container item xs={12} md={6}>
-                  <Grid item xs={12} >
-                    <HelpCategory></HelpCategory>
-                    <Introduction></Introduction>
-                    <RatingAndReview></RatingAndReview>
-                  </Grid>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Grid container item spacing={2}>
-                    <Grid item xs={12}>
-                      <MentorCalendar></MentorCalendar>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
+              <MentorCalendar>
+              </MentorCalendar>
             </CardsWrapper>
-
-          </MaxWidthDiv>
+          </CenterWidthWrapper>
         </GrayBackground>
       </FullWidthWrapper>
     </div>
