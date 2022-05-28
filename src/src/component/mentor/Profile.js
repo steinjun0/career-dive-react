@@ -11,7 +11,8 @@ import {
   colorCareerDiveBlue,
   colorBackgroundGrayLight,
   colorCareerDivePink,
-  colorTextLight
+  colorTextLight,
+  EmptyWidth
 } from "util/styledComponent";
 import { useState } from "react";
 
@@ -52,13 +53,13 @@ const Discription = styled(RowAlignCenterFlex)``;
 
 const Buttons = styled(RowAlignCenterFlex)`
   margin-left: auto;
-  height: 32px;
+  height: 40px;
   justify-content: space-between;
 `;
 
 const FavoriteMentorButton = styled(Button)`
-  min-width: 0px;
-  min-height: 0px;
+  min-width: 40px;
+  min-height: 40px;
   background-color: ${colorBackgroundGrayLight};
   color: white;
   &:hover {
@@ -68,8 +69,8 @@ const FavoriteMentorButton = styled(Button)`
 `;
 
 const FavoriteMentorButtonClicked = styled(Button)`
-  min-width: 0px;
-  min-height: 0px;
+  min-width: 40px;
+  min-height: 40px;
   background-color: rgba(226, 93, 125, 0.2);;
   color: white;
   &:hover {
@@ -80,13 +81,16 @@ const FavoriteMentorButtonClicked = styled(Button)`
 
 const ApplyMentoringButton = styled(Button)`
   width: 122px;
-  height: 32px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 400;
   background-color: ${colorCareerDiveBlue};
   color: white;
   &:hover {
     background-color: ${colorCareerDiveBlue};
     color: white;
   }
+  border-radius: 8px;
 `;
 
 function FavoriteButton({ isFavorite, setIsFavorite }) {
@@ -114,12 +118,13 @@ function MentorProfile({ name = '', discription = '' }) {
       </ProfileTexts>
       <Buttons>
         <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
-        {/* <ApplyMentoringButton
+        <EmptyWidth width='12px'></EmptyWidth>
+        <ApplyMentoringButton
           startIcon={<img src={EditCalandarIcon} alt={'calendar'} />}
           disableElevation
         >
-          멘토링 신청
-        </ApplyMentoringButton> */}
+          상담 신청
+        </ApplyMentoringButton>
       </Buttons>
     </MentorProfileWrapper>
   );

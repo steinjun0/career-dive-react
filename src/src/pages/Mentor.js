@@ -48,7 +48,6 @@ function Mentor() {
         </MaxWidthDiv>
         <GrayBackground>
           <MaxWidthDiv>
-            <Request />
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>
 

@@ -12,5 +12,5 @@ export const CustomButton = styled(Button)`
   min-width: ${props => props.width ? props.width : ''};
   font-size: 16px;
   line-height: 24px;
-  border-radius: 8px;
+  border-radius: 8px !important;
 `;
