@@ -15,6 +15,7 @@ import {
   EmptyWidth
 } from "util/styledComponent";
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MentorProfileWrapper = styled(RowAlignCenterFlex)`
   height: 200px;
@@ -106,8 +107,12 @@ function FavoriteButton({ isFavorite, setIsFavorite }) {
   }
 }
 
+
 function MentorProfile({ name = '', discription = '' }) {
   const [isFavorite, setIsFavorite] = useState(false)
+  const navigater = useNavigate();
+  const params = useParams();
+  console.log('params', params.id)
   return (
     <MentorProfileWrapper>
       <MentorProfileImg src={testMentorImage} alt="profile-image" />
@@ -122,6 +127,7 @@ function MentorProfile({ name = '', discription = '' }) {
         <ApplyMentoringButton
           startIcon={<img src={EditCalandarIcon} alt={'calendar'} />}
           disableElevation
+          onClick={() => { navigater(`/mentee/mentor/mentoring/apply/${params.id}`) }}
         >
           상담 신청
         </ApplyMentoringButton>
