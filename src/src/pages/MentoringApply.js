@@ -10,6 +10,7 @@ import {
 
 import MentorProfile from 'component/mentor/Profile'
 import MentorCalendar from 'component/mentor/Calendar'
+import { useLocation } from "react-router-dom";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -34,6 +35,8 @@ const IntroductionWrapper = styled(Flex)`
 `;
 
 function Mentor() {
+  const location = useLocation();
+  console.log('location', location)
   return (
     <div>
       <FullWidthWrapper>

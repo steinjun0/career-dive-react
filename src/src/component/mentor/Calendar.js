@@ -17,6 +17,7 @@ import {
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomButton } from "util/Custom/CustomButton";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const CalendarWrapper = styled(Flex)`
   width: 100%;
@@ -172,6 +173,10 @@ function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin,
 }
 
 function Calendar() {
+  const navigater = useNavigate();
+  const params = useParams();
+  const location = useLocation();
+
   const year = 2022;
   const [month, setMonth] = useState(`${new Date().getMonth()}월`);
   const originData = [{ date: 9, availableTime: [['09:00', '09:30']] },
@@ -190,8 +195,8 @@ function Calendar() {
   const [availableAMTime, setAvailableAMTime] = useState([]);
   const [availablePMTime, setAvailablePMTime] = useState([]);
 
-  const [amLines, setAMLines] = useState(1)
-  const [pmLines, setPMLines] = useState(1)
+  const [amLines, setAmLines] = useState(1)
+  const [pmLines, setPmLines] = useState(1)
 
   const getTimeSelectWrapperHeight = (amLines, pmLines) => {
     // margin-top
@@ -253,6 +258,8 @@ function Calendar() {
   const [consultingTime, setConsultingTime] = useState(0);
   const [consultingHourAndMin, setConsultingHourAndMin] = useState(0);
 
+
+
   const onClickConsultingTime = (event, newConsultingTime) => {
     if (newConsultingTime === null) {
       setConsultingTime(0);
@@ -308,17 +315,17 @@ function Calendar() {
     }
 
     if (tempAvailableAMTime.length === 0) {
-      setAMLines(0)
+      setAmLines(0)
     }
     else {
-      setAMLines(1 + parseInt((tempAvailableAMTime.length * 76) / cardWidth))
+      setAmLines(1 + parseInt((tempAvailableAMTime.length * 76) / cardWidth))
     }
 
     if (tempAvailablePMTime.length === 0) {
-      setPMLines(0)
+      setPmLines(0)
     }
     else {
-      setPMLines(1 + parseInt((tempAvailablePMTime.length * 76) / cardWidth))
+      setPmLines(1 + parseInt((tempAvailablePMTime.length * 76) / cardWidth))
     }
   };
 
@@ -341,6 +348,36 @@ function Calendar() {
     const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
     return `${hour}:${min}`
   }
+
+  useEffect(() => {
+    if (location.state !== null) {
+      console.log('location.state', location.state)
+      if (location.state.selectedDate !== undefined) {
+        setSelectedDate(location.state.selectedDate)
+      }
+      if (location.state.consultingTime !== undefined) {
+        setConsultingTime(location.state.consultingTime)
+      }
+      if (location.state.consultingHourAndMin !== undefined) {
+        setConsultingHourAndMin(location.state.consultingHourAndMin)
+      }
+
+      if (location.state.amLines !== undefined) {
+        setAmLines(location.state.amLines)
+      }
+      if (location.state.pmLines !== undefined) {
+        setPmLines(location.state.pmLines)
+      }
+      if (location.state.availableAMTime !== undefined) {
+        setAvailableAMTime(location.state.availableAMTime)
+      }
+      if (location.state.availablePMTime !== undefined) {
+        setAvailablePMTime(location.state.availablePMTime)
+      }
+    }
+  }, [])
+
+
 
   return (
     <CalendarWrapper>
@@ -434,7 +471,14 @@ function Calendar() {
               timeArray={availablePMTime}
             />
             <EmptyHeight height='28px'></EmptyHeight>
-            <CustomButton height='52px'>신청</CustomButton>
+            <CustomButton
+              height='52px'
+              onClick={() => {
+                navigater(`/mentee/mentor/mentoring/apply/${params.id}`,
+                  { state: { selectedDate, consultingTime, consultingHourAndMin, amLines, pmLines, availableAMTime, availablePMTime } })
+              }}>
+              신청
+            </CustomButton>
           </TimeSelectWrapper>
 
           {/* <AvailableTimeWrapper>
