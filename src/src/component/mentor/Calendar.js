@@ -198,7 +198,7 @@ function Calendar() {
   const [amLines, setAmLines] = useState(1)
   const [pmLines, setPmLines] = useState(1)
 
-  const getTimeSelectWrapperHeight = (amLines, pmLines) => {
+  const getTimeSelectWrapperHeight = (amLines, pmLines, hideButton) => {
     // margin-top
     // line-height
     // amLines height
@@ -206,7 +206,7 @@ function Calendar() {
     // line-height
     // pmLines height
     let buttonHeight = 0
-    if (consultingHourAndMin !== 0) {
+    if (consultingHourAndMin !== 0 && !hideButton) {
       buttonHeight = 80
     }
     if (amLines === 0 && pmLines === 0) {
@@ -349,7 +349,10 @@ function Calendar() {
     return `${hour}:${min}`
   }
 
+
+  const [isApplyPage, setIsApplyPage] = useState(false);
   useEffect(() => {
+    setIsApplyPage(location.pathname.includes('apply'))
     if (location.state !== null) {
       console.log('location.state', location.state)
       if (location.state.selectedDate !== undefined) {
@@ -455,7 +458,7 @@ function Calendar() {
 
           <TimeSelectWrapper
             is_show={(consultingTime != 0).toString()}
-            height={getTimeSelectWrapperHeight(amLines, pmLines)}
+            height={getTimeSelectWrapperHeight(amLines, pmLines, isApplyPage)}
           >
             <SelectionConsultingHourAndMin
               title={'오전'}
