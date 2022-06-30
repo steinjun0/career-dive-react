@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 import testMentorImage from "../../assets/img/testMentorImage.png";
 import Button from "@mui/material/Button";
 import FavoriteIcon from "@mui/icons-material/FavoriteBorder";
-import EditCalandarIcon from "../../assets/icon/editCalandar.svg";
+import EditCalendarIcon from "../../assets/icon/editCalendar.svg";
 
 import {
   RowAlignCenterFlex,
@@ -125,7 +125,7 @@ function MentorProfile({ name = '', discription = '' }) {
         <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
         <EmptyWidth width='12px'></EmptyWidth>
         <ApplyMentoringButton
-          startIcon={<img src={EditCalandarIcon} alt={'calendar'} />}
+          startIcon={<img src={EditCalendarIcon} alt={'calendar'} />}
           disableElevation
           onClick={() => { navigater(`/mentee/mentor/mentoring/apply/${params.id}`) }}
         >

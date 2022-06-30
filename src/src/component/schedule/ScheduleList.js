@@ -118,39 +118,6 @@ function ScheduleList() {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={3} key={index}>
                   <ScheduleCard schedule={schedule}></ScheduleCard>
-                  {/* <ScheduleCard>
-                    <ScheduleCardTop>
-                      <img src={calendarIcon} alt="" />
-
-                      <ContentWrapper>
-                        <ScheduleDate>
-                          {schedule.date}
-                        </ScheduleDate>
-                        <ScheduleTime>
-                          {schedule.time}
-                        </ScheduleTime>
-
-                        <ManageScheduleButton background_color={'#f4f4f4'} custom_color={'#848484'} >
-                          예약 관리
-                        </ManageScheduleButton>
-
-                      </ContentWrapper>
-                    </ScheduleCardTop>
-
-                    <ScheduleCardBottom>
-                      <ProfileImg src={testProfileIamge}></ProfileImg>
-
-                      <ContentWrapper>
-                        <TextSubtitle2>
-                          {schedule.name} 멘토
-                        </TextSubtitle2>
-                        <TextBody2>
-                          {schedule.company}
-                        </TextBody2>
-                      </ContentWrapper>
-
-                    </ScheduleCardBottom>
-                  </ScheduleCard> */}
                 </Grid>
               );
             }

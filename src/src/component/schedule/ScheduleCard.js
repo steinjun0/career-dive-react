@@ -10,11 +10,20 @@ import {
   colorCareerDiveBlue,
   colorBackgroundGrayLight,
   TextHeading6,
+  EmptyWidth,
 } from "util/styledComponent";
 import { CustomIconButton } from 'util/Custom/CustomIconButton'
 
 import requestFormIcon from 'assets/icon/requestForm.svg'
 import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'
+import RequestFormIcon from "assets/icon/RequestFormIcon";
+import EditCalendarIcon from "assets/icon/EditCalendarIcon";
+import PhoneIcon from "assets/icon/PhoneIcon";
+
+import calendarSuccess from 'assets/icon/schedule/calendarSuccess.svg'
+import calendarWait from 'assets/icon/schedule/calendarWait.svg'
+import calendarCancel from 'assets/icon/schedule/calendarCancel.svg'
+
 
 const ScheduleCardWrapper = styled(Flex)`
   align-items: stretch;
@@ -54,10 +63,22 @@ const ScheduleTime = styled(TextSubtitle1)`
 function ScheduleCard({ schedule }) {
   const calendarIcon = circleCalendarIcon;
   const requestIcon = requestFormIcon;
+  let categoryIcon;
+  if (schedule.category == '예약 성공') {
+    categoryIcon = calendarSuccess;
+  } else if (schedule.category == '예약 대기') {
+    categoryIcon = calendarWait;
+  } else if (schedule.category == '예약 실패') {
+    categoryIcon = calendarCancel;
+  } else if (schedule.category == '상담 완료') {
+    categoryIcon = calendarSuccess;
+  } else {
+    categoryIcon = calendarSuccess;
+  }
   return (
     <ScheduleCardWrapper>
       <ScheduleCardLeft>
-        <CategoryImg src={calendarIcon}></CategoryImg>
+        <CategoryImg src={categoryIcon}></CategoryImg>
       </ScheduleCardLeft>
 
       <ScheduleCardRight>
@@ -87,23 +108,29 @@ function ScheduleCard({ schedule }) {
           </Flex>
           <Flex>
             <CustomIconButton
-              icon={requestIcon}
+              Icon={RequestFormIcon}
               text='요청서'
               width='90px'
               background_color={colorCareerDiveBlue}
-              text_color={'#fff'}></CustomIconButton>
+              text_color={'#fff'}>
+            </CustomIconButton>
+            <EmptyWidth width='12px'></EmptyWidth>
+
             <CustomIconButton
-              icon={requestIcon}
-              text='요청서'
-              width='90px'
+              Icon={EditCalendarIcon}
+              text='예약 변경'
+              width='105px'
               background_color={colorCareerDiveBlue}
               text_color={'#fff'}></CustomIconButton>
+            <EmptyWidth width='12px'></EmptyWidth>
+
             <CustomIconButton
-              icon={requestIcon}
-              text='요청서'
-              width='90px'
+              Icon={PhoneIcon}
+              text='상담 입장'
+              width='105px'
               background_color={colorCareerDiveBlue}
               text_color={'#fff'}></CustomIconButton>
+
           </Flex>
         </VerticalFlex>
 
