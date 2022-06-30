@@ -100,6 +100,12 @@ export const CircleImg = styled("img")`
   border-radius: 50%;
 `;
 
+export const SizedImg = styled("img")`
+  width: ${props => props.width};
+  height: ${props => props.height};
+`;
+
+
 export const GrayBackground = styled(Flex)`
   background-color: #f8f8f8;
   flex-direction: column;
