@@ -72,6 +72,7 @@ function Introduction({ applyInformation }) {
             valueArray={['일반', '프리미엄']}
             onChange={(event, value) => { setMentoringCategory(value) }}></CustomToggleButtonGroup>
         </Flex>
+        <EmptyHeight height='16px'></EmptyHeight>
 
         <Flex>
           <TextSubtitle1>
@@ -79,6 +80,12 @@ function Introduction({ applyInformation }) {
           </TextSubtitle1>
           <EmptyWidth width="8px"></EmptyWidth>
           <TextBody2 color={colorTextLight}>최대 3개 선택 가능</TextBody2>
+        </Flex>
+        <Flex>
+          <CustomToggleButtonGroup
+            value={mentoringCategory}
+            valueArray={['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기']}
+            onChange={(event, value) => { setMentoringCategory(value) }}></CustomToggleButtonGroup>
         </Flex>
 
       </Card>

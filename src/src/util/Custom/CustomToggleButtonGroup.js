@@ -1,8 +1,8 @@
 import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { colorBackgroundGrayLight, colorCareerDiveBlue, colorTextLight } from '../styledComponent';
+import { colorBackgroundGrayLight, colorCareerDiveBlue, colorTextLight, TextBody2 } from '../styledComponent';
 
 
-const TimeButton = styled(ToggleButton)`
+const CustomToggleButton = styled(ToggleButton)`
  justify-content: center;
  width: 76px;
  min-width: 76px;
@@ -13,6 +13,9 @@ const TimeButton = styled(ToggleButton)`
  color: ${colorTextLight};
  border: solid 1px ${colorBackgroundGrayLight};
  border-radius: 8px !important;
+ white-space: nowrap;
+ padding: 10px 20px;
+ width: auto;
 
  &.Mui-selected {
   color: ${colorCareerDiveBlue};
@@ -26,7 +29,7 @@ const TimeButton = styled(ToggleButton)`
  }
 `
 
-const TimeButtonWrapper = styled(ToggleButtonGroup)`
+const CustomToggleButtonWrapper = styled(ToggleButtonGroup)`
   display: flex;
   flex-wrap: wrap;
   margin-right: -16px;
@@ -34,7 +37,7 @@ const TimeButtonWrapper = styled(ToggleButtonGroup)`
 
 export function CustomToggleButtonGroup({ value, valueArray, onChange }) {
   return (
-    <TimeButtonWrapper
+    <CustomToggleButtonWrapper
       value={value}
       exclusive
       onChange={onChange}
@@ -42,12 +45,12 @@ export function CustomToggleButtonGroup({ value, valueArray, onChange }) {
     >
       {
         valueArray.map((value, index) => {
-          return <TimeButton value={value} aria-label={`${value}`} key={index}>
-            {value}
-          </TimeButton>
+          return <CustomToggleButton value={value} aria-label={`${value}`} key={index}>
+            <TextBody2>{value}</TextBody2>
+          </CustomToggleButton>
         })
       }
-    </TimeButtonWrapper>
+    </CustomToggleButtonWrapper>
   )
 }
 
