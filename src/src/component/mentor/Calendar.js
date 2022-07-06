@@ -139,10 +139,6 @@ const TimeButtonWrapper = styled(ToggleButtonGroup)`
   margin-right: -16px;
 `
 function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin, onClickConsultingHourAndMin }) {
-  let isAM = false
-  if (title === '오전') {
-    isAM = true
-  }
   if (timeArray.length == 0) {
     return <div></div>
   } else {
@@ -172,7 +168,7 @@ function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin,
 
 }
 
-function Calendar({ setIsFinishSet }) {
+function Calendar({ applyInformation, setApplyInformation }) {
   const navigater = useNavigate();
   const params = useParams();
   const location = useLocation();
@@ -344,9 +340,19 @@ function Calendar({ setIsFinishSet }) {
     if (consultingHourAndMin == null) {
       setConsultingHourAndMin(0);
     }
-    if (consultingHourAndMin !== 0 && setIsFinishSet !== undefined) {
-      setIsFinishSet(true);
-      console.log(consultingHourAndMin);
+    if (setApplyInformation !== undefined) {
+      if (consultingHourAndMin !== 0) {
+        const tempApplyInformation = JSON.parse(JSON.stringify(applyInformation));
+        tempApplyInformation['isFinishSet'] = true
+        tempApplyInformation['consultingDate'] = { year, month, selectedDate }
+        setApplyInformation(tempApplyInformation)
+      }
+      else {
+        const tempApplyInformation = JSON.parse(JSON.stringify(applyInformation));
+        tempApplyInformation['isFinishSet'] = false
+        tempApplyInformation['consultingDate'] = ''
+        setApplyInformation(tempApplyInformation)
+      }
     }
   }, [consultingHourAndMin])
 
@@ -369,7 +375,6 @@ function Calendar({ setIsFinishSet }) {
   useEffect(() => {
     setIsApplyPage(location.pathname.includes('apply'))
     if (location.state !== null) {
-      console.log('location.state', location.state)
       if (location.state.selectedDate !== undefined) {
         setSelectedDate(location.state.selectedDate)
       }

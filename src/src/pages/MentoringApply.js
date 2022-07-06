@@ -10,6 +10,7 @@ import {
 
 import MentorProfile from 'component/mentor/Profile'
 import MentorCalendar from 'component/mentor/Calendar'
+import SelectContent from 'component/mentor/apply/SelectContent'
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 
@@ -27,14 +28,21 @@ const MentorCalendarWrapper = styled('div')`
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-top: 30px;
-  margin-bottom: 154px;
+  margin-bottom: 158px;
+  width: 582px;
+`;
+
+const CardsWrapper2 = styled(Flex)`
+  justify-content: space-between;
+  margin-top: -128px;
+  margin-bottom: 128px;
   width: 582px;
 `;
 
 
 function Mentor() {
   const location = useLocation();
-  const [isFinishSet, setIsFinishSet] = useState(false)
+  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '' })
   return (
     <div>
       <FullWidthWrapper>
@@ -46,9 +54,17 @@ function Mentor() {
         <GrayBackground>
           <CenterWidthWrapper>
             <CardsWrapper>
-              <MentorCalendar setIsFinishSet={setIsFinishSet}>
+              <MentorCalendar applyInformation={applyInformation} setApplyInformation={setApplyInformation}>
               </MentorCalendar>
             </CardsWrapper>
+
+            {
+              applyInformation['isFinishSet'] &&
+              <CardsWrapper2>
+                <SelectContent applyInformation={applyInformation}>
+                </SelectContent>
+              </CardsWrapper2>
+            }
 
           </CenterWidthWrapper>
         </GrayBackground>

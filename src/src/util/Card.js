@@ -20,8 +20,8 @@ const CardWrapper = styled(VerticalFlex)`
 const TitleWrapper = styled(RowAlignCenterFlex)`
   font-size: 20px;
   font-weight: 700;
-  ${props => props.no_divider ? '' : 'border-bottom: 1px solid #CFD6E0;'}
-  ${props => props.no_divider ? '' : 'padding-bottom: 16px;'}
+  ${props => props.no_divider == 'true' ? '' : 'border-bottom: 1px solid #CFD6E0;'}
+  ${props => props.no_divider == 'true' ? '' : 'padding-bottom: 16px;'}
   
 `;
 
