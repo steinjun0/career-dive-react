@@ -11,6 +11,7 @@ import {
 import MentorProfile from 'component/mentor/Profile'
 import MentorCalendar from 'component/mentor/Calendar'
 import { useLocation } from "react-router-dom";
+import { useState } from "react";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -30,13 +31,10 @@ const CardsWrapper = styled(Flex)`
   width: 582px;
 `;
 
-const IntroductionWrapper = styled(Flex)`
-  margin-bottom: 30px;
-`;
 
 function Mentor() {
   const location = useLocation();
-  console.log('location', location)
+  const [isFinishSet, setIsFinishSet] = useState(false)
   return (
     <div>
       <FullWidthWrapper>
@@ -48,9 +46,10 @@ function Mentor() {
         <GrayBackground>
           <CenterWidthWrapper>
             <CardsWrapper>
-              <MentorCalendar>
+              <MentorCalendar setIsFinishSet={setIsFinishSet}>
               </MentorCalendar>
             </CardsWrapper>
+
           </CenterWidthWrapper>
         </GrayBackground>
       </FullWidthWrapper>

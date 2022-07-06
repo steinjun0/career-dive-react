@@ -172,7 +172,7 @@ function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin,
 
 }
 
-function Calendar() {
+function Calendar({ setIsFinishSet }) {
   const navigater = useNavigate();
   const params = useParams();
   const location = useLocation();
@@ -340,12 +340,27 @@ function Calendar() {
     }
   }, [month])
 
+  useEffect(() => {
+    if (consultingHourAndMin == null) {
+      setConsultingHourAndMin(0);
+    }
+    if (consultingHourAndMin !== 0 && setIsFinishSet !== undefined) {
+      setIsFinishSet(true);
+      console.log(consultingHourAndMin);
+    }
+  }, [consultingHourAndMin])
+
   const addMinute = (hourAndMin, addingMin) => {
+
     const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
     const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
 
     const hour = `${'00' + afterDate.getHours()}`.slice(-2)
     const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
+
+    if (isNaN(hour) || isNaN(hour)) {
+      return ''
+    }
     return `${hour}:${min}`
   }
 
@@ -452,7 +467,11 @@ function Calendar() {
             </DateTitle>
             <EmptyHeight height='16px' />
             <TextSubtitle1 color={colorCareerDiveBlue}>
-              {consultingHourAndMin}~{`${addMinute(consultingHourAndMin, consultingTime)}`}
+              {
+                consultingHourAndMin === 0 ? '' : `${consultingHourAndMin} ~ ${addMinute(consultingHourAndMin, consultingTime)}`
+              }
+
+
             </TextSubtitle1>
           </TimeSelectWrapper>
 
