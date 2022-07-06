@@ -1,11 +1,19 @@
 import {
+  colorCareerDiveBlue,
   colorTextBody,
+  colorTextLight,
+  EmptyHeight,
+  EmptyWidth,
   Flex,
-  VerticalFlex,
+  RowAlignCenterFlex,
+  TextBody2,
+  TextSubtitle1,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { styled } from "@mui/material";
 import { getDayInKorean } from "util/util";
+import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
+import { useState } from "react";
 
 const IntroductionWrapper = styled(Flex)`
   width: 100%;
@@ -17,22 +25,34 @@ const HtmlWrapper = styled('div')`
   color: ${colorTextBody};
 `;
 
+const DateBox = styled(RowAlignCenterFlex)`
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius:12px;
+  border: 1px solid;
+  color: ${colorTextLight};
+`;
+
+const AvailableDateBox = styled(DateBox)`
+  background-color: rgba(105, 140, 255, 0.2);
+  color: ${colorCareerDiveBlue};
+  cursor: pointer;
+`;
+
+const SelectedDateBox = styled(DateBox)`
+  background-color:${colorCareerDiveBlue};
+  color: white;
+  cursor: pointer;
+`;
 
 function Introduction({ applyInformation }) {
   const mentoringDate = new Date(applyInformation['consultingDate']['year'],
     applyInformation['consultingDate']['month'].slice(0, -1) - 1,
     applyInformation['consultingDate']['selectedDate']);
 
-  const introductionText = `<p>안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.</p>
-  <ul>
-    <li>직무소개</li>
-    <li>취업상담</li>
-    <li>진로상담</li>
-    <li>이직준비</li>
-    <li>면접 팁</li>
-  </ul>
-  
-  <p>안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.</p>`;
+  const [mentoringCategory, setMentoringCategory] = useState('일반')
+
   return (
     <IntroductionWrapper>
       <Card
@@ -42,11 +62,27 @@ function Introduction({ applyInformation }) {
                 ${applyInformation['consultingDate']['selectedDate']}일
                 (${getDayInKorean(mentoringDate)})`}
       >
-        <VerticalFlex>
-          <HtmlWrapper dangerouslySetInnerHTML={{ __html: introductionText }}></HtmlWrapper>
-        </VerticalFlex>
+        <EmptyHeight height='16px'></EmptyHeight>
+        <TextSubtitle1>
+          상담 유형
+        </TextSubtitle1>
+        <Flex>
+          <CustomToggleButtonGroup
+            value={mentoringCategory}
+            valueArray={['일반', '프리미엄']}
+            onChange={(event, value) => { setMentoringCategory(value) }}></CustomToggleButtonGroup>
+        </Flex>
+
+        <Flex>
+          <TextSubtitle1>
+            상담 내용
+          </TextSubtitle1>
+          <EmptyWidth width="8px"></EmptyWidth>
+          <TextBody2 color={colorTextLight}>최대 3개 선택 가능</TextBody2>
+        </Flex>
+
       </Card>
-    </IntroductionWrapper>
+    </IntroductionWrapper >
 
   );
 }

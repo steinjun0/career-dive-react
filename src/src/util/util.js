@@ -15,8 +15,6 @@ export const getLastPathOfRoute = (location) => {
 
 export const getDayInKorean = (date) => {
   let dayNumber = date.getDay()
-  console.log(dayNumber)
-  console.log(date)
   let koreanDay = ['일', '월', '화', '수', '목', '금', '토'];
   return koreanDay[dayNumber]
 }

@@ -18,6 +18,8 @@ import {
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
+
 
 const CalendarWrapper = styled(Flex)`
   width: 100%;
@@ -82,20 +84,9 @@ const TimeSelectWrapper = styled(VerticalFlex)`
   // height: ${props => props.is_show === 'true' ? '200px' : '100px'};
 `;
 
-const AvailableTimeWrapper = styled(Flex)`
-  flex-wrap: wrap;
-  font-size: 14px;
-  font-weight: 400;
-`;
 
 const DateTitle = styled('span')`
   font-weight: 700;
-  margin-top: 16px;
-`;
-
-const AvailableTime = styled(RowAlignCenterFlex)`
-  width: 50%;
-  height: 24px;
   margin-top: 16px;
 `;
 
@@ -130,7 +121,6 @@ const TimeButton = styled(ToggleButton)`
   border: 1px ${colorCareerDiveBlue} solid !important;
   background-color: rgba(105, 140, 255, 0.3);
  }
-
 `
 
 const TimeButtonWrapper = styled(ToggleButtonGroup)`
@@ -148,20 +138,13 @@ function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin,
         <DateTitle>
           {title}
         </DateTitle>
-        <TimeButtonWrapper
+        <CustomToggleButtonGroup
           value={consultingHourAndMin}
+          valueArray={timeArray}
           exclusive
           onChange={onClickConsultingHourAndMin}
           aria-label="text alignment"
-        >
-          {
-            timeArray.map((time, index) => {
-              return <TimeButton value={time} aria-label={`${time}min`} key={index}>
-                {time}
-              </TimeButton>
-            })
-          }
-        </TimeButtonWrapper>
+        />
       </VerticalFlex>
     )
   }
