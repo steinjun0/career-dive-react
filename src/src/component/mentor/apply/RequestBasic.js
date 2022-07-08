@@ -1,19 +1,22 @@
-import { Divider, styled, } from "@mui/material";
+import { styled, } from "@mui/material";
 
 import {
   Flex,
   EmptyWidth,
   TextBody2,
   EmptyHeight,
-  LinkNoDeco,
   TextHeading6,
   colorCareerDiveBlue,
   TextSubtitle1,
   colorBackgroundGrayLight,
   colorTextLight,
-  VerticalFlex
+  VerticalFlex,
+  colorBackgroundCareerDiveBlue,
+  colorCareerDivePink,
+  colorBackgroundCareerDivePink
 } from "util/styledComponent";
 import { Card } from "util/Card";
+import { TagLarge } from "util/Custom/CustomTag";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -33,14 +36,67 @@ const UnderlineText = styled(TextBody2)`
   text-decoration: underline;
 `
 
+const getCategoryColor = (category) => {
+  if (category === '일반') {
+    return colorCareerDiveBlue
+  } else if (category === '프리미엄') {
+    return colorCareerDivePink
+  } else {
+    return colorTextLight
+  }
+}
+
+const getCategoryBackgroundColor = (category) => {
+  if (category === '일반') {
+    return colorBackgroundCareerDiveBlue
+  } else if (category === '프리미엄') {
+    return colorBackgroundCareerDivePink
+  } else {
+    return colorBackgroundGrayLight
+  }
+}
+
+const CategoryTag = styled(TagLarge)`
+  color:${props => getCategoryColor(props.category)};
+  background-color:${props => getCategoryBackgroundColor(props.category)};
+`
+
 function Request() {
+  const mentoringCategory = '일반'
+  const mentoringContents = ['이직 준비', '면접 팁', '업계 이야기']
+  // TODO: localStorage에서 받아오기
   return (
+    // TODO: 디자인에 맞게 수정하기(덜어내기)
     <RequestCardWrapper>
-      <Card title={'2022년 1월 9일(목)'} titleHead={
-        <LinkNoDeco to={'/mentee/mypage/account/change'}>
-          <EmptyWidth width='12px' />
-          <TextHeading6 color={colorCareerDiveBlue}>오전 09:00~오전 9:20</TextHeading6>
-        </LinkNoDeco>}>
+      <Card
+        title={'2022년 1월 9일(목)'}
+        titleHead={
+          <Flex>
+            <EmptyWidth width='12px' />
+            <TextSubtitle1 color={colorCareerDiveBlue}>오전 09:00~오전 9:20</TextSubtitle1>
+          </Flex>}
+        titleBottom={
+          <VerticalFlex>
+            <EmptyHeight height='16px' />
+            <Flex>
+              <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
+              <EmptyWidth width='8px' />
+              {mentoringContents.map((value, index) => {
+                return (
+                  // TODO: 수정 버튼 만들기
+
+                  <Flex key={index}>
+                    <TagLarge color={colorTextLight}
+                      background_color={colorBackgroundGrayLight}>
+                      <TextBody2>{value}</TextBody2>
+                    </TagLarge>
+                    <EmptyWidth width='8px'></EmptyWidth>
+                  </Flex>
+                )
+              })}
+            </Flex>
+          </VerticalFlex>
+        }>
 
         <EmptyHeight height='16px' />
         <TextHeading6>요청서</TextHeading6>

@@ -141,7 +141,7 @@ function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin,
         <CustomToggleButtonGroup
           value={consultingHourAndMin}
           valueArray={timeArray}
-          exclusive
+          isExclusive={true}
           onChange={onClickConsultingHourAndMin}
           aria-label="text alignment"
         />
@@ -196,9 +196,6 @@ function Calendar({ applyInformation, setApplyInformation }) {
     } else if (amLines === 0 && pmLines !== 0) {
       return 16 + 24 + (44 + 16) * pmLines + buttonHeight
     } else {
-      console.log('amLines', amLines)
-      console.log('pmLines', pmLines)
-      console.log('buttonHeight', buttonHeight)
       return 16 + 24 + (44 + 16) * amLines + 16 + 24 + (44 + 16) * pmLines + buttonHeight
     }
   }

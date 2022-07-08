@@ -16,6 +16,7 @@ import { getDayInKorean } from "util/util";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
+import { useNavigate, useParams } from "react-router-dom";
 
 const IntroductionWrapper = styled(Flex)`
   width: 100%;
@@ -49,6 +50,9 @@ const SelectedDateBox = styled(DateBox)`
 `;
 
 function Introduction({ applyInformation }) {
+  const navigater = useNavigate()
+  const params = useParams()
+
   const mentoringDate = new Date(applyInformation['consultingDate']['year'],
     applyInformation['consultingDate']['month'].slice(0, -1) - 1,
     applyInformation['consultingDate']['selectedDate']);
@@ -77,6 +81,7 @@ function Introduction({ applyInformation }) {
         <Flex>
           <CustomToggleButtonGroup
             value={mentoringCategory}
+            isExclusive={true}
             valueArray={['일반', '프리미엄']}
             onChange={(event, value) => { setMentoringCategory(value) }}></CustomToggleButtonGroup>
         </Flex>
@@ -99,6 +104,11 @@ function Introduction({ applyInformation }) {
         <EmptyHeight height='28px' />
         <CustomButton
           height='52px'
+          onClick={() => {
+            navigater(`/mentee/mentor/mentoring/apply/${params.id}`,
+              { state: {} })
+            // localStorage에 저장하기
+          }}
         >
           <TextHeading6>
             다음
