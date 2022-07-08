@@ -54,7 +54,12 @@ function Introduction({ applyInformation }) {
     applyInformation['consultingDate']['selectedDate']);
 
   const [mentoringCategory, setMentoringCategory] = useState('일반')
-  const [mentoringContent, setMentoringContent] = useState('직무소개')
+  const [mentoringContent, setMentoringContent] = useState(['직무소개'])
+  const addMentoringContent = (contents) => {
+    if (contents.length <= 3) {
+      setMentoringContent(contents)
+    }
+  }
 
   return (
     <IntroductionWrapper>
@@ -87,8 +92,9 @@ function Introduction({ applyInformation }) {
         <Flex>
           <CustomToggleButtonGroup
             value={mentoringContent}
+            isExclusive={false}
             valueArray={['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기']}
-            onChange={(event, value) => { setMentoringContent(value) }}></CustomToggleButtonGroup>
+            onChange={(event, value) => { addMentoringContent(value) }}></CustomToggleButtonGroup>
         </Flex>
         <EmptyHeight height='28px' />
         <CustomButton

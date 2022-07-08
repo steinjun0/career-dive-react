@@ -360,7 +360,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
 
   const [isApplyPage, setIsApplyPage] = useState(false);
   useEffect(() => {
-    setIsApplyPage(location.pathname.includes('apply'))
+    setIsApplyPage(location.pathname.includes('reservation'))
     if (location.state !== null) {
       console.log('location.state', location.state)
       if (location.state.selectedDate !== undefined) {
@@ -489,7 +489,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
             <CustomButton
               height='52px'
               onClick={() => {
-                navigater(`/mentee/mentor/mentoring/apply/${params.id}`,
+                navigater(`/mentee/mentor/mentoring/reservation/${params.id}`,
                   { state: { selectedDate, consultingTime, consultingHourAndMin, amLines, pmLines, availableAMTime, availablePMTime } })
               }}>
               신청

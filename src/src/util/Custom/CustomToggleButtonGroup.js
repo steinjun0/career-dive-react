@@ -35,11 +35,11 @@ const CustomToggleButtonWrapper = styled(ToggleButtonGroup)`
   margin-right: -16px;
 `
 
-export function CustomToggleButtonGroup({ value, valueArray, onChange }) {
+export function CustomToggleButtonGroup({ value, valueArray, onChange, isExclusive }) {
   return (
     <CustomToggleButtonWrapper
       value={value}
-      exclusive
+      exclusive={isExclusive}
       onChange={onChange}
       aria-label="text alignment"
     >

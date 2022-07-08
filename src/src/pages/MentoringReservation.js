@@ -40,7 +40,7 @@ const CardsWrapper2 = styled(Flex)`
 `;
 
 
-function Mentor() {
+function MentoringReservation() {
   const location = useLocation();
   const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '' })
   return (
@@ -73,4 +73,4 @@ function Mentor() {
   );
 }
 
-export default Mentor;
+export default MentoringReservation;
