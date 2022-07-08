@@ -295,6 +295,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
       cardWidth = (1194 / 2) - 48 - 60
     } else {
       cardWidth = (window.innerWidth / 2) - 48 - 60
+      if (cardWidth < 534) cardWidth = 534
     }
 
     if (tempAvailableAMTime.length === 0) {
