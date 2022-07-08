@@ -4,6 +4,7 @@ import {
   TextHeading6,
   RowAlignCenterFlex,
   VerticalFlex,
+  Flex,
 } from "./styledComponent";
 
 const CardWrapper = styled(VerticalFlex)`
@@ -17,7 +18,7 @@ const CardWrapper = styled(VerticalFlex)`
   width: 100%;
 `;
 
-const TitleWrapper = styled(RowAlignCenterFlex)`
+const TitleWrapper = styled(VerticalFlex)`
   font-size: 20px;
   font-weight: 700;
   ${props => props.no_divider == 'true' ? '' : 'border-bottom: 1px solid #CFD6E0;'}
@@ -31,18 +32,27 @@ const TitleHead = styled(RowAlignCenterFlex)`
 const TitleTail = styled(RowAlignCenterFlex)`
   margin-left: auto;
 `
+const TitleBottom = styled(RowAlignCenterFlex)`
+`
 
 export function Card(props) {
   return (
     <CardWrapper max_width={props.max_width} min_width={props.min_width}>
       <TitleWrapper no_divider={props.no_divider}>
-        <TextHeading6>{props.title}</TextHeading6>
-        <TitleHead>
-          {props.titleHead}
-        </TitleHead>
-        <TitleTail>
-          {props.titleTail}
-        </TitleTail>
+        <Flex>
+          <TextHeading6>{props.title}</TextHeading6>
+          <TitleHead>
+            {props.titleHead}
+          </TitleHead>
+          <TitleTail>
+            {props.titleTail}
+          </TitleTail>
+        </Flex>
+        <Flex>
+          <TitleBottom>
+            {props.titleBottom}
+          </TitleBottom>
+        </Flex>
       </TitleWrapper>
       {props.children}
     </CardWrapper>
