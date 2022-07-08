@@ -9,7 +9,10 @@ import {
 } from "util/styledComponent";
 
 import MentorProfile from 'component/mentor/Profile'
-import Request from "component/mentor/apply/RequestView";
+import MentorCalendar from 'component/mentor/Calendar'
+import SelectContent from 'component/mentor/apply/SelectContent'
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -24,8 +27,16 @@ const CardsWrapper = styled(Flex)`
   width: 582px;
 `;
 
+const CardsWrapper2 = styled(Flex)`
+  justify-content: space-between;
+  margin-top: -128px;
+  margin-bottom: 128px;
+  width: 582px;
+`;
+
 
 function MentoringReservation() {
+  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '' })
   return (
     <div>
       <FullWidthWrapper>
@@ -36,14 +47,19 @@ function MentoringReservation() {
         </MaxWidthDiv>
         <GrayBackground>
           <CenterWidthWrapper>
-            <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Request />
-              </Grid>
-            </Grid>
             <CardsWrapper>
+              <MentorCalendar applyInformation={applyInformation} setApplyInformation={setApplyInformation}>
+              </MentorCalendar>
             </CardsWrapper>
-            {/* TODO: 제출 버튼 만들기*/}
+
+            {
+              applyInformation['isFinishSet'] &&
+              <CardsWrapper2>
+                <SelectContent applyInformation={applyInformation}>
+                </SelectContent>
+              </CardsWrapper2>
+            }
+
           </CenterWidthWrapper>
         </GrayBackground>
       </FullWidthWrapper>

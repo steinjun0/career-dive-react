@@ -18,6 +18,8 @@ import {
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
+
 
 const CalendarWrapper = styled(Flex)`
   width: 100%;
@@ -82,20 +84,9 @@ const TimeSelectWrapper = styled(VerticalFlex)`
   // height: ${props => props.is_show === 'true' ? '200px' : '100px'};
 `;
 
-const AvailableTimeWrapper = styled(Flex)`
-  flex-wrap: wrap;
-  font-size: 14px;
-  font-weight: 400;
-`;
 
 const DateTitle = styled('span')`
   font-weight: 700;
-  margin-top: 16px;
-`;
-
-const AvailableTime = styled(RowAlignCenterFlex)`
-  width: 50%;
-  height: 24px;
   margin-top: 16px;
 `;
 
@@ -130,7 +121,6 @@ const TimeButton = styled(ToggleButton)`
   border: 1px ${colorCareerDiveBlue} solid !important;
   background-color: rgba(105, 140, 255, 0.3);
  }
-
 `
 
 const TimeButtonWrapper = styled(ToggleButtonGroup)`
@@ -139,10 +129,6 @@ const TimeButtonWrapper = styled(ToggleButtonGroup)`
   margin-right: -16px;
 `
 function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin, onClickConsultingHourAndMin }) {
-  let isAM = false
-  if (title === '오전') {
-    isAM = true
-  }
   if (timeArray.length == 0) {
     return <div></div>
   } else {
@@ -152,27 +138,20 @@ function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin,
         <DateTitle>
           {title}
         </DateTitle>
-        <TimeButtonWrapper
+        <CustomToggleButtonGroup
           value={consultingHourAndMin}
-          exclusive
+          valueArray={timeArray}
+          isExclusive={true}
           onChange={onClickConsultingHourAndMin}
           aria-label="text alignment"
-        >
-          {
-            timeArray.map((time, index) => {
-              return <TimeButton value={time} aria-label={`${time}min`} key={index}>
-                {time}
-              </TimeButton>
-            })
-          }
-        </TimeButtonWrapper>
+        />
       </VerticalFlex>
     )
   }
 
 }
 
-function Calendar() {
+function Calendar({ applyInformation, setApplyInformation }) {
   const navigater = useNavigate();
   const params = useParams();
   const location = useLocation();
@@ -198,15 +177,16 @@ function Calendar() {
   const [amLines, setAmLines] = useState(1)
   const [pmLines, setPmLines] = useState(1)
 
-  const getTimeSelectWrapperHeight = (amLines, pmLines, hideButton) => {
+  const getTimeSelectWrapperHeight = (amLines, pmLines, isHidingButton) => {
     // margin-top
     // line-height
     // amLines height
     // gap margin
     // line-height
     // pmLines height
+
     let buttonHeight = 0
-    if (consultingHourAndMin !== 0 && !hideButton) {
+    if (consultingHourAndMin !== 0 && !isHidingButton) {
       buttonHeight = 80
     }
     if (amLines === 0 && pmLines === 0) {
@@ -312,6 +292,7 @@ function Calendar() {
       cardWidth = (1194 / 2) - 48 - 60
     } else {
       cardWidth = (window.innerWidth / 2) - 48 - 60
+      if (cardWidth < 534) cardWidth = 534
     }
 
     if (tempAvailableAMTime.length === 0) {
@@ -340,19 +321,44 @@ function Calendar() {
     }
   }, [month])
 
+  useEffect(() => {
+    if (consultingHourAndMin == null) {
+      setConsultingHourAndMin(0);
+    }
+    if (setApplyInformation !== undefined) {
+      if (consultingHourAndMin !== 0) {
+        const tempApplyInformation = JSON.parse(JSON.stringify(applyInformation));
+        tempApplyInformation['isFinishSet'] = true
+        tempApplyInformation['consultingDate'] = { year, month, selectedDate }
+        setApplyInformation(tempApplyInformation)
+      }
+      else {
+        const tempApplyInformation = JSON.parse(JSON.stringify(applyInformation));
+        tempApplyInformation['isFinishSet'] = false
+        tempApplyInformation['consultingDate'] = ''
+        setApplyInformation(tempApplyInformation)
+      }
+    }
+  }, [consultingHourAndMin])
+
   const addMinute = (hourAndMin, addingMin) => {
+
     const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
     const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
 
     const hour = `${'00' + afterDate.getHours()}`.slice(-2)
     const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
+
+    if (isNaN(hour) || isNaN(hour)) {
+      return ''
+    }
     return `${hour}:${min}`
   }
 
 
   const [isApplyPage, setIsApplyPage] = useState(false);
   useEffect(() => {
-    setIsApplyPage(location.pathname.includes('apply'))
+    setIsApplyPage(location.pathname.includes('reservation'))
     if (location.state !== null) {
       console.log('location.state', location.state)
       if (location.state.selectedDate !== undefined) {
@@ -452,7 +458,11 @@ function Calendar() {
             </DateTitle>
             <EmptyHeight height='16px' />
             <TextSubtitle1 color={colorCareerDiveBlue}>
-              {consultingHourAndMin}~{`${addMinute(consultingHourAndMin, consultingTime)}`}
+              {
+                consultingHourAndMin === 0 ? '' : `${consultingHourAndMin} ~ ${addMinute(consultingHourAndMin, consultingTime)}`
+              }
+
+
             </TextSubtitle1>
           </TimeSelectWrapper>
 
@@ -477,7 +487,7 @@ function Calendar() {
             <CustomButton
               height='52px'
               onClick={() => {
-                navigater(`/mentee/mentor/mentoring/apply/${params.id}`,
+                navigater(`/mentee/mentor/mentoring/reservation/${params.id}`,
                   { state: { selectedDate, consultingTime, consultingHourAndMin, amLines, pmLines, availableAMTime, availablePMTime } })
               }}>
               신청

@@ -12,3 +12,9 @@ export const getLastPathOfRoute = (location) => {
   const navigationSplits = location.pathname.split('/');
   return navigationSplits[navigationSplits.length - 1]
 }
+
+export const getDayInKorean = (date) => {
+  let dayNumber = date.getDay()
+  let koreanDay = ['일', '월', '화', '수', '목', '금', '토'];
+  return koreanDay[dayNumber]
+}

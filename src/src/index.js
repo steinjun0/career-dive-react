@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from './pages/SignUp';
 import Mentor from "./pages/Mentor";
+import MentoringReservation from './pages/MentoringReservation'
 import MentoringApply from './pages/MentoringApply'
 
 import Gnb from "./component/Gnb";
@@ -51,6 +52,7 @@ ReactDOM.render(
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/mentee/mentor/profile/:id" element={<Mentor />} />
+          <Route path="/mentee/mentor/mentoring/reservation/:id" element={<MentoringReservation />} />
           <Route path="/mentee/mentor/mentoring/apply/:id" element={<MentoringApply />} />
           <Route path="/mentee/schedule" element={<Schedule />} />
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
