@@ -177,15 +177,16 @@ function Calendar({ applyInformation, setApplyInformation }) {
   const [amLines, setAmLines] = useState(1)
   const [pmLines, setPmLines] = useState(1)
 
-  const getTimeSelectWrapperHeight = (amLines, pmLines, hideButton) => {
+  const getTimeSelectWrapperHeight = (amLines, pmLines, isHidingButton) => {
     // margin-top
     // line-height
     // amLines height
     // gap margin
     // line-height
     // pmLines height
+
     let buttonHeight = 0
-    if (consultingHourAndMin !== 0 && !hideButton) {
+    if (consultingHourAndMin !== 0 && !isHidingButton) {
       buttonHeight = 80
     }
     if (amLines === 0 && pmLines === 0) {
@@ -195,6 +196,9 @@ function Calendar({ applyInformation, setApplyInformation }) {
     } else if (amLines === 0 && pmLines !== 0) {
       return 16 + 24 + (44 + 16) * pmLines + buttonHeight
     } else {
+      console.log('amLines', amLines)
+      console.log('pmLines', pmLines)
+      console.log('buttonHeight', buttonHeight)
       return 16 + 24 + (44 + 16) * amLines + 16 + 24 + (44 + 16) * pmLines + buttonHeight
     }
   }
@@ -358,6 +362,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
   useEffect(() => {
     setIsApplyPage(location.pathname.includes('apply'))
     if (location.state !== null) {
+      console.log('location.state', location.state)
       if (location.state.selectedDate !== undefined) {
         setSelectedDate(location.state.selectedDate)
       }

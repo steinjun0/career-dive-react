@@ -7,6 +7,7 @@ import {
   Flex,
   RowAlignCenterFlex,
   TextBody2,
+  TextHeading6,
   TextSubtitle1,
 } from "util/styledComponent";
 import { Card } from "util/Card";
@@ -14,6 +15,7 @@ import { styled } from "@mui/material";
 import { getDayInKorean } from "util/util";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { useState } from "react";
+import { CustomButton } from "util/Custom/CustomButton";
 
 const IntroductionWrapper = styled(Flex)`
   width: 100%;
@@ -52,6 +54,7 @@ function Introduction({ applyInformation }) {
     applyInformation['consultingDate']['selectedDate']);
 
   const [mentoringCategory, setMentoringCategory] = useState('일반')
+  const [mentoringContent, setMentoringContent] = useState('직무소개')
 
   return (
     <IntroductionWrapper>
@@ -83,11 +86,18 @@ function Introduction({ applyInformation }) {
         </Flex>
         <Flex>
           <CustomToggleButtonGroup
-            value={mentoringCategory}
+            value={mentoringContent}
             valueArray={['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기']}
-            onChange={(event, value) => { setMentoringCategory(value) }}></CustomToggleButtonGroup>
+            onChange={(event, value) => { setMentoringContent(value) }}></CustomToggleButtonGroup>
         </Flex>
-
+        <EmptyHeight height='28px' />
+        <CustomButton
+          height='52px'
+        >
+          <TextHeading6>
+            다음
+          </TextHeading6>
+        </CustomButton>
       </Card>
     </IntroductionWrapper >
 
