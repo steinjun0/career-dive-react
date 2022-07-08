@@ -3,7 +3,9 @@ import { styled } from "@mui/material";
 
 // color
 export const colorCareerDiveBlue = "#698CFF";
+export const colorBackgroundCareerDiveBlue = "#698CFF1a";
 export const colorCareerDivePink = "#E25D7D";
+export const colorBackgroundCareerDivePink = "#E25D7D1a";
 export const colorBlueGray = '#CFD6E0';
 export const colorTextLight = "#5F6368";
 export const colorTextBody = "#191919";
@@ -49,13 +51,13 @@ export const TextHeading6 = styled(`h6`)`
 export const TextButton = styled(`span`)`
   font-size: 14px;
   line-height: 20px;
-  color: ${colorTextLight};
   font-weight: 500;
+  color: ${props => props.color};
 `;
 
 export const TextCaption = styled(`span`)`
   font-size: 12px;
-  color: ${colorTextLight};
+  color: ${props => props.color};
 `;
 
 

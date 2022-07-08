@@ -5,8 +5,14 @@ import {
   colorCareerDivePink,
   colorCareerDiveBlue,
   Flex,
+  TextButton,
+  colorBackgroundCareerDiveBlue,
+  colorBackgroundCareerDivePink,
+  EmptyWidth,
+  EmptyHeight,
 } from "util/styledComponent";
 import { Card } from "util/Card";
+import { TagLarge, TagMedium } from "util/Custom/CustomTag";
 
 const HelpCategoryWrapper = styled(Flex)`
   margin-bottom: 30px;
@@ -58,11 +64,33 @@ function HelpCategory() {
             <PremiumLegend>• 프리미엄</PremiumLegend>
           </RowAlignCenterFlex>
         }>
+        <EmptyHeight height='16px'></EmptyHeight>
         <RowAlignCenterFlex>
-          {regularTags.map((tag, index) => <RegularTag key={index}>{tag}</RegularTag>)}
+          {regularTags.map((tag, index) =>
+            <Flex>
+              <TagMedium
+                color={colorCareerDiveBlue}
+                background_color={colorBackgroundCareerDiveBlue}
+                key={index}>
+                <TextButton>{tag}</TextButton>
+              </TagMedium>
+              <EmptyWidth width='8px'></EmptyWidth>
+            </Flex>
+          )}
         </RowAlignCenterFlex>
+        <EmptyHeight height='16px'></EmptyHeight>
         <RowAlignCenterFlex>
-          {premiumTags.map((tag, index) => <PremiumTag key={index}>{tag}</PremiumTag>)}
+          {premiumTags.map((tag, index) =>
+            <Flex>
+              <TagMedium
+                color={colorCareerDivePink}
+                background_color={colorBackgroundCareerDivePink}
+                key={index}>
+                <TextButton>{tag}</TextButton>
+              </TagMedium>
+              <EmptyWidth width='8px'></EmptyWidth>
+            </Flex>
+          )}
         </RowAlignCenterFlex>
 
       </Card>

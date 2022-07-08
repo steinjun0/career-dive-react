@@ -12,10 +12,13 @@ import {
   colorBackgroundGrayLight,
   colorCareerDivePink,
   colorTextLight,
-  EmptyWidth
+  EmptyWidth,
+  colorBackgroundCareerDiveBlue,
+  EmptyHeight
 } from "util/styledComponent";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { TagSmall } from "util/Custom/CustomTag";
 
 const MentorProfileWrapper = styled(RowAlignCenterFlex)`
   height: 200px;
@@ -33,16 +36,6 @@ const ProfileTexts = styled(VerticalFlex)`
   height: 84px;
   margin-left: 30px;
   align-items: start;
-`;
-
-const Tag = styled(RowAlignCenterFlex)`
-  background-color: rgba(105, 140, 255, 0.1);
-  color: #698cff;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 12px;
-  height: 20px;
-  margin-bottom: 8px;
 `;
 
 const Name = styled(RowAlignCenterFlex)`
@@ -112,12 +105,12 @@ function MentorProfile({ name = '', discription = '' }) {
   const [isFavorite, setIsFavorite] = useState(false)
   const navigater = useNavigate();
   const params = useParams();
-  console.log('params', params.id)
   return (
     <MentorProfileWrapper>
       <MentorProfileImg src={testMentorImage} alt="profile-image" />
       <ProfileTexts>
-        <Tag>현직자</Tag>
+        <TagSmall color={colorCareerDiveBlue} background_color={colorBackgroundCareerDiveBlue}>현직자</TagSmall>
+        <EmptyHeight height='8px'></EmptyHeight>
         <Name>{name} 멘토</Name>
         <Discription>{discription}</Discription>
       </ProfileTexts>
