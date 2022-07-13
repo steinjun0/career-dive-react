@@ -107,7 +107,7 @@ function Introduction({ applyInformation }) {
           onClick={() => {
             navigater(`/mentee/mentor/mentoring/apply/${params.id}`,
               { state: {} })
-            // localStorage에 저장하기
+            // TODO: localStorage에 저장하기
           }}
         >
           <TextHeading6>

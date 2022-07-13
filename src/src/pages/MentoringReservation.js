@@ -13,6 +13,7 @@ import MentorCalendar from 'component/mentor/Calendar'
 import SelectContent from 'component/mentor/apply/SelectContent'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { updateReservation } from "util/util";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -38,35 +39,16 @@ const CardsWrapper2 = styled(Flex)`
 function MentoringReservation() {
   const params = useParams();
 
-  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '', consultingDate: '' })
-
-  useEffect(() => {
-    const reservations = JSON.parse(localStorage.getItem('reservations'))
-    if (reservations !== null) {
-      if (params.id in reservations) {
-        const reservation = reservations[params.id]
-      } else {
-        reservations[params.id] = {}
-        localStorage.setItem('reservations', JSON.stringify(reservations))
-      }
-    } else {
-      const newReservations = {}
-      newReservations[params.id] = {}
-      localStorage.setItem('reservations', JSON.stringify(newReservations))
-    }
-
-    // localStorage.setItem()
-
-    return () => {
-
-    }
-  }, [])
+  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '', consultingTime: '', consultingStartTime: '' })
 
   useEffect(() => {
     if (applyInformation['isFinishSet']) {
-      const reservations = JSON.parse(localStorage.getItem('reservations'))
-      const reservation = reservations[params.id]
-      // reservation['consultingDate'] = 
+      const updatingData = [
+        { name: 'consultingDate', data: applyInformation.consultingDate },
+        { name: 'consultingTime', data: applyInformation.consultingTime },
+        { name: 'consultingStartTime', data: applyInformation.consultingStartTime },
+      ]
+      updateReservation(params.id, updatingData)
 
     }
   }, [applyInformation])

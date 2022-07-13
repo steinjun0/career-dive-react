@@ -19,6 +19,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
+import { updateReservation } from "util/util";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -509,37 +510,14 @@ function Calendar({ applyInformation, setApplyInformation }) {
             <CustomButton
               height='52px'
               onClick={() => {
+                const updatingData = [
+                  { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
+                  { name: 'consultingTime', data: consultingTime },
+                  { name: 'consultingStartTime', data: consultingStartTime },
 
-                let reservations = JSON.parse(localStorage.getItem('reservations'))
-                let reservation = {}
-
-                if (reservations !== null) {
-                  if (params.id in reservations) {
-                    reservation = reservations[params.id]
-                  }
-                }
-                else {
-                  reservations = {}
-                  reservations[params.id] = {}
-                }
-
-                reservation['consultingDate'] = { year, month: Number(month.slice(0, -1)), date: selectedDate }
-                reservation['consultingTime'] = consultingTime
-                reservation['consultingStartTime'] = consultingStartTime
-
-                reservations[params.id] = reservation
-                localStorage.setItem('reservations', JSON.stringify(reservations))
-
+                ]
+                updateReservation(params.id, updatingData)
                 navigater(`/mentee/mentor/mentoring/reservation/${params.id}`)
-                // navigater(`/mentee/mentor/mentoring/reservation/${params.id}`,
-                //   {
-                //     state: {
-                //       consultingDate: { year, month: Number(month.slice(0, -1)), selectedDate },
-                //       consultingTime,
-                //       consultingStartTime
-                //     }
-                //   })
-
               }}>
               신청
             </CustomButton>
