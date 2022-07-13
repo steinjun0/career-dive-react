@@ -11,8 +11,8 @@ import {
 import MentorProfile from 'component/mentor/Profile'
 import MentorCalendar from 'component/mentor/Calendar'
 import SelectContent from 'component/mentor/apply/SelectContent'
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -36,7 +36,42 @@ const CardsWrapper2 = styled(Flex)`
 
 
 function MentoringReservation() {
-  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '' })
+  const params = useParams();
+
+  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '', consultingDate: '' })
+
+  useEffect(() => {
+    const reservations = JSON.parse(localStorage.getItem('reservations'))
+    if (reservations !== null) {
+      if (params.id in reservations) {
+        const reservation = reservations[params.id]
+      } else {
+        reservations[params.id] = {}
+        localStorage.setItem('reservations', JSON.stringify(reservations))
+      }
+    } else {
+      const newReservations = {}
+      newReservations[params.id] = {}
+      localStorage.setItem('reservations', JSON.stringify(newReservations))
+    }
+
+    // localStorage.setItem()
+
+    return () => {
+
+    }
+  }, [])
+
+  useEffect(() => {
+    if (applyInformation['isFinishSet']) {
+      console.log(applyInformation)
+      const reservations = JSON.parse(localStorage.getItem('reservations'))
+      const reservation = reservations[params.id]
+      // reservation['consultingDate'] = 
+
+    }
+  }, [applyInformation])
+
   return (
     <div>
       <FullWidthWrapper>

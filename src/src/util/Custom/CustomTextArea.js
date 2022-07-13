@@ -8,4 +8,5 @@ export const CustomTextArea = styled(TextareaAutosize)`
   padding: 20px;
   line-height: 28px;
   font-size: 14px;
+  max-width: 100%;
 `;

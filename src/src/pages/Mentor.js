@@ -33,9 +33,6 @@ const CardsWrapper = styled(Flex)`
   margin-bottom: 154px;
 `;
 
-const IntroductionWrapper = styled(Flex)`
-  margin-bottom: 30px;
-`;
 
 function Mentor() {
   return (
