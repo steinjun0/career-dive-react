@@ -9,7 +9,7 @@ import {
 } from "util/styledComponent";
 
 import MentorProfile from 'component/mentor/Profile'
-import Request from "component/mentor/apply/RequestView";
+import Request from "component/mentor/apply/RequestBasic";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
