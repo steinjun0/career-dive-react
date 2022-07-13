@@ -20,6 +20,7 @@ import { TagLarge } from "util/Custom/CustomTag";
 import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import Dropzone from 'react-dropzone'
+import UploadIcon from 'assets/icon/UploadIcon'
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -121,7 +122,7 @@ function Request() {
             {({ getRootProps, getInputProps }) => (
               <section>
                 <FileDropzoneContent>
-
+                  <UploadIcon color={colorTextLight} />
                 </FileDropzoneContent>
               </section>
             )}
