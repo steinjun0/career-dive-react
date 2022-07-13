@@ -9,7 +9,8 @@ import {
 } from "util/styledComponent";
 
 import MentorProfile from 'component/mentor/Profile'
-import Request from "component/mentor/apply/RequestBasic";
+import RequestBasic from "component/mentor/apply/RequestBasic";
+import RequestPremium from "component/mentor/apply/RequestPremium";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -38,12 +39,12 @@ function MentoringReservation() {
           <CenterWidthWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Request />
+                <RequestBasic />
+                <RequestPremium />
               </Grid>
             </Grid>
             <CardsWrapper>
             </CardsWrapper>
-            {/* TODO: 제출 버튼 만들기*/}
           </CenterWidthWrapper>
         </GrayBackground>
       </FullWidthWrapper>
