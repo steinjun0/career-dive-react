@@ -67,11 +67,11 @@ function HelpCategory() {
         <EmptyHeight height='16px'></EmptyHeight>
         <RowAlignCenterFlex>
           {regularTags.map((tag, index) =>
-            <Flex>
+            <Flex key={index}>
               <TagMedium
                 color={colorCareerDiveBlue}
                 background_color={colorBackgroundCareerDiveBlue}
-                key={index}>
+              >
                 <TextButton>{tag}</TextButton>
               </TagMedium>
               <EmptyWidth width='8px'></EmptyWidth>
@@ -81,11 +81,11 @@ function HelpCategory() {
         <EmptyHeight height='16px'></EmptyHeight>
         <RowAlignCenterFlex>
           {premiumTags.map((tag, index) =>
-            <Flex>
+            <Flex key={index}>
               <TagMedium
                 color={colorCareerDivePink}
                 background_color={colorBackgroundCareerDivePink}
-                key={index}>
+              >
                 <TextButton>{tag}</TextButton>
               </TagMedium>
               <EmptyWidth width='8px'></EmptyWidth>
