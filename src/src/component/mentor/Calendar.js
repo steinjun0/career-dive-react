@@ -279,8 +279,6 @@ function Calendar({ applyInformation, setApplyInformation }) {
         }
       }
     })
-    console.log('originData', originData)
-    console.log('tempAvailableTime', tempAvailableTime)
     let tempAvailableAMTime = []
     let tempAvailablePMTime = []
     tempAvailableTime.forEach((element) => {
@@ -388,7 +386,6 @@ function Calendar({ applyInformation, setApplyInformation }) {
       }
     }
     if (location.state !== null) {
-      console.log('location.state', location.state)
       if (location.state.consultingDate !== undefined) {
         setSelectedDate(location.state.consultingDate.date)
       }

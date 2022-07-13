@@ -64,7 +64,6 @@ function MentoringReservation() {
 
   useEffect(() => {
     if (applyInformation['isFinishSet']) {
-      console.log(applyInformation)
       const reservations = JSON.parse(localStorage.getItem('reservations'))
       const reservation = reservations[params.id]
       // reservation['consultingDate'] = 

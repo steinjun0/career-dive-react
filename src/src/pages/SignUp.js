@@ -271,12 +271,6 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
 
     const postAccount = async (email, password) => {
         try {
-            console.log('signUpData', signUpData)
-            console.log('signUpData', {
-                email: signUpData.email,
-                password: signUpData.password,
-                nickname: signUpData.nickName,
-            })
             const accountCreateResponse = await API.postAccount(signUpData.email, signUpData.password, signUpData.nickName);
             if (accountCreateResponse.status === 200) {
                 window.localStorage.setItem('user_id', accountCreateResponse.data.user_id)
