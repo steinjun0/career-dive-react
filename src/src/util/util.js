@@ -18,3 +18,29 @@ export const getDayInKorean = (date) => {
   let koreanDay = ['일', '월', '화', '수', '목', '금', '토'];
   return koreanDay[dayNumber]
 }
+
+export const updateReservation = (id, updateDataArray) => {
+  let reservations = JSON.parse(localStorage.getItem('reservations'))
+  let reservation = {}
+
+  if (reservations !== null) {
+    if (id in reservations) {
+      reservation = reservations[id]
+    }
+  }
+  else {
+    reservations = {}
+    reservations[id] = {}
+  }
+
+  updateDataArray.forEach((obj) => {
+    reservation[obj.name] = obj.data
+  })
+
+  // reservation['consultingDate'] = { year, month: Number(month.slice(0, -1)), date: selectedDate }
+  // reservation['consultingTime'] = consultingTime
+  // reservation['consultingStartTime'] = consultingStartTime
+
+  reservations[id] = reservation
+  localStorage.setItem('reservations', JSON.stringify(reservations))
+}
