@@ -19,6 +19,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
+import { updateReservation } from "util/util";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -84,7 +85,6 @@ const TimeSelectWrapper = styled(VerticalFlex)`
   // height: ${props => props.is_show === 'true' ? '200px' : '100px'};
 `;
 
-
 const DateTitle = styled('span')`
   font-weight: 700;
   margin-top: 16px;
@@ -128,7 +128,8 @@ const TimeButtonWrapper = styled(ToggleButtonGroup)`
   flex-wrap: wrap;
   margin-right: -16px;
 `
-function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin, onClickConsultingHourAndMin }) {
+
+function SelectionConsultingStartTime({ title, timeArray, consultingStartTime, onClickconsultingStartTime }) {
   if (timeArray.length == 0) {
     return <div></div>
   } else {
@@ -139,10 +140,10 @@ function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin,
           {title}
         </DateTitle>
         <CustomToggleButtonGroup
-          value={consultingHourAndMin}
+          value={consultingStartTime}
           valueArray={timeArray}
           isExclusive={true}
-          onChange={onClickConsultingHourAndMin}
+          onChange={onClickconsultingStartTime}
           aria-label="text alignment"
         />
       </VerticalFlex>
@@ -151,6 +152,53 @@ function SelectionConsultingHourAndMin({ title, timeArray, consultingHourAndMin,
 
 }
 
+const getDatesOfMonth = (year, month) => {
+  const dayOfFirstDate = new Date(year, month - 1, 1).getDay();
+  const lastDateOfMonth = new Date(year, month, 0).getDate();
+
+  let startDayOfWeek = dayOfFirstDate
+  let dates = []
+  for (let date = 1; date < lastDateOfMonth;) {
+    let week = [...Array(startDayOfWeek).fill(0)]
+    for (let day = startDayOfWeek; day < 7 && date <= lastDateOfMonth; day++) {
+      week.push(date)
+      date++;
+    }
+    if (week.length !== 7) {
+      week.push(...Array(7 - week.length).fill(0))
+    }
+    dates.push(week)
+    startDayOfWeek = 0
+  }
+
+  return dates;
+}
+
+const addMinute = (hourAndMin, addingMin) => {
+
+  const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
+  const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
+
+  const hour = `${'00' + afterDate.getHours()}`.slice(-2)
+  const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
+
+  if (isNaN(hour) || isNaN(hour)) {
+    return ''
+  }
+  return `${hour}:${min}`
+}
+
+const originData = [{ date: 9, availableTime: [['09:00', '09:30']] },
+{ date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
+{ date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
+{ date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
+{ date: 17, availableTime: [['09:00', '09:30']] },
+{ date: 18, availableTime: [['09:00', '09:30']] },
+]
+
+const availableDates = [9, 10, 11, 16, 17, 18];
+
+
 function Calendar({ applyInformation, setApplyInformation }) {
   const navigater = useNavigate();
   const params = useParams();
@@ -158,24 +206,20 @@ function Calendar({ applyInformation, setApplyInformation }) {
 
   const year = 2022;
   const [month, setMonth] = useState(`${new Date().getMonth()}월`);
-  const originData = [{ date: 9, availableTime: [['09:00', '09:30']] },
-  { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
-  { date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
-  { date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
-  { date: 17, availableTime: [['09:00', '09:30']] },
-  { date: 18, availableTime: [['09:00', '09:30']] },
-  ]
+
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
-  const availableDates = [9, 10, 11, 16, 17, 18];
   // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
   const [selectedDate, setSelectedDate] = useState(0);
-  const [availableTime, setAvailableTime] = useState([]);
 
   const [availableAMTime, setAvailableAMTime] = useState([]);
   const [availablePMTime, setAvailablePMTime] = useState([]);
 
   const [amLines, setAmLines] = useState(1)
   const [pmLines, setPmLines] = useState(1)
+
+  const [dates, setDates] = useState(getDatesOfMonth(year, month))
+  const [consultingTime, setConsultingTime] = useState(0);
+  const [consultingStartTime, setConsultingStartTime] = useState(0);
 
   const getTimeSelectWrapperHeight = (amLines, pmLines, isHidingButton) => {
     // margin-top
@@ -186,7 +230,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
     // pmLines height
 
     let buttonHeight = 0
-    if (consultingHourAndMin !== 0 && !isHidingButton) {
+    if (consultingStartTime !== 0 && !isHidingButton) {
       buttonHeight = 80
     }
     if (amLines === 0 && pmLines === 0) {
@@ -203,57 +247,22 @@ function Calendar({ applyInformation, setApplyInformation }) {
   // const availableTime = [['09:00', '09:40'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']]
 
 
-  const getDatesOfMonth = (year, month) => {
-    const dayOfFirstDate = new Date(year, month - 1, 1).getDay();
-    const lastDateOfMonth = new Date(year, month, 0).getDate();
-
-    let startDayOfWeek = dayOfFirstDate
-    let dates = []
-    for (let date = 1; date < lastDateOfMonth;) {
-      let week = [...Array(startDayOfWeek).fill(0)]
-      for (let day = startDayOfWeek; day < 7 && date <= lastDateOfMonth; day++) {
-        week.push(date)
-        date++;
-      }
-      if (week.length !== 7) {
-        week.push(...Array(7 - week.length).fill(0))
-      }
-      dates.push(week)
-      startDayOfWeek = 0
-    }
-
-    return dates;
-  }
-
   const onClickAvailableDate = (date) => {
     setSelectedDate(date);
 
     setConsultingTime(0);
-    setConsultingHourAndMin(0);
+    setConsultingStartTime(0);
     setAvailableAMTime([])
     setAvailablePMTime([])
   }
 
-  const [dates, setDates] = useState(getDatesOfMonth(year, month))
-  const [consultingTime, setConsultingTime] = useState(0);
-  const [consultingHourAndMin, setConsultingHourAndMin] = useState(0);
-
-
-
-  const onClickConsultingTime = (event, newConsultingTime) => {
-    if (newConsultingTime === null) {
-      setConsultingTime(0);
-      return
-    }
-    setConsultingTime(newConsultingTime);
-    setConsultingHourAndMin(0);
-
+  const updateAvailableTimes = (consultingTime, selectedDate) => {
     let tempAvailableTime = []
     originData.forEach((element) => {
       if (element.date === selectedDate) {
         for (const time of element.availableTime) {
           let termCount = 0
-          while (new Date(`2021/01/01 ${time[1]}`) - new Date(`2021/01/01 ${time[0]}`) > (newConsultingTime * 60 * 1000 + 10) * (termCount + 1)) {
+          while (new Date(`2021/01/01 ${time[1]}`) - new Date(`2021/01/01 ${time[0]}`) > (consultingTime * 60 * 1000 + 10) * (termCount + 1)) {
             const addingTime = Number(time[0].slice(3)) + termCount * 30
             let addedHour = Number(time[0].slice(0, 2)) + parseInt(addingTime / 60)
             let addedMin
@@ -271,8 +280,6 @@ function Calendar({ applyInformation, setApplyInformation }) {
         }
       }
     })
-    setAvailableTime(tempAvailableTime)
-
     let tempAvailableAMTime = []
     let tempAvailablePMTime = []
     tempAvailableTime.forEach((element) => {
@@ -308,10 +315,21 @@ function Calendar({ applyInformation, setApplyInformation }) {
     else {
       setPmLines(1 + parseInt((tempAvailablePMTime.length * 76) / cardWidth))
     }
+  }
+
+  const onClickConsultingTime = (event, newConsultingTime) => {
+    if (newConsultingTime === null) {
+      setConsultingTime(0);
+      return
+    }
+    setConsultingTime(newConsultingTime);
+    // setConsultingStartTime(0);
+    updateAvailableTimes(newConsultingTime, selectedDate)
+
   };
 
-  const onClickConsultingHourAndMin = (event, consultingHourAndMin) => {
-    setConsultingHourAndMin(consultingHourAndMin)
+  const onClickconsultingStartTime = (event, consultingStartTime) => {
+    setConsultingStartTime(consultingStartTime)
   }
 
   useEffect(() => {
@@ -322,67 +340,72 @@ function Calendar({ applyInformation, setApplyInformation }) {
   }, [month])
 
   useEffect(() => {
-    if (consultingHourAndMin == null) {
-      setConsultingHourAndMin(0);
+    if (consultingStartTime == null) {
+      setConsultingStartTime(0);
     }
     if (setApplyInformation !== undefined) {
-      if (consultingHourAndMin !== 0) {
+      if (consultingStartTime !== 0) {
         const tempApplyInformation = JSON.parse(JSON.stringify(applyInformation));
         tempApplyInformation['isFinishSet'] = true
-        tempApplyInformation['consultingDate'] = { year, month, selectedDate }
+        tempApplyInformation['consultingDate'] = { year, month: Number(month.slice(0, -1)), date: selectedDate }
+        tempApplyInformation['consultingTime'] = consultingTime
+        tempApplyInformation['consultingStartTime'] = consultingStartTime
         setApplyInformation(tempApplyInformation)
       }
       else {
         const tempApplyInformation = JSON.parse(JSON.stringify(applyInformation));
         tempApplyInformation['isFinishSet'] = false
         tempApplyInformation['consultingDate'] = ''
+        tempApplyInformation['consultingTime'] = ''
         setApplyInformation(tempApplyInformation)
       }
     }
-  }, [consultingHourAndMin])
+  }, [consultingStartTime])
 
-  const addMinute = (hourAndMin, addingMin) => {
 
-    const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
-    const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
-
-    const hour = `${'00' + afterDate.getHours()}`.slice(-2)
-    const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
-
-    if (isNaN(hour) || isNaN(hour)) {
-      return ''
-    }
-    return `${hour}:${min}`
-  }
 
 
   const [isApplyPage, setIsApplyPage] = useState(false);
   useEffect(() => {
     setIsApplyPage(location.pathname.includes('reservation'))
+    const reservations = JSON.parse(localStorage.getItem('reservations'))
+    if (reservations !== null) {
+      const reservation = reservations[params.id]
+      if (reservation !== undefined) {
+        if ('consultingDate' in reservation) {
+          setSelectedDate(reservation['consultingDate'].date)
+        }
+        if ('consultingTime' in reservation) {
+          setConsultingTime(reservation['consultingTime'])
+        }
+        if ('consultingTime' in reservation && 'consultingDate' in reservation) {
+          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date)
+        }
+        if ('consultingStartTime' in reservation) {
+          setConsultingStartTime(reservation['consultingStartTime'])
+        }
+      }
+    }
     if (location.state !== null) {
-      console.log('location.state', location.state)
-      if (location.state.selectedDate !== undefined) {
-        setSelectedDate(location.state.selectedDate)
+      if (location.state.consultingDate !== undefined) {
+        setSelectedDate(location.state.consultingDate.date)
       }
       if (location.state.consultingTime !== undefined) {
         setConsultingTime(location.state.consultingTime)
       }
-      if (location.state.consultingHourAndMin !== undefined) {
-        setConsultingHourAndMin(location.state.consultingHourAndMin)
+      if (location.state.consultingDate !== undefined && location.state.consultingTime !== undefined) {
+        updateAvailableTimes(location.state.consultingTime, location.state.consultingDate.date)
+      }
+      if (location.state.consultingStartTime !== undefined) {
+        setConsultingStartTime(location.state.consultingStartTime)
       }
 
-      if (location.state.amLines !== undefined) {
-        setAmLines(location.state.amLines)
-      }
-      if (location.state.pmLines !== undefined) {
-        setPmLines(location.state.pmLines)
-      }
-      if (location.state.availableAMTime !== undefined) {
-        setAvailableAMTime(location.state.availableAMTime)
-      }
-      if (location.state.availablePMTime !== undefined) {
-        setAvailablePMTime(location.state.availablePMTime)
-      }
+      // if (location.state.availableAMTime !== undefined) {
+      //   setAvailableAMTime(location.state.availableAMTime)
+      // }
+      // if (location.state.availablePMTime !== undefined) {
+      //   setAvailablePMTime(location.state.availablePMTime)
+      // }
     }
   }, [])
 
@@ -451,7 +474,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
 
           <TimeSelectWrapper
             is_show={(selectedDate != 0).toString()}
-            height={consultingHourAndMin == 0 ? 56 : 76}
+            height={consultingStartTime == 0 ? 56 : 76}
           >
             <DateTitle>
               상담 시작 시간
@@ -459,7 +482,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
             <EmptyHeight height='16px' />
             <TextSubtitle1 color={colorCareerDiveBlue}>
               {
-                consultingHourAndMin === 0 ? '' : `${consultingHourAndMin} ~ ${addMinute(consultingHourAndMin, consultingTime)}`
+                consultingStartTime === 0 ? '' : `${consultingStartTime} ~ ${addMinute(consultingStartTime, consultingTime)}`
               }
 
 
@@ -470,25 +493,31 @@ function Calendar({ applyInformation, setApplyInformation }) {
             is_show={(consultingTime != 0).toString()}
             height={getTimeSelectWrapperHeight(amLines, pmLines, isApplyPage)}
           >
-            <SelectionConsultingHourAndMin
+            <SelectionConsultingStartTime
               title={'오전'}
-              consultingHourAndMin={consultingHourAndMin}
-              onClickConsultingHourAndMin={onClickConsultingHourAndMin}
+              consultingStartTime={consultingStartTime}
+              onClickconsultingStartTime={onClickconsultingStartTime}
               timeArray={availableAMTime}
             />
 
-            <SelectionConsultingHourAndMin
+            <SelectionConsultingStartTime
               title={'오후'}
-              consultingHourAndMin={consultingHourAndMin}
-              onClickConsultingHourAndMin={onClickConsultingHourAndMin}
+              consultingStartTime={consultingStartTime}
+              onClickconsultingStartTime={onClickconsultingStartTime}
               timeArray={availablePMTime}
             />
             <EmptyHeight height='28px'></EmptyHeight>
             <CustomButton
               height='52px'
               onClick={() => {
-                navigater(`/mentee/mentor/mentoring/reservation/${params.id}`,
-                  { state: { selectedDate, consultingTime, consultingHourAndMin, amLines, pmLines, availableAMTime, availablePMTime } })
+                const updatingData = [
+                  { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
+                  { name: 'consultingTime', data: consultingTime },
+                  { name: 'consultingStartTime', data: consultingStartTime },
+
+                ]
+                updateReservation(params.id, updatingData)
+                navigater(`/mentee/mentor/mentoring/reservation/${params.id}`)
               }}>
               신청
             </CustomButton>

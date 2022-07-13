@@ -54,8 +54,8 @@ function Introduction({ applyInformation }) {
   const params = useParams()
 
   const mentoringDate = new Date(applyInformation['consultingDate']['year'],
-    applyInformation['consultingDate']['month'].slice(0, -1) - 1,
-    applyInformation['consultingDate']['selectedDate']);
+    applyInformation['consultingDate']['month'] - 1,
+    applyInformation['consultingDate']['date']);
 
   const [mentoringCategory, setMentoringCategory] = useState('일반')
   const [mentoringContent, setMentoringContent] = useState(['직무소개'])
@@ -70,8 +70,8 @@ function Introduction({ applyInformation }) {
       <Card
         no_divider={'false'}
         title={`${applyInformation['consultingDate']['year']}년
-                ${applyInformation['consultingDate']['month']}
-                ${applyInformation['consultingDate']['selectedDate']}일
+                ${applyInformation['consultingDate']['month']}월
+                ${applyInformation['consultingDate']['date']}일
                 (${getDayInKorean(mentoringDate)})`}
       >
         <EmptyHeight height='16px'></EmptyHeight>
@@ -107,7 +107,7 @@ function Introduction({ applyInformation }) {
           onClick={() => {
             navigater(`/mentee/mentor/mentoring/apply/${params.id}`,
               { state: {} })
-            // localStorage에 저장하기
+            // TODO: localStorage에 저장하기
           }}
         >
           <TextHeading6>

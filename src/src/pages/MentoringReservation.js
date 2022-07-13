@@ -11,8 +11,9 @@ import {
 import MentorProfile from 'component/mentor/Profile'
 import MentorCalendar from 'component/mentor/Calendar'
 import SelectContent from 'component/mentor/apply/SelectContent'
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { updateReservation } from "util/util";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -36,7 +37,22 @@ const CardsWrapper2 = styled(Flex)`
 
 
 function MentoringReservation() {
-  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '' })
+  const params = useParams();
+
+  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '', consultingTime: '', consultingStartTime: '' })
+
+  useEffect(() => {
+    if (applyInformation['isFinishSet']) {
+      const updatingData = [
+        { name: 'consultingDate', data: applyInformation.consultingDate },
+        { name: 'consultingTime', data: applyInformation.consultingTime },
+        { name: 'consultingStartTime', data: applyInformation.consultingStartTime },
+      ]
+      updateReservation(params.id, updatingData)
+
+    }
+  }, [applyInformation])
+
   return (
     <div>
       <FullWidthWrapper>
