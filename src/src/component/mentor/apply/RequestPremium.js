@@ -21,6 +21,7 @@ import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
+import { useState } from "react";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -45,7 +46,15 @@ const getCategoryColor = (category) => {
 
 const FileDropzoneContent = styled(Flex)`
   background-color: ${colorBackgroundGrayLight};
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: 60px;
 `;
+
+const UnderlineText = styled(TextBody2)`
+  text-decoration: underline;
+`
 
 const getCategoryBackgroundColor = (category) => {
   if (category === '일반') {
@@ -65,6 +74,7 @@ const CategoryTag = styled(TagLarge)`
 function Request() {
   const mentoringCategory = '프리미엄'
   const mentoringContents = ['이직 준비', '면접 팁', '업계 이야기']
+  const [uploadingFiles, setUploadingFiles] = useState([])
   // TODO: localStorage에서 받아오기
   return (
     // TODO: 디자인에 맞게 수정하기(덜어내기)
@@ -118,15 +128,32 @@ function Request() {
           />
           <EmptyHeight height='16px' />
           <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
-          <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
+
+          {/* TODO: upload 파일 취소 버튼 필요 */}
+          <Dropzone onDrop={acceptedFiles => {
+            if (uploadingFiles.length + acceptedFiles.length > 2) {
+              alert('업로드 파일이 3개 이상입니다.')
+              return
+            }
+            const temp = []
+            acceptedFiles.forEach(file => {
+              temp.push(file.path)
+            })
+            setUploadingFiles([...uploadingFiles, ...temp])
+          }}>
             {({ getRootProps, getInputProps }) => (
               <section>
-                <FileDropzoneContent>
+                <FileDropzoneContent {...getRootProps()}>
+                  <input {...getInputProps()} />
                   <UploadIcon color={colorTextLight} />
                 </FileDropzoneContent>
               </section>
             )}
           </Dropzone>
+          <EmptyHeight height='16px' />
+          {uploadingFiles.map((items, index) => {
+            return <UnderlineText key={index}>{items}</UnderlineText>
+          })}
           <EmptyHeight height='16px' />
         </Card>
       </RequestCardWrapper >
