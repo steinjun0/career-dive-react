@@ -11,6 +11,7 @@ import SignUp from './pages/SignUp';
 import Mentor from "./pages/Mentor";
 import MentoringReservation from './pages/MentoringReservation'
 import MentoringApply from './pages/MentoringApply'
+import MentoringApplyViewer from './pages/MentoringApplyViewer'
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
@@ -54,6 +55,7 @@ ReactDOM.render(
           <Route path="/mentee/mentor/profile/:id" element={<Mentor />} />
           <Route path="/mentee/mentor/mentoring/reservation/:id" element={<MentoringReservation />} />
           <Route path="/mentee/mentor/mentoring/apply/:id" element={<MentoringApply />} />
+          <Route path="/mentee/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewer />} />
           <Route path="/mentee/schedule" element={<Schedule />} />
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentee/mypage/account/change" element={<MyPage />} />

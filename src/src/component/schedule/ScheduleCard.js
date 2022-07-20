@@ -23,6 +23,7 @@ import PhoneIcon from "assets/icon/PhoneIcon";
 import calendarSuccess from 'assets/icon/schedule/calendarSuccess.svg'
 import calendarWait from 'assets/icon/schedule/calendarWait.svg'
 import calendarCancel from 'assets/icon/schedule/calendarCancel.svg'
+import { useNavigate } from "react-router-dom";
 
 
 const ScheduleCardWrapper = styled(Flex)`
@@ -63,6 +64,8 @@ const ScheduleTime = styled(TextSubtitle1)`
 function ScheduleCard({ schedule }) {
   const calendarIcon = circleCalendarIcon;
   const requestIcon = requestFormIcon;
+  const navigater = useNavigate();
+
   let categoryIcon;
   if (schedule.category == '예약 성공') {
     categoryIcon = calendarSuccess;
@@ -112,7 +115,10 @@ function ScheduleCard({ schedule }) {
               text='요청서'
               width='90px'
               background_color={colorCareerDiveBlue}
-              text_color={'#fff'}>
+              text_color={'#fff'}
+              onClick={() => { navigater(`/mentee/mentor/mentoring/apply/viewer/1`) }}
+            >
+              {/* TODO: params id 맞춰주기 */}
             </CustomIconButton>
             <EmptyWidth width='12px'></EmptyWidth>
 
