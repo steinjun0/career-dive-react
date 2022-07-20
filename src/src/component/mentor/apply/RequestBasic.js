@@ -19,6 +19,8 @@ import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
 import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -58,7 +60,22 @@ const CategoryTag = styled(TagLarge)`
 
 function Request() {
   const mentoringCategory = '일반'
-  const mentoringContents = ['이직 준비', '면접 팁', '업계 이야기']
+  const [mentoringContents, setMentoringContents] = useState([])
+  const params = useParams()
+
+  useEffect(() => {
+    try {
+      setMentoringContents(JSON.parse(localStorage.getItem('reservations'))[params.id]['mentoringContent'])
+    } catch (error) {
+      console.log(error)
+      alert('선택된 상담 내용 정보가 없습니다')
+    }
+
+
+    return () => {
+    }
+  }, [])
+
   // TODO: localStorage에서 받아오기
   return (
     // TODO: 디자인에 맞게 수정하기(덜어내기)
@@ -77,7 +94,7 @@ function Request() {
               <Flex>
                 <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
                 <EmptyWidth width='8px' />
-                {mentoringContents.map((value, index) => {
+                {mentoringContents && mentoringContents.map((value, index) => {
                   return (
                     // TODO: 수정 버튼 만들기
 

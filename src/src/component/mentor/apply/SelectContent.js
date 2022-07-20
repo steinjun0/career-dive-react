@@ -12,7 +12,7 @@ import {
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { styled } from "@mui/material";
-import { getDayInKorean } from "util/util";
+import { getDayInKorean, updateReservation } from "util/util";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
@@ -105,9 +105,13 @@ function Introduction({ applyInformation }) {
         <CustomButton
           height='52px'
           onClick={() => {
-            navigater(`/mentee/mentor/mentoring/apply/${params.id}`,
-              { state: {} })
-            // TODO: localStorage에 저장하기
+            const updatingData = [
+              { name: 'mentoringContent', data: mentoringContent },
+              { name: 'isPremium', data: mentoringCategory === '프리미엄' }
+            ]
+            updateReservation(params.id, updatingData)
+
+            navigater(`/mentee/mentor/mentoring/apply/${params.id}`)
           }}
         >
           <TextHeading6>

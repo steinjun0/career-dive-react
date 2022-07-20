@@ -21,7 +21,8 @@ import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -73,9 +74,23 @@ const CategoryTag = styled(TagLarge)`
 
 function Request() {
   const mentoringCategory = '프리미엄'
-  const mentoringContents = ['이직 준비', '면접 팁', '업계 이야기']
+  const params = useParams()
+  const [mentoringContents, setMentoringContents] = useState([])
   const [uploadingFiles, setUploadingFiles] = useState([])
-  // TODO: localStorage에서 받아오기
+
+  useEffect(() => {
+    try {
+      setMentoringContents(JSON.parse(localStorage.getItem('reservations'))[params.id]['mentoringContent'])
+    } catch (error) {
+      console.log(error)
+      alert('선택된 상담 내용 정보가 없습니다')
+    }
+
+
+    return () => {
+    }
+  }, [])
+
   return (
     // TODO: 디자인에 맞게 수정하기(덜어내기)
     <VerticalFlex>

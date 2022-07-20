@@ -514,7 +514,6 @@ function Calendar({ applyInformation, setApplyInformation }) {
                   { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
                   { name: 'consultingTime', data: consultingTime },
                   { name: 'consultingStartTime', data: consultingStartTime },
-
                 ]
                 updateReservation(params.id, updatingData)
                 navigater(`/mentee/mentor/mentoring/reservation/${params.id}`)
