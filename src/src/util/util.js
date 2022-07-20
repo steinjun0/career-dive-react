@@ -8,6 +8,20 @@ export const getDifferenceMinutes = (startTime, finishTime) => {
   return mm
 }
 
+export const addMinute = (hourAndMin, addingMin) => {
+
+  const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
+  const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
+
+  const hour = `${'00' + afterDate.getHours()}`.slice(-2)
+  const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
+
+  if (isNaN(hour) || isNaN(hour)) {
+    return ''
+  }
+  return `${hour}:${min}`
+}
+
 export const getLastPathOfRoute = (location) => {
   const navigationSplits = location.pathname.split('/');
   return navigationSplits[navigationSplits.length - 1]

@@ -19,7 +19,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { updateReservation } from "util/util";
+import { addMinute, updateReservation } from "util/util";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -174,19 +174,6 @@ const getDatesOfMonth = (year, month) => {
   return dates;
 }
 
-const addMinute = (hourAndMin, addingMin) => {
-
-  const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
-  const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
-
-  const hour = `${'00' + afterDate.getHours()}`.slice(-2)
-  const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
-
-  if (isNaN(hour) || isNaN(hour)) {
-    return ''
-  }
-  return `${hour}:${min}`
-}
 
 const originData = [{ date: 9, availableTime: [['09:00', '09:30']] },
 { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
