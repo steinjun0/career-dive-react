@@ -21,6 +21,7 @@ import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { addMinute, getDayInKorean } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -61,18 +62,21 @@ const CategoryTag = styled(TagLarge)`
 function Request() {
   const mentoringCategory = '일반'
   const [mentoringContents, setMentoringContents] = useState([])
+  const [consultingDate, setConsultingDate] = useState({})
+  const [consultingStartTime, setConsultingStartTime] = useState()
+  const [consultingTime, setConsultingTime] = useState(20)
   const params = useParams()
 
   useEffect(() => {
     try {
-      setMentoringContents(JSON.parse(localStorage.getItem('reservations'))[params.id]['mentoringContent'])
+      const reservation = JSON.parse(localStorage.getItem('reservations'))[params.id]
+      setMentoringContents(reservation['mentoringContent'])
+      setConsultingDate(reservation['consultingDate'])
+      setConsultingStartTime(reservation['consultingStartTime'])
+      setConsultingTime(reservation['consultingTime'])
     } catch (error) {
       console.log(error)
-      alert('선택된 상담 내용 정보가 없습니다')
-    }
-
-
-    return () => {
+      alert('누락된 상담 내용 정보가 있습니다.')
     }
   }, [])
 
@@ -82,11 +86,11 @@ function Request() {
     <VerticalFlex>
       <RequestCardWrapper>
         <Card
-          title={'2022년 1월 9일(목)'}
+          title={`${consultingDate['year']}년 ${consultingDate['month']}월 ${consultingDate['date']}일(${getDayInKorean(new Date(consultingDate['year'], consultingDate['month'] - 1, consultingDate['date']))})`}
           titleHead={
             <Flex>
               <EmptyWidth width='12px' />
-              <TextSubtitle1 color={colorCareerDiveBlue}>오전 09:00~오전 9:20</TextSubtitle1>
+              <TextSubtitle1 color={colorCareerDiveBlue}>오전 {consultingStartTime}~오전 {addMinute(consultingStartTime, consultingTime)}</TextSubtitle1>
             </Flex>}
           titleBottom={
             <VerticalFlex>
