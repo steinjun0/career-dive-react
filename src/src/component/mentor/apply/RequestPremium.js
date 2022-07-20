@@ -107,7 +107,7 @@ function Request() {
           titleHead={
             <Flex>
               <EmptyWidth width='12px' />
-              <TextSubtitle1 color={colorCareerDiveBlue}>{getConsultingRangeInKorean(setConsultingStartTime, setConsultingTime)}</TextSubtitle1>
+              <TextSubtitle1 color={colorCareerDiveBlue}>{getConsultingRangeInKorean(consultingStartTime, consultingTime)}</TextSubtitle1>
             </Flex>}
           titleBottom={
             <VerticalFlex>
