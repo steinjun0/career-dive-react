@@ -21,7 +21,7 @@ import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { addMinute, getDayInKorean } from "util/util";
+import { addMinute, getAMOrPM, getDayInKorean } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -59,6 +59,9 @@ const CategoryTag = styled(TagLarge)`
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
 
+const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
+  `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
+
 function Request() {
   const mentoringCategory = '일반'
   const [mentoringContents, setMentoringContents] = useState([])
@@ -90,7 +93,7 @@ function Request() {
           titleHead={
             <Flex>
               <EmptyWidth width='12px' />
-              <TextSubtitle1 color={colorCareerDiveBlue}>오전 {consultingStartTime}~오전 {addMinute(consultingStartTime, consultingTime)}</TextSubtitle1>
+              <TextSubtitle1 color={colorCareerDiveBlue}>{getConsultingRangeInKorean(consultingStartTime, consultingTime)}</TextSubtitle1>
             </Flex>}
           titleBottom={
             <VerticalFlex>

@@ -23,6 +23,7 @@ import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { addMinute, getAMOrPM, getDayInKorean } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -71,23 +72,29 @@ const CategoryTag = styled(TagLarge)`
   color:${props => getCategoryColor(props.category)};
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
+const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
+  `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
 
 function Request() {
   const mentoringCategory = '프리미엄'
-  const params = useParams()
+
   const [mentoringContents, setMentoringContents] = useState([])
   const [uploadingFiles, setUploadingFiles] = useState([])
+  const [consultingDate, setConsultingDate] = useState({})
+  const [consultingStartTime, setConsultingStartTime] = useState()
+  const [consultingTime, setConsultingTime] = useState(20)
+  const params = useParams()
 
   useEffect(() => {
     try {
-      setMentoringContents(JSON.parse(localStorage.getItem('reservations'))[params.id]['mentoringContent'])
+      const reservation = JSON.parse(localStorage.getItem('reservations'))[params.id]
+      setMentoringContents(reservation['mentoringContent'])
+      setConsultingDate(reservation['consultingDate'])
+      setConsultingStartTime(reservation['consultingStartTime'])
+      setConsultingTime(reservation['consultingTime'])
     } catch (error) {
       console.log(error)
-      alert('선택된 상담 내용 정보가 없습니다')
-    }
-
-
-    return () => {
+      alert('누락된 상담 내용 정보가 있습니다.')
     }
   }, [])
 
@@ -96,11 +103,11 @@ function Request() {
     <VerticalFlex>
       <RequestCardWrapper>
         <Card
-          title={'2022년 1월 9일(목)'}
+          title={`${consultingDate['year']}년 ${consultingDate['month']}월 ${consultingDate['date']}일(${getDayInKorean(new Date(consultingDate['year'], consultingDate['month'] - 1, consultingDate['date']))})`}
           titleHead={
             <Flex>
               <EmptyWidth width='12px' />
-              <TextSubtitle1 color={colorCareerDivePink}>오전 09:00~오전 9:20</TextSubtitle1>
+              <TextSubtitle1 color={colorCareerDiveBlue}>{getConsultingRangeInKorean(setConsultingStartTime, setConsultingTime)}</TextSubtitle1>
             </Flex>}
           titleBottom={
             <VerticalFlex>

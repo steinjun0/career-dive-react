@@ -22,6 +22,16 @@ export const addMinute = (hourAndMin, addingMin) => {
   return `${hour}:${min}`
 }
 
+export const getAMOrPM = (hourAndMin) => {
+  try {
+    return Number(hourAndMin.slice(0, 2)) < 12 ? '오전' : '오후'
+  } catch (error) {
+    return ''
+  }
+};
+
+
+
 export const getLastPathOfRoute = (location) => {
   const navigationSplits = location.pathname.split('/');
   return navigationSplits[navigationSplits.length - 1]
