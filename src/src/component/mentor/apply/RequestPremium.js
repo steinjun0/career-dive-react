@@ -119,7 +119,7 @@ function Request() {
             • &nbsp;&nbsp;선택하신 희망 상담 내용 이외의 정보(섭외, 광고 등)를 요청할 수 없습니다.
           </TextBody2>
           <TextBody2 color={colorCareerDivePink}>
-            • &nbsp;&nbsp;자소서 초안(최대 1,500자)을 업로드해 주세요. 멘토는 초안을 토대로 구성, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.
+            • &nbsp;&nbsp;자소서 초안(최대 1,500자)을 업로드해 주세요. 멘토는 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.
           </TextBody2>
           <EmptyHeight height='16px' />
           <CustomTextArea
