@@ -23,7 +23,7 @@ import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { addMinute, getAMOrPM, getDayInKorean } from "util/util";
+import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -83,6 +83,8 @@ function Request() {
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()
   const [consultingTime, setConsultingTime] = useState(20)
+  const [applymentContent, setApplymentContent] = useState('')
+
   const params = useParams()
 
   useEffect(() => {
@@ -92,6 +94,7 @@ function Request() {
       setConsultingDate(reservation['consultingDate'])
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
+      setApplymentContent(reservation['applymentContent'])
     } catch (error) {
       console.log(error)
       alert('누락된 상담 내용 정보가 있습니다.')
@@ -145,6 +148,14 @@ function Request() {
           </TextBody2>
           <EmptyHeight height='16px' />
           <CustomTextArea
+            defaultValue={applymentContent}
+            onChange={(event) => {
+              const updatingData = [
+                { name: 'applymentContent', data: event.target.value },
+              ]
+              updateReservation(params.id, updatingData)
+            }}
+
             placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
             minRows={5}
           />
