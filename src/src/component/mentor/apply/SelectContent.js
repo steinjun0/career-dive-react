@@ -1,11 +1,8 @@
 import {
-  colorCareerDiveBlue,
-  colorTextBody,
   colorTextLight,
   EmptyHeight,
   EmptyWidth,
   Flex,
-  RowAlignCenterFlex,
   TextBody2,
   TextHeading6,
   TextSubtitle1,
@@ -14,39 +11,12 @@ import { Card } from "util/Card";
 import { styled } from "@mui/material";
 import { getDayInKorean, updateReservation } from "util/util";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
 
 const IntroductionWrapper = styled(Flex)`
   width: 100%;
-`;
-
-const HtmlWrapper = styled('div')`
-  font-size: 14px;
-  line-height: 24px;
-  color: ${colorTextBody};
-`;
-
-const DateBox = styled(RowAlignCenterFlex)`
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius:12px;
-  border: 1px solid;
-  color: ${colorTextLight};
-`;
-
-const AvailableDateBox = styled(DateBox)`
-  background-color: rgba(105, 140, 255, 0.2);
-  color: ${colorCareerDiveBlue};
-  cursor: pointer;
-`;
-
-const SelectedDateBox = styled(DateBox)`
-  background-color:${colorCareerDiveBlue};
-  color: white;
-  cursor: pointer;
 `;
 
 function Introduction({ applyInformation }) {
@@ -57,8 +27,21 @@ function Introduction({ applyInformation }) {
     applyInformation['consultingDate']['month'] - 1,
     applyInformation['consultingDate']['date']);
 
-  const [mentoringCategory, setMentoringCategory] = useState('일반')
-  const [mentoringContent, setMentoringContent] = useState(['직무소개'])
+  const [mentoringCategory, setMentoringCategory] = useState(null)
+  const [mentoringContent, setMentoringContent] = useState([])
+
+  useEffect(() => {
+    const reservations = JSON.parse(localStorage.getItem('reservations'))
+    if (reservations !== null) {
+      const reservation = reservations[params.id]
+      if (reservation !== undefined) {
+        reservation['mentoringCategory'] && setMentoringCategory(reservation['mentoringCategory'])
+        reservation['mentoringContent'] && setMentoringContent(reservation['mentoringContent'])
+      }
+    }
+  }, [])
+
+
   const addMentoringContent = (contents) => {
     if (contents.length <= 3) {
       setMentoringContent(contents)
@@ -107,11 +90,19 @@ function Introduction({ applyInformation }) {
           onClick={() => {
             const updatingData = [
               { name: 'mentoringContent', data: mentoringContent },
-              { name: 'isPremium', data: mentoringCategory === '프리미엄' }
+              { name: 'mentoringCategory', data: mentoringCategory }
             ]
-            updateReservation(params.id, updatingData)
+            if (mentoringContent === []) {
+              alert('상담 내용을 선택하세요')
+            }
+            else if (mentoringCategory === null) {
+              alert('상담 유형을 선택하세요')
+            } else {
+              updateReservation(params.id, updatingData)
+              navigater(`/mentee/mentor/mentoring/apply/${params.id}`)
+            }
 
-            navigater(`/mentee/mentor/mentoring/apply/${params.id}`)
+
           }}
         >
           <TextHeading6>
