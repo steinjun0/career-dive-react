@@ -23,12 +23,9 @@ function Introduction({ applyInformation }) {
   const navigater = useNavigate()
   const params = useParams()
 
-  const mentoringDate = new Date(applyInformation['consultingDate']['year'],
-    applyInformation['consultingDate']['month'] - 1,
-    applyInformation['consultingDate']['date']);
-
   const [mentoringCategory, setMentoringCategory] = useState(null)
   const [mentoringContent, setMentoringContent] = useState([])
+  const [mentoringDate, setMentoringDate] = useState()
 
   useEffect(() => {
     const reservations = JSON.parse(localStorage.getItem('reservations'))
@@ -37,6 +34,8 @@ function Introduction({ applyInformation }) {
       if (reservation !== undefined) {
         reservation['mentoringCategory'] && setMentoringCategory(reservation['mentoringCategory'])
         reservation['mentoringContent'] && setMentoringContent(reservation['mentoringContent'])
+        reservation['consultingDate'] && setMentoringDate(new Date(reservation['consultingDate']['year'], reservation['consultingDate']['month'] - 1, reservation['consultingDate']['date']))
+        console.log('mentoringDate.getFullYear()', mentoringDate)
       }
     }
   }, [])
@@ -52,10 +51,10 @@ function Introduction({ applyInformation }) {
     <IntroductionWrapper>
       <Card
         no_divider={'false'}
-        title={`${applyInformation['consultingDate']['year']}년
-                ${applyInformation['consultingDate']['month']}월
-                ${applyInformation['consultingDate']['date']}일
-                (${getDayInKorean(mentoringDate)})`}
+        title={`${mentoringDate && mentoringDate.getFullYear()}년
+                ${mentoringDate && mentoringDate.getMonth() + 1}월
+                ${mentoringDate && mentoringDate.getDate()}일
+                (${mentoringDate && getDayInKorean(mentoringDate)})`}
       >
         <EmptyHeight height='16px'></EmptyHeight>
         <TextSubtitle1>

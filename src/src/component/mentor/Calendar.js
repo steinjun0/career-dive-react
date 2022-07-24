@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 import { Card } from "util/Card"
@@ -19,7 +19,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { addMinute, updateReservation } from "util/util";
+import { addMinute, updateReservation, usePrevious } from "util/util";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -186,13 +186,13 @@ const originData = [{ date: 9, availableTime: [['09:00', '09:30']] },
 const availableDates = [9, 10, 11, 16, 17, 18];
 
 
-function Calendar({ applyInformation, setApplyInformation }) {
+function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
   const navigater = useNavigate();
   const params = useParams();
   const location = useLocation();
 
   const year = 2022;
-  const [month, setMonth] = useState(`${new Date().getMonth()}월`);
+  const [month, setMonth] = useState('0월');
 
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
   // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
@@ -205,7 +205,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
   const [pmLines, setPmLines] = useState(1)
 
   const [dates, setDates] = useState(getDatesOfMonth(year, month))
-  const [consultingTime, setConsultingTime] = useState(0);
+  const [consultingTime, setConsultingTime] = useState(-1);
   const [consultingStartTime, setConsultingStartTime] = useState(0);
 
   const getTimeSelectWrapperHeight = (amLines, pmLines, isHidingButton) => {
@@ -319,33 +319,40 @@ function Calendar({ applyInformation, setApplyInformation }) {
     setConsultingStartTime(consultingStartTime)
   }
 
+  const prevMonth = usePrevious(month);
   useEffect(() => {
-    if (month.length !== 0) {
+    if (prevMonth === '0월') {
+      setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
+    }
+    else if (month.length !== 0) {
       setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
       setSelectedDate(0)
     }
   }, [month])
 
+  // 상담시간 변경시 시작시간 초기화
+  const prevConsultingTime = usePrevious(consultingTime);
+  useEffect(() => {
+    if (prevConsultingTime !== -1) {
+      setConsultingStartTime(0)
+    }
+  }, [consultingTime])
+
   useEffect(() => {
     if (consultingStartTime == null) {
       setConsultingStartTime(0);
     }
-    if (setApplyInformation !== undefined) {
-      if (consultingStartTime !== 0) {
-        const tempApplyInformation = JSON.parse(JSON.stringify(applyInformation));
-        tempApplyInformation['isFinishSet'] = true
-        tempApplyInformation['consultingDate'] = { year, month: Number(month.slice(0, -1)), date: selectedDate }
-        tempApplyInformation['consultingTime'] = consultingTime
-        tempApplyInformation['consultingStartTime'] = consultingStartTime
-        setApplyInformation(tempApplyInformation)
-      }
-      else {
-        const tempApplyInformation = JSON.parse(JSON.stringify(applyInformation));
-        tempApplyInformation['isFinishSet'] = false
-        tempApplyInformation['consultingDate'] = ''
-        tempApplyInformation['consultingTime'] = ''
-        setApplyInformation(tempApplyInformation)
-      }
+    if (consultingStartTime !== 0) {
+      const updatingData = [
+        { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
+        { name: 'consultingTime', data: consultingTime },
+        { name: 'consultingStartTime', data: consultingStartTime },
+      ]
+      setIsFinishSet && setIsFinishSet(true)
+      updateReservation(params.id, updatingData)
+
+    } else {
+      setIsFinishSet && setIsFinishSet(false)
     }
   }, [consultingStartTime])
 
@@ -360,6 +367,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {
         if ('consultingDate' in reservation) {
+          setMonth(reservation['consultingDate'].month + '월')
           setSelectedDate(reservation['consultingDate'].date)
         }
         if ('consultingTime' in reservation) {
@@ -373,27 +381,7 @@ function Calendar({ applyInformation, setApplyInformation }) {
         }
       }
     }
-    if (location.state !== null) {
-      if (location.state.consultingDate !== undefined) {
-        setSelectedDate(location.state.consultingDate.date)
-      }
-      if (location.state.consultingTime !== undefined) {
-        setConsultingTime(location.state.consultingTime)
-      }
-      if (location.state.consultingDate !== undefined && location.state.consultingTime !== undefined) {
-        updateAvailableTimes(location.state.consultingTime, location.state.consultingDate.date)
-      }
-      if (location.state.consultingStartTime !== undefined) {
-        setConsultingStartTime(location.state.consultingStartTime)
-      }
 
-      // if (location.state.availableAMTime !== undefined) {
-      //   setAvailableAMTime(location.state.availableAMTime)
-      // }
-      // if (location.state.availablePMTime !== undefined) {
-      //   setAvailablePMTime(location.state.availablePMTime)
-      // }
-    }
   }, [])
 
 
