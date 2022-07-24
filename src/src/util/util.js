@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 export const getDifferenceMinutes = (startTime, finishTime) => {
   // format of input time => 'hh:mm' (String)
   const tempStartDate = new Date(2022, 0, 1, startTime.slice(0, 2), startTime.slice(3, 5))
@@ -67,4 +69,12 @@ export const updateReservation = (id, updateDataArray) => {
 
   reservations[id] = reservation
   localStorage.setItem('reservations', JSON.stringify(reservations))
+}
+
+export function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
 }
