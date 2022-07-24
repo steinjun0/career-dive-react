@@ -106,8 +106,6 @@ function Request() {
                 <EmptyWidth width='8px' />
                 {mentoringContents && mentoringContents.map((value, index) => {
                   return (
-                    // TODO: 수정 버튼 만들기
-
                     <Flex key={index}>
                       <TagLarge color={colorTextLight}
                         background_color={colorBackgroundGrayLight}>
@@ -132,6 +130,12 @@ function Request() {
           <EmptyHeight height='16px' />
           <CustomTextArea
             defaultValue={applymentContent}
+            onFocus={(event) => {
+              event.target.placeholder = ''
+            }}
+            onBlur={(event) => {
+              event.target.placeholder = '희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다.'
+            }}
             onChange={(event) => {
               const updatingData = [
                 { name: 'applymentContent', data: event.target.value },
