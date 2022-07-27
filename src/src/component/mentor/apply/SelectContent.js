@@ -1,20 +1,17 @@
 import {
-  colorCareerDiveBlue,
-  colorTextBody,
   colorTextLight,
   EmptyHeight,
   EmptyWidth,
   Flex,
-  RowAlignCenterFlex,
   TextBody2,
   TextHeading6,
   TextSubtitle1,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { styled } from "@mui/material";
-import { getDayInKorean } from "util/util";
+import { getDayInKorean, updateReservation } from "util/util";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -22,43 +19,28 @@ const IntroductionWrapper = styled(Flex)`
   width: 100%;
 `;
 
-const HtmlWrapper = styled('div')`
-  font-size: 14px;
-  line-height: 24px;
-  color: ${colorTextBody};
-`;
-
-const DateBox = styled(RowAlignCenterFlex)`
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius:12px;
-  border: 1px solid;
-  color: ${colorTextLight};
-`;
-
-const AvailableDateBox = styled(DateBox)`
-  background-color: rgba(105, 140, 255, 0.2);
-  color: ${colorCareerDiveBlue};
-  cursor: pointer;
-`;
-
-const SelectedDateBox = styled(DateBox)`
-  background-color:${colorCareerDiveBlue};
-  color: white;
-  cursor: pointer;
-`;
-
 function Introduction({ applyInformation }) {
   const navigater = useNavigate()
   const params = useParams()
 
-  const mentoringDate = new Date(applyInformation['consultingDate']['year'],
-    applyInformation['consultingDate']['month'] - 1,
-    applyInformation['consultingDate']['date']);
+  const [mentoringCategory, setMentoringCategory] = useState(null)
+  const [mentoringContent, setMentoringContent] = useState([])
+  const [mentoringDate, setMentoringDate] = useState()
 
-  const [mentoringCategory, setMentoringCategory] = useState('일반')
-  const [mentoringContent, setMentoringContent] = useState(['직무소개'])
+  useEffect(() => {
+    const reservations = JSON.parse(localStorage.getItem('reservations'))
+    if (reservations !== null) {
+      const reservation = reservations[params.id]
+      if (reservation !== undefined) {
+        reservation['mentoringCategory'] && setMentoringCategory(reservation['mentoringCategory'])
+        reservation['mentoringContent'] && setMentoringContent(reservation['mentoringContent'])
+        reservation['consultingDate'] && setMentoringDate(new Date(reservation['consultingDate']['year'], reservation['consultingDate']['month'] - 1, reservation['consultingDate']['date']))
+        console.log('mentoringDate.getFullYear()', mentoringDate)
+      }
+    }
+  }, [])
+
+
   const addMentoringContent = (contents) => {
     if (contents.length <= 3) {
       setMentoringContent(contents)
@@ -69,10 +51,10 @@ function Introduction({ applyInformation }) {
     <IntroductionWrapper>
       <Card
         no_divider={'false'}
-        title={`${applyInformation['consultingDate']['year']}년
-                ${applyInformation['consultingDate']['month']}월
-                ${applyInformation['consultingDate']['date']}일
-                (${getDayInKorean(mentoringDate)})`}
+        title={`${mentoringDate && mentoringDate.getFullYear()}년
+                ${mentoringDate && mentoringDate.getMonth() + 1}월
+                ${mentoringDate && mentoringDate.getDate()}일
+                (${mentoringDate && getDayInKorean(mentoringDate)})`}
       >
         <EmptyHeight height='16px'></EmptyHeight>
         <TextSubtitle1>
@@ -105,9 +87,21 @@ function Introduction({ applyInformation }) {
         <CustomButton
           height='52px'
           onClick={() => {
-            navigater(`/mentee/mentor/mentoring/apply/${params.id}`,
-              { state: {} })
-            // TODO: localStorage에 저장하기
+            const updatingData = [
+              { name: 'mentoringContent', data: mentoringContent },
+              { name: 'mentoringCategory', data: mentoringCategory }
+            ]
+            if (mentoringContent === []) {
+              alert('상담 내용을 선택하세요')
+            }
+            else if (mentoringCategory === null) {
+              alert('상담 유형을 선택하세요')
+            } else {
+              updateReservation(params.id, updatingData)
+              navigater(`/mentee/mentor/mentoring/apply/${params.id}`)
+            }
+
+
           }}
         >
           <TextHeading6>

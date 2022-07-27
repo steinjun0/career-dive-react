@@ -19,6 +19,9 @@ import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
 import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -56,20 +59,44 @@ const CategoryTag = styled(TagLarge)`
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
 
+const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
+  `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
+
 function Request() {
   const mentoringCategory = '일반'
-  const mentoringContents = ['이직 준비', '면접 팁', '업계 이야기']
+  const [mentoringContents, setMentoringContents] = useState([])
+  const [consultingDate, setConsultingDate] = useState({})
+  const [consultingStartTime, setConsultingStartTime] = useState()
+  const [consultingTime, setConsultingTime] = useState(20)
+  const [applymentContent, setApplymentContent] = useState('')
+
+  const params = useParams()
+
+  useEffect(() => {
+    try {
+      const reservation = JSON.parse(localStorage.getItem('reservations'))[params.id]
+      setMentoringContents(reservation['mentoringContent'])
+      setConsultingDate(reservation['consultingDate'])
+      setConsultingStartTime(reservation['consultingStartTime'])
+      setConsultingTime(reservation['consultingTime'])
+      setApplymentContent(reservation['applymentContent'])
+    } catch (error) {
+      console.log(error)
+      alert('누락된 상담 내용 정보가 있습니다.')
+    }
+  }, [])
+
   // TODO: localStorage에서 받아오기
   return (
     // TODO: 디자인에 맞게 수정하기(덜어내기)
     <VerticalFlex>
       <RequestCardWrapper>
         <Card
-          title={'2022년 1월 9일(목)'}
+          title={`${consultingDate['year']}년 ${consultingDate['month']}월 ${consultingDate['date']}일(${getDayInKorean(new Date(consultingDate['year'], consultingDate['month'] - 1, consultingDate['date']))})`}
           titleHead={
             <Flex>
               <EmptyWidth width='12px' />
-              <TextSubtitle1 color={colorCareerDiveBlue}>오전 09:00~오전 9:20</TextSubtitle1>
+              <TextSubtitle1 color={colorCareerDiveBlue}>{getConsultingRangeInKorean(consultingStartTime, consultingTime)}</TextSubtitle1>
             </Flex>}
           titleBottom={
             <VerticalFlex>
@@ -77,10 +104,8 @@ function Request() {
               <Flex>
                 <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
                 <EmptyWidth width='8px' />
-                {mentoringContents.map((value, index) => {
+                {mentoringContents && mentoringContents.map((value, index) => {
                   return (
-                    // TODO: 수정 버튼 만들기
-
                     <Flex key={index}>
                       <TagLarge color={colorTextLight}
                         background_color={colorBackgroundGrayLight}>
@@ -104,6 +129,20 @@ function Request() {
           </TextBody2>
           <EmptyHeight height='16px' />
           <CustomTextArea
+            defaultValue={applymentContent}
+            onFocus={(event) => {
+              event.target.placeholder = ''
+            }}
+            onBlur={(event) => {
+              event.target.placeholder = '희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다.'
+            }}
+            onChange={(event) => {
+              const updatingData = [
+                { name: 'applymentContent', data: event.target.value },
+              ]
+              updateReservation(params.id, updatingData)
+            }}
+
             placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
             minRows={5}
           />

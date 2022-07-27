@@ -31,10 +31,11 @@ const IconText = styled(TextSubtitle1)`
 // }
 `;
 
-export function CustomIconButton({ Icon, text, width, background_color, text_color }) {
+export function CustomIconButton({ Icon, text, width, background_color, text_color, onClick }) {
   const [isHover, setIsHover] = useState(false)
   return (
     <CustomIconButtonStyle width={width} background_color={background_color}
+      onClick={onClick}
       onMouseEnter={() => { setIsHover(true) }}
       onMouseLeave={() => { setIsHover(false) }}>
       {/* <SizedImg style={{ marginRight: '8px', color: text_color }} src={icon} width='24px' height='24px'></SizedImg> */}

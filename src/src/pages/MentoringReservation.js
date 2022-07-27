@@ -39,19 +39,10 @@ const CardsWrapper2 = styled(Flex)`
 function MentoringReservation() {
   const params = useParams();
 
-  const [applyInformation, setApplyInformation] = useState({ isFinishSet: false, consultingDate: '', consultingTime: '', consultingStartTime: '' })
-
+  const [isFinishSet, setIsFinishSet] = useState(false)
   useEffect(() => {
-    if (applyInformation['isFinishSet']) {
-      const updatingData = [
-        { name: 'consultingDate', data: applyInformation.consultingDate },
-        { name: 'consultingTime', data: applyInformation.consultingTime },
-        { name: 'consultingStartTime', data: applyInformation.consultingStartTime },
-      ]
-      updateReservation(params.id, updatingData)
-
-    }
-  }, [applyInformation])
+    console.log(isFinishSet)
+  }, [isFinishSet])
 
   return (
     <div>
@@ -61,17 +52,17 @@ function MentoringReservation() {
             <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
           </MetorProfileBanner>
         </MaxWidthDiv>
-        <GrayBackground>
+        <GrayBackground >
           <CenterWidthWrapper>
-            <CardsWrapper>
-              <MentorCalendar applyInformation={applyInformation} setApplyInformation={setApplyInformation}>
+            <CardsWrapper >
+              <MentorCalendar setIsFinishSet={setIsFinishSet}>
               </MentorCalendar>
             </CardsWrapper>
 
             {
-              applyInformation['isFinishSet'] &&
+              isFinishSet &&
               <CardsWrapper2>
-                <SelectContent applyInformation={applyInformation}>
+                <SelectContent >
                 </SelectContent>
               </CardsWrapper2>
             }

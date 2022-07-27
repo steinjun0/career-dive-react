@@ -21,7 +21,9 @@ import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -70,22 +72,45 @@ const CategoryTag = styled(TagLarge)`
   color:${props => getCategoryColor(props.category)};
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
+const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
+  `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
 
 function Request() {
   const mentoringCategory = '프리미엄'
-  const mentoringContents = ['이직 준비', '면접 팁', '업계 이야기']
+
+  const [mentoringContents, setMentoringContents] = useState([])
   const [uploadingFiles, setUploadingFiles] = useState([])
-  // TODO: localStorage에서 받아오기
+  const [consultingDate, setConsultingDate] = useState({})
+  const [consultingStartTime, setConsultingStartTime] = useState()
+  const [consultingTime, setConsultingTime] = useState(20)
+  const [applymentContent, setApplymentContent] = useState('')
+
+  const params = useParams()
+
+  useEffect(() => {
+    try {
+      const reservation = JSON.parse(localStorage.getItem('reservations'))[params.id]
+      setMentoringContents(reservation['mentoringContent'])
+      setConsultingDate(reservation['consultingDate'])
+      setConsultingStartTime(reservation['consultingStartTime'])
+      setConsultingTime(reservation['consultingTime'])
+      setApplymentContent(reservation['applymentContent'])
+    } catch (error) {
+      console.log(error)
+      alert('누락된 상담 내용 정보가 있습니다.')
+    }
+  }, [])
+
   return (
     // TODO: 디자인에 맞게 수정하기(덜어내기)
     <VerticalFlex>
       <RequestCardWrapper>
         <Card
-          title={'2022년 1월 9일(목)'}
+          title={`${consultingDate['year']}년 ${consultingDate['month']}월 ${consultingDate['date']}일(${getDayInKorean(new Date(consultingDate['year'], consultingDate['month'] - 1, consultingDate['date']))})`}
           titleHead={
             <Flex>
               <EmptyWidth width='12px' />
-              <TextSubtitle1 color={colorCareerDivePink}>오전 09:00~오전 9:20</TextSubtitle1>
+              <TextSubtitle1 color={colorCareerDiveBlue}>{getConsultingRangeInKorean(consultingStartTime, consultingTime)}</TextSubtitle1>
             </Flex>}
           titleBottom={
             <VerticalFlex>
@@ -95,8 +120,6 @@ function Request() {
                 <EmptyWidth width='8px' />
                 {mentoringContents.map((value, index) => {
                   return (
-                    // TODO: 수정 버튼 만들기
-
                     <Flex key={index}>
                       <TagLarge color={colorTextLight}
                         background_color={colorBackgroundGrayLight}>
@@ -119,10 +142,24 @@ function Request() {
             • &nbsp;&nbsp;선택하신 희망 상담 내용 이외의 정보(섭외, 광고 등)를 요청할 수 없습니다.
           </TextBody2>
           <TextBody2 color={colorCareerDivePink}>
-            • &nbsp;&nbsp;자소서 초안(최대 1,500자)을 업로드해 주세요. 멘토는 초안을 토대로 구성, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.
+            • &nbsp;&nbsp;자소서 초안(최대 1,500자)을 업로드해 주세요. 멘토는 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.
           </TextBody2>
           <EmptyHeight height='16px' />
           <CustomTextArea
+            defaultValue={applymentContent}
+            onFocus={(event) => {
+              event.target.placeholder = ''
+            }}
+            onBlur={(event) => {
+              event.target.placeholder = '희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다.'
+            }}
+            onChange={(event) => {
+              const updatingData = [
+                { name: 'applymentContent', data: event.target.value },
+              ]
+              updateReservation(params.id, updatingData)
+            }}
+
             placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
             minRows={5}
           />

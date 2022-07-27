@@ -17,7 +17,9 @@ function SimpleMenu({ title, menuItems = [], style = {}, setState = () => { }, e
         setAnchorEl(event.currentTarget);
     };
     const handleClose = (element) => {
-        setState(element)
+        if (menuItems.includes(element)) {
+            setState(element)
+        }
         setAnchorEl(null);
     };
 

@@ -78,7 +78,7 @@ function HomeBanner() {
           <RowAlignCenterFlex>
             <SearchBarSpan>직무</SearchBarSpan>
             <SimpleMenu
-              title="직무를 선택하세요"
+              title="선택하세요"
               menuItems={["개발", "기획", "디자인"]}
             ></SimpleMenu>
           </RowAlignCenterFlex>
@@ -86,7 +86,7 @@ function HomeBanner() {
           <RowAlignCenterFlex>
             <SearchBarSpan>회사</SearchBarSpan>
             <SimpleMenu
-              title="회사를 선택하세요"
+              title="선택하세요"
               menuItems={["네이버", "삼성전자", "JYP"]}
             ></SimpleMenu>
           </RowAlignCenterFlex>
@@ -94,7 +94,7 @@ function HomeBanner() {
           <RowAlignCenterFlex>
             <SearchBarSpan>태그</SearchBarSpan>
             <SimpleMenu
-              title="태그를 선택하세요"
+              title="선택하세요"
               menuItems={["취업준비", "이직", "사내 분위기"]}
             ></SimpleMenu>
           </RowAlignCenterFlex>
@@ -105,7 +105,7 @@ function HomeBanner() {
         <BannerTitle>
           평소 만나고 싶던
           <br />
-          현직자를 만나보세요
+          현직자를 만나보세요.
         </BannerTitle>
 
       </HomeBannerWrapper>
