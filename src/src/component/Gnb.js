@@ -1,5 +1,5 @@
-import { styled } from "@mui/material";
-import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex } from 'util/styledComponent';
+import { Divider, styled } from "@mui/material";
+import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight } from 'util/styledComponent';
 
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import logo from '../assets/img/logo/careerDiveLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 
 
@@ -102,9 +102,24 @@ const GnbLi = styled('li')`
   box-sizing: border-box;
   `: ''
   }
-  
 `;
 
+const ProfileMenu = styled(VerticalFlex)`
+  transition: height 0.3s ease;
+  top: 80px;
+  right: 30px;
+  height: ${props => props.is_hide === 'true' ? '0px' : '289px'};
+  position: absolute;
+  width: 180px;
+  background-color: #fff;
+  box-sizing: content-box;
+  box-shadow: 10px 20px 40px rgba(130, 130, 130, 0.1);
+  border-radius: 8px;
+  padding: 0 24px;
+  gap: 16px;
+  color: ${colorTextLight};
+  overflow: hidden;
+`;
 
 
 function Gnb() {
@@ -114,6 +129,10 @@ function Gnb() {
     return url === location
   }
   const [isLogin, setIsLogin] = useState(false)
+  const [isHideProfileMenu, setIsHideProfileMenu] = useState(true)
+  const isMouseOnProfileMenuRef = useRef(false);
+
+
 
   useEffect(() => {
     const access_token = localStorage.getItem('access_token')
@@ -124,6 +143,8 @@ function Gnb() {
       }
     }
   }, [])
+
+
 
 
   return (
@@ -159,10 +180,35 @@ function Gnb() {
         }
 
         {isLogin && <RightTopGnb>
+          <div>{String(isMouseOnProfileMenuRef.current)}</div>
+
           <CustomButton width={'83px'} style={{ marginRight: 24 }} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
           <NotificationsNoneIcon style={{ marginRight: 14 }} />
-          <LinkNoDeco to={'mentee/mypage/profile'}>
+          <Flex
+            onMouseEnter={() => {
+              isMouseOnProfileMenuRef.current = true
+              setIsHideProfileMenu(false)
+            }}
+            onMouseLeave={() => {
+              isMouseOnProfileMenuRef.current = false
+              setTimeout(() => {
+                setIsHideProfileMenu(!isMouseOnProfileMenuRef.current)
+              }, 300);
+            }}>
             <ProfileImg src={testProfileImage} alt="" />
+            <ProfileMenu is_hide={String(isHideProfileMenu)}>
+              <TextSubtitle2 style={{ marginTop: 24 }}>프로필</TextSubtitle2>
+              <TextSubtitle2>계정</TextSubtitle2>
+              <TextSubtitle2>후기</TextSubtitle2>
+              <TextSubtitle2>결제</TextSubtitle2>
+              <Divider></Divider>
+              <TextBody2 >도움말</TextBody2>
+              <TextBody2 style={{ marginBottom: 24 }}>로그아웃</TextBody2>
+            </ProfileMenu>
+          </Flex>
+
+
+          <LinkNoDeco to={'mentee/mypage/profile'}>
           </LinkNoDeco>
         </RightTopGnb>}
 
