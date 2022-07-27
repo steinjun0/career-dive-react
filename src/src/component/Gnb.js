@@ -121,6 +121,10 @@ const ProfileMenu = styled(VerticalFlex)`
   overflow: hidden;
 `;
 
+const onClickLogout = () => {
+  localStorage.removeItem('access_token')
+  window.location.reload(false);
+}
 
 function Gnb() {
   const location = useLocation().pathname;
@@ -180,8 +184,6 @@ function Gnb() {
         }
 
         {isLogin && <RightTopGnb>
-          <div>{String(isMouseOnProfileMenuRef.current)}</div>
-
           <CustomButton width={'83px'} style={{ marginRight: 24 }} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
           <NotificationsNoneIcon style={{ marginRight: 14 }} />
           <Flex
@@ -197,19 +199,27 @@ function Gnb() {
             }}>
             <ProfileImg src={testProfileImage} alt="" />
             <ProfileMenu is_hide={String(isHideProfileMenu)}>
-              <TextSubtitle2 style={{ marginTop: 24 }}>프로필</TextSubtitle2>
-              <TextSubtitle2>계정</TextSubtitle2>
-              <TextSubtitle2>후기</TextSubtitle2>
-              <TextSubtitle2>결제</TextSubtitle2>
+              <LinkNoDeco to={'mentee/mypage/profile'}>
+                <TextSubtitle2 style={{ marginTop: 24 }}>프로필</TextSubtitle2>
+              </LinkNoDeco>
+
+              <LinkNoDeco to={'mentee/mypage/account'}>
+                <TextSubtitle2>계정</TextSubtitle2>
+              </LinkNoDeco>
+              <LinkNoDeco to={'mentee/mypage/review'}>
+                <TextSubtitle2>후기</TextSubtitle2>
+              </LinkNoDeco>
+              <LinkNoDeco to={'mentee/mypage/payment'}>
+                <TextSubtitle2>결제</TextSubtitle2>
+              </LinkNoDeco>
               <Divider></Divider>
               <TextBody2 >도움말</TextBody2>
-              <TextBody2 style={{ marginBottom: 24 }}>로그아웃</TextBody2>
+              <TextBody2 style={{ marginBottom: 24, cursor: 'pointer' }}
+                onClick={onClickLogout}>로그아웃</TextBody2>
             </ProfileMenu>
           </Flex>
 
 
-          <LinkNoDeco to={'mentee/mypage/profile'}>
-          </LinkNoDeco>
         </RightTopGnb>}
 
 
