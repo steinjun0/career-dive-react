@@ -1,13 +1,15 @@
 import { styled } from "@mui/material";
-import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue } from 'util/styledComponent';
+import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex } from 'util/styledComponent';
 
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import logo from '../assets/img/logo/careerDiveLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
+import { useEffect, useState } from "react";
+import { CustomButton } from "util/Custom/CustomButton";
 
 
 const GnbFullWidthWrapper = styled("nav")`
@@ -66,9 +68,9 @@ const LeftTopGnb = styled(RowAlignCenterFlex)`
 const RightTopGnb = styled(RowAlignCenterFlex)`
     display:flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: end;
     height: 41px;
-    width: 251px;
+    width: 193px;
     margin-left: auto;
     padding-left: 16px;
     max-width: 1194px;
@@ -107,9 +109,22 @@ const GnbLi = styled('li')`
 
 function Gnb() {
   const location = useLocation().pathname;
+  const navigate = useNavigate();
   const isPresentUrl = (url) => {
     return url === location
   }
+  const [isLogin, setIsLogin] = useState(false)
+
+  useEffect(() => {
+    const access_token = localStorage.getItem('access_token')
+    if (access_token !== null) {
+      // TODO: token확인 후 로그인 여부 확인.
+      if (true) {
+        setIsLogin(true)
+      }
+    }
+  }, [])
+
 
   return (
     <GnbFullWidthWrapper>
@@ -121,7 +136,7 @@ function Gnb() {
           </LinkNoDeco>
         </LeftTopGnb>
 
-        <CenterGnb>
+        {isLogin && <CenterGnb>
           <CenterMenu>
             <LinkNoDeco to={`/mentee/schedule`}>
               <GnbLi present_link={isPresentUrl(`/mentee/schedule`).toString()}>내 상담</GnbLi>
@@ -133,16 +148,24 @@ function Gnb() {
               <GnbLi>상담 후기</GnbLi>
             </LinkNoDeco>
           </CenterMenu>
-        </CenterGnb>
+        </CenterGnb>}
 
-        <RightTopGnb>
-          <BlueSpan>멘토 되기</BlueSpan>
-          <NotificationsNoneIcon />
-          <MenuIcon />
+        {!isLogin &&
+          <RightTopGnb>
+            <LinkNoDeco to={'/login'}>
+              <CustomButton width={'67px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
+            </LinkNoDeco>
+          </RightTopGnb>
+        }
+
+        {isLogin && <RightTopGnb>
+          <CustomButton width={'83px'} style={{ marginRight: 24 }} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
+          <NotificationsNoneIcon style={{ marginRight: 14 }} />
           <LinkNoDeco to={'mentee/mypage/profile'}>
             <ProfileImg src={testProfileImage} alt="" />
           </LinkNoDeco>
-        </RightTopGnb>
+        </RightTopGnb>}
+
 
       </GnbWrapper>
     </GnbFullWidthWrapper>
