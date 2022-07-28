@@ -103,7 +103,6 @@ function Login() {
                                 </TextHeading6>
                                 <TextFieldWrapper>
                                     <CustomTextField
-                                        height={'26px'}
                                         style={{ marginBottom: 24 }}
                                         onChange={(event) => { setEmail(event.target.value) }}
                                         onKeyPress={(event) => {
