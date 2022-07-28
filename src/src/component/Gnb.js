@@ -124,7 +124,8 @@ const ProfileMenu = styled(VerticalFlex)`
 
 const onClickLogout = () => {
   localStorage.removeItem('access_token')
-  window.location.reload(false);
+  window.location.href = '/';
+  // navigate('/')
 }
 
 function Gnb() {
