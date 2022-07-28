@@ -22,6 +22,7 @@ import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
 import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
+import { useNavigate } from 'react-router-dom';
 
 const LoginWrapper = styled(VerticalFlex)`
   width: 100%;
@@ -60,6 +61,7 @@ const SignUpText = styled('span')`
 `
 
 function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isAutoLogin, setIsAutoLogin] = useState(false);
@@ -71,6 +73,7 @@ function Login() {
                 window.localStorage.setItem('user_id', loginResponse.data.user_id)
                 window.localStorage.setItem('access_token', loginResponse.data.access_token)
                 window.localStorage.setItem('refresh_token', loginResponse.data.refresh_token)
+                navigate('/')
             } else {
                 alert(loginResponse.error.response.data.error) // 이렇게 복잡해야하는가?
             }
