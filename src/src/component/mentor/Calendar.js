@@ -321,11 +321,8 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
 
   const prevMonth = usePrevious(month);
   useEffect(() => {
-    if (prevMonth === '0월') {
-      setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
-    }
-    else if (month.length !== 0) {
-      setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
+    setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
+    if (prevMonth !== '0월' && month.length !== 0) {
       setSelectedDate(0)
     }
   }, [month])
@@ -369,6 +366,8 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
         if ('consultingDate' in reservation) {
           setMonth(reservation['consultingDate'].month + '월')
           setSelectedDate(reservation['consultingDate'].date)
+        } else {
+          setMonth((new Date().getMonth() + 1) + '월')
         }
         if ('consultingTime' in reservation) {
           setConsultingTime(reservation['consultingTime'])
@@ -379,7 +378,11 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
         if ('consultingStartTime' in reservation) {
           setConsultingStartTime(reservation['consultingStartTime'])
         }
+      } else {
+        setMonth((new Date().getMonth() + 1) + '월')
       }
+    } else {
+      setMonth((new Date().getMonth() + 1) + '월')
     }
 
   }, [])
