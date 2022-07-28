@@ -89,7 +89,8 @@ export const FullWidthWrapper = styled(VerticalFlex)`
 `;
 
 export const FullHeightFullWidthWrapper = styled(FullWidthWrapper)`
-  height: calc(100vh - 80px - 214px); // 100vh - header - footer
+  min-height: calc(100vh - 80px - 214px); // 100vh - header - footer
+  justify-content: center;
 `;
 
 export const CenterWidthWrapper = styled(Flex)`
