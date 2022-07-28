@@ -10,6 +10,8 @@ import logo from '../assets/img/logo/careerDiveLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
+import { useReactPath } from "util/util";
+import API from "API";
 
 
 const GnbFullWidthWrapper = styled("nav")`
@@ -106,8 +108,8 @@ const GnbLi = styled('li')`
 
 const ProfileMenu = styled(VerticalFlex)`
   transition: height 0.3s ease;
-  top: 80px;
-  right: 30px;
+  top: 54px;
+  right: 0;
   height: ${props => props.is_hide === 'true' ? '0px' : '289px'};
   position: absolute;
   width: 180px;
@@ -122,8 +124,9 @@ const ProfileMenu = styled(VerticalFlex)`
 `;
 
 const onClickLogout = () => {
-  localStorage.removeItem('access_token')
-  window.location.reload(false);
+  localStorage.clear();
+  window.location.href = '/';
+  // navigate('/')
 }
 
 function Gnb() {
@@ -137,16 +140,40 @@ function Gnb() {
   const isMouseOnProfileMenuRef = useRef(false);
 
 
+  useEffect(async () => {
+    const AccessToken = localStorage.getItem('AccessToken')
 
-  useEffect(() => {
-    const access_token = localStorage.getItem('access_token')
-    if (access_token !== null) {
+    if (AccessToken !== null) {
       // TODO: token확인 후 로그인 여부 확인.
-      if (true) {
+      const validResponse = await API.postAccountValid(AccessToken);
+      if (validResponse.status === 200) {
         setIsLogin(true)
+        return
       }
     }
-  }, [])
+    const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
+    console.log('isAutoLogin', isAutoLogin)
+    if (isAutoLogin === true) {
+      const RefreshToken = localStorage.getItem('RefreshToken')
+      if (RefreshToken !== null) {
+        const refreshResponse = await API.postAccountRenew(RefreshToken);
+        if (refreshResponse.status === 200) {
+          const newAccessToken = refreshResponse.data
+          localStorage.setItem('AccessToken', newAccessToken)
+          setIsLogin(true)
+          return
+        }
+      }
+    }
+    setIsLogin(false)
+  }, [location])
+
+  // useEffect(async () => {
+  //   const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
+  //   if (isAutoLoginLocalStorage === true) {
+  //     const loginResponse = await API.postAccountLogin(email, password);
+  //   }
+  // }, [])
 
 
 
@@ -187,6 +214,7 @@ function Gnb() {
           <CustomButton width={'83px'} style={{ marginRight: 24 }} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
           <NotificationsNoneIcon style={{ marginRight: 14 }} />
           <Flex
+            style={{ position: 'relative' }}
             onMouseEnter={() => {
               isMouseOnProfileMenuRef.current = true
               setIsHideProfileMenu(false)

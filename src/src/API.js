@@ -130,8 +130,18 @@ export default {
     return loginRes
   },
 
-  async postLogin(email, password) {
+  async postAccountLogin(email, password) {
     const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/login`, { email, password })
+    return loginRes
+  },
+
+  async postAccountValid(accessToken) {
+    const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/valid`, { 'AccessToken': accessToken })
+    return loginRes
+  },
+
+  async postAccountRenew(refreshToken) {
+    const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/renew`, { 'RefreshToken': refreshToken })
     return loginRes
   },
 

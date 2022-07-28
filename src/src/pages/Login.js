@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import API from '../API.js'
 import { Grid, styled, } from "@mui/material";
@@ -22,6 +22,7 @@ import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
 import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
+import { useNavigate } from 'react-router-dom';
 
 const LoginWrapper = styled(VerticalFlex)`
   width: 100%;
@@ -60,17 +61,28 @@ const SignUpText = styled('span')`
 `
 
 function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isAutoLogin, setIsAutoLogin] = useState(false);
 
+    useEffect(() => {
+        const isAutoLoginLocalStorage = JSON.parse(localStorage.getItem('isAutoLogin'))
+        if (isAutoLoginLocalStorage === true) {
+            setIsAutoLogin(true)
+        }
+    }, [])
+
+
     const onClickLogin = async () => {
         try {
-            const loginResponse = await API.postLogin(email, password);
+            const loginResponse = await API.postAccountLogin(email, password);
             if (loginResponse.status === 200) {
-                window.localStorage.setItem('user_id', loginResponse.data.user_id)
-                window.localStorage.setItem('access_token', loginResponse.data.access_token)
-                window.localStorage.setItem('refresh_token', loginResponse.data.refresh_token)
+                window.localStorage.setItem('UserId', loginResponse.data['UserID'])
+                window.localStorage.setItem('AccessToken', loginResponse.data['AccessToken'])
+                window.localStorage.setItem('RefreshToken', loginResponse.data['RefreshToken'])
+                window.localStorage.setItem('isAutoLogin', isAutoLogin)
+                navigate('/')
             } else {
                 alert(loginResponse.error.response.data.error) // 이렇게 복잡해야하는가?
             }
@@ -93,6 +105,12 @@ function Login() {
                                     <CustomTextField
                                         height={'26px'}
                                         onChange={(event) => { setEmail(event.target.value) }}
+                                        onKeyPress={(event) => {
+                                            if (event.key === 'Enter') {
+                                                onClickLogin()
+                                                event.preventDefault();
+                                            }
+                                        }}
                                         variant="filled"
                                         InputProps={{ disableUnderline: true, }}
                                         fullWidth={true}
@@ -104,6 +122,12 @@ function Login() {
                                     <CustomPasswordTextField
                                         password={password}
                                         setPassword={setPassword}
+                                        onKeyPress={(event) => {
+                                            if (event.key === 'Enter') {
+                                                onClickLogin()
+                                                event.preventDefault();
+                                            }
+                                        }}
                                     />
                                 </TextFieldWrapper>
                                 <EmptyHeight height={'8px'} />
