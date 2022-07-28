@@ -29,12 +29,6 @@ const CardsWrapper = styled(Flex)`
 
 
 function MentoringReservation() {
-  const [isPremium, setIsPremium] = useState(false)
-  const params = useParams()
-  useEffect(() => {
-    setIsPremium(JSON.parse(localStorage.getItem('reservations'))[params.id]['isPremium'])
-  }, [])
-
   return (
     <div>
       <FullWidthWrapper>
@@ -47,10 +41,11 @@ function MentoringReservation() {
           <CenterWidthWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                {
+                {/* {
                   isPremium ? <RequestPremium /> : <RequestBasic />
-                }
-
+                } */}
+                <RequestPremium />
+                <RequestBasic />
               </Grid>
             </Grid>
             <CardsWrapper>

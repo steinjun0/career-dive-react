@@ -44,6 +44,7 @@ const TextFieldWrapper = styled(Flex)`
 
 const SubButtonsWrapper = styled(RowAlignCenterFlex)`
   justify-content: space-between;
+  height: 24px;
 `;
 
 const SubButtons = styled(TextBody2)`
@@ -131,7 +132,6 @@ function Login() {
                                         }}
                                     />
                                 </TextFieldWrapper>
-                                <EmptyHeight height={'24px'} />
                                 <SubButtonsWrapper>
                                     <RowAlignCenterFlex>
                                         <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
