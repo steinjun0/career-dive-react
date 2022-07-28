@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import API from '../API.js'
 import { Grid, styled, } from "@mui/material";
@@ -66,9 +66,17 @@ function Login() {
     const [password, setPassword] = useState('');
     const [isAutoLogin, setIsAutoLogin] = useState(false);
 
+    useEffect(() => {
+        const isAutoLoginLocalStorage = JSON.parse(localStorage.getItem('isAutoLogin'))
+        if (isAutoLoginLocalStorage === true) {
+            setIsAutoLogin(true)
+        }
+    }, [])
+
+
     const onClickLogin = async () => {
         try {
-            const loginResponse = await API.postLogin(email, password);
+            const loginResponse = await API.postAccountLogin(email, password);
             if (loginResponse.status === 200) {
                 window.localStorage.setItem('UserId', loginResponse.data['UserID'])
                 window.localStorage.setItem('AccessToken', loginResponse.data['AccessToken'])

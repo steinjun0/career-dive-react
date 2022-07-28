@@ -11,6 +11,7 @@ import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useReactPath } from "util/util";
+import API from "API";
 
 
 const GnbFullWidthWrapper = styled("nav")`
@@ -123,7 +124,7 @@ const ProfileMenu = styled(VerticalFlex)`
 `;
 
 const onClickLogout = () => {
-  localStorage.removeItem('AccessToken')
+  localStorage.clear();
   window.location.href = '/';
   // navigate('/')
 }
@@ -139,15 +140,40 @@ function Gnb() {
   const isMouseOnProfileMenuRef = useRef(false);
 
 
-  useEffect(() => {
+  useEffect(async () => {
     const AccessToken = localStorage.getItem('AccessToken')
+
     if (AccessToken !== null) {
       // TODO: token확인 후 로그인 여부 확인.
-      if (true) {
+      const validResponse = await API.postAccountValid(AccessToken);
+      if (validResponse.status === 200) {
         setIsLogin(true)
+        return
       }
     }
+    const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
+    console.log('isAutoLogin', isAutoLogin)
+    if (isAutoLogin === true) {
+      const RefreshToken = localStorage.getItem('RefreshToken')
+      if (RefreshToken !== null) {
+        const refreshResponse = await API.postAccountRenew(RefreshToken);
+        if (refreshResponse.status === 200) {
+          const newAccessToken = refreshResponse.data
+          localStorage.setItem('AccessToken', newAccessToken)
+          setIsLogin(true)
+          return
+        }
+      }
+    }
+    setIsLogin(false)
   }, [location])
+
+  // useEffect(async () => {
+  //   const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
+  //   if (isAutoLoginLocalStorage === true) {
+  //     const loginResponse = await API.postAccountLogin(email, password);
+  //   }
+  // }, [])
 
 
 
