@@ -44,6 +44,7 @@ const TextFieldWrapper = styled(Flex)`
 
 const SubButtonsWrapper = styled(RowAlignCenterFlex)`
   justify-content: space-between;
+  height: 24px;
 `;
 
 const SubButtons = styled(TextBody2)`
@@ -103,7 +104,6 @@ function Login() {
                                 </TextHeading6>
                                 <TextFieldWrapper>
                                     <CustomTextField
-                                        height={'26px'}
                                         style={{ marginBottom: 24 }}
                                         onChange={(event) => { setEmail(event.target.value) }}
                                         onKeyPress={(event) => {
@@ -132,7 +132,6 @@ function Login() {
                                         }}
                                     />
                                 </TextFieldWrapper>
-                                <EmptyHeight height={'24px'} />
                                 <SubButtonsWrapper>
                                     <RowAlignCenterFlex>
                                         <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />

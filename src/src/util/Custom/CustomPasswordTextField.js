@@ -5,11 +5,12 @@ import { colorCareerDiveBlue, colorTextDisabled } from "util/styledComponent";
 import { CustomTextField } from "./CustomTextField";
 
 
-export function CustomPasswordTextField({ setPassword, onKeyPress }) {
+export function CustomPasswordTextField({ setPassword, onKeyPress, style }) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <CustomTextField
+      style={style}
       onChange={(event) => { setPassword(event.target.value) }}
       onKeyPress={onKeyPress}
       variant="filled"
