@@ -123,7 +123,7 @@ const ProfileMenu = styled(VerticalFlex)`
 `;
 
 const onClickLogout = () => {
-  localStorage.removeItem('access_token')
+  localStorage.removeItem('AccessToken')
   window.location.href = '/';
   // navigate('/')
 }
@@ -140,8 +140,8 @@ function Gnb() {
 
 
   useEffect(() => {
-    const access_token = localStorage.getItem('access_token')
-    if (access_token !== null) {
+    const AccessToken = localStorage.getItem('AccessToken')
+    if (AccessToken !== null) {
       // TODO: token확인 후 로그인 여부 확인.
       if (true) {
         setIsLogin(true)

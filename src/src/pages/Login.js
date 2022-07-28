@@ -70,9 +70,10 @@ function Login() {
         try {
             const loginResponse = await API.postLogin(email, password);
             if (loginResponse.status === 200) {
-                window.localStorage.setItem('user_id', loginResponse.data['UserID'])
-                window.localStorage.setItem('access_token', loginResponse.data['AccessToken'])
-                window.localStorage.setItem('refresh_token', loginResponse.data['RefreshToken'])
+                window.localStorage.setItem('UserId', loginResponse.data['UserID'])
+                window.localStorage.setItem('AccessToken', loginResponse.data['AccessToken'])
+                window.localStorage.setItem('RefreshToken', loginResponse.data['RefreshToken'])
+                window.localStorage.setItem('isAutoLogin', isAutoLogin)
                 navigate('/')
             } else {
                 alert(loginResponse.error.response.data.error) // 이렇게 복잡해야하는가?
