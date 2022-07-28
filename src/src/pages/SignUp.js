@@ -17,7 +17,9 @@ import {
     EmptyHeight,
     ColumnAlignCenterFlex,
     TextCaption,
-    colorCareerDiveBlue
+    colorCareerDiveBlue,
+    colorBackgroundGrayMedium,
+    FullWidthWrapper
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
@@ -31,8 +33,8 @@ const LoginWrapper = styled(VerticalFlex)`
 
 const TextFieldWrapper = styled(Flex)`
   width: 100%;
-  margin-top: 32px;
-  min-height: 145px;
+  margin-top: 36px;
+  margin-bottom: 24px;
   flex-direction: column;
   justify-content: space-between;
   input{
@@ -43,6 +45,7 @@ const TextFieldWrapper = styled(Flex)`
 
 const SubButtonsWrapper = styled(RowAlignCenterFlex)`
   justify-content: space-between;
+  margin-bottom: 12px;
 `;
 
 const SubButtons = styled(TextBody2)`
@@ -57,7 +60,7 @@ const ButtonWrapper = styled(VerticalFlex)`
 const TermsButton = styled(Flex)`
   justify-content: center;
   align-items: center;
-  border: 1px solid ${colorTextLight};
+  border: 1px solid ${colorBackgroundGrayMedium};
   border-radius: 2px;
   width: 39px;
   height: 20px;
@@ -146,12 +149,14 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
     }, [isCheckUsingTerm, isCheckPersonalData, isCheckMarketing])
     return (
         <VerticalFlex>
-            <TextHeading6>
-                회원가입
-            </TextHeading6>
+            <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
+                <TextHeading6>
+                    회원가입
+                </TextHeading6>
+                <TextCaption color={colorTextLight}>1/3</TextCaption>
+            </RowAlignCenterFlex>
             <TextFieldWrapper>
                 <CustomTextField
-                    height={'26px'}
                     onChange={(event) => { setEmail(event.target.value) }}
                     variant="filled"
                     InputProps={{ disableUnderline: true, }}
@@ -161,7 +166,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                     hiddenLabel
                     placeholder="이메일"
                 />
-                <EmptyHeight height={'30px'} />
+                <EmptyHeight height={'24px'} />
                 <TextCaption>
                     영문, 숫자, 특수문자 포함 8자 이상
                 </TextCaption>
@@ -172,11 +177,11 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                 />
             </TextFieldWrapper>
 
-            <EmptyHeight height={'30px'} />
             <SubButtonsWrapper>
                 <RowAlignCenterFlex>
                     <CustomCheckbox isChecked={isCheckUsingTerm} setIsChecked={setIsCheckUsingTerm} />
                     <SubButtons
+                        style={{ marginLeft: 4 }}
                         onClick={(e) => { setIsCheckUsingTerm(!isCheckUsingTerm) }}>
                         이용 약관 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
                     </SubButtons>
@@ -190,6 +195,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                 <RowAlignCenterFlex>
                     <CustomCheckbox isChecked={isCheckPersonalData} setIsChecked={setIsCheckPersonalData} />
                     <SubButtons
+                        style={{ marginLeft: 4 }}
                         onClick={(e) => { setIsCheckPersonalData(!isCheckPersonalData) }}>
                         개인 정보 활용 동의 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
                     </SubButtons>
@@ -203,6 +209,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                 <RowAlignCenterFlex>
                     <CustomCheckbox isChecked={isCheckMarketing} setIsChecked={setIsCheckMarketing} />
                     <SubButtons
+                        style={{ marginLeft: 4 }}
                         onClick={(e) => { setIsCheckMarketing(!isCheckMarketing) }}>
                         마케팅 수신 동의 <SpanWeak>(선택)</SpanWeak>
                     </SubButtons>
@@ -212,21 +219,20 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                     약관
                 </TermsButton>
             </SubButtonsWrapper>
-            <Divider style={{ margin: '8px 0 8px 0' }}></Divider>
+            <Divider style={{ marginBottom: '12px' }}></Divider>
             <SubButtonsWrapper>
                 <RowAlignCenterFlex>
-                    <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} />
-                    <SubButtons onClick={(e) => { checkAll() }}>전체 동의</SubButtons>
+                    <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} onClick={checkAll} />
+                    <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { checkAll() }}>전체 동의</SubButtons>
                 </RowAlignCenterFlex>
             </SubButtonsWrapper>
-            <EmptyHeight height={'16px'} />
+            <EmptyHeight height={'12px'} />
             <ButtonWrapper>
                 <CustomButton
                     onClick={() => {
                         updateSignUpData(signUpData, setSignUpData);
                         setSignUpStep(signUpStep + 1)
-                    }}
-                    height="50px">
+                    }}>
                     다음
                 </CustomButton>
             </ButtonWrapper>
@@ -242,9 +248,13 @@ function SignUp2ndPhone({ signUpStep, setSignUpStep, signUpData, setSignUpData }
     }
     return (
         <VerticalFlex>
-            <TextHeading6>
-                회원가입
-            </TextHeading6>
+            <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
+                <TextHeading6>
+                    회원가입
+                </TextHeading6>
+                <TextCaption color={colorTextLight}>2/3</TextCaption>
+            </RowAlignCenterFlex>
+
 
             <EmptyHeight height={'40px'} />
             <ButtonWrapper>
@@ -255,7 +265,9 @@ function SignUp2ndPhone({ signUpStep, setSignUpStep, signUpData, setSignUpData }
                 </CustomButton>
             </ButtonWrapper>
             <EmptyHeight height='30px' />
-            <TextBody2>인증 시 입력한 전화번호는 다른 사용자들에게 공유되지 않습니다.</TextBody2>
+            <FullWidthWrapper>
+                <TextBody2>입력하신 전화번호는 본인 인증 용도로만 사용됩니다.</TextBody2>
+            </FullWidthWrapper>
 
         </VerticalFlex>
     );
@@ -290,19 +302,17 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
 
     return (
         <VerticalFlex>
-            <TextHeading6>
-                닉네임
-            </TextHeading6>
+            <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
+                <TextHeading6>
+                    닉네임 설정
+                </TextHeading6>
+                <TextCaption color={colorTextLight}>3/3</TextCaption>
+            </RowAlignCenterFlex>
 
             <EmptyHeight height={'40px'} />
-            <TextBody2>닉네임을 자유롭게 설정해보세요.</TextBody2>
-            <EmptyHeight height={'30px'} />
-            <TextCaption>
-                최대 10자
-            </TextCaption>
+            <TextCaption>닉네임을 자유롭게 설정해보세요.</TextCaption>
             <EmptyHeight height={'12px'} />
             <CustomTextField
-                height={'26px'}
                 onChange={(event) => { setNickName(event.target.value) }}
                 variant="filled"
                 InputProps={{ disableUnderline: true, }}
@@ -310,9 +320,9 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
                 margin="dense"
                 size="small"
                 hiddenLabel
-                placeholder="닉네임(선택)"
+                placeholder="최대 10자"
             />
-            <EmptyHeight height={'30px'} />
+            <EmptyHeight height={'24px'} />
             <ButtonWrapper>
                 <CustomButton
                     onClick={() => {
