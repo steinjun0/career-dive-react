@@ -106,8 +106,8 @@ const GnbLi = styled('li')`
 
 const ProfileMenu = styled(VerticalFlex)`
   transition: height 0.3s ease;
-  top: 80px;
-  right: 30px;
+  top: 54px;
+  right: 0;
   height: ${props => props.is_hide === 'true' ? '0px' : '289px'};
   position: absolute;
   width: 180px;
@@ -187,6 +187,7 @@ function Gnb() {
           <CustomButton width={'83px'} style={{ marginRight: 24 }} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
           <NotificationsNoneIcon style={{ marginRight: 14 }} />
           <Flex
+            style={{ position: 'relative' }}
             onMouseEnter={() => {
               isMouseOnProfileMenuRef.current = true
               setIsHideProfileMenu(false)
