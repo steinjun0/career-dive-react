@@ -31,6 +31,7 @@ const ScheduleCardWrapper = styled(Flex)`
   border: 1px solid ${colorBlueGray};
   border-radius: 8px;
   height: 192px;
+  overflow: hidden;
 `;
 
 const CategoryImg = styled('img')`
