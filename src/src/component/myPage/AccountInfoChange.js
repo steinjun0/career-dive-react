@@ -18,7 +18,7 @@ import { useState } from "react";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
-  justify-content:center;
+  justify-content:start;
 `;
 
 export const TextFieldWrapper = styled(Flex)`
