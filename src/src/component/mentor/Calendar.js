@@ -201,8 +201,8 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
   const [availableAMTime, setAvailableAMTime] = useState([]);
   const [availablePMTime, setAvailablePMTime] = useState([]);
 
-  const [amLines, setAmLines] = useState(1)
-  const [pmLines, setPmLines] = useState(1)
+  const [amLines, setAmLines] = useState(0)
+  const [pmLines, setPmLines] = useState(0)
 
   const [dates, setDates] = useState(getDatesOfMonth(year, month))
   const [consultingTime, setConsultingTime] = useState(-1);
@@ -220,15 +220,18 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
     if (consultingStartTime !== 0 && !isHidingButton) {
       buttonHeight = 80
     }
+
     if (amLines === 0 && pmLines === 0) {
       return 0
     } else if (amLines !== 0 && pmLines === 0) {
+
       return 16 + 24 + (44 + 16) * amLines + buttonHeight
     } else if (amLines === 0 && pmLines !== 0) {
       return 16 + 24 + (44 + 16) * pmLines + buttonHeight
-    } else {
+    } else if (amLines !== 0 && pmLines !== 0) {
       return 16 + 24 + (44 + 16) * amLines + 16 + 24 + (44 + 16) * pmLines + buttonHeight
     }
+    return buttonHeight
   }
 
   // const availableTime = [['09:00', '09:40'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']]
@@ -288,7 +291,6 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
       cardWidth = (window.innerWidth / 2) - 48 - 60
       if (cardWidth < 534) cardWidth = 534
     }
-
     if (tempAvailableAMTime.length === 0) {
       setAmLines(0)
     }
