@@ -1,7 +1,7 @@
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { VisibilityOutlined, VisibilityOffOutlined } from "@material-ui/icons";
 import { InputAdornment, IconButton } from "@mui/material";
 import { useState } from "react";
-import { colorCareerDiveBlue } from "util/styledComponent";
+import { colorCareerDiveBlue, colorTextDisabled } from "util/styledComponent";
 import { CustomTextField } from "./CustomTextField";
 
 
@@ -23,7 +23,7 @@ export function CustomPasswordTextField({ setPassword, onKeyPress }) {
               aria-label="toggle password visibility"
               onClick={() => { setShowPassword(!showPassword) }}
             >
-              {showPassword ? <VisibilityOff style={{ color: colorCareerDiveBlue }} /> : <Visibility style={{ color: colorCareerDiveBlue }} />}
+              {showPassword ? <VisibilityOutlined fontSize="small" style={{ color: colorCareerDiveBlue }} /> : <VisibilityOffOutlined fontSize="small" style={{ color: colorTextDisabled }} />}
             </IconButton>
           </InputAdornment>
         )

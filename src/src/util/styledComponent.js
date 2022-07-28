@@ -9,6 +9,7 @@ export const colorBackgroundCareerDivePink = "#E25D7D1a";
 export const colorBlueGray = '#CFD6E0';
 export const colorTextLight = "#5F6368";
 export const colorTextBody = "#191919";
+export const colorTextDisabled = "#D9D9D9";
 export const colorBackgroundGrayLight = "#F8F8F8";
 export const colorBackgroundGrayDark = "#E6E6E6";
 

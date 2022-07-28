@@ -17,6 +17,8 @@ import {
     EmptyHeight,
     ColumnAlignCenterFlex,
     LinkNoDeco,
+    TextSubtitle2,
+    TextSubtitle1,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
@@ -30,10 +32,10 @@ const LoginWrapper = styled(VerticalFlex)`
 
 const TextFieldWrapper = styled(Flex)`
   width: 100%;
-  margin-top: 32px;
+  margin-top: 36px;
   min-height: 118px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: start;
   input{
     color: black;
     background-color: ${colorBackgroundGrayLight};
@@ -53,10 +55,8 @@ const ButtonWrapper = styled(VerticalFlex)`
 //   margin-top: 20px;
 `
 
-const SignUpText = styled('span')`
+const SignUpText = styled(TextSubtitle2)`
   text-decoration: underline;
-  font-size: 12px;
-  font-weight: 700;
   margin-top: 6px;
 `
 
@@ -104,6 +104,7 @@ function Login() {
                                 <TextFieldWrapper>
                                     <CustomTextField
                                         height={'26px'}
+                                        style={{ marginBottom: 24 }}
                                         onChange={(event) => { setEmail(event.target.value) }}
                                         onKeyPress={(event) => {
                                             if (event.key === 'Enter') {
@@ -120,6 +121,7 @@ function Login() {
                                         placeholder="이메일"
                                     />
                                     <CustomPasswordTextField
+                                        style={{ marginBottom: 24 }}
                                         password={password}
                                         setPassword={setPassword}
                                         onKeyPress={(event) => {
@@ -130,11 +132,11 @@ function Login() {
                                         }}
                                     />
                                 </TextFieldWrapper>
-                                <EmptyHeight height={'8px'} />
+                                <EmptyHeight height={'24px'} />
                                 <SubButtonsWrapper>
                                     <RowAlignCenterFlex>
                                         <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
-                                        <SubButtons onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
+                                        <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
                                     </RowAlignCenterFlex>
 
                                     <Flex>
@@ -143,15 +145,14 @@ function Login() {
                                         <SubButtons>비밀번호 찾기</SubButtons>
                                     </Flex>
                                 </SubButtonsWrapper>
-                                <EmptyHeight height={'8px'} />
+                                <EmptyHeight height={'24px'} />
                                 <ButtonWrapper>
                                     <CustomButton
-                                        onClick={onClickLogin}
-                                        height="50px">
+                                        onClick={onClickLogin}>
                                         로그인
                                     </CustomButton>
                                 </ButtonWrapper>
-                                <EmptyHeight height={'29px'} />
+                                <EmptyHeight height={'24px'} />
                                 <ColumnAlignCenterFlex>
                                     <TextBody2>아직 회원이 아니신가요?</TextBody2>
                                     <LinkNoDeco to='/signup'>
