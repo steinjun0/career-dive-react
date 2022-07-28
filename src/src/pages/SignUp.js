@@ -18,7 +18,8 @@ import {
     ColumnAlignCenterFlex,
     TextCaption,
     colorCareerDiveBlue,
-    colorBackgroundGrayMedium
+    colorBackgroundGrayMedium,
+    FullWidthWrapper
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
@@ -148,9 +149,12 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
     }, [isCheckUsingTerm, isCheckPersonalData, isCheckMarketing])
     return (
         <VerticalFlex>
-            <TextHeading6>
-                회원가입
-            </TextHeading6>
+            <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
+                <TextHeading6>
+                    회원가입
+                </TextHeading6>
+                <TextCaption color={colorTextLight}>1/3</TextCaption>
+            </RowAlignCenterFlex>
             <TextFieldWrapper>
                 <CustomTextField
                     onChange={(event) => { setEmail(event.target.value) }}
@@ -228,8 +232,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                     onClick={() => {
                         updateSignUpData(signUpData, setSignUpData);
                         setSignUpStep(signUpStep + 1)
-                    }}
-                    height="50px">
+                    }}>
                     다음
                 </CustomButton>
             </ButtonWrapper>
@@ -245,9 +248,13 @@ function SignUp2ndPhone({ signUpStep, setSignUpStep, signUpData, setSignUpData }
     }
     return (
         <VerticalFlex>
-            <TextHeading6>
-                회원가입
-            </TextHeading6>
+            <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
+                <TextHeading6>
+                    회원가입
+                </TextHeading6>
+                <TextCaption color={colorTextLight}>2/3</TextCaption>
+            </RowAlignCenterFlex>
+
 
             <EmptyHeight height={'40px'} />
             <ButtonWrapper>
@@ -258,7 +265,9 @@ function SignUp2ndPhone({ signUpStep, setSignUpStep, signUpData, setSignUpData }
                 </CustomButton>
             </ButtonWrapper>
             <EmptyHeight height='30px' />
-            <TextBody2>인증 시 입력한 전화번호는 다른 사용자들에게 공유되지 않습니다.</TextBody2>
+            <FullWidthWrapper>
+                <TextBody2>입력하신 전화번호는 본인 인증 용도로만 사용됩니다.</TextBody2>
+            </FullWidthWrapper>
 
         </VerticalFlex>
     );
@@ -293,19 +302,17 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
 
     return (
         <VerticalFlex>
-            <TextHeading6>
-                닉네임
-            </TextHeading6>
+            <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
+                <TextHeading6>
+                    닉네임 설정
+                </TextHeading6>
+                <TextCaption color={colorTextLight}>3/3</TextCaption>
+            </RowAlignCenterFlex>
 
             <EmptyHeight height={'40px'} />
-            <TextBody2>닉네임을 자유롭게 설정해보세요.</TextBody2>
-            <EmptyHeight height={'30px'} />
-            <TextCaption>
-                최대 10자
-            </TextCaption>
+            <TextCaption>닉네임을 자유롭게 설정해보세요.</TextCaption>
             <EmptyHeight height={'12px'} />
             <CustomTextField
-                height={'26px'}
                 onChange={(event) => { setNickName(event.target.value) }}
                 variant="filled"
                 InputProps={{ disableUnderline: true, }}
@@ -313,9 +320,9 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
                 margin="dense"
                 size="small"
                 hiddenLabel
-                placeholder="닉네임(선택)"
+                placeholder="최대 10자"
             />
-            <EmptyHeight height={'30px'} />
+            <EmptyHeight height={'24px'} />
             <ButtonWrapper>
                 <CustomButton
                     onClick={() => {
