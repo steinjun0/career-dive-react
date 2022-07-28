@@ -10,6 +10,7 @@ import logo from '../assets/img/logo/careerDiveLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
+import { useReactPath } from "util/util";
 
 
 const GnbFullWidthWrapper = styled("nav")`
@@ -137,7 +138,6 @@ function Gnb() {
   const isMouseOnProfileMenuRef = useRef(false);
 
 
-
   useEffect(() => {
     const access_token = localStorage.getItem('access_token')
     if (access_token !== null) {
@@ -146,7 +146,7 @@ function Gnb() {
         setIsLogin(true)
       }
     }
-  }, [])
+  }, [location])
 
 
 
