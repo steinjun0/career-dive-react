@@ -11,7 +11,8 @@ export const colorTextLight = "#5F6368";
 export const colorTextBody = "#191919";
 export const colorTextDisabled = "#D9D9D9";
 export const colorBackgroundGrayLight = "#F8F8F8";
-export const colorBackgroundGrayDark = "#E6E6E6";
+export const colorBackgroundGrayMedium = "#E6E6E6";
+export const colorBackgroundGrayDark = "#7C7C7C";
 
 // text
 export const TextBody1 = styled(`span`)`
@@ -58,7 +59,7 @@ export const TextButton = styled(`span`)`
 
 export const TextCaption = styled(`span`)`
   font-size: 12px;
-  color: ${props => props.color};
+  color: ${props => props.color ? props.color : colorTextBody};
 `;
 
 

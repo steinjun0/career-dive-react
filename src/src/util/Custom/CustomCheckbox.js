@@ -4,11 +4,12 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { colorCareerDiveBlue, colorTextDisabled } from "util/styledComponent";
 
 
-export function CustomCheckbox({ isChecked, setIsChecked }) {
+export function CustomCheckbox({ isChecked, setIsChecked, onClick }) {
 
   return (
     <Checkbox
       disableRipple
+      onClick={onClick}
       checked={isChecked}
       onChange={() => { setIsChecked(!isChecked) }}
       style={{ padding: 0 }}

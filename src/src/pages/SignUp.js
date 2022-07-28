@@ -17,7 +17,8 @@ import {
     EmptyHeight,
     ColumnAlignCenterFlex,
     TextCaption,
-    colorCareerDiveBlue
+    colorCareerDiveBlue,
+    colorBackgroundGrayMedium
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
@@ -31,8 +32,8 @@ const LoginWrapper = styled(VerticalFlex)`
 
 const TextFieldWrapper = styled(Flex)`
   width: 100%;
-  margin-top: 32px;
-  min-height: 145px;
+  margin-top: 36px;
+  margin-bottom: 24px;
   flex-direction: column;
   justify-content: space-between;
   input{
@@ -43,6 +44,7 @@ const TextFieldWrapper = styled(Flex)`
 
 const SubButtonsWrapper = styled(RowAlignCenterFlex)`
   justify-content: space-between;
+  margin-bottom: 12px;
 `;
 
 const SubButtons = styled(TextBody2)`
@@ -57,7 +59,7 @@ const ButtonWrapper = styled(VerticalFlex)`
 const TermsButton = styled(Flex)`
   justify-content: center;
   align-items: center;
-  border: 1px solid ${colorTextLight};
+  border: 1px solid ${colorBackgroundGrayMedium};
   border-radius: 2px;
   width: 39px;
   height: 20px;
@@ -151,7 +153,6 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
             </TextHeading6>
             <TextFieldWrapper>
                 <CustomTextField
-                    height={'26px'}
                     onChange={(event) => { setEmail(event.target.value) }}
                     variant="filled"
                     InputProps={{ disableUnderline: true, }}
@@ -161,7 +162,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                     hiddenLabel
                     placeholder="이메일"
                 />
-                <EmptyHeight height={'30px'} />
+                <EmptyHeight height={'24px'} />
                 <TextCaption>
                     영문, 숫자, 특수문자 포함 8자 이상
                 </TextCaption>
@@ -172,11 +173,11 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                 />
             </TextFieldWrapper>
 
-            <EmptyHeight height={'30px'} />
             <SubButtonsWrapper>
                 <RowAlignCenterFlex>
                     <CustomCheckbox isChecked={isCheckUsingTerm} setIsChecked={setIsCheckUsingTerm} />
                     <SubButtons
+                        style={{ marginLeft: 4 }}
                         onClick={(e) => { setIsCheckUsingTerm(!isCheckUsingTerm) }}>
                         이용 약관 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
                     </SubButtons>
@@ -190,6 +191,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                 <RowAlignCenterFlex>
                     <CustomCheckbox isChecked={isCheckPersonalData} setIsChecked={setIsCheckPersonalData} />
                     <SubButtons
+                        style={{ marginLeft: 4 }}
                         onClick={(e) => { setIsCheckPersonalData(!isCheckPersonalData) }}>
                         개인 정보 활용 동의 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
                     </SubButtons>
@@ -203,6 +205,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                 <RowAlignCenterFlex>
                     <CustomCheckbox isChecked={isCheckMarketing} setIsChecked={setIsCheckMarketing} />
                     <SubButtons
+                        style={{ marginLeft: 4 }}
                         onClick={(e) => { setIsCheckMarketing(!isCheckMarketing) }}>
                         마케팅 수신 동의 <SpanWeak>(선택)</SpanWeak>
                     </SubButtons>
@@ -212,14 +215,14 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                     약관
                 </TermsButton>
             </SubButtonsWrapper>
-            <Divider style={{ margin: '8px 0 8px 0' }}></Divider>
+            <Divider style={{ marginBottom: '12px' }}></Divider>
             <SubButtonsWrapper>
                 <RowAlignCenterFlex>
-                    <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} />
-                    <SubButtons onClick={(e) => { checkAll() }}>전체 동의</SubButtons>
+                    <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} onClick={checkAll} />
+                    <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { checkAll() }}>전체 동의</SubButtons>
                 </RowAlignCenterFlex>
             </SubButtonsWrapper>
-            <EmptyHeight height={'16px'} />
+            <EmptyHeight height={'12px'} />
             <ButtonWrapper>
                 <CustomButton
                     onClick={() => {

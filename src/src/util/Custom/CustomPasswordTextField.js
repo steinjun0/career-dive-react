@@ -10,7 +10,6 @@ export function CustomPasswordTextField({ setPassword, onKeyPress }) {
 
   return (
     <CustomTextField
-      height={'26px'}
       onChange={(event) => { setPassword(event.target.value) }}
       onKeyPress={onKeyPress}
       variant="filled"
