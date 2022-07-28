@@ -70,9 +70,9 @@ function Login() {
         try {
             const loginResponse = await API.postLogin(email, password);
             if (loginResponse.status === 200) {
-                window.localStorage.setItem('user_id', loginResponse.data.user_id)
-                window.localStorage.setItem('access_token', loginResponse.data.access_token)
-                window.localStorage.setItem('refresh_token', loginResponse.data.refresh_token)
+                window.localStorage.setItem('user_id', loginResponse.data['UserID'])
+                window.localStorage.setItem('access_token', loginResponse.data['AccessToken'])
+                window.localStorage.setItem('refresh_token', loginResponse.data['RefreshToken'])
                 navigate('/')
             } else {
                 alert(loginResponse.error.response.data.error) // 이렇게 복잡해야하는가?
@@ -96,6 +96,12 @@ function Login() {
                                     <CustomTextField
                                         height={'26px'}
                                         onChange={(event) => { setEmail(event.target.value) }}
+                                        onKeyPress={(event) => {
+                                            if (event.key === 'Enter') {
+                                                onClickLogin()
+                                                event.preventDefault();
+                                            }
+                                        }}
                                         variant="filled"
                                         InputProps={{ disableUnderline: true, }}
                                         fullWidth={true}
@@ -107,6 +113,12 @@ function Login() {
                                     <CustomPasswordTextField
                                         password={password}
                                         setPassword={setPassword}
+                                        onKeyPress={(event) => {
+                                            if (event.key === 'Enter') {
+                                                onClickLogin()
+                                                event.preventDefault();
+                                            }
+                                        }}
                                     />
                                 </TextFieldWrapper>
                                 <EmptyHeight height={'8px'} />
