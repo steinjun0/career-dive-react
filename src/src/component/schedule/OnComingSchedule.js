@@ -8,12 +8,18 @@ import {
   TextBody2,
   TextSubtitle1,
   TextSubtitle2,
+  colorCareerDiveBlue,
+  EmptyWidth,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
 import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
+import { CustomIconButton } from "util/Custom/CustomIconButton";
+import RequestFormIcon from "assets/icon/RequestFormIcon";
+import EditCalendarIcon from "assets/icon/EditCalendarIcon";
+import PhoneIcon from "assets/icon/PhoneIcon";
 
 const ScheduleCardWrapper = styled(Flex)`
   width: 100%;
@@ -21,11 +27,12 @@ const ScheduleCardWrapper = styled(Flex)`
 
 const SchedulesWrapper = styled(VerticalFlex)`
   width: 100%;
+  margin-top: 20px;
 `;
 
 const ScheduleWrapper = styled(RowAlignCenterFlex)`
   width: 100%;
-  margin-bottom: 22px;
+  height: 52px;
 `;
 
 const ScheduleDateAndTime = styled(VerticalFlex)`
@@ -45,7 +52,7 @@ const ProfileImg = styled(CircleImg)`
 
 const Buttons = styled(RowAlignCenterFlex)`
   margin-left: auto;
-  width: 210px;
+  width: auto;
   justify-content: space-between;
 `;
 
@@ -64,7 +71,7 @@ function OnComingShedule() {
 
           {schedules.map((schedule, index) => {
             return (
-              <ScheduleWrapper key={index}>
+              <ScheduleWrapper key={index} style={{ marginBottom: index == schedules.length - 1 ? 8 : 20 }}>
 
                 <ScheduleDateAndTime>
                   <TextBody2>{schedule.date}</TextBody2>
@@ -75,13 +82,39 @@ function OnComingShedule() {
                   <ProfileImg src={testImage}></ProfileImg>
                   <VerticalFlex>
                     <TextSubtitle2>{schedule.name} 멘토</TextSubtitle2>
-                    <TextBody2>{schedule.company}</TextBody2>
+                    {/* <TextBody2>{schedule.company}</TextBody2> */}
                   </VerticalFlex>
                 </ProfileWrapper>
 
                 <Buttons>
-                  <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
-                  <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton>
+                  <CustomIconButton
+                    Icon={RequestFormIcon}
+                    text='요청서'
+                    width='90px'
+                    background_color={colorCareerDiveBlue}
+                    text_color={'#fff'}
+                    onClick={() => { }}
+                  >
+                    {/* TODO: params id 맞춰주기 */}
+                  </CustomIconButton>
+                  <EmptyWidth width='12px'></EmptyWidth>
+
+                  <CustomIconButton
+                    Icon={EditCalendarIcon}
+                    text='예약 변경'
+                    width='105px'
+                    background_color={colorCareerDiveBlue}
+                    text_color={'#fff'}></CustomIconButton>
+                  <EmptyWidth width='12px'></EmptyWidth>
+
+                  <CustomIconButton
+                    Icon={PhoneIcon}
+                    text='상담 입장'
+                    width='105px'
+                    background_color={colorCareerDiveBlue}
+                    text_color={'#fff'}></CustomIconButton>
+                  {/* <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
+                  <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton> */}
                 </Buttons>
 
               </ScheduleWrapper>);
