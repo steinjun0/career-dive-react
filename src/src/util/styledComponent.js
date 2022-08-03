@@ -13,12 +13,17 @@ export const colorTextDisabled = "#D9D9D9";
 export const colorBackgroundGrayLight = "#F8F8F8";
 export const colorBackgroundGrayMedium = "#E6E6E6";
 export const colorBackgroundGrayDark = "#7C7C7C";
+export const colorSuccess = "#B4CE16";
+
 
 // text
 export const TextBody1 = styled(`span`)`
   font-size: 16px;
   line-height: 24px;
   color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
 `;
 
 export const TextBody2 = styled(`p`)`
@@ -27,12 +32,18 @@ export const TextBody2 = styled(`p`)`
   font-weight: 400;
   margin: 0;
   color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
 `;
 
 export const TextSubtitle1 = styled(`span`)`
   font-weight: 700;
   line-height: 24px;
   color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
 `;
 
 export const TextSubtitle2 = styled(`span`)`
@@ -40,6 +51,9 @@ export const TextSubtitle2 = styled(`span`)`
   font-weight: 700;
   line-height: 24px;
   color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
 `;
 
 export const TextHeading6 = styled(`h6`)`
@@ -48,6 +62,9 @@ export const TextHeading6 = styled(`h6`)`
   line-height: 32px;
   margin: 0;
   color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
 `;
 
 export const TextButton = styled(`span`)`
@@ -55,12 +72,20 @@ export const TextButton = styled(`span`)`
   line-height: 20px;
   font-weight: 500;
   color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
 `;
 
 export const TextCaption = styled(`span`)`
   font-size: 12px;
   color: ${props => props.color ? props.color : colorTextBody};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
 `;
+
+
 
 
 // container
@@ -142,6 +167,12 @@ export const WidthFixerWrapper = styled(Flex)`
   
   max-width: ${props => props.width};
   max-height: ${props => props.height};
+`
+
+export const TextEllipsisContainer = styled(Flex)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `
 
 

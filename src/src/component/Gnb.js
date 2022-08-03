@@ -132,6 +132,9 @@ const onClickLogout = () => {
 function Gnb() {
   const location = useLocation().pathname;
   const navigate = useNavigate();
+  const isInMentor = () => {
+    return location.slice(0, 9).includes('mentor')
+  }
   const isPresentUrl = (url) => {
     return url === location
   }
@@ -211,7 +214,20 @@ function Gnb() {
         }
 
         {isLogin && <RightTopGnb>
-          <CustomButton width={'83px'} style={{ marginRight: 24 }} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
+          {isInMentor() ? <LinkNoDeco to={'/'}>
+            <CustomButton
+              width={'83px'}
+              style={{ marginRight: 24 }}
+              background_color={colorBackgroundGrayLight}
+              custom_color={colorCareerDiveBlue}>멘티 모드</CustomButton>
+          </LinkNoDeco> : <LinkNoDeco to={'/mentor/schedule'}>
+            <CustomButton
+              width={'83px'}
+              style={{ marginRight: 24 }}
+              background_color={colorBackgroundGrayLight}
+              custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
+          </LinkNoDeco>}
+
           <NotificationsNoneIcon style={{ marginRight: 14 }} />
           <Flex
             style={{ position: 'relative' }}
@@ -228,7 +244,7 @@ function Gnb() {
             <ProfileImg src={testProfileImage} alt="" />
             <ProfileMenu is_hide={String(isHideProfileMenu)}>
               <LinkNoDeco to={'mentee/mypage/profile'}>
-                <TextSubtitle2 style={{ marginTop: 24 }}>프로필</TextSubtitle2>
+                <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
               </LinkNoDeco>
 
               <LinkNoDeco to={'mentee/mypage/account'}>
@@ -241,8 +257,8 @@ function Gnb() {
                 <TextSubtitle2>결제</TextSubtitle2>
               </LinkNoDeco>
               <Divider></Divider>
-              <TextBody2 >도움말</TextBody2>
-              <TextBody2 style={{ marginBottom: 24, cursor: 'pointer' }}
+              <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
+              <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
                 onClick={onClickLogout}>로그아웃</TextBody2>
             </ProfileMenu>
           </Flex>

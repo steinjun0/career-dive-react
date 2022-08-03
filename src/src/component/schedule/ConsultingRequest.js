@@ -10,6 +10,8 @@ import {
   TextSubtitle2,
   colorCareerDiveBlue,
   EmptyWidth,
+  colorCareerDivePink,
+  colorSuccess,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { Card } from "util/Card";
@@ -19,7 +21,10 @@ import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
 import { CustomIconButton } from "util/Custom/CustomIconButton";
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";
-import PhoneIcon from "assets/icon/PhoneIcon";
+import CircleDecline from "assets/icon/CircleDecline";
+import CircleAccept from "assets/icon/CircleAccept";
+import CalendarCancel from "assets/icon/schedule/CalendarCancel";
+import CalendarSuccess from "assets/icon/schedule/CalendarSuccess";
 
 const ScheduleCardWrapper = styled(Flex)`
   width: 100%;
@@ -58,7 +63,7 @@ const Buttons = styled(RowAlignCenterFlex)`
 
 const testImage = testMentorImage;
 
-function OnComingShedule() {
+function ConsultingRequest() {
   const schedules = [
     { date: '2022년 1월 18일', time: '오후 12시 20분', name: '다슬기', company: '(주)다파다' },
     { date: '2022년 2월 5일', time: '오전 10시 40분', name: '고디', company: '(주)다파다' },
@@ -66,7 +71,7 @@ function OnComingShedule() {
 
   return (
     <ScheduleCardWrapper>
-      <Card no_divider={'true'} title={'다가오는 일정'}>
+      <Card no_divider={'true'} title={'상담 요청'}>
         <SchedulesWrapper>
 
           {schedules.map((schedule, index) => {
@@ -100,19 +105,24 @@ function OnComingShedule() {
                   <EmptyWidth width='12px'></EmptyWidth>
 
                   <CustomIconButton
-                    Icon={EditCalendarIcon}
-                    text='예약 변경'
+                    Icon={CircleDecline}
+                    text='상담 취소'
                     width='105px'
-                    hover_color={colorCareerDiveBlue}
-                    text_color={'#fff'}></CustomIconButton>
+                    hover_color={colorCareerDivePink}
+                    text_color={'#fff'}
+                    default_color={colorCareerDivePink}
+                    default_text_color={'#fff'}
+                  ></CustomIconButton>
                   <EmptyWidth width='12px'></EmptyWidth>
 
                   <CustomIconButton
-                    Icon={PhoneIcon}
-                    text='상담 입장'
+                    Icon={CircleAccept}
+                    text='상담 수락'
                     width='105px'
-                    hover_color={colorCareerDiveBlue}
-                    text_color={'#fff'}></CustomIconButton>
+                    hover_color={colorSuccess}
+                    text_color={'#fff'}
+                    default_color={colorSuccess}
+                    default_text_color={'#fff'}></CustomIconButton>
                   {/* <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
                   <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton> */}
                 </Buttons>
@@ -127,4 +137,4 @@ function OnComingShedule() {
   );
 }
 
-export default OnComingShedule;
+export default ConsultingRequest;
