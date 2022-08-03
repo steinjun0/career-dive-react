@@ -244,7 +244,7 @@ function Gnb() {
             <ProfileImg src={testProfileImage} alt="" />
             <ProfileMenu is_hide={String(isHideProfileMenu)}>
               <LinkNoDeco to={'mentee/mypage/profile'}>
-                <TextSubtitle2 style={{ marginTop: 24 }}>프로필</TextSubtitle2>
+                <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
               </LinkNoDeco>
 
               <LinkNoDeco to={'mentee/mypage/account'}>
@@ -257,8 +257,8 @@ function Gnb() {
                 <TextSubtitle2>결제</TextSubtitle2>
               </LinkNoDeco>
               <Divider></Divider>
-              <TextBody2 >도움말</TextBody2>
-              <TextBody2 style={{ marginBottom: 24, cursor: 'pointer' }}
+              <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
+              <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
                 onClick={onClickLogout}>로그아웃</TextBody2>
             </ProfileMenu>
           </Flex>
