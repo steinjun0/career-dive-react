@@ -16,6 +16,7 @@ const CustomIconButtonStyle = styled(Button)`
   }
   min-width: 0;
   width: 40px;
+  height: 40px;
   min-width: none;
   // overflow: clip;
   border-radius: 8px !important;

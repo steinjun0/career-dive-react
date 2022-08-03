@@ -21,7 +21,10 @@ import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
 import { CustomIconButton } from "util/Custom/CustomIconButton";
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";
-import PhoneIcon from "assets/icon/PhoneIcon";
+import CircleDecline from "assets/icon/CircleDecline";
+import CircleAccept from "assets/icon/CircleAccept";
+import CalendarCancel from "assets/icon/schedule/CalendarCancel";
+import CalendarSuccess from "assets/icon/schedule/CalendarSuccess";
 
 const ScheduleCardWrapper = styled(Flex)`
   width: 100%;
@@ -102,8 +105,8 @@ function ConsultingRequest() {
                   <EmptyWidth width='12px'></EmptyWidth>
 
                   <CustomIconButton
-                    Icon={EditCalendarIcon}
-                    text='예약 변경'
+                    Icon={CircleDecline}
+                    text='상담 취소'
                     width='105px'
                     hover_color={colorCareerDivePink}
                     text_color={'#fff'}
@@ -113,8 +116,8 @@ function ConsultingRequest() {
                   <EmptyWidth width='12px'></EmptyWidth>
 
                   <CustomIconButton
-                    Icon={PhoneIcon}
-                    text='상담 입장'
+                    Icon={CircleAccept}
+                    text='상담 수락'
                     width='105px'
                     hover_color={colorSuccess}
                     text_color={'#fff'}
