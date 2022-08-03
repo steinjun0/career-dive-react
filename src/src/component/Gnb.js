@@ -132,6 +132,9 @@ const onClickLogout = () => {
 function Gnb() {
   const location = useLocation().pathname;
   const navigate = useNavigate();
+  const isInMentor = () => {
+    return location.slice(0, 9).includes('mentor')
+  }
   const isPresentUrl = (url) => {
     return url === location
   }
@@ -211,7 +214,20 @@ function Gnb() {
         }
 
         {isLogin && <RightTopGnb>
-          <CustomButton width={'83px'} style={{ marginRight: 24 }} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
+          {isInMentor() ? <LinkNoDeco to={'/'}>
+            <CustomButton
+              width={'83px'}
+              style={{ marginRight: 24 }}
+              background_color={colorBackgroundGrayLight}
+              custom_color={colorCareerDiveBlue}>멘티 모드</CustomButton>
+          </LinkNoDeco> : <LinkNoDeco to={'/mentor/schedule'}>
+            <CustomButton
+              width={'83px'}
+              style={{ marginRight: 24 }}
+              background_color={colorBackgroundGrayLight}
+              custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
+          </LinkNoDeco>}
+
           <NotificationsNoneIcon style={{ marginRight: 14 }} />
           <Flex
             style={{ position: 'relative' }}
