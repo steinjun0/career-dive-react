@@ -7,7 +7,8 @@ import {
   Flex,
   RowAlignCenterFlex,
   TextBody2,
-  EmptyHeight
+  EmptyHeight,
+  TextEllipsisContainer
 } from "util/styledComponent";
 
 import OnComingShedule from "component/schedule/OnComingSchedule";
@@ -47,11 +48,17 @@ function MentorSchedule() {
                   <EmptyHeight height={'20px'} />
                   {dummyData.map((elem, index) => {
                     if (index == dummyData.length - 1) {
-                      return <TextBody2 style={{ textOverflow: 'ellipsis' }}>{elem}</TextBody2>
+                      return (<TextEllipsisContainer key={index}>
+                        <TextBody2>{elem}</TextBody2>
+                      </TextEllipsisContainer>)
                     } else {
-                      return <TextBody2 style={{ marginBottom: 12, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{elem}</TextBody2>
+                      return (<TextEllipsisContainer key={index}>
+                        <TextBody2 style={{ marginBottom: 12 }}>{elem}</TextBody2>
+                      </TextEllipsisContainer>
+                      )
                     }
                   })}
+
                 </Card>
 
               </Grid>
