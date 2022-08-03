@@ -170,8 +170,8 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                 <TextCaption>
                     영문, 숫자, 특수문자 포함 8자 이상
                 </TextCaption>
-                <EmptyHeight height={'12px'} />
                 <CustomPasswordTextField
+                    style={{ marginTop: 12 }}
                     password={password}
                     setPassword={setPassword}
                 />
