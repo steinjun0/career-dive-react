@@ -13,6 +13,8 @@ export const colorTextDisabled = "#D9D9D9";
 export const colorBackgroundGrayLight = "#F8F8F8";
 export const colorBackgroundGrayMedium = "#E6E6E6";
 export const colorBackgroundGrayDark = "#7C7C7C";
+export const colorSuccess = "#B4CE16";
+
 
 // text
 export const TextBody1 = styled(`span`)`
