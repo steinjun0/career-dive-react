@@ -6,7 +6,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import logo from '../assets/img/logo/careerDiveLogo.svg';
+import logoMentee from '../assets/img/logo/careerDiveLogo.svg';
+import logoMentor from '../assets/img/logo/careerDiveMentorLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
@@ -187,7 +188,8 @@ function Gnb() {
 
         <LeftTopGnb>
           <LinkNoDeco to={'/'}>
-            <HomeLogo src={logo} alt="커리어 다이브" />
+            {isInMentor() ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
+
           </LinkNoDeco>
         </LeftTopGnb>
 
