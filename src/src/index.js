@@ -17,6 +17,7 @@ import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
 import Schedule from "./pages/Schedule";
 import MyPage from "./pages/MyPage";
+import MentorSchedule from './pages/Mentor/Schedule'
 import { colorCareerDiveBlue, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -64,6 +65,7 @@ ReactDOM.render(
           <Route path="/mentor/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentor/mypage/account/change" element={<MyPage />} />
           <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
+          <Route path="/mentor/schedule" element={<MentorSchedule />} />
         </Routes>
       </VerticalFlex>
       <Footer />
