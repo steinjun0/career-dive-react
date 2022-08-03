@@ -13,6 +13,7 @@ import {
 
 import OnComingShedule from "component/schedule/OnComingSchedule";
 import ScheduleList from "component/schedule/ScheduleList";
+import ConsultingRequest from "component/schedule/ConsultingRequest"
 import { Card } from "util/Card";
 import { ChevronRight } from "@material-ui/icons";
 
@@ -61,6 +62,9 @@ function MentorSchedule() {
 
                 </Card>
 
+              </Grid>
+              <Grid item xs={12}>
+                <ConsultingRequest></ConsultingRequest>
               </Grid>
               <Grid item xs={12}>
                 <ScheduleList></ScheduleList>

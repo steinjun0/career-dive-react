@@ -10,6 +10,8 @@ import {
   TextSubtitle2,
   colorCareerDiveBlue,
   EmptyWidth,
+  colorCareerDivePink,
+  colorSuccess,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { Card } from "util/Card";
@@ -58,7 +60,7 @@ const Buttons = styled(RowAlignCenterFlex)`
 
 const testImage = testMentorImage;
 
-function OnComingShedule() {
+function ConsultingRequest() {
   const schedules = [
     { date: '2022년 1월 18일', time: '오후 12시 20분', name: '다슬기', company: '(주)다파다' },
     { date: '2022년 2월 5일', time: '오전 10시 40분', name: '고디', company: '(주)다파다' },
@@ -66,7 +68,7 @@ function OnComingShedule() {
 
   return (
     <ScheduleCardWrapper>
-      <Card no_divider={'true'} title={'다가오는 일정'}>
+      <Card no_divider={'true'} title={'상담 요청'}>
         <SchedulesWrapper>
 
           {schedules.map((schedule, index) => {
@@ -103,16 +105,21 @@ function OnComingShedule() {
                     Icon={EditCalendarIcon}
                     text='예약 변경'
                     width='105px'
-                    hover_color={colorCareerDiveBlue}
-                    text_color={'#fff'}></CustomIconButton>
+                    hover_color={colorCareerDivePink}
+                    text_color={'#fff'}
+                    default_color={colorCareerDivePink}
+                    default_text_color={'#fff'}
+                  ></CustomIconButton>
                   <EmptyWidth width='12px'></EmptyWidth>
 
                   <CustomIconButton
                     Icon={PhoneIcon}
                     text='상담 입장'
                     width='105px'
-                    hover_color={colorCareerDiveBlue}
-                    text_color={'#fff'}></CustomIconButton>
+                    hover_color={colorSuccess}
+                    text_color={'#fff'}
+                    default_color={colorSuccess}
+                    default_text_color={'#fff'}></CustomIconButton>
                   {/* <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
                   <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton> */}
                 </Buttons>
@@ -127,4 +134,4 @@ function OnComingShedule() {
   );
 }
 
-export default OnComingShedule;
+export default ConsultingRequest;
