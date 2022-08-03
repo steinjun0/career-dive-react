@@ -1,4 +1,4 @@
-import { Button, Grid, styled } from "@mui/material";
+import { Button, Divider, Grid, styled } from "@mui/material";
 import ScheduleCard from 'component/schedule/ScheduleCard.js'
 import {
   VerticalFlex,
@@ -9,6 +9,7 @@ import {
   TextSubtitle2,
   colorBlueGray,
   colorCareerDiveBlue,
+  EmptyHeight,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { Card } from "util/Card";
@@ -103,15 +104,17 @@ function ScheduleList() {
   return (
     <ScheduleListWrapper>
       <Card no_divider={'true'} title={'내 신청 내역'}>
+        <EmptyHeight height={'12px'} />
         <Flex>
           {categories.map((element, index) => {
             if (element === category) {
-              return <CategoryButton is_selected={'true'} key={`${index}`}>{element}</CategoryButton>;
+              return <TextBody2 style={{ cursor: 'pointer', paddingBottom: '12px', marginRight: '24px', borderBottom: `3px solid ${colorCareerDiveBlue}` }} color={colorCareerDiveBlue} key={`${index}`}>{element}</TextBody2>;
             } else {
-              return <CategoryButton is_selected={'false'} key={index} onClick={() => { setCategory(element) }}>{element}</CategoryButton>;
+              return <TextBody2 style={{ cursor: 'pointer', marginRight: '24px' }} is_selected={'false'} key={index} onClick={() => { setCategory(element) }}>{element}</TextBody2>;
             }
           })}
         </Flex>
+        <Divider />
         <Grid container spacing={'30px'} marginTop={0}>
           {schedules.map((schedule, index) => {
             if (category === '전체' || schedule.category === category) {
