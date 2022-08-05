@@ -1,9 +1,10 @@
-import { styled } from "@mui/material";
+import { styled, TextField } from "@mui/material";
 import {
   RowAlignCenterFlex,
   FullWidthWrapper,
   CenterWidthWrapper,
   Flex,
+  EmptyWidth,
 } from "util/styledComponent";
 
 import SimpleMenu from "util/SimpleMenu";
@@ -57,6 +58,12 @@ const SearchBarSpan = styled("span")`
   font-weight: 500;
 `;
 
+const SearchBarTextField = styled(TextField)`
+  font-size: 16px;
+  color: #bdbdbd;
+  width: 90px;
+`;
+
 const BannerTitle = styled("span")`
   font-size: 48px;
   margin-top: 151px;
@@ -77,7 +84,9 @@ function HomeBanner() {
         <SearchBar>
           <RowAlignCenterFlex>
             <SearchBarSpan>직무</SearchBarSpan>
+            <EmptyWidth width={'6px'} />
             <SimpleMenu
+              style={{ fontSize: 16 }}
               title="선택하세요"
               menuItems={["개발", "기획", "디자인"]}
             ></SimpleMenu>
@@ -85,18 +94,27 @@ function HomeBanner() {
 
           <RowAlignCenterFlex>
             <SearchBarSpan>회사</SearchBarSpan>
-            <SimpleMenu
-              title="선택하세요"
-              menuItems={["네이버", "삼성전자", "JYP"]}
-            ></SimpleMenu>
+            <EmptyWidth width={'14px'} />
+
+            <SearchBarTextField
+              placeholder="입력하세요"
+              variant="standard"
+              InputProps={{
+                disableUnderline: true,
+              }}
+            ></SearchBarTextField>
           </RowAlignCenterFlex>
 
           <RowAlignCenterFlex>
             <SearchBarSpan>태그</SearchBarSpan>
-            <SimpleMenu
-              title="선택하세요"
-              menuItems={["취업준비", "이직", "사내 분위기"]}
-            ></SimpleMenu>
+            <EmptyWidth width={'14px'} />
+            <SearchBarTextField
+              placeholder="입력하세요"
+              variant="standard"
+              InputProps={{
+                disableUnderline: true,
+              }}
+            ></SearchBarTextField>
           </RowAlignCenterFlex>
 
           <img src={BannerSearchIcon} alt="" />
