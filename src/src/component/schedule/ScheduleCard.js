@@ -115,7 +115,7 @@ function ScheduleCard({ schedule }) {
               Icon={RequestFormIcon}
               text='요청서'
               width='90px'
-              background_color={colorCareerDiveBlue}
+              hover_color={colorCareerDiveBlue}
               text_color={'#fff'}
               onClick={() => { navigater(`/mentee/mentor/mentoring/apply/viewer/1`) }}
             >
@@ -127,7 +127,7 @@ function ScheduleCard({ schedule }) {
               Icon={EditCalendarIcon}
               text='예약 변경'
               width='105px'
-              background_color={colorCareerDiveBlue}
+              hover_color={colorCareerDiveBlue}
               text_color={'#fff'}></CustomIconButton>
             <EmptyWidth width='12px'></EmptyWidth>
 
@@ -135,7 +135,7 @@ function ScheduleCard({ schedule }) {
               Icon={PhoneIcon}
               text='상담 입장'
               width='105px'
-              background_color={colorCareerDiveBlue}
+              hover_color={colorCareerDiveBlue}
               text_color={'#fff'}></CustomIconButton>
 
           </Flex>
