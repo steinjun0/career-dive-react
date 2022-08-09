@@ -2,10 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 import { Card } from "util/Card"
-import SimpleMenu from "util/SimpleMenu"
 
 import {
-  RowAlignCenterFlex,
   VerticalFlex,
   colorCareerDiveBlue,
   colorTextLight,
@@ -15,7 +13,6 @@ import {
   TextSubtitle1
 } from "util/styledComponent";
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
@@ -28,50 +25,6 @@ const CalendarWrapper = styled(Flex)`
   // margin-top: 30px;
   transition: all 0.3s ease-out;
 `
-
-const DateWrapper = styled(VerticalFlex)`
-  border-bottom: 1px solid #CFD6E0;
-  padding-bottom: 16px;
-`;
-
-const WeekBox = styled(RowAlignCenterFlex)`
-  justify-content: space-between;
-  // width: 534px;
-  height: 44px;
-  width: 100%;
-  margin-top: 16px;
-`;
-
-const DateBox = styled(RowAlignCenterFlex)`
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius:12px;
-  color: ${colorTextLight};
-`;
-
-const DayWrapper = styled(Flex)`
-  justify-content: space-between;
-  font-weight: 700;
-  color: black;
-  margin-top: 10px;
-`;
-
-const DayBox = styled(DateBox)`
-  color: black;
-`;
-
-const AvailableDateBox = styled(DateBox)`
-  background-color: rgba(105, 140, 255, 0.2);
-  color: ${colorCareerDiveBlue};
-  cursor: pointer;
-`;
-
-const SelectedDateBox = styled(DateBox)`
-  background-color:${colorCareerDiveBlue};
-  color: white;
-  cursor: pointer;
-`;
 
 const CalendarContentWrapper = styled(VerticalFlex)`
   justify-content: start;
@@ -89,15 +42,6 @@ const TimeSelectWrapper = styled(VerticalFlex)`
 const DateTitle = styled('span')`
   font-weight: 700;
   margin-top: 16px;
-`;
-
-const YearMonthMenuWrapper = styled(RowAlignCenterFlex)`
- justify-content: center;
- margin: 16px 0;
- height: 24px;
-`
-
-const YearMonthMenu = styled(SimpleMenu)`
 `;
 
 const TimeButton = styled(ToggleButton)`
@@ -153,29 +97,6 @@ function SelectionConsultingStartTime({ title, timeArray, consultingStartTime, o
 
 }
 
-const getDatesOfMonth = (year, month) => {
-  const dayOfFirstDate = new Date(year, month - 1, 1).getDay();
-  const lastDateOfMonth = new Date(year, month, 0).getDate();
-
-  let startDayOfWeek = dayOfFirstDate
-  let dates = []
-  for (let date = 1; date < lastDateOfMonth;) {
-    let week = [...Array(startDayOfWeek).fill(0)]
-    for (let day = startDayOfWeek; day < 7 && date <= lastDateOfMonth; day++) {
-      week.push(date)
-      date++;
-    }
-    if (week.length !== 7) {
-      week.push(...Array(7 - week.length).fill(0))
-    }
-    dates.push(week)
-    startDayOfWeek = 0
-  }
-
-  return dates;
-}
-
-
 const originData = [{ date: 9, availableTime: [['09:00', '10:30']] },
 { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
 { date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
@@ -187,16 +108,15 @@ const originData = [{ date: 9, availableTime: [['09:00', '10:30']] },
 const availableDates = [9, 10, 11, 16, 17, 18];
 
 
-function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
+function Calendar({ setIsFinishSet }) {
   const navigater = useNavigate();
   const params = useParams();
   const location = useLocation();
+  const [isApplyPage, setIsApplyPage] = useState(false);
 
   const year = 2022;
   const [month, setMonth] = useState('0월');
 
-  const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
-  // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
   const [selectedDate, setSelectedDate] = useState(0);
 
   const [availableAMTime, setAvailableAMTime] = useState([]);
@@ -205,9 +125,10 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
   const [amLines, setAmLines] = useState(0)
   const [pmLines, setPmLines] = useState(0)
 
-  const [dates, setDates] = useState(getDatesOfMonth(year, month))
   const [consultingTime, setConsultingTime] = useState(-1);
   const [consultingStartTime, setConsultingStartTime] = useState(0);
+
+  const [selectedDateObj, setSelectedDateObj] = useState(new Date());
 
   const getTimeSelectWrapperHeight = (amLines, pmLines, isHidingButton) => {
     // margin-top
@@ -235,12 +156,10 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
     return buttonHeight
   }
 
-  // const availableTime = [['09:00', '09:40'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']]
 
-
+  // 날짜 선택시, 기존값 초기화
   const onClickAvailableDate = (date) => {
     setSelectedDate(date);
-
     setConsultingTime(0);
     setConsultingStartTime(0);
     setAvailableAMTime([])
@@ -280,7 +199,6 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
         tempAvailablePMTime.push(element)
       }
     })
-    console.log('originData', originData)
     setAvailableAMTime(tempAvailableAMTime)
     setAvailablePMTime(tempAvailablePMTime)
     // window.innerWidth / 2 : 6 grid
@@ -293,6 +211,7 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
       cardWidth = (window.innerWidth / 2) - 48 - 60
       if (cardWidth < 534) cardWidth = 534
     }
+
     if (tempAvailableAMTime.length === 0) {
       setAmLines(0)
     }
@@ -323,14 +242,6 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
     setConsultingStartTime(consultingStartTime)
   }
 
-  const prevMonth = usePrevious(month);
-  useEffect(() => {
-    setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
-
-    if (prevMonth !== '0월' && month.length !== 0) {
-      setSelectedDate(0)
-    }
-  }, [month])
 
   // 상담시간 변경시 시작시간 초기화
   const prevConsultingTime = usePrevious(consultingTime);
@@ -340,35 +251,7 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
     }
   }, [consultingTime])
 
-  useEffect(() => {
-    if (consultingStartTime == null) {
-      setConsultingStartTime(0);
-    }
-    if (consultingStartTime !== 0) {
-      const updatingData = [
-        { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
-        { name: 'consultingTime', data: consultingTime },
-        { name: 'consultingStartTime', data: consultingStartTime },
-      ]
-      setIsFinishSet && setIsFinishSet(true)
-      updateReservation(params.id, updatingData)
-
-    } else {
-      setIsFinishSet && setIsFinishSet(false)
-    }
-  }, [consultingStartTime])
-
-
-
-
-  const [isApplyPage, setIsApplyPage] = useState(false);
-
-  const [selectedDateObj, setSelectedDateObj] = useState(new Date());
-
-  useEffect(() => {
-    let tempMonth
-    let tempDate
-    setIsApplyPage(location.pathname.includes('reservation'))
+  const setDataFromLocalStorage = () => {
     const reservations = JSON.parse(localStorage.getItem('reservations'))
     if (reservations !== null) {
       const reservation = reservations[params.id]
@@ -395,7 +278,31 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
       setMonth((new Date().getMonth() + 1) + '월')
     }
 
+  }
+
+  useEffect(() => {
+    setIsApplyPage(location.pathname.includes('reservation'))
+    setDataFromLocalStorage()
   }, [])
+
+
+  useEffect(() => {
+    if (consultingStartTime == null) {
+      setConsultingStartTime(0);
+    }
+    if (consultingStartTime !== 0) {
+      const updatingData = [
+        { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
+        { name: 'consultingTime', data: consultingTime },
+        { name: 'consultingStartTime', data: consultingStartTime },
+      ]
+      setIsFinishSet && setIsFinishSet(true)
+      updateReservation(params.id, updatingData)
+
+    } else {
+      setIsFinishSet && setIsFinishSet(false)
+    }
+  }, [consultingStartTime])
 
 
   useEffect(() => {
