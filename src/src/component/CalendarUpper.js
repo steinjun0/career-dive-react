@@ -106,13 +106,14 @@ const getDatesOfMonth = (year, month) => {
 }
 
 
-function CalendarUpper({ availableDates, onChange }) {
+function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp }) {
   const year = 2022;
-  const [month, setMonth] = useState('0월');
+  const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : '0월');
 
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
   // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
-  const [selectedDate, setSelectedDate] = useState(0);
+  console.log('selectedDateObjProp.getDate()', selectedDateObjProp)
+  const [selectedDate, setSelectedDate] = useState(selectedDateObjProp ? selectedDateObjProp.getDate() : 0);
 
   const [dates, setDates] = useState(getDatesOfMonth(year, month))
 
@@ -121,25 +122,49 @@ function CalendarUpper({ availableDates, onChange }) {
   }
 
 
+
   const prevMonth = usePrevious(month);
-  useEffect(() => {
-    setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
+  // useEffect(() => {
+  //   setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
+  //   if (prevMonth !== '0월' && month.length !== 0) {
+  //     setSelectedDate(0)
+  //   }
+  //   const selectedDateObj = new Date(year, Number(month.slice(0, -1)), 0)
+  //   if (selectedDateObj instanceof Date) {
+  //     onDateChange(selectedDateObj)
+  //   }
+  // }, [month])
+
+  const onClickMonth = () => {
     if (prevMonth !== '0월' && month.length !== 0) {
       setSelectedDate(0)
     }
+    const selectedDateObj = new Date(year, Number(month.slice(0, -1)), 0)
+    if (selectedDateObj instanceof Date) {
+      onDateChange(selectedDateObj)
+    }
+  }
+
+  useEffect(() => {
+    setDates(getDatesOfMonth(year, month.slice(0, - 1)))
   }, [month])
+
 
   useEffect(() => {
     try {
-      const selectedDateObj = new Date(year, Number(month.slice(0, -1)) - 1, selectedDate)
+      const selectedDateObj = new Date(year, selectedDate == 0 ? month.slice(0, -1) : month.slice(0, -1) - 1, selectedDate)
       if (selectedDateObj instanceof Date) {
-        onChange(selectedDateObj)
+        onDateChange(selectedDateObj)
       }
     } catch (error) {
 
     }
 
-  }, [month, selectedDate])
+  }, [selectedDate])
+
+  useEffect(() => {
+  }, [selectedDateObjProp])
+
 
 
 
@@ -150,6 +175,7 @@ function CalendarUpper({ availableDates, onChange }) {
           style={{ fontWeight: 700, fontSize: 16, color: 'black' }}
           title={`2022년 ${month}`}
           menuItems={['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']}
+          onClickProps={onClickMonth}
           setState={setMonth}
           endIcon={<KeyboardArrowDownIcon />}></YearMonthMenu>
       </YearMonthMenuWrapper>

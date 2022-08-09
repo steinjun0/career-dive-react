@@ -20,6 +20,7 @@ import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { addMinute, updateReservation, usePrevious } from "util/util";
+import CalendarUpper from "component/CalendarUpper";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -324,6 +325,7 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
   const prevMonth = usePrevious(month);
   useEffect(() => {
     setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
+
     if (prevMonth !== '0월' && month.length !== 0) {
       setSelectedDate(0)
     }
@@ -359,7 +361,12 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
 
 
   const [isApplyPage, setIsApplyPage] = useState(false);
+
+  const [selectedDateObj, setSelectedDateObj] = useState(new Date());
+
   useEffect(() => {
+    let tempMonth
+    let tempDate
     setIsApplyPage(location.pathname.includes('reservation'))
     const reservations = JSON.parse(localStorage.getItem('reservations'))
     if (reservations !== null) {
@@ -368,6 +375,12 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
         if ('consultingDate' in reservation) {
           setMonth(reservation['consultingDate'].month + '월')
           setSelectedDate(reservation['consultingDate'].date)
+          // tempMonth = reservation['consultingDate'].month + '월'
+          // tempDate = reservation['consultingDate'].date
+          // console.log('tempMonth', tempMonth)
+          // console.log('tempDate', tempDate)
+          // console.log('tempDate', new Date(year, tempMonth.slice(0, -1) - 1, tempDate))
+          // // setSelectedDateObj(new Date(year, tempMonth.slice(0, -1) - 1, tempDate))
         } else {
           setMonth((new Date().getMonth() + 1) + '월')
         }
@@ -390,11 +403,28 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
   }, [])
 
 
+  useEffect(() => {
+    setSelectedDate(selectedDateObj.getDate())
+    setMonth((selectedDateObj.getMonth() + 1) + '월')
+  }, [selectedDateObj])
+
+  useEffect(() => {
+    console.log('month', month)
+  }, [month])
+
 
   return (
     <CalendarWrapper>
       <Card title={'상담 가능 일정'} min_width={'400px'}>
         <CalendarContentWrapper>
+
+          <CalendarUpper
+            availableDates={availableDates}
+            selectedDateObjProp={selectedDateObj}
+            onDateChange={(dateObject) => {
+              setSelectedDateObj(dateObject);
+            }} />
+
           <YearMonthMenuWrapper>
             <YearMonthMenu
               style={{ fontWeight: 700, fontSize: 16, color: 'black' }}
