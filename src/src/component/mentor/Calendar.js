@@ -176,7 +176,7 @@ const getDatesOfMonth = (year, month) => {
 }
 
 
-const originData = [{ date: 9, availableTime: [['09:00', '09:30']] },
+const originData = [{ date: 9, availableTime: [['09:00', '10:30']] },
 { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
 { date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
 { date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
@@ -280,6 +280,7 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
         tempAvailablePMTime.push(element)
       }
     })
+    console.log('originData', originData)
     setAvailableAMTime(tempAvailableAMTime)
     setAvailablePMTime(tempAvailablePMTime)
     // window.innerWidth / 2 : 6 grid
@@ -375,12 +376,6 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
         if ('consultingDate' in reservation) {
           setMonth(reservation['consultingDate'].month + '월')
           setSelectedDate(reservation['consultingDate'].date)
-          // tempMonth = reservation['consultingDate'].month + '월'
-          // tempDate = reservation['consultingDate'].date
-          // console.log('tempMonth', tempMonth)
-          // console.log('tempDate', tempDate)
-          // console.log('tempDate', new Date(year, tempMonth.slice(0, -1) - 1, tempDate))
-          // // setSelectedDateObj(new Date(year, tempMonth.slice(0, -1) - 1, tempDate))
         } else {
           setMonth((new Date().getMonth() + 1) + '월')
         }
@@ -408,10 +403,6 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
     setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
 
-  useEffect(() => {
-    console.log('month', month)
-  }, [month])
-
 
   return (
     <CalendarWrapper>
@@ -421,43 +412,10 @@ function Calendar({ applyInformation, setApplyInformation, setIsFinishSet }) {
           <CalendarUpper
             availableDates={availableDates}
             selectedDateObjProp={selectedDateObj}
+            onClickAvailableDateProps={onClickAvailableDate}
             onDateChange={(dateObject) => {
               setSelectedDateObj(dateObject);
             }} />
-
-          <YearMonthMenuWrapper>
-            <YearMonthMenu
-              style={{ fontWeight: 700, fontSize: 16, color: 'black' }}
-              title={`2022년 ${month}`}
-              menuItems={['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']}
-              setState={setMonth}
-              endIcon={<KeyboardArrowDownIcon />}></YearMonthMenu>
-          </YearMonthMenuWrapper>
-
-          <DayWrapper>
-            {dayInKorean.map((day, dayIndex) => <DayBox key={`${dayIndex}`}>{day}</DayBox>)}
-          </DayWrapper>
-
-          <DateWrapper>
-            {dates.map((week, weekIndex) =>
-              <WeekBox key={weekIndex}>
-                {week.map((date, dateIndex) => {
-                  if (date === 0) return <DateBox key={`${weekIndex}${dateIndex}`}></DateBox>
-                  else {
-                    if (date === selectedDate) {
-                      return <SelectedDateBox key={`${weekIndex}${dateIndex}`}>{date}</SelectedDateBox>
-                    } else if (availableDates.includes(date)) {
-                      return <AvailableDateBox onClick={() => { onClickAvailableDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
-                    }
-                    else {
-                      return <DateBox key={`${weekIndex}${dateIndex}`}>{date}</DateBox>
-                    }
-                  }
-                }
-                )}
-              </WeekBox>
-            )}
-          </DateWrapper>
 
 
           <TimeSelectWrapper

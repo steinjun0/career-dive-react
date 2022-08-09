@@ -106,7 +106,7 @@ const getDatesOfMonth = (year, month) => {
 }
 
 
-function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp }) {
+function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp, onClickAvailableDateProps }) {
   const year = 2022;
   const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : '0월');
 
@@ -119,6 +119,7 @@ function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp }) {
 
   const onClickAvailableDate = (date) => {
     setSelectedDate(date);
+    onClickAvailableDateProps(date)
   }
 
 
