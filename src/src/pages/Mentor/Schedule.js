@@ -16,6 +16,7 @@ import ScheduleList from "component/schedule/ScheduleList";
 import ConsultingRequest from "component/schedule/ConsultingRequest"
 import { Card } from "util/Card";
 import { ChevronRight } from "@material-ui/icons";
+import CalendarMentor from "component/mentor/CalendarMentor";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -68,6 +69,9 @@ function MentorSchedule() {
               </Grid>
               <Grid item xs={12}>
                 <ScheduleList></ScheduleList>
+              </Grid>
+              <Grid item xs={6}>
+                <CalendarMentor></CalendarMentor>
               </Grid>
             </Grid>
           </CardsWrapper>
