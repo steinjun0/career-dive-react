@@ -38,10 +38,10 @@ function AddNewAvailableTime({ onSetTime }) {
   let housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
   let minsList = ['00', '10', '20', '30', '40', '50']
   const [startAMPM, setStartAMPM] = useState('오전')
-  const [endAMPM, setEndAMPM] = useState('오전')
   const [startHour, setStartHour] = useState('01')
-  const [endHour, setEndHour] = useState('01')
   const [startMin, setStartMin] = useState('00')
+  const [endAMPM, setEndAMPM] = useState('오전')
+  const [endHour, setEndHour] = useState('01')
   const [endMin, setEndMin] = useState('00')
   const [isRepeat, setIsRepeat] = useState(true)
 
@@ -103,7 +103,7 @@ function AddNewAvailableTime({ onSetTime }) {
       />
       <CustomButton
         onClick={() => {
-          onSetTime()
+          onSetTime({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, isRepeat })
         }}
       >확인</CustomButton>
     </RowAlignCenterFlex>
@@ -136,9 +136,17 @@ function CalendarMentor({ setIsFinishSet }) {
 
   const [selectedDateObj, setSelectedDateObj] = useState(new Date());
 
+  const [availableTimes, setAvailableTimes] = useState({})
 
-  const addNewAvailableTime = () => {
 
+  const addNewAvailableTime = (selectedDate, { startAMPM, startHour, startMin, endAMPM, endHour, endMin, isRepeat }) => {
+    let temp = JSON.parse(JSON.stringify(availableTimes))
+    if (typeof temp[selectedDate] == 'object') {
+      temp[selectedDate].push({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, isRepeat })
+    } else {
+      temp[selectedDate] = [{ startAMPM, startHour, startMin, endAMPM, endHour, endMin, isRepeat }]
+    }
+    setAvailableTimes(temp)
   }
 
   // 날짜 선택시, 기존값 초기화
@@ -184,6 +192,9 @@ function CalendarMentor({ setIsFinishSet }) {
     setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
 
+  useEffect(() => {
+    console.log('availableTimes', availableTimes)
+  }, [availableTimes])
 
   return (
     <CalendarWrapper>
@@ -201,8 +212,20 @@ function CalendarMentor({ setIsFinishSet }) {
           <AddOutlined />
 
           <Flex>
-            <AddNewAvailableTime onSetTime={(time) => { addNewAvailableTime(time) }} />
+            <AddNewAvailableTime onSetTime={(time) => { addNewAvailableTime(selectedDate, time) }} />
           </Flex>
+          {availableTimes[selectedDate] && availableTimes[selectedDate].map((e, index) => {
+            let startAMPM = e.startAMPM
+            let startHour = e.startHour
+            let startMin = e.startMin
+            let endAMPM = e.endAMPM
+            let endHour = e.endHour
+            let endMin = e.endMin
+            let isRepeat = e.isRepeat
+            return <Flex key={index}>
+              {index}={startAMPM}-{startHour}-{startMin}~{endAMPM}-{endHour}-{endMin}-{isRepeat}
+            </Flex>
+          })}
 
         </CalendarContentWrapper>
       </Card >
