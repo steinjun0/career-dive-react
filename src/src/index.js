@@ -17,10 +17,11 @@ import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
 import Schedule from "./pages/Schedule";
 import MyPage from "./pages/MyPage";
-import MentorSchedule from './pages/Mentor/Schedule'
+import MentorHome from './pages/Mentor/Home'
 import { colorCareerDiveBlue, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MentorSchedule from "pages/Mentor/Schedule";
 
 const theme = createTheme({
   palette: {
@@ -65,6 +66,7 @@ ReactDOM.render(
           <Route path="/mentor/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentor/mypage/account/change" element={<MyPage />} />
           <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
+          <Route path="/mentor/home" element={<MentorHome />} />
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
         </Routes>
       </VerticalFlex>
