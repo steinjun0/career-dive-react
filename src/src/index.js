@@ -12,6 +12,7 @@ import Mentor from "./pages/Mentor";
 import MentoringReservation from './pages/MentoringReservation'
 import MentoringApply from './pages/MentoringApply'
 import MentoringApplyViewer from './pages/MentoringApplyViewer'
+import MentoringApplyViewerMentor from './pages/Mentor/MentoringApplyViewer'
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
@@ -68,6 +69,7 @@ ReactDOM.render(
           <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
           <Route path="/mentor/home" element={<MentorHome />} />
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
+          <Route path="/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewerMentor />} />
         </Routes>
       </VerticalFlex>
       <Footer />

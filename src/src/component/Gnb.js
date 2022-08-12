@@ -222,7 +222,7 @@ function Gnb() {
               style={{ marginRight: 24 }}
               background_color={colorBackgroundGrayLight}
               custom_color={colorCareerDiveBlue}>멘티 모드</CustomButton>
-          </LinkNoDeco> : <LinkNoDeco to={'/mentor/schedule'}>
+          </LinkNoDeco> : <LinkNoDeco to={'/mentor/home'}>
             <CustomButton
               width={'83px'}
               style={{ marginRight: 24 }}
