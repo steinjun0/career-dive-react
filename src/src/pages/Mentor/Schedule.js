@@ -5,17 +5,11 @@ import {
   GrayBackground,
   MaxWidthDiv,
   Flex,
-  RowAlignCenterFlex,
-  TextBody2,
-  EmptyHeight,
-  TextEllipsisContainer
+
 } from "util/styledComponent";
 
 import OnComingShedule from "component/schedule/OnComingSchedule";
 import ScheduleList from "component/schedule/ScheduleList";
-import ConsultingRequest from "component/schedule/ConsultingRequest"
-import { Card } from "util/Card";
-import { ChevronRight } from "@material-ui/icons";
 import CalendarMentor from "component/mentor/CalendarMentor";
 
 const CardsWrapper = styled(Flex)`

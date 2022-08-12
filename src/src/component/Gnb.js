@@ -4,14 +4,12 @@ import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDi
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import MenuIcon from '@mui/icons-material/Menu';
 
 import logoMentee from '../assets/img/logo/careerDiveLogo.svg';
 import logoMentor from '../assets/img/logo/careerDiveMentorLogo.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
-import { useReactPath } from "util/util";
 import API from "API";
 
 
@@ -78,11 +76,6 @@ const RightTopGnb = styled(RowAlignCenterFlex)`
     padding-left: 16px;
     max-width: 1194px;
     background-color: white;
-  `;
-
-const BlueSpan = styled('span')`
-    color: #698CFF;
-    font-weight: 700;
   `;
 
 const ProfileImg = styled(CircleImg)`

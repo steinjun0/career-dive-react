@@ -1,8 +1,7 @@
-import { Button, Grid, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import {
   VerticalFlex,
   Flex,
-  CircleImg,
   TextBody2,
   TextSubtitle1,
   TextSubtitle2,
@@ -14,8 +13,6 @@ import {
 } from "util/styledComponent";
 import { CustomIconButton } from 'util/Custom/CustomIconButton'
 
-import requestFormIcon from 'assets/icon/requestForm.svg'
-import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";
 import PhoneIcon from "assets/icon/PhoneIcon";
@@ -23,7 +20,6 @@ import PhoneIcon from "assets/icon/PhoneIcon";
 import calendarSuccess from 'assets/icon/schedule/calendarSuccess.svg'
 import calendarWait from 'assets/icon/schedule/calendarWait.svg'
 import calendarCancel from 'assets/icon/schedule/calendarCancel.svg'
-import { useNavigate } from "react-router-dom";
 
 
 const ScheduleCardWrapper = styled(Flex)`
@@ -63,9 +59,6 @@ const ScheduleTime = styled(TextSubtitle1)`
 
 
 function ScheduleCard({ schedule, requestFormOnClick, changeOnClick, enterOnClick }) {
-  const calendarIcon = circleCalendarIcon;
-  const requestIcon = requestFormIcon;
-
   let categoryIcon;
   if (schedule.category == '예약 성공') {
     categoryIcon = calendarSuccess;

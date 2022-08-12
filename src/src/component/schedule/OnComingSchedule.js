@@ -11,11 +11,9 @@ import {
   colorCareerDiveBlue,
   EmptyWidth,
 } from "util/styledComponent";
-import { CustomButton } from 'util/Custom/CustomButton'
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
-import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
 import { CustomIconButton } from "util/Custom/CustomIconButton";
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";

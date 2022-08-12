@@ -1,18 +1,12 @@
-import { Button, Divider, Grid, styled } from "@mui/material";
+import { Divider, Grid, styled } from "@mui/material";
 import ScheduleCard from 'component/schedule/ScheduleCard.js'
 import {
-  VerticalFlex,
   Flex,
-  CircleImg,
   TextBody2,
-  TextSubtitle1,
-  TextSubtitle2,
-  colorBlueGray,
   colorCareerDiveBlue,
   EmptyHeight,
   LinkNoDeco,
 } from "util/styledComponent";
-import { CustomButton } from 'util/Custom/CustomButton'
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
@@ -20,7 +14,6 @@ import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'
 import ChevronRight from '@mui/icons-material/ChevronRight';
 
 import { useState } from "react";
-import { NavigateNextRounded } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
 
 const ScheduleListWrapper = styled(Flex)`
@@ -53,7 +46,7 @@ function ScheduleList() {
   const [category, setCategory] = useState('전체');
   return (
     <ScheduleListWrapper>
-      <Card no_divider={'true'} title={'내 신청 내역'}
+      <Card no_divider={'true'} title={<LinkNoDeco to={'/mentor/schedule'}>내 신청 내역</LinkNoDeco>}
         titleHead={
           <LinkNoDeco to={'/mentor/schedule'}>
             <ChevronRight fontSize="medium" />
