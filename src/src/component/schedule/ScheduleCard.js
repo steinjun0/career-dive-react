@@ -62,10 +62,9 @@ const ScheduleTime = styled(TextSubtitle1)`
 
 
 
-function ScheduleCard({ schedule }) {
+function ScheduleCard({ schedule, requestFormOnClick, changeOnClick, enterOnClick }) {
   const calendarIcon = circleCalendarIcon;
   const requestIcon = requestFormIcon;
-  const navigater = useNavigate();
 
   let categoryIcon;
   if (schedule.category == '예약 성공') {
@@ -117,7 +116,7 @@ function ScheduleCard({ schedule }) {
               width='90px'
               hover_color={colorCareerDiveBlue}
               text_color={'#fff'}
-              onClick={() => { navigater(`/mentee/mentor/mentoring/apply/viewer/1`) }}
+              onClick={requestFormOnClick}
             >
               {/* TODO: params id 맞춰주기 */}
             </CustomIconButton>
@@ -128,7 +127,9 @@ function ScheduleCard({ schedule }) {
               text='예약 변경'
               width='105px'
               hover_color={colorCareerDiveBlue}
-              text_color={'#fff'}></CustomIconButton>
+              text_color={'#fff'}
+              onClick={changeOnClick}
+            ></CustomIconButton>
             <EmptyWidth width='12px'></EmptyWidth>
 
             <CustomIconButton
@@ -136,7 +137,8 @@ function ScheduleCard({ schedule }) {
               text='상담 입장'
               width='105px'
               hover_color={colorCareerDiveBlue}
-              text_color={'#fff'}></CustomIconButton>
+              text_color={'#fff'}
+              onClick={enterOnClick}></CustomIconButton>
 
           </Flex>
         </VerticalFlex>

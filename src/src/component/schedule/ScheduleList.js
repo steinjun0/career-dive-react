@@ -20,6 +20,8 @@ import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'
 import ChevronRight from '@mui/icons-material/ChevronRight';
 
 import { useState } from "react";
+import { NavigateNextRounded } from "@material-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 const ScheduleListWrapper = styled(Flex)`
   width: 100%;
@@ -34,6 +36,7 @@ const ScheduleListWrapper = styled(Flex)`
 function ScheduleList() {
   const calendarIcon = circleCalendarIcon;
   const testProfileIamge = testMentorImage;
+  const navigater = useNavigate();
 
   const schedules = [
     { category: '예약 성공', date: '2022년 2월 18일', time: '오후 12시 20분', name: '다슬기', company: '(주)다파다', position: '루나' },
@@ -72,7 +75,7 @@ function ScheduleList() {
             if (category === '전체' || schedule.category === category) {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  <ScheduleCard schedule={schedule}></ScheduleCard>
+                  <ScheduleCard schedule={schedule} requestFormOnClick={() => { navigater(`/mentee/mentor/mentoring/apply/viewer/1`) }}></ScheduleCard>
                 </Grid>
               );
             }
