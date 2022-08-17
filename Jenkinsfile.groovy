@@ -16,6 +16,6 @@ node {
         sh 'bash ./deploy/wait-kaniko.sh'
     }
     stage ('rollout deployment'){
-        sh './kubectl rollout restart deployment careerdive-front'
+        sh './kubectl rollout restart deployment careerdive-front -n careerdive'
     }
 }    
