@@ -41,17 +41,7 @@ function Session() {
     <GrayBackground>
       <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 300px)' }}>
 
-        <ReflexElement className="left-pane">
-          <div style={{ padding: 24 }}>
-            <RequestView style={{ width: '100%', padding: 24 }}>
-            </RequestView>
-          </div>
-
-        </ReflexElement>
-
-        <ReflexSplitter />
-
-        <ReflexElement className="right-pane" >
+        <ReflexElement className="left-pane" maxSize="350">
           <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 24, height: '90%', justifyContent: 'space-between' }}>
             <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center' }}>
               <ColumnAlignCenterFlex >
@@ -68,6 +58,17 @@ function Session() {
               </ColumnAlignCenterFlex>
             </Card>
           </VerticalFlex>
+
+
+        </ReflexElement>
+
+        <ReflexSplitter />
+
+        <ReflexElement className="right-pane" >
+          <div style={{ padding: 24 }}>
+            <RequestView style={{ width: '100%', padding: 24 }}>
+            </RequestView>
+          </div>
         </ReflexElement>
 
       </ReflexContainer>
