@@ -23,6 +23,7 @@ import { colorCareerDiveBlue, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MentorSchedule from "pages/Mentor/Schedule";
+import Sendbird from "pages/Sendbird";
 
 const theme = createTheme({
   palette: {
@@ -70,6 +71,8 @@ ReactDOM.render(
           <Route path="/mentor/home" element={<MentorHome />} />
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
           <Route path="/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewerMentor />} />
+
+          <Route path="/sendbird" element={<Sendbird />} />
         </Routes>
       </VerticalFlex>
       <Footer />
