@@ -67,6 +67,17 @@ export const TextHeading6 = styled(`h6`)`
   overflow: inherit;
 `;
 
+export const TextHeading4 = styled(`h4`)`
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 32px;
+  margin: 0;
+  color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
+`;
+
 export const TextButton = styled(`span`)`
   font-size: 14px;
   line-height: 20px;

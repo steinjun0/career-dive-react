@@ -23,7 +23,7 @@ import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
 
 const RequestCardWrapper = styled(Flex)`
-  margin-top: 30px;
+  // margin-top: 30px;
 `;
 
 
@@ -65,7 +65,7 @@ const CategoryTag = styled(TagLarge)`
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
 
-function Request() {
+function RequestView() {
   const mentoringCategory = '일반'
   const mentoringContents = ['이직 준비', '면접 팁', '업계 이야기']
   return (
@@ -146,4 +146,4 @@ function Request() {
   );
 }
 
-export default Request;
+export default RequestView;
