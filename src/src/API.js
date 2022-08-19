@@ -1,14 +1,25 @@
 import axios from 'axios'
 const CAREER_DIVE_API_URL = 'https://api.careerdive.deagwon.com'
 
-let user = JSON.parse(localStorage.getItem('userData'))
+// let user = JSON.parse(localStorage.getItem('userData'))
+// let tokenHeader = false
+
+// if (user !== null) {
+//   tokenHeader = { headers: { Authorization: `${user.token}` } }
+// } else {
+//   tokenHeader = false
+// }
+console.log(localStorage.getItem('AccessToken'))
+let accessToken = localStorage.getItem('AccessToken')
 let tokenHeader = false
 
-if (user !== null) {
-  tokenHeader = { headers: { Authorization: `Bearer ${user.token}` } }
+if (accessToken !== null) {
+  tokenHeader = { headers: { Authorization: `${accessToken}` } }
 } else {
   tokenHeader = false
 }
+
+
 const getValidError = exception => {
   if (exception.response !== undefined && exception.response.data !== undefined && exception.response.data.errors !== undefined) {
     return exception.response.data.errors
@@ -46,7 +57,7 @@ export default {
   async getAxiosZip(url) {
     this.refreshUserData()
     try {
-      const res = user.token ? await axios.get(url, { headers: { Authorization: `Bearer ${user.token}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
+      const res = tokenHeader ? await axios.get(url, { headers: { Authorization: `${accessToken}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -75,7 +86,7 @@ export default {
   async postAxiosFormData(url, data) {
     this.refreshUserData()
     try {
-      const res = user.token ? await axios.post(url, data, { headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+      const res = tokenHeader ? await axios.post(url, data, { headers: { Authorization: `${accessToken}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -93,7 +104,7 @@ export default {
   async patchAxiosFormData(url, data) {
     this.refreshUserData()
     try {
-      const res = user.token ? await axios.patch(url, data, { headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+      const res = tokenHeader ? await axios.patch(url, data, { headers: { Authorization: `${accessToken}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -143,6 +154,11 @@ export default {
   async postAccountRenew(refreshToken) {
     const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/renew`, { 'RefreshToken': refreshToken })
     return loginRes
+  },
+
+  async patchAccount(userData) {
+    const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
+    return userRes
   },
 
 
