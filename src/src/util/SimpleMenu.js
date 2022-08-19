@@ -10,18 +10,23 @@ const MenuButton = styled(Button)`
     font-weight: ${props => props.fontWeight ? props.fontWeight : 0}
 `
 
-function SimpleMenu({ title, menuItems = [], style = {}, setState = () => { }, endIcon = undefined }) {
+function SimpleMenu({ title, menuItems = [], style = {}, setState = () => { }, endIcon = undefined, onClickProps }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    const handleClose = (element) => {
-        if (menuItems.includes(element)) {
-            setState(element)
+    const handleClose = (text) => {
+        if (menuItems.includes(text)) {
+            setState(text)
         }
         setAnchorEl(null);
     };
+    const onClick = (element) => {
+        console.log('element', element.target.outerText)
+        handleClose(element.target.outerText)
+        onClickProps && onClickProps()
+    }
 
     return (<div>
         <MenuButton
@@ -44,7 +49,7 @@ function SimpleMenu({ title, menuItems = [], style = {}, setState = () => { }, e
             }}
         >
             {menuItems.map((element, index) =>
-                <MenuItem key={index} onClick={() => { handleClose(element) }}>{element}</MenuItem>
+                <MenuItem key={index} onClick={(element) => { onClick(element) }}>{element}</MenuItem>
             )}
         </Menu>
     </div>);

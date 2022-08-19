@@ -12,15 +12,19 @@ import Mentor from "./pages/Mentor";
 import MentoringReservation from './pages/MentoringReservation'
 import MentoringApply from './pages/MentoringApply'
 import MentoringApplyViewer from './pages/MentoringApplyViewer'
+import MentoringApplyViewerMentor from './pages/Mentor/MentoringApplyViewer'
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
 import Schedule from "./pages/Schedule";
 import MyPage from "./pages/MyPage";
-import MentorSchedule from './pages/Mentor/Schedule'
+import MentorHome from './pages/Mentor/Home'
 import { colorCareerDiveBlue, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MentorSchedule from "pages/Mentor/Schedule";
+import Sendbird from "pages/Sendbird";
+import Session from "./pages/Session";
 
 const theme = createTheme({
   palette: {
@@ -65,7 +69,13 @@ ReactDOM.render(
           <Route path="/mentor/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentor/mypage/account/change" element={<MyPage />} />
           <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
+          <Route path="/mentor/home" element={<MentorHome />} />
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
+          <Route path="/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewerMentor />} />
+
+          <Route path="/sendbird" element={<Sendbird />} />
+          <Route path="/session" element={<Session />} />
+
         </Routes>
       </VerticalFlex>
       <Footer />

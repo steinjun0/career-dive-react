@@ -1,22 +1,20 @@
-import { Button, Divider, Grid, styled } from "@mui/material";
+import { Divider, Grid, styled } from "@mui/material";
 import ScheduleCard from 'component/schedule/ScheduleCard.js'
 import {
-  VerticalFlex,
   Flex,
-  CircleImg,
   TextBody2,
-  TextSubtitle1,
-  TextSubtitle2,
-  colorBlueGray,
   colorCareerDiveBlue,
   EmptyHeight,
+  LinkNoDeco,
 } from "util/styledComponent";
-import { CustomButton } from 'util/Custom/CustomButton'
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
 import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'
+import ChevronRight from '@mui/icons-material/ChevronRight';
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ScheduleListWrapper = styled(Flex)`
   width: 100%;
@@ -27,66 +25,11 @@ const ScheduleListWrapper = styled(Flex)`
 //   border-radius: 8px;
 // `;
 
-const CategoryButton = styled(Button)`
-  // styled-component props can't get boolean
-  background-color: ${props => props.is_selected === 'true' ? 'rgba(105, 140, 255, 0.2)' : 'rgba(175, 175, 175, 0.1)'};
-  color: ${props => props.is_selected === 'true' ? colorCareerDiveBlue : '#828282'};
-  &:hover {
-    background-color: ${props => props.is_selected === 'true' ? 'rgba(105, 140, 255, 0.2)' : 'rgba(175, 175, 175, 0.1)'};
-    color: ${props => props.is_selected === 'true' ? colorCareerDiveBlue : '#828282'};
-  }
-
-  min-width: 0px;
-  padding: 4px 10px;
-  margin-right: 12px;
-  border-radius: 16px;
-
-  font-size: 16px;
-  line-height: 24px;
-
-  cursor: pointer;
-`;
-
-const ScheduleCardTop = styled(Flex)`
-  border-bottom: 1px solid ${colorBlueGray};
-  padding: 20px;
-  align-items: start;
-`;
-
-const ScheduleDate = styled(TextBody2)`
-  margin-bottom: 4px;
-`
-
-const ScheduleTime = styled(TextSubtitle1)`
-  margin-bottom: 10px;
-`
-
-const ManageScheduleButton = styled(CustomButton)`
-  font-size: 14px;
-  width: 79px;
-  height: 32px;
-`;
-
-
-const ScheduleCardBottom = styled(Flex)`
-  padding: 20px;
-`;
-
-const ProfileImg = styled(CircleImg)`
-  width: 40px;
-  height: 40px;
-  margin-right: 16px;
-`;
-
-const ContentWrapper = styled(VerticalFlex)`
-  margin-left: 16px;
-`;
-
-
 
 function ScheduleList() {
   const calendarIcon = circleCalendarIcon;
   const testProfileIamge = testMentorImage;
+  const navigater = useNavigate();
 
   const schedules = [
     { category: '예약 성공', date: '2022년 2월 18일', time: '오후 12시 20분', name: '다슬기', company: '(주)다파다', position: '루나' },
@@ -103,7 +46,12 @@ function ScheduleList() {
   const [category, setCategory] = useState('전체');
   return (
     <ScheduleListWrapper>
-      <Card no_divider={'true'} title={'내 신청 내역'}>
+      <Card no_divider={'true'} title={<LinkNoDeco to={'/mentor/schedule'}>내 신청 내역</LinkNoDeco>}
+        titleHead={
+          <LinkNoDeco to={'/mentor/schedule'}>
+            <ChevronRight fontSize="medium" />
+          </LinkNoDeco>
+        }>
         <EmptyHeight height={'12px'} />
         <Flex>
           {categories.map((element, index) => {
@@ -120,7 +68,7 @@ function ScheduleList() {
             if (category === '전체' || schedule.category === category) {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  <ScheduleCard schedule={schedule}></ScheduleCard>
+                  <ScheduleCard schedule={schedule} requestFormOnClick={() => { navigater(`/mentee/mentor/mentoring/apply/viewer/1`) }}></ScheduleCard>
                 </Grid>
               );
             }

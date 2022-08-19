@@ -1,8 +1,7 @@
-import { Button, Grid, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import {
   VerticalFlex,
   Flex,
-  CircleImg,
   TextBody2,
   TextSubtitle1,
   TextSubtitle2,
@@ -14,8 +13,6 @@ import {
 } from "util/styledComponent";
 import { CustomIconButton } from 'util/Custom/CustomIconButton'
 
-import requestFormIcon from 'assets/icon/requestForm.svg'
-import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";
 import PhoneIcon from "assets/icon/PhoneIcon";
@@ -23,7 +20,6 @@ import PhoneIcon from "assets/icon/PhoneIcon";
 import calendarSuccess from 'assets/icon/schedule/calendarSuccess.svg'
 import calendarWait from 'assets/icon/schedule/calendarWait.svg'
 import calendarCancel from 'assets/icon/schedule/calendarCancel.svg'
-import { useNavigate } from "react-router-dom";
 
 
 const ScheduleCardWrapper = styled(Flex)`
@@ -62,11 +58,7 @@ const ScheduleTime = styled(TextSubtitle1)`
 
 
 
-function ScheduleCard({ schedule }) {
-  const calendarIcon = circleCalendarIcon;
-  const requestIcon = requestFormIcon;
-  const navigater = useNavigate();
-
+function ScheduleCard({ schedule, requestFormOnClick, changeOnClick, enterOnClick }) {
   let categoryIcon;
   if (schedule.category == '예약 성공') {
     categoryIcon = calendarSuccess;
@@ -115,9 +107,9 @@ function ScheduleCard({ schedule }) {
               Icon={RequestFormIcon}
               text='요청서'
               width='90px'
-              background_color={colorCareerDiveBlue}
+              hover_color={colorCareerDiveBlue}
               text_color={'#fff'}
-              onClick={() => { navigater(`/mentee/mentor/mentoring/apply/viewer/1`) }}
+              onClick={requestFormOnClick}
             >
               {/* TODO: params id 맞춰주기 */}
             </CustomIconButton>
@@ -127,16 +119,19 @@ function ScheduleCard({ schedule }) {
               Icon={EditCalendarIcon}
               text='예약 변경'
               width='105px'
-              background_color={colorCareerDiveBlue}
-              text_color={'#fff'}></CustomIconButton>
+              hover_color={colorCareerDiveBlue}
+              text_color={'#fff'}
+              onClick={changeOnClick}
+            ></CustomIconButton>
             <EmptyWidth width='12px'></EmptyWidth>
 
             <CustomIconButton
               Icon={PhoneIcon}
               text='상담 입장'
               width='105px'
-              background_color={colorCareerDiveBlue}
-              text_color={'#fff'}></CustomIconButton>
+              hover_color={colorCareerDiveBlue}
+              text_color={'#fff'}
+              onClick={enterOnClick}></CustomIconButton>
 
           </Flex>
         </VerticalFlex>

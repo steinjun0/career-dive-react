@@ -5,17 +5,12 @@ import {
   GrayBackground,
   MaxWidthDiv,
   Flex,
-  RowAlignCenterFlex,
-  TextBody2,
-  EmptyHeight,
-  TextEllipsisContainer
+
 } from "util/styledComponent";
 
 import OnComingShedule from "component/schedule/OnComingSchedule";
 import ScheduleList from "component/schedule/ScheduleList";
-import ConsultingRequest from "component/schedule/ConsultingRequest"
-import { Card } from "util/Card";
-import { ChevronRight } from "@material-ui/icons";
+import CalendarMentor from "component/mentor/CalendarMentor";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -35,39 +30,15 @@ function MentorSchedule() {
         <MaxWidthDiv>
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <OnComingShedule></OnComingShedule>
               </Grid>
-              <Grid item xs={6}>
-                <Card
-                  style={{ boxSizing: 'border-box', maxWidth: '100%' }}
-                  no_divider={'true'}
-                  title={'공지 및 알림'}
-                  titleHead={
-                    <ChevronRight fontSize="medium" />
-                  }>
-                  <EmptyHeight height={'20px'} />
-                  {dummyData.map((elem, index) => {
-                    if (index == dummyData.length - 1) {
-                      return (<TextEllipsisContainer key={index}>
-                        <TextBody2>{elem}</TextBody2>
-                      </TextEllipsisContainer>)
-                    } else {
-                      return (<TextEllipsisContainer key={index}>
-                        <TextBody2 style={{ marginBottom: 12 }}>{elem}</TextBody2>
-                      </TextEllipsisContainer>
-                      )
-                    }
-                  })}
 
-                </Card>
-
-              </Grid>
-              <Grid item xs={12}>
-                <ConsultingRequest></ConsultingRequest>
-              </Grid>
               <Grid item xs={12}>
                 <ScheduleList></ScheduleList>
+              </Grid>
+              <Grid item xs={6}>
+                <CalendarMentor></CalendarMentor>
               </Grid>
             </Grid>
           </CardsWrapper>
