@@ -15,6 +15,9 @@ import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useState } from "react";
 
+import API from "API";
+
+
 const MenteeIntroduceWrapper = styled(Flex)`
   // width: 100%;
 `;
@@ -55,8 +58,22 @@ function MenteeIntroduce() {
     setIsEditing(false)
   }
 
-  const saveEditing = () => {
-    setIsEditing(false)
+  const saveEditing = async () => {
+    const validResponse = await API.patchAccount({
+      AgreeAdb: true,
+      AgreeNoti: true,
+      "BirthDate": "string",
+      "Email": "email@careerdive.com",
+      "Name": "string",
+      "Nickname": "string",
+      "Password": "p@ssw0rd",
+      "Phone": "string",
+      "Sex": true
+    });
+    if (validResponse.status === 200) {
+      setIsEditing(false)
+      return
+    }
   }
 
   return (
@@ -100,7 +117,7 @@ function MenteeIntroduce() {
             placeholder="자기소개는 여기에 들어갑니다."
             multiline
             variant="filled"
-            InputProps={{ disableUnderline: true, }}
+            InputProps={{ disableUnderline: true, readOnly: !isEditing }}
             minRows={4}
             maxRows={8}
             fullWidth={true}
@@ -124,7 +141,7 @@ function MenteeIntroduce() {
             id="outlined-textarea"
             placeholder="자신을 소개하는 url을 작성해보세요"
             variant="filled"
-            InputProps={{ disableUnderline: true }}
+            InputProps={{ disableUnderline: true, readOnly: !isEditing }}
             rows={1}
             fullWidth={true}
           />
