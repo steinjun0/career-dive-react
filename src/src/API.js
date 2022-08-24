@@ -1,5 +1,6 @@
 import axios from 'axios'
 const CAREER_DIVE_API_URL = 'https://api.careerdive.deagwon.com'
+// const CAREER_DIVE_API_URL = 'https://devapi.careerdive.deagwon.com'
 
 // let user = JSON.parse(localStorage.getItem('userData'))
 // let tokenHeader = false
@@ -9,7 +10,6 @@ const CAREER_DIVE_API_URL = 'https://api.careerdive.deagwon.com'
 // } else {
 //   tokenHeader = false
 // }
-console.log(localStorage.getItem('AccessToken'))
 let accessToken = localStorage.getItem('AccessToken')
 let tokenHeader = false
 
@@ -50,7 +50,6 @@ export default {
       const res = tokenHeader ? await axios.get(url, tokenHeader) : await axios.get(url)
       return res
     } catch (e) {
-      // console.log(e);
       return { error: getValidError(e) }
     }
   },
@@ -67,6 +66,7 @@ export default {
     this.refreshUserData()
     try {
       const res = await axios.get(url, {
+        headers: { Authorization: `${accessToken}` },
         params: param,
       }, tokenHeader)
       return res
@@ -136,6 +136,11 @@ export default {
     return loginRes
   },
 
+  async getConsultSchedule(year, month, mentorId) {
+    const scheduleRes = await this.getAxiosWithParams(`${CAREER_DIVE_API_URL}/consult/schedule`, { 'Year': year, 'Month': month, 'MentorID': mentorId })
+    return scheduleRes
+  },
+
   async postAccount(email, password, nickname) {
     const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
     return loginRes
@@ -156,11 +161,15 @@ export default {
     return loginRes
   },
 
+  async postConsultSchedule(dayTimes, year, month, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule`, { DayTimes: dayTimes, MentorID: mentorId, Month: month, Year: year })
+    return scheduleRes
+  },
+
   async patchAccount(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
     return userRes
   },
-
 
   async patchUser(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}auth/user/`, userData)
