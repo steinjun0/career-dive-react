@@ -32,12 +32,13 @@ const IconText = styled(TextSubtitle1)`
 // }
 `;
 
-export function CustomIconButton({ Icon, text, width, default_color, default_text_color, hover_color, text_color, onClick }) {
+export function CustomIconButton({ Icon, text, style, width, default_color, default_text_color, hover_color, text_color, onClick }) {
   const [isHover, setIsHover] = useState(false)
   console.log('default_text_color', default_text_color)
   return (
     <CustomIconButtonStyle width={width} hover_color={hover_color} default_color={default_color}
       onClick={onClick}
+      style={style}
       onMouseEnter={() => { setIsHover(true) }}
       onMouseLeave={() => { setIsHover(false) }}>
       {/* <SizedImg style={{ marginRight: '8px', color: text_color }} src={icon} width='24px' height='24px'></SizedImg> */}
