@@ -203,6 +203,7 @@ function CalendarMentor({ setIsFinishSet }) {
 
   const [isAdding, setIsAdding] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
+  const [tempAvailableTime, setTempAvailableTime] = useState([])
 
 
   const addNewAvailableTime = (selectedDate, { startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption }) => {
@@ -285,6 +286,7 @@ function CalendarMentor({ setIsFinishSet }) {
               height={'32px'}
               style={{ padding: '4px 12px' }}
               onClick={() => {
+                setTempAvailableTime([...availableTimes[selectedDate]])
                 setIsEditing(true)
               }}
             >
@@ -300,6 +302,9 @@ function CalendarMentor({ setIsFinishSet }) {
                 height={'32px'}
                 style={{ padding: '4px 12px' }}
                 onClick={() => {
+                  console.log(tempAvailableTime)
+                  availableTimes[selectedDate] = tempAvailableTime
+                  setTempAvailableTime([])
                   setIsEditing(false)
                 }}
               >
