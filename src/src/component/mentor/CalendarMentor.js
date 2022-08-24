@@ -49,7 +49,7 @@ const calendarSimpleMenuStyle = {
   borderRadius: '8px'
 };
 
-function AddNewAvailableTime({ onSetTime }) {
+function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
   let housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
   let minsList = ['00', '10', '20', '30', '40', '50']
   const [startAMPM, setStartAMPM] = useState('오전')
@@ -59,17 +59,29 @@ function AddNewAvailableTime({ onSetTime }) {
   const [endHour, setEndHour] = useState('01')
   const [endMin, setEndMin] = useState('00')
   const [repeatOption, setRepeatOption] = useState('매일 반복')
+  const [isShow, setIsShow] = useState(true)
+
+  useEffect(() => {
+    if (initialTime) {
+      setStartAMPM(initialTime.startAMPM)
+      setStartHour(initialTime.startHour)
+      setStartMin(initialTime.startMin)
+      setEndAMPM(initialTime.endAMPM)
+      setEndHour(initialTime.endHour)
+      setEndMin(initialTime.endMin)
+      setRepeatOption(initialTime.repeatOption)
+    }
+  }, [])
 
 
-
-  return (
+  return (isShow &&
     <RowAlignCenterFlex
-      style={{ width: '100%' }}>
+      style={Object.assign({ width: '100%' }, style)}>
       <SimpleMenu
         style={calendarSimpleMenuStyle}
         title={startAMPM}
         menuItems={['오전', '오후']}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.startAMPM = text } : () => { }}
         setState={setStartAMPM}
       />
       <EmptyWidth width={'4px'} />
@@ -77,7 +89,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={startHour}
         menuItems={housrList}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.startHour = text } : () => { }}
         setState={setStartHour}
       />
       <EmptyWidth width={'4px'} />
@@ -87,7 +99,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={startMin}
         menuItems={minsList}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.startMin = text } : () => { }}
         setState={setStartMin}
       />
       <EmptyWidth width={'4px'} />
@@ -97,7 +109,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={endAMPM}
         menuItems={['오전', '오후']}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.endAMPM = text } : () => { }}
         setState={setEndAMPM}
       />
       <EmptyWidth width={'4px'} />
@@ -105,7 +117,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={endHour}
         menuItems={housrList}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.endHour = text } : () => { }}
         setState={setEndHour}
       />
       <EmptyWidth width={'4px'} />
@@ -115,7 +127,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={endMin}
         menuItems={minsList}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.endMin = text } : () => { }}
         setState={setEndMin}
       />
       <EmptyWidth width={'4px'} />
@@ -123,19 +135,32 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={`${repeatOption}`}
         menuItems={['매일 반복', '매주 반복', '반복 없음']}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.repeatOption = text } : () => { }}
         setState={setRepeatOption}
         endIcon={<KeyboardArrowDownIcon />}
       />
       <EmptyWidth width={'4px'} />
-      <CustomButton
+
+
+      {!initialTime && <CustomButton
         style={{ padding: 0, marginLeft: 'auto', padding: '4px 12px' }}
         height={'32px'}
         width={'0px'}
         onClick={() => {
           onSetTime({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
         }}
-      >확인</CustomButton>
+      >확인</CustomButton>}
+
+      {initialTime && <CustomButton
+        style={{ padding: 0, marginLeft: 'auto', padding: '4px 12px' }}
+        height={'32px'}
+        width={'0px'}
+        onClick={() => {
+          onRemove()
+          setIsShow(false)
+        }}
+      >삭제</CustomButton>}
+
     </RowAlignCenterFlex>
   )
 
@@ -282,6 +307,7 @@ function CalendarMentor({ setIsFinishSet }) {
                 height={'32px'}
                 style={{ padding: '4px 12px' }}
                 onClick={() => {
+                  console.log(availableTimes[selectedDate])
                   setIsEditing(false)
                 }}
               >
@@ -303,8 +329,8 @@ function CalendarMentor({ setIsFinishSet }) {
             let endHour = e.endHour
             let endMin = e.endMin
             let repeatOption = e.repeatOption
-            return <Flex>
-              <TagLarge key={index} style={{ marginTop: 16 }}>
+            return <Flex key={index} style={{ justifyContent: 'space-between', marginTop: '16px' }}>
+              <TagLarge >
                 <TextBody2>
                   {startAMPM} {startHour}:{startMin} ~ {endAMPM} {endHour} : {endMin} · {repeatOption}
                 </TextBody2>
@@ -313,24 +339,21 @@ function CalendarMentor({ setIsFinishSet }) {
           })}
 
           {isEditing && availableTimes[selectedDate] && availableTimes[selectedDate].map((e, index) => {
-            let startAMPM = e.startAMPM
-            let startHour = e.startHour
-            let startMin = e.startMin
-            let endAMPM = e.endAMPM
-            let endHour = e.endHour
-            let endMin = e.endMin
-            let repeatOption = e.repeatOption
-            return <Flex>
-              <TagLarge key={index} style={{ marginTop: 16 }}>
-                <TextBody2>
-                  {startAMPM} {startHour}:{startMin} ~ {endAMPM} {endHour} : {endMin} · {repeatOption}
-                </TextBody2>
-              </TagLarge>
-            </Flex>
+
+            return <SetAvailableTime
+              key={index}
+              style={{ marginTop: '16px' }}
+              onRemove={() => {
+                const index = availableTimes[selectedDate].indexOf(e);
+                if (index > -1) {
+                  availableTimes[selectedDate].splice(index, 1);
+                }
+              }}
+              initialTime={e} />
           })}
 
           {isAdding && <Flex style={{ marginTop: '16px' }}>
-            <AddNewAvailableTime onSetTime={(time) => {
+            <SetAvailableTime onSetTime={(time) => {
               addNewAvailableTime(selectedDate, time)
               setIsAdding(false)
             }} />
