@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Card } from "util/Card"
 
@@ -15,7 +16,9 @@ import {
   EmptyWidth,
   TextBody2,
   colorBackgroundCareerDiveBlue,
-  TextHeading6
+  TextHeading6,
+  colorBackgroundCareerDivePink,
+  colorCareerDivePink
 } from "util/styledComponent";
 import { TagLarge } from "util/Custom/CustomTag";
 
@@ -27,6 +30,7 @@ import CalendarMentorUpper from "component/CalendarMentorUpper";
 import { AddOutlined } from "@material-ui/icons";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import SimpleMenu from "util/SimpleMenu";
+import { CustomIconButton } from "util/Custom/CustomIconButton";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -149,17 +153,21 @@ function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
         onClick={() => {
           onSetTime({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
         }}
-      >확인</CustomButton>}
+      >
+        <TextBody2>확인</TextBody2>
+      </CustomButton>}
 
-      {initialTime && <CustomButton
-        style={{ padding: 0, marginLeft: 'auto', padding: '4px 12px' }}
-        height={'32px'}
-        width={'0px'}
+      {initialTime && <CustomIconButton
+        style={{ marginLeft: 'auto' }}
+        Icon={DeleteIcon}
+        default_color={colorBackgroundCareerDivePink}
+        default_text_color={colorCareerDivePink}
+        hover_color={colorCareerDivePink}
         onClick={() => {
           onRemove()
           setIsShow(false)
         }}
-      >삭제</CustomButton>}
+      />}
 
     </RowAlignCenterFlex>
   )
@@ -330,7 +338,7 @@ function CalendarMentor({ setIsFinishSet }) {
             let endMin = e.endMin
             let repeatOption = e.repeatOption
             return <Flex key={index} style={{ justifyContent: 'space-between', marginTop: '16px' }}>
-              <TagLarge >
+              <TagLarge style={{ padding: '4px 12px' }}>
                 <TextBody2>
                   {startAMPM} {startHour}:{startMin} ~ {endAMPM} {endHour} : {endMin} · {repeatOption}
                 </TextBody2>
