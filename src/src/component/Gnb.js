@@ -149,7 +149,6 @@ function Gnb() {
       }
     }
     const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
-    console.log('isAutoLogin', isAutoLogin)
     if (isAutoLogin === true) {
       const RefreshToken = localStorage.getItem('RefreshToken')
       if (RefreshToken !== null) {

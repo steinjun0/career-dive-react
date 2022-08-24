@@ -260,7 +260,7 @@ function CalendarMentor({ setIsFinishSet }) {
   }, [selectedDateObj])
 
   useEffect(() => {
-    console.log('availableTimes', availableTimes)
+    // console.log('availableTimes', availableTimes)
   }, [availableTimes])
 
   return (
@@ -302,7 +302,6 @@ function CalendarMentor({ setIsFinishSet }) {
                 height={'32px'}
                 style={{ padding: '4px 12px' }}
                 onClick={() => {
-                  console.log(tempAvailableTime)
                   availableTimes[selectedDate] = tempAvailableTime
                   setTempAvailableTime([])
                   setIsEditing(false)
@@ -320,7 +319,6 @@ function CalendarMentor({ setIsFinishSet }) {
                 height={'32px'}
                 style={{ padding: '4px 12px' }}
                 onClick={() => {
-                  console.log(availableTimes[selectedDate])
                   setIsEditing(false)
                 }}
               >

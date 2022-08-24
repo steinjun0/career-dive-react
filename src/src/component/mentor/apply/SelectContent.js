@@ -35,7 +35,6 @@ function Introduction({ applyInformation }) {
         reservation['mentoringCategory'] && setMentoringCategory(reservation['mentoringCategory'])
         reservation['mentoringContent'] && setMentoringContent(reservation['mentoringContent'])
         reservation['consultingDate'] && setMentoringDate(new Date(reservation['consultingDate']['year'], reservation['consultingDate']['month'] - 1, reservation['consultingDate']['date']))
-        console.log('mentoringDate.getFullYear()', mentoringDate)
       }
     }
   }, [])
