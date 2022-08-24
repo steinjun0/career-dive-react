@@ -25,6 +25,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MentorSchedule from "pages/Mentor/Schedule";
 import Sendbird from "pages/Sendbird";
 import Session from "./pages/Session";
+import MentorCalendar from "pages/Mentor/Calendar";
 
 const theme = createTheme({
   palette: {
@@ -71,6 +72,7 @@ ReactDOM.render(
           <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
           <Route path="/mentor/home" element={<MentorHome />} />
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
+          <Route path="/mentor/calendar" element={<MentorCalendar />} />
           <Route path="/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewerMentor />} />
 
           <Route path="/sendbird" element={<Sendbird />} />
