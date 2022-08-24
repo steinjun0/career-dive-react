@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Card } from "util/Card"
 
@@ -9,24 +10,25 @@ import {
   colorTextLight,
   Flex,
   colorBackgroundGrayLight,
-  EmptyHeight,
-  TextSubtitle1,
   RowAlignCenterFlex,
   EmptyWidth,
   TextBody2,
   colorBackgroundCareerDiveBlue,
-  TextHeading6
+  TextHeading6,
+  colorBackgroundCareerDivePink,
+  colorCareerDivePink
 } from "util/styledComponent";
 import { TagLarge } from "util/Custom/CustomTag";
 
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { addMinute, updateReservation, usePrevious } from "util/util";
 import CalendarMentorUpper from "component/CalendarMentorUpper";
-import { AddOutlined } from "@material-ui/icons";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import SimpleMenu from "util/SimpleMenu";
+import { CustomIconButton } from "util/Custom/CustomIconButton";
+import API from "API";
+import { type } from "@testing-library/user-event/dist/type";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -49,7 +51,7 @@ const calendarSimpleMenuStyle = {
   borderRadius: '8px'
 };
 
-function AddNewAvailableTime({ onSetTime }) {
+function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
   let housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
   let minsList = ['00', '10', '20', '30', '40', '50']
   const [startAMPM, setStartAMPM] = useState('오전')
@@ -59,17 +61,29 @@ function AddNewAvailableTime({ onSetTime }) {
   const [endHour, setEndHour] = useState('01')
   const [endMin, setEndMin] = useState('00')
   const [repeatOption, setRepeatOption] = useState('매일 반복')
+  const [isShow, setIsShow] = useState(true)
+
+  useEffect(() => {
+    if (initialTime) {
+      setStartAMPM(initialTime.startAMPM)
+      setStartHour(initialTime.startHour)
+      setStartMin(initialTime.startMin)
+      setEndAMPM(initialTime.endAMPM)
+      setEndHour(initialTime.endHour)
+      setEndMin(initialTime.endMin)
+      setRepeatOption(initialTime.repeatOption)
+    }
+  }, [])
 
 
-
-  return (
+  return (isShow &&
     <RowAlignCenterFlex
-      style={{ width: '100%' }}>
+      style={Object.assign({ width: '100%' }, style)}>
       <SimpleMenu
         style={calendarSimpleMenuStyle}
         title={startAMPM}
         menuItems={['오전', '오후']}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.startAMPM = text } : () => { }}
         setState={setStartAMPM}
       />
       <EmptyWidth width={'4px'} />
@@ -77,7 +91,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={startHour}
         menuItems={housrList}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.startHour = text } : () => { }}
         setState={setStartHour}
       />
       <EmptyWidth width={'4px'} />
@@ -87,7 +101,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={startMin}
         menuItems={minsList}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.startMin = text } : () => { }}
         setState={setStartMin}
       />
       <EmptyWidth width={'4px'} />
@@ -97,7 +111,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={endAMPM}
         menuItems={['오전', '오후']}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.endAMPM = text } : () => { }}
         setState={setEndAMPM}
       />
       <EmptyWidth width={'4px'} />
@@ -105,7 +119,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={endHour}
         menuItems={housrList}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.endHour = text } : () => { }}
         setState={setEndHour}
       />
       <EmptyWidth width={'4px'} />
@@ -115,7 +129,7 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={endMin}
         menuItems={minsList}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.endMin = text } : () => { }}
         setState={setEndMin}
       />
       <EmptyWidth width={'4px'} />
@@ -123,33 +137,39 @@ function AddNewAvailableTime({ onSetTime }) {
         style={calendarSimpleMenuStyle}
         title={`${repeatOption}`}
         menuItems={['매일 반복', '매주 반복', '반복 없음']}
-        onClickProps={() => { }}
+        onClickProps={initialTime ? (text) => { initialTime.repeatOption = text } : () => { }}
         setState={setRepeatOption}
         endIcon={<KeyboardArrowDownIcon />}
       />
       <EmptyWidth width={'4px'} />
-      <CustomButton
+
+
+      {!initialTime && <CustomButton
         style={{ padding: 0, marginLeft: 'auto', padding: '4px 12px' }}
         height={'32px'}
         width={'0px'}
         onClick={() => {
           onSetTime({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
         }}
-      >확인</CustomButton>
+      >
+        <TextBody2>확인</TextBody2>
+      </CustomButton>}
+      {initialTime && <CustomIconButton
+        style={{ marginLeft: 'auto' }}
+        Icon={DeleteIcon}
+        default_color={colorBackgroundCareerDivePink}
+        default_text_color={colorCareerDivePink}
+        hover_color={colorCareerDivePink}
+        onClick={() => {
+          onRemove()
+          setIsShow(false)
+        }}
+      />}
+
     </RowAlignCenterFlex>
   )
 
 }
-
-const originData = [{ date: 9, availableTime: [['09:00', '10:30']] },
-{ date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
-{ date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
-{ date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
-{ date: 17, availableTime: [['09:00', '09:30']] },
-{ date: 18, availableTime: [['09:00', '09:30']] },
-]
-
-const availableDates = [9, 10, 11, 16, 17, 18];
 
 
 function CalendarMentor({ setIsFinishSet }) {
@@ -167,18 +187,24 @@ function CalendarMentor({ setIsFinishSet }) {
   const [selectedDateObj, setSelectedDateObj] = useState(new Date());
 
   const [availableTimes, setAvailableTimes] = useState({})
+  const [availableDates, setAvailableDates] = useState([])
 
-  const [isAdding, setIsAdding] = useState(true)
+
+  const [isAdding, setIsAdding] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [tempAvailableTime, setTempAvailableTime] = useState([])
+
+  const ruleTypeConverter = { custom: '반복 없음', week: '매주 반복', day: '매일 반복' }
 
 
-  const addNewAvailableTime = (selectedDate, { startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption }) => {
+  const addNewAvailableTime = async (selectedDate, { startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption }) => {
     let temp = JSON.parse(JSON.stringify(availableTimes))
     if (typeof temp[selectedDate] == 'object') {
       temp[selectedDate].push({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
     } else {
       temp[selectedDate] = [{ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption }]
     }
+    postConsultSchedule(temp)
     setAvailableTimes(temp)
   }
 
@@ -197,8 +223,84 @@ function CalendarMentor({ setIsFinishSet }) {
     }
   }, [consultingTime])
 
-  useEffect(() => {
-  }, [])
+  const getConsultSchedule = async () => {
+    try {
+      const res = await API.getConsultSchedule(year, month.slice(0, -1), Number(localStorage.getItem('UserID')))
+      if (res.status === 200) {
+        if (res.data.DayTimes !== null) {
+          const tempDayTimes = []
+          const tempAvailableTime = availableTimes
+          res.data.DayTimes.map((e) => {
+            tempDayTimes.push(e.Day)
+            tempAvailableTime[e.Day] = []
+            e.StartEnds.map((i) => {
+              let startHour = i.StartTime.slice(0, i.StartTime.indexOf(':'))
+              let startAMPM = startHour <= 12 ? '오전' : '오후'
+              startHour = startHour <= 12 ? startHour : startHour - 12
+              let startMin = i.StartTime.slice(i.StartTime.indexOf(':') + 1)
+
+              let endHour = i.EndTime.slice(0, i.EndTime.indexOf(':'))
+              let endAMPM = endHour <= 12 ? '오전' : '오후'
+              endHour = endHour <= 12 ? endHour : endHour - 12
+              let endMin = i.EndTime.slice(i.EndTime.indexOf(':') + 1)
+
+              let repeatOption = ruleTypeConverter[i.RuleType]
+
+              tempAvailableTime[e.Day].push({
+                startAMPM, startHour, startMin,
+                endAMPM, endHour, endMin,
+                repeatOption,
+                scheduleId: i.ScheduleID
+              })
+
+            })
+            // setAvailableDates([...availableDates, e.Day])
+          })
+          setAvailableDates(tempDayTimes)
+          setAvailableTimes(tempAvailableTime)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const postConsultSchedule = async (availableTimesProps) => {
+    const dayTimes = [...Object.keys(availableTimesProps).map((date) => {
+      return {
+        Day: selectedDate,
+        StartEnds: [...availableTimesProps[date].map((e) => {
+
+          return {
+            StartTime: `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`,
+            EndTime: `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`,
+          }
+        })],
+      }
+    })]
+
+    console.log('dayTimes', dayTimes)
+
+    const res = await API.postConsultSchedule(dayTimes,
+      year,
+      Number(month.slice(0, -1)),
+      Number(localStorage.getItem('UserID'))
+    )
+
+    getConsultSchedule()
+  }
+
+  const saveConsultSchedule = async () => {
+    tempAvailableTime.map(async (e) => {
+      const res = await API.deleteConsultSchedule(e.scheduleId)
+    })
+    const res = await API.postConsultSchedule(availableTimes)
+  }
+
+  useEffect(async () => {
+    getConsultSchedule()
+
+  }, [month])
 
 
   useEffect(() => {
@@ -227,6 +329,7 @@ function CalendarMentor({ setIsFinishSet }) {
 
   useEffect(() => {
     console.log('availableTimes', availableTimes)
+    console.log('availableDates', availableDates)
   }, [availableTimes])
 
   return (
@@ -245,13 +348,14 @@ function CalendarMentor({ setIsFinishSet }) {
           <AddOutlined /> */}
           <Flex style={{ justifyContent: 'space-between', marginTop: '24px', marginBottom: '8px' }}>
             <TextHeading6>상담 가능 시간대 설정</TextHeading6>
-            {!isAdding && <CustomButton
+            {!isAdding && !isEditing && <CustomButton
               background_color={colorBackgroundGrayLight}
               custom_color={colorTextLight}
               width={'0px'}
               height={'32px'}
               style={{ padding: '4px 12px' }}
               onClick={() => {
+                setTempAvailableTime([...availableTimes[selectedDate]])
                 setIsEditing(true)
               }}
             >
@@ -259,10 +363,42 @@ function CalendarMentor({ setIsFinishSet }) {
                 수정
               </TextBody2>
             </CustomButton>}
+            {isEditing && <Flex>
+              <CustomButton
+                background_color={colorBackgroundGrayLight}
+                custom_color={colorTextLight}
+                width={'0px'}
+                height={'32px'}
+                style={{ padding: '4px 12px' }}
+                onClick={() => {
+                  availableTimes[selectedDate] = tempAvailableTime
+                  setTempAvailableTime([])
+                  setIsEditing(false)
+                }}
+              >
+                <TextBody2>
+                  취소
+                </TextBody2>
+              </CustomButton>
+              <EmptyWidth width={'16px'} />
+              <CustomButton
+                background_color={colorCareerDiveBlue}
+                custom_color={'white'}
+                width={'0px'}
+                height={'32px'}
+                style={{ padding: '4px 12px' }}
+                onClick={async () => {
+                  await saveConsultSchedule()
+                  setIsEditing(false)
+                }}
+              >
+                <TextBody2>
+                  저장
+                </TextBody2>
+              </CustomButton>
+            </Flex>}
 
           </Flex>
-
-
 
           {!isEditing && availableTimes[selectedDate] && availableTimes[selectedDate].map((e, index) => {
             let startAMPM = e.startAMPM
@@ -272,35 +408,32 @@ function CalendarMentor({ setIsFinishSet }) {
             let endHour = e.endHour
             let endMin = e.endMin
             let repeatOption = e.repeatOption
-            return <Flex>
-              <TagLarge key={index} style={{ marginTop: 16 }}>
+            return <Flex key={index} style={{ justifyContent: 'space-between', marginTop: '16px' }}>
+              <TagLarge style={{ padding: '4px 12px' }}>
                 <TextBody2>
-                  {startAMPM} {startHour}:{startMin} ~ {endAMPM} {endHour} : {endMin} · {repeatOption}
+                  {startAMPM} {startHour}:{startMin} ~ {endAMPM} {endHour}:{endMin} · {repeatOption}
                 </TextBody2>
               </TagLarge>
             </Flex>
           })}
 
           {isEditing && availableTimes[selectedDate] && availableTimes[selectedDate].map((e, index) => {
-            let startAMPM = e.startAMPM
-            let startHour = e.startHour
-            let startMin = e.startMin
-            let endAMPM = e.endAMPM
-            let endHour = e.endHour
-            let endMin = e.endMin
-            let repeatOption = e.repeatOption
-            return <Flex>
-              <TagLarge key={index} style={{ marginTop: 16 }}>
-                <TextBody2>
-                  {startAMPM} {startHour}:{startMin} ~ {endAMPM} {endHour} : {endMin} · {repeatOption}
-                </TextBody2>
-              </TagLarge>
-            </Flex>
+
+            return <SetAvailableTime
+              key={index}
+              style={{ marginTop: '16px' }}
+              onRemove={() => {
+                const index = availableTimes[selectedDate].indexOf(e);
+                if (index > -1) {
+                  availableTimes[selectedDate].splice(index, 1);
+                }
+              }}
+              initialTime={e} />
           })}
 
           {isAdding && <Flex style={{ marginTop: '16px' }}>
-            <AddNewAvailableTime onSetTime={(time) => {
-              addNewAvailableTime(selectedDate, time)
+            <SetAvailableTime onSetTime={async (time) => {
+              await addNewAvailableTime(selectedDate, time)
               setIsAdding(false)
             }} />
           </Flex>}
@@ -312,7 +445,9 @@ function CalendarMentor({ setIsFinishSet }) {
                 custom_color={colorCareerDiveBlue}
                 width={'0px'}
                 height={'0px'}
-                onClick={() => { setIsAdding(true) }}
+                onClick={async () => {
+                  setIsAdding(true)
+                }}
                 style={{ marginTop: '16px', padding: '4px 12px' }}
               >
                 <TextBody2>

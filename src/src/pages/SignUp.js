@@ -285,7 +285,7 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
         try {
             const accountCreateResponse = await API.postAccount(signUpData.email, signUpData.password, signUpData.nickName);
             if (accountCreateResponse.status === 200) {
-                window.localStorage.setItem('UserId', accountCreateResponse.data.UserId)
+                window.localStorage.setItem('UserID', accountCreateResponse.data.UserID)
                 window.localStorage.setItem('AccessToken', accountCreateResponse.data.AccessToken)
                 window.localStorage.setItem('RefreshToken', accountCreateResponse.data.RefreshToken)
                 alert('회원가입이 완료되었습니다!')

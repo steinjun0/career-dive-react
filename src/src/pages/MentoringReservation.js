@@ -41,7 +41,7 @@ function MentoringReservation() {
 
   const [isFinishSet, setIsFinishSet] = useState(false)
   useEffect(() => {
-    console.log(isFinishSet)
+    // console.log(isFinishSet)
   }, [isFinishSet])
 
   return (

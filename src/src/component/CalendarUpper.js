@@ -112,7 +112,6 @@ function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp, onCl
 
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
   // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
-  console.log('selectedDateObjProp.getDate()', selectedDateObjProp)
   const [selectedDate, setSelectedDate] = useState(selectedDateObjProp ? selectedDateObjProp.getDate() : 0);
 
   const [dates, setDates] = useState(getDatesOfMonth(year, month))

@@ -23,9 +23,8 @@ function SimpleMenu({ title, menuItems = [], style = {}, setState = () => { }, e
         setAnchorEl(null);
     };
     const onClick = (element) => {
-        console.log('element', element.target.outerText)
         handleClose(element.target.outerText)
-        onClickProps && onClickProps()
+        onClickProps && onClickProps(element.target.outerText)
     }
 
     return (<div>
