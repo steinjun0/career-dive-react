@@ -79,7 +79,7 @@ function Login() {
         try {
             const loginResponse = await API.postAccountLogin(email, password);
             if (loginResponse.status === 200) {
-                window.localStorage.setItem('UserId', loginResponse.data['UserID'])
+                window.localStorage.setItem('UserID', loginResponse.data['UserID'])
                 window.localStorage.setItem('AccessToken', loginResponse.data['AccessToken'])
                 window.localStorage.setItem('RefreshToken', loginResponse.data['RefreshToken'])
                 window.localStorage.setItem('isAutoLogin', isAutoLogin)

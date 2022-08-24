@@ -28,7 +28,7 @@ function MentorCalendar() {
         <MaxWidthDiv>
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0} direction="column" alignItems="center">
-              <Grid item xs={6}>
+              <Grid item xs={6} minWidth={582}>
                 <CalendarMentor></CalendarMentor>
               </Grid>
             </Grid>
