@@ -245,7 +245,7 @@ function CalendarMentor({ setIsFinishSet }) {
           <AddOutlined /> */}
           <Flex style={{ justifyContent: 'space-between', marginTop: '24px', marginBottom: '8px' }}>
             <TextHeading6>상담 가능 시간대 설정</TextHeading6>
-            {!isAdding && <CustomButton
+            {!isAdding && !isEditing && <CustomButton
               background_color={colorBackgroundGrayLight}
               custom_color={colorTextLight}
               width={'0px'}
@@ -259,6 +259,37 @@ function CalendarMentor({ setIsFinishSet }) {
                 수정
               </TextBody2>
             </CustomButton>}
+            {isEditing && <Flex>
+              <CustomButton
+                background_color={colorBackgroundGrayLight}
+                custom_color={colorTextLight}
+                width={'0px'}
+                height={'32px'}
+                style={{ padding: '4px 12px' }}
+                onClick={() => {
+                  setIsEditing(false)
+                }}
+              >
+                <TextBody2>
+                  취소
+                </TextBody2>
+              </CustomButton>
+              <EmptyWidth width={'16px'} />
+              <CustomButton
+                background_color={colorCareerDiveBlue}
+                custom_color={'white'}
+                width={'0px'}
+                height={'32px'}
+                style={{ padding: '4px 12px' }}
+                onClick={() => {
+                  setIsEditing(false)
+                }}
+              >
+                <TextBody2>
+                  저장
+                </TextBody2>
+              </CustomButton>
+            </Flex>}
 
           </Flex>
 
