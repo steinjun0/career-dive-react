@@ -176,8 +176,8 @@ export default {
     return userRes
   },
 
-  async deleteTask(taskId) {
-    const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}task/task/${taskId}/`)
+  async deleteConsultSchedule(shceduleId) {
+    const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}/consult/schedule/${shceduleId}`)
     return deleteRes
   },
 
