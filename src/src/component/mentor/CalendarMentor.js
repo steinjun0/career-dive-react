@@ -198,6 +198,7 @@ function CalendarMentor({ setIsFinishSet }) {
 
 
   const addNewAvailableTime = async (selectedDate, { startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption }) => {
+    console.log('startHour', startHour)
     let temp = JSON.parse(JSON.stringify(availableTimes))
     if (typeof temp[selectedDate] == 'object') {
       temp[selectedDate].push({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
@@ -266,9 +267,11 @@ function CalendarMentor({ setIsFinishSet }) {
   }
 
   const postConsultSchedule = async (availableTimesProps) => {
+    console.log('selectedDate', selectedDate)
+    console.log('availableTimesProps', availableTimesProps)
     const dayTimes = [...Object.keys(availableTimesProps).map((date) => {
       return {
-        Day: selectedDate,
+        Day: Number(date),
         StartEnds: [...availableTimesProps[date].map((e) => {
 
           return {
