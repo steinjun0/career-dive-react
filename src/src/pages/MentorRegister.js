@@ -83,7 +83,7 @@ color: #BDBDBD;
 
 
 
-function MentorApply() {
+function MentorRegister() {
     const [signUpData, setSignUpData] = useState({});
     const [signUpStep, setSignUpStep] = useState(1);
 
@@ -351,4 +351,4 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
         </VerticalFlex>
     );
 }
-export default MentorApply;
+export default MentorRegister;
