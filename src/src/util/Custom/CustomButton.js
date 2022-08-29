@@ -10,6 +10,8 @@ export const CustomButton = styled(Button)`
   }
   min-height: ${props => props.height ? props.height : '48px'};
   min-width: ${props => props.width ? props.width : ''};
+  height: ${props => props.height ? props.height : '48px'};
+  width: ${props => props.width ? props.width : ''};
   font-size: 16px;
   line-height: 24px;
   border-radius: 8px !important;
