@@ -101,16 +101,18 @@ function MentorRegister() {
                 <Grid justifyContent="center" container spacing={'30px'} marginTop={0}>
                     <Grid container item xs={4} md={4}>
                         <LoginWrapper>
-                            {signUpStep === 2 && <MentorInfo
+                            {signUpStep === 1 && <MentorInfo
                                 signUpStep={signUpStep}
                                 setSignUpStep={setSignUpStep}
                                 signUpData={signUpData}
                                 setSignUpData={setSignUpData} />}
-                            {signUpStep === 1 && <CareerCertificate
+                            {signUpStep === 2 && <CareerCertificate
                                 signUpStep={signUpStep}
                                 setSignUpStep={setSignUpStep}
                                 signUpData={signUpData}
                                 setSignUpData={setSignUpData} />}
+                            {signUpStep === 3 && <Finish />
+                            }
                         </LoginWrapper>
                     </Grid>
                 </Grid>
@@ -320,68 +322,29 @@ function CareerCertificate({ signUpStep, setSignUpStep, signUpData, setSignUpDat
     );
 }
 
-function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
-    let navigate = useNavigate();
-    const [nickName, setNickName] = useState('');
-    const updateNickName = () => {
-        const updateData = Object.assign(signUpData, { nickName })
-        setSignUpData(updateData)
-    }
-
-    const postAccount = async (email, password) => {
-        try {
-            const accountCreateResponse = await API.postAccount(signUpData.email, signUpData.password, signUpData.nickName);
-            if (accountCreateResponse.status === 200) {
-                window.localStorage.setItem('UserID', accountCreateResponse.data.UserID)
-                window.localStorage.setItem('AccessToken', accountCreateResponse.data.AccessToken)
-                window.localStorage.setItem('RefreshToken', accountCreateResponse.data.RefreshToken)
-                alert('회원가입이 완료되었습니다!')
-                navigate('/')
-
-            } else {
-                alert(accountCreateResponse.error.response.data.error) // 이렇게 복잡해야하는가?
-            }
-        }
-        catch {
-
-        }
-    }
-
+function Finish() {
     return (
         <VerticalFlex>
             <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
                 <TextHeading6>
-                    닉네임 설정
+                    멘토 등록 신청이 완료 되었습니다 👏
                 </TextHeading6>
-                <TextCaption color={colorTextLight}>3/3</TextCaption>
             </RowAlignCenterFlex>
+            <EmptyHeight height='16px' />
+            <TextBody2>
+                빠른 시일 내에 접수해주신 내용 및 경력 인증 확인 후 승인해드리도록 하겠습니다. 신청 결과는 가입 시 입력한 메일을 통해 안내됩니다.
+            </TextBody2>
+            <EmptyHeight height={'30px'} />
 
-            <EmptyHeight height={'40px'} />
-            <TextCaption>닉네임을 자유롭게 설정해보세요.</TextCaption>
-            <EmptyHeight height={'12px'} />
-            <CustomTextField
-                onChange={(event) => { setNickName(event.target.value) }}
-                variant="filled"
-                InputProps={{ disableUnderline: true, }}
-                fullWidth={true}
-                margin="dense"
-                size="small"
-                hiddenLabel
-                placeholder="최대 10자"
-            />
-            <EmptyHeight height={'24px'} />
+
             <ButtonWrapper>
                 <CustomButton
-                    onClick={() => {
-                        updateNickName()
-                        postAccount()
-                    }}
+                    onClick={() => { }}
                     height="50px">
                     완료
                 </CustomButton>
             </ButtonWrapper>
             <EmptyHeight height='30px' />
-
 
         </VerticalFlex>
     );
