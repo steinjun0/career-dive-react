@@ -279,8 +279,6 @@ function CalendarMentor({ setIsFinishSet }) {
       }
     })]
 
-    console.log('dayTimes', dayTimes)
-
     const res = await API.postConsultSchedule(dayTimes,
       year,
       Number(month.slice(0, -1)),
@@ -291,11 +289,12 @@ function CalendarMentor({ setIsFinishSet }) {
   }
 
   const saveConsultSchedule = async () => {
-    tempAvailableTime.map(async (e) => {
+    await Promise.all(tempAvailableTime.map(async (e) => {
       const res = await API.deleteConsultSchedule(e.scheduleId)
-    })
-    const res = await API.postConsultSchedule(availableTimes)
+      return res
+    }))
   }
+
 
   useEffect(async () => {
     getConsultSchedule()
@@ -328,8 +327,8 @@ function CalendarMentor({ setIsFinishSet }) {
   }, [selectedDateObj])
 
   useEffect(() => {
-    console.log('availableTimes', availableTimes)
-    console.log('availableDates', availableDates)
+    // console.log('availableTimes', availableTimes)
+    // console.log('availableDates', availableDates)
   }, [availableTimes])
 
   return (
@@ -355,7 +354,7 @@ function CalendarMentor({ setIsFinishSet }) {
               height={'32px'}
               style={{ padding: '4px 12px' }}
               onClick={() => {
-                setTempAvailableTime([...availableTimes[selectedDate]])
+                setTempAvailableTime(availableTimes[selectedDate] ? [...availableTimes[selectedDate]] : [])
                 setIsEditing(true)
               }}
             >
@@ -389,6 +388,7 @@ function CalendarMentor({ setIsFinishSet }) {
                 style={{ padding: '4px 12px' }}
                 onClick={async () => {
                   await saveConsultSchedule()
+                  await postConsultSchedule(availableTimes)
                   setIsEditing(false)
                 }}
               >
