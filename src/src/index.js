@@ -68,8 +68,7 @@ ReactDOM.render(
           <Route path="/mentee/mypage/account/change" element={<MyPage />} />
           <Route path="/mentee/mypage" element={<Navigate replace to="/mentee/mypage/profile" />} />
 
-          <Route path="/mentor/apply" element={<MentorRegister />} />
-
+          <Route path="/mentor/register" element={<MentorRegister />} />
 
 
           <Route path="/mentor/mypage/:subPage" element={<MyPage />} />
