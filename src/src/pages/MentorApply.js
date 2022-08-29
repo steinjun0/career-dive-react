@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom';
 import SimpleMenu from 'util/SimpleMenu.js';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { CustomToggleButton } from 'util/Custom/CutomToggleButton.js';
 
 
 const LoginWrapper = styled(VerticalFlex)`
@@ -176,11 +177,8 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
                 직무 정보
             </TextSubtitle2>
             <EmptyHeight height='16px' />
-
             <SimpleMenu title={<TextBody2>직무</TextBody2>} font style={{ width: '358px', height: '48px', backgroundColor: colorBackgroundGrayLight, justifyContent: 'space-between', padding: '10px 20px ' }} menuItems={['asdf']} setState={() => { }} endIcon={<KeyboardArrowDownIcon color={colorTextLight} />} onClickProps></SimpleMenu>
-
             <EmptyHeight height='16px' />
-
             <CustomTextField
                 onChange={(event) => { }}
                 variant="filled"
@@ -198,7 +196,6 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
                 부서
             </TextSubtitle2>
             <EmptyHeight height='16px' />
-
             <CustomTextField
                 onChange={(event) => { }}
                 variant="filled"
@@ -209,59 +206,38 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
                 hiddenLabel
                 placeholder="부서"
             />
+            <EmptyHeight height='16px' />
+
+            <TextSubtitle2>
+                부서 공개 여부
+            </TextSubtitle2>
+            <EmptyHeight height='16px' />
+            <TextBody2 color={colorTextLight}>추후 공개 여부 변경 가능</TextBody2>
+            <EmptyHeight height='16px' />
+            <Flex style={{ alignItems: 'center' }}>
+                <CustomToggleButton />
+                <EmptyWidth width={'8px'} />
+                <TextBody2 color={colorCareerDiveBlue}>공개</TextBody2>
+            </Flex>
+            <EmptyHeight height='30px' />
+
+            <TextSubtitle2>
+                태그
+            </TextSubtitle2>
+            <EmptyHeight height='16px' />
+            <CustomTextField
+                onChange={(event) => { }}
+                variant="filled"
+                InputProps={{ disableUnderline: true, }}
+                fullWidth={true}
+                margin="dense"
+                size="small"
+                hiddenLabel
+                placeholder="ex. 커리어다이브, 플랫폼, 에듀테크, 금융서비스 등"
+            />
+            <EmptyHeight height='30px' />
 
 
-
-            <SubButtonsWrapper>
-                <RowAlignCenterFlex>
-                    <CustomCheckbox isChecked={isCheckUsingTerm} setIsChecked={setIsCheckUsingTerm} />
-                    <SubButtons
-                        style={{ marginLeft: 4 }}
-                        onClick={(e) => { setIsCheckUsingTerm(!isCheckUsingTerm) }}>
-                        이용 약관 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
-                    </SubButtons>
-                </RowAlignCenterFlex>
-
-                <TermsButton>
-                    약관
-                </TermsButton>
-            </SubButtonsWrapper>
-            <SubButtonsWrapper>
-                <RowAlignCenterFlex>
-                    <CustomCheckbox isChecked={isCheckPersonalData} setIsChecked={setIsCheckPersonalData} />
-                    <SubButtons
-                        style={{ marginLeft: 4 }}
-                        onClick={(e) => { setIsCheckPersonalData(!isCheckPersonalData) }}>
-                        개인 정보 활용 동의 <SpanCareerDiveBlue>(필수)</SpanCareerDiveBlue>
-                    </SubButtons>
-                </RowAlignCenterFlex>
-
-                <TermsButton>
-                    약관
-                </TermsButton>
-            </SubButtonsWrapper>
-            <SubButtonsWrapper>
-                <RowAlignCenterFlex>
-                    <CustomCheckbox isChecked={isCheckMarketing} setIsChecked={setIsCheckMarketing} />
-                    <SubButtons
-                        style={{ marginLeft: 4 }}
-                        onClick={(e) => { setIsCheckMarketing(!isCheckMarketing) }}>
-                        마케팅 수신 동의 <SpanWeak>(선택)</SpanWeak>
-                    </SubButtons>
-                </RowAlignCenterFlex>
-
-                <TermsButton>
-                    약관
-                </TermsButton>
-            </SubButtonsWrapper>
-            <Divider style={{ marginBottom: '12px' }}></Divider>
-            <SubButtonsWrapper>
-                <RowAlignCenterFlex>
-                    <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} onClick={checkAll} />
-                    <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { checkAll() }}>전체 동의</SubButtons>
-                </RowAlignCenterFlex>
-            </SubButtonsWrapper>
-            <EmptyHeight height={'12px'} />
             <ButtonWrapper>
                 <CustomButton
                     onClick={() => {
@@ -271,6 +247,7 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
                     다음
                 </CustomButton>
             </ButtonWrapper>
+            <EmptyHeight height='30px' />
 
         </VerticalFlex >
     );
