@@ -30,6 +30,8 @@ import SimpleMenu from 'util/SimpleMenu.js';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomToggleButton } from 'util/Custom/CutomToggleButton.js';
+import Dropzone from 'react-dropzone';
+import UploadIcon from 'assets/icon/UploadIcon'
 
 
 const LoginWrapper = styled(VerticalFlex)`
@@ -80,7 +82,13 @@ const SpanCareerDiveBlue = styled('span')`
 const SpanWeak = styled('span')`
 color: #BDBDBD;
 `
-
+const FileDropzoneContent = styled(Flex)`
+  background-color: ${colorBackgroundGrayLight};
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: 60px;
+`;
 
 
 function MentorRegister() {
@@ -93,12 +101,12 @@ function MentorRegister() {
                 <Grid justifyContent="center" container spacing={'30px'} marginTop={0}>
                     <Grid container item xs={4} md={4}>
                         <LoginWrapper>
-                            {signUpStep === 1 && <MentorInfo
+                            {signUpStep === 2 && <MentorInfo
                                 signUpStep={signUpStep}
                                 setSignUpStep={setSignUpStep}
                                 signUpData={signUpData}
                                 setSignUpData={setSignUpData} />}
-                            {signUpStep === 2 && <CareerCertificate
+                            {signUpStep === 1 && <CareerCertificate
                                 signUpStep={signUpStep}
                                 setSignUpStep={setSignUpStep}
                                 signUpData={signUpData}
@@ -258,28 +266,55 @@ function CareerCertificate({ signUpStep, setSignUpStep, signUpData, setSignUpDat
         const updateData = Object.assign(signUpData, { phoneAuth: true })
         setSignUpData(updateData)
     }
+    const [uploadingFiles, setUploadingFiles] = useState([])
+
     return (
         <VerticalFlex>
             <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
                 <TextHeading6>
-                    회원가입
+                    경력 인증
                 </TextHeading6>
-                <TextCaption color={colorTextLight}>2/3</TextCaption>
             </RowAlignCenterFlex>
+            <EmptyHeight height='4px' />
+            <TextBody2>
+                국민건강보험 사이트에서 발급한 자격득실확인서(PDF)를 첨부해 주세요. 해당 서류를 통해 재직 기간과 회사가 인증되며, 한 개의 회사만 인증이 가능합니다.
+                <br />
+                <br />
+                (사이트 접속 > 자격득실 확인서 발급 > ‘프린트 발급’ 클릭)
+            </TextBody2>
+            <EmptyHeight height={'30px'} />
 
+            {/* TODO: upload 파일 취소 버튼 필요 */}
+            <Dropzone onDrop={acceptedFiles => {
+                if (uploadingFiles.length + acceptedFiles.length > 2) {
+                    alert('업로드 파일이 3개 이상입니다.')
+                    return
+                }
+                const temp = []
+                acceptedFiles.forEach(file => {
+                    temp.push(file.path)
+                })
+                setUploadingFiles([...uploadingFiles, ...temp])
+            }}>
+                {({ getRootProps, getInputProps }) => (
+                    <section>
+                        <FileDropzoneContent {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <UploadIcon color={colorTextLight} />
+                        </FileDropzoneContent>
+                    </section>
+                )}
+            </Dropzone>
 
-            <EmptyHeight height={'40px'} />
+            <EmptyHeight height={'30px'} />
             <ButtonWrapper>
                 <CustomButton
                     onClick={() => { updatePhoneAuth(); setSignUpStep(signUpStep + 1) }}
                     height="50px">
-                    휴대폰 본인 인증
+                    인증 요청
                 </CustomButton>
             </ButtonWrapper>
             <EmptyHeight height='30px' />
-            <FullWidthWrapper>
-                <TextBody2>입력하신 전화번호는 본인 인증 용도로만 사용됩니다.</TextBody2>
-            </FullWidthWrapper>
 
         </VerticalFlex>
     );
