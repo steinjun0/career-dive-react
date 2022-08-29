@@ -166,6 +166,11 @@ export default {
     return scheduleRes
   },
 
+  async postConsultScheduleRule(startTime, endTime, weekDay, type, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
+    return scheduleRes
+  },
+
   async patchAccount(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
     return userRes
