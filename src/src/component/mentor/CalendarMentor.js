@@ -267,13 +267,15 @@ function CalendarMentor({ setIsFinishSet }) {
   }
 
   const postConsultSchedule = async (availableTimesProps) => {
-    console.log('selectedDate', selectedDate)
-    console.log('availableTimesProps', availableTimesProps)
     const dayTimes = [...Object.keys(availableTimesProps).map((date) => {
       return {
         Day: Number(date),
-        StartEnds: [...availableTimesProps[date].map((e) => {
-
+        StartEnds: [...availableTimesProps[date].filter((e) => {
+          if (e.repeatOption === '반복 없음') {
+            return true
+          }
+          return false
+        }).map((e) => {
           return {
             StartTime: `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`,
             EndTime: `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`,
