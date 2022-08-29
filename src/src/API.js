@@ -167,7 +167,7 @@ export default {
   },
 
   async postConsultScheduleRule(startTime, endTime, weekDay, type, mentorId) {
-    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
     return scheduleRes
   },
 
