@@ -51,9 +51,19 @@ const calendarSimpleMenuStyle = {
   borderRadius: '8px'
 };
 
+const repeatOptionConverter = {
+  '반복 없음': 'custom',
+  '매일 반복': 'week',
+  '매주 반복': 'day',
+  'custom': '반복 없음',
+  'week': '매일 반복',
+  'day': '매주 반복',
+}
+
 function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
-  let housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-  let minsList = ['00', '10', '20', '30', '40', '50']
+  const housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+  const minsList = ['00', '10', '20', '30', '40', '50']
+
   const [startAMPM, setStartAMPM] = useState('오전')
   const [startHour, setStartHour] = useState('01')
   const [startMin, setStartMin] = useState('00')
@@ -146,8 +156,6 @@ function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
 
       {!initialTime && <CustomButton
         style={{ padding: 0, marginLeft: 'auto', padding: '4px 12px' }}
-        height={'32px'}
-        width={'0px'}
         onClick={() => {
           onSetTime({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
         }}
@@ -290,6 +298,35 @@ function CalendarMentor({ setIsFinishSet }) {
       Number(localStorage.getItem('UserID'))
     )
 
+    await Promise.all(Object.keys(availableTimesProps).map(
+      async (date) => {
+        availableTimesProps[date].filter((e) => {
+          if (e.repeatOption === '반복 없음') {
+            return false
+          }
+          return true
+        }).map(
+          async (e) => {
+            const startTime = `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
+            const endTime = `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
+            const weekDay = new Date(year, Number(month.slice(0, -1)) - 1, date).getDay()
+            const type = e.repeatOption
+            Number(localStorage.getItem('UserID'))
+            console.log(startTime, endTime, weekDay, repeatOptionConverter[type], Number(localStorage.getItem('UserID')))
+
+            const res = await API.postConsultScheduleRule(
+              startTime,
+              endTime,
+              weekDay,
+              repeatOptionConverter[type],
+              Number(localStorage.getItem('UserID'))
+            )
+
+
+          })
+      }))
+
+
     getConsultSchedule()
   }
 
@@ -355,8 +392,6 @@ function CalendarMentor({ setIsFinishSet }) {
             {!isAdding && !isEditing && <CustomButton
               background_color={colorBackgroundGrayLight}
               custom_color={colorTextLight}
-              width={'0px'}
-              height={'32px'}
               style={{ padding: '4px 12px' }}
               onClick={() => {
                 setTempAvailableTime(availableTimes[selectedDate] ? [...availableTimes[selectedDate]] : [])
@@ -371,8 +406,6 @@ function CalendarMentor({ setIsFinishSet }) {
               <CustomButton
                 background_color={colorBackgroundGrayLight}
                 custom_color={colorTextLight}
-                width={'0px'}
-                height={'32px'}
                 style={{ padding: '4px 12px' }}
                 onClick={() => {
                   availableTimes[selectedDate] = tempAvailableTime
@@ -388,8 +421,6 @@ function CalendarMentor({ setIsFinishSet }) {
               <CustomButton
                 background_color={colorCareerDiveBlue}
                 custom_color={'white'}
-                width={'0px'}
-                height={'32px'}
                 style={{ padding: '4px 12px' }}
                 onClick={async () => {
                   await saveConsultSchedule()
@@ -448,8 +479,6 @@ function CalendarMentor({ setIsFinishSet }) {
               <CustomButton
                 background_color={colorBackgroundCareerDiveBlue}
                 custom_color={colorCareerDiveBlue}
-                width={'0px'}
-                height={'0px'}
                 onClick={async () => {
                   setIsAdding(true)
                 }}
