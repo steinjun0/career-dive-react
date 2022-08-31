@@ -228,6 +228,7 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                     <CustomButton
                         background_color={colorBackgroundGrayLight}
                         custom_color={colorTextDisabled}
+                        height={'48px'}
                     >
                         다음
                     </CustomButton>
@@ -235,7 +236,8 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                     <CustomButton
                         onClick={() => {
                             setSignUpStep(signUpStep + 1)
-                        }}>
+                        }}
+                        height={'48px'}>
                         다음
                     </CustomButton>}
             </ButtonWrapper>

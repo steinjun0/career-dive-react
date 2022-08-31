@@ -211,15 +211,27 @@ function Gnb() {
           {isInMentor() ? <LinkNoDeco to={'/'}>
             <CustomButton
               width={'83px'}
+              height={'43px'}
               style={{ marginRight: 24 }}
               background_color={colorBackgroundGrayLight}
-              custom_color={colorCareerDiveBlue}>멘티 모드</CustomButton>
+              custom_color={colorCareerDiveBlue}
+            >
+              <TextSubtitle2>
+                멘티 모드
+              </TextSubtitle2>
+            </CustomButton>
           </LinkNoDeco> : <LinkNoDeco to={'/mentor/home'}>
             <CustomButton
               width={'83px'}
-              style={{ marginRight: 24 }}
+              height={'48px'}
+              padding={'12px 14px'}
+              style={{ marginRight: 24, }}
               background_color={colorBackgroundGrayLight}
-              custom_color={colorCareerDiveBlue}>멘토 모드</CustomButton>
+              custom_color={colorCareerDiveBlue}>
+              <TextSubtitle2>
+                멘토 모드
+              </TextSubtitle2>
+            </CustomButton>
           </LinkNoDeco>}
 
           <NotificationsNoneIcon style={{ marginRight: 14 }} />

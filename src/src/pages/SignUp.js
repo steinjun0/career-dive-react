@@ -229,6 +229,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
             <EmptyHeight height={'12px'} />
             <ButtonWrapper>
                 <CustomButton
+                    height={'48px'}
                     onClick={() => {
                         updateSignUpData(signUpData, setSignUpData);
                         setSignUpStep(signUpStep + 1)
