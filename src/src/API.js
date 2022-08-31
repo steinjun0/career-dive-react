@@ -171,6 +171,16 @@ export default {
     return scheduleRes
   },
 
+  async postAccountMentor(inService, job, jobInComp, divisInComp, divisIsPub, tags) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/mentor`, { Mentor: { Inservice: inService, Job: job, JobInComp: jobInComp, DivisInComp: divisInComp, DivisIsPub: divisIsPub }, Tags: tags })
+    return scheduleRes
+  },
+
+  async postAccountMentorFile(id, file) {
+    const scheduleRes = await this.postAxiosFormData(`${CAREER_DIVE_API_URL}/account/mentor/${id}/file`, file)
+    return scheduleRes
+  },
+
   async patchAccount(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
     return userRes

@@ -64,7 +64,13 @@ function MentorRegister() {
     const [tagsString, setTagsString] = useState('')
     const [tags, setTags] = useState([])
     useEffect(() => {
-        setTags(tagsString.split(',').map(element => element.trim()))
+        const pureTags = tagsString.split(',').map(element => element.trim()).filter((e) => e.length === 0 ? false : true)
+        let tempTags = []
+        pureTags.map((e) => {
+            tempTags.push({ Name: e })
+        })
+        setTags(tempTags)
+
     }, [tagsString])
 
     const mentorInfoState = {
@@ -86,6 +92,7 @@ function MentorRegister() {
                             {signUpStep === 2 && <CareerCertificate
                                 signUpStep={signUpStep}
                                 setSignUpStep={setSignUpStep}
+                                mentorInfoState={mentorInfoState}
                             />}
                             {signUpStep === 3 && <Finish />
                             }
@@ -238,10 +245,31 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
     );
 }
 
-function CareerCertificate({ signUpStep, setSignUpStep }) {
-    const onClickAuthRequest = () => {
+function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
+    const [uploadingFile, setUploadingFile] = useState([])
+    const onClickAuthRequest = async () => {
+        const accountRes = await API.postAccountMentor(
+            mentorInfoState.inService,
+            mentorInfoState.job,
+            mentorInfoState.jobInComp,
+            mentorInfoState.divisInComp,
+            mentorInfoState.divisIsPub,
+            mentorInfoState.tags)
+
+        if (accountRes.status === 200) {
+            alert('멘토 정보 등록 되었습니다')
+            const fileRes = await API.postAccountMentorFile(localStorage.getItem('UserID'), uploadingFile)
+            if (fileRes.status === 200) {
+                alert('자격득실확인서 등록 되었습니다')
+            } else {
+                alert('자격득실확인서 등록 실패')
+            }
+        } else {
+            alert('멘토 정보 등록 실패')
+        }
+
+
     }
-    const [uploadingFiles, setUploadingFiles] = useState([])
 
     return (
         <VerticalFlex>
@@ -259,17 +287,12 @@ function CareerCertificate({ signUpStep, setSignUpStep }) {
             </TextBody2>
             <EmptyHeight height={'30px'} />
 
-            {/* TODO: upload 파일 취소 버튼 필요 */}
             <Dropzone onDrop={acceptedFiles => {
-                if (uploadingFiles.length + acceptedFiles.length > 2) {
-                    alert('업로드 파일이 3개 이상입니다.')
+                if (acceptedFiles.length > 1) {
+                    alert('업로드 파일이 2개 이상입니다.')
                     return
                 }
-                const temp = []
-                acceptedFiles.forEach(file => {
-                    temp.push(file.path)
-                })
-                setUploadingFiles([...uploadingFiles, ...temp])
+                setUploadingFile(acceptedFiles[0])
             }}>
                 {({ getRootProps, getInputProps }) => (
                     <section>
@@ -280,11 +303,15 @@ function CareerCertificate({ signUpStep, setSignUpStep }) {
                     </section>
                 )}
             </Dropzone>
+            {uploadingFile.name}
 
             <EmptyHeight height={'30px'} />
             <ButtonWrapper>
                 <CustomButton
-                    onClick={() => { onClickAuthRequest(); setSignUpStep(signUpStep + 1) }}
+                    onClick={() => {
+                        onClickAuthRequest();
+                        setSignUpStep(signUpStep + 1)
+                    }}
                     height="50px">
                     인증 요청
                 </CustomButton>
