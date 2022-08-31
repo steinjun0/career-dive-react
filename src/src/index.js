@@ -70,7 +70,6 @@ ReactDOM.render(
 
           <Route path="/mentor/register" element={<MentorRegister />} />
 
-
           <Route path="/mentor/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentor/mypage/account/change" element={<MyPage />} />
           <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
@@ -78,8 +77,6 @@ ReactDOM.render(
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
           <Route path="/mentor/calendar" element={<MentorCalendar />} />
           <Route path="/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewerMentor />} />
-
-
 
           <Route path="/sendbird" element={<Sendbird />} />
           <Route path="/session" element={<Session />} />

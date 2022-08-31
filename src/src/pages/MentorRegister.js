@@ -19,7 +19,9 @@ import {
     colorBackgroundGrayMedium,
     FullWidthWrapper,
     TextSubtitle2,
-    EmptyWidth
+    EmptyWidth,
+    colorBackgroundCareerDiveBlue,
+    colorTextDisabled
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
@@ -29,59 +31,19 @@ import { useNavigate } from 'react-router-dom';
 import SimpleMenu from 'util/SimpleMenu.js';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { CustomToggleButton } from 'util/Custom/CutomToggleButton.js';
+import { CustomToggleButton, onChangeToggle } from 'util/Custom/CutomToggleButton.js';
 import Dropzone from 'react-dropzone';
 import UploadIcon from 'assets/icon/UploadIcon'
 
 
 const LoginWrapper = styled(VerticalFlex)`
-  width: 100%;
+  min-width: 378px;
 `
-
-const TextFieldWrapper = styled(Flex)`
-  width: 100%;
-  margin-top: 36px;
-  margin-bottom: 24px;
-  flex-direction: column;
-  justify-content: space-between;
-  input{
-    color: black;
-    background-color: ${colorBackgroundGrayLight};
-  }
-`
-
-const SubButtonsWrapper = styled(RowAlignCenterFlex)`
-  justify-content: space-between;
-  margin-bottom: 12px;
-`;
-
-const SubButtons = styled(TextBody2)`
-  color: ${colorTextLight};
-  cursor: pointer;
-`;
 
 const ButtonWrapper = styled(VerticalFlex)`
 //   margin-top: 20px;
 `
 
-const TermsButton = styled(Flex)`
-  justify-content: center;
-  align-items: center;
-  border: 1px solid ${colorBackgroundGrayMedium};
-  border-radius: 2px;
-  width: 39px;
-  height: 20px;
-  font-size: 10px;
-  color: ${colorTextLight};
-`;
-
-const SpanCareerDiveBlue = styled('span')`
-  color: ${colorCareerDiveBlue};
-`
-
-const SpanWeak = styled('span')`
-color: #BDBDBD;
-`
 const FileDropzoneContent = styled(Flex)`
   background-color: ${colorBackgroundGrayLight};
   justify-content: center;
@@ -92,8 +54,23 @@ const FileDropzoneContent = styled(Flex)`
 
 
 function MentorRegister() {
-    const [signUpData, setSignUpData] = useState({});
     const [signUpStep, setSignUpStep] = useState(1);
+
+    const [inService, setInService] = useState(true)
+    const [job, setJob] = useState('')
+    const [jobInComp, setJobInComp] = useState('')
+    const [divisInComp, setDivisInComp] = useState('')
+    const [divisIsPub, setDivisIsPub] = useState(true)
+    const [tagsString, setTagsString] = useState('')
+    const [tags, setTags] = useState([])
+    useEffect(() => {
+        setTags(tagsString.split(',').map(element => element.trim()))
+    }, [tagsString])
+
+    const mentorInfoState = {
+        inService, setInService, job, setJob, jobInComp, setJobInComp, divisInComp, setDivisInComp,
+        divisIsPub, setDivisIsPub, tagsString, setTagsString, tags, setTags
+    }
 
     return (
         <FullHeightFullWidthWrapper>
@@ -104,13 +81,12 @@ function MentorRegister() {
                             {signUpStep === 1 && <MentorInfo
                                 signUpStep={signUpStep}
                                 setSignUpStep={setSignUpStep}
-                                signUpData={signUpData}
-                                setSignUpData={setSignUpData} />}
+                                mentorInfoState={mentorInfoState}
+                            />}
                             {signUpStep === 2 && <CareerCertificate
                                 signUpStep={signUpStep}
                                 setSignUpStep={setSignUpStep}
-                                signUpData={signUpData}
-                                setSignUpData={setSignUpData} />}
+                            />}
                             {signUpStep === 3 && <Finish />
                             }
                         </LoginWrapper>
@@ -121,42 +97,17 @@ function MentorRegister() {
     );
 }
 
-function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const [isCheckUsingTerm, setIsCheckUsingTerm] = useState(false);
-    const [isCheckPersonalData, setIsCheckPersonalData] = useState(false);
-    const [isCheckMarketing, setIsCheckMarketing] = useState(false);
-    const [isCheckAll, setIsCheckAll] = useState(false);
-
-    const updateSignUpData = (signUpData, setSignUpData) => {
-        const updateData = Object.assign(signUpData, { email, password, isCheckUsingTerm, isCheckPersonalData, isCheckMarketing })
-        setSignUpData(updateData);
-    }
-
-    const checkAll = () => {
-        if (!isCheckAll) {
-            setIsCheckUsingTerm(true)
-            setIsCheckPersonalData(true)
-            setIsCheckMarketing(true)
-            setIsCheckAll(true)
-        } else {
-            setIsCheckUsingTerm(false)
-            setIsCheckPersonalData(false)
-            setIsCheckMarketing(false)
-            setIsCheckAll(false)
-        }
-    }
-
+function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
+    const [nextButtonDisable, setNextButtonDisable] = useState(true)
 
     useEffect(() => {
-        if (isCheckUsingTerm && isCheckPersonalData && isCheckMarketing) {
-            setIsCheckAll(true);
+        if (mentorInfoState.job !== '' && mentorInfoState.divisInComp !== '') {
+            setNextButtonDisable(false)
         } else {
-            setIsCheckAll(false);
+            setNextButtonDisable(true)
         }
-    }, [isCheckUsingTerm, isCheckPersonalData, isCheckMarketing])
+    }, [...Object.keys(mentorInfoState).map((k) => mentorInfoState[k])])
+
     return (
         <VerticalFlex>
             <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
@@ -170,13 +121,20 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
             <EmptyHeight height='30px' />
 
             <RowAlignCenterFlex >
-                <CustomButton background_color={colorBackgroundGrayLight} custom_color={colorTextLight}
-                    height='44px' width='82px'>
+                <CustomButton
+                    background_color={mentorInfoState.inService ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight}
+                    custom_color={mentorInfoState.inService ? colorCareerDiveBlue : colorTextLight}
+                    height='44px' width='82px'
+                    onClick={() => mentorInfoState.setInService(true)}>
+
                     <TextBody2>전 직장</TextBody2>
                 </CustomButton>
                 <EmptyWidth width={'16px'}></EmptyWidth>
-                <CustomButton background_color={colorBackgroundGrayLight} custom_color={colorTextLight}
-                    height='44px' width='82px'>
+                <CustomButton
+                    background_color={!mentorInfoState.inService ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight}
+                    custom_color={!mentorInfoState.inService ? colorCareerDiveBlue : colorTextLight}
+                    height='44px' width='82px'
+                    onClick={() => mentorInfoState.setInService(false)}>
                     <TextBody2>현 직장</TextBody2>
                 </CustomButton>
             </RowAlignCenterFlex>
@@ -187,10 +145,17 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
                 직무 정보
             </TextSubtitle2>
             <EmptyHeight height='16px' />
-            <SimpleMenu title={<TextBody2>직무</TextBody2>} font style={{ width: '358px', height: '48px', backgroundColor: colorBackgroundGrayLight, justifyContent: 'space-between', padding: '10px 20px ' }} menuItems={['asdf']} setState={() => { }} endIcon={<KeyboardArrowDownIcon color={colorTextLight} />} onClickProps></SimpleMenu>
+            <SimpleMenu
+                title={<TextBody2>{mentorInfoState.job === '' ? '선택' : mentorInfoState.job}</TextBody2>}
+                font
+                style={{ width: '378px', height: '48px', backgroundColor: colorBackgroundGrayLight, justifyContent: 'space-between', padding: '10px 20px ' }}
+                menuItems={['딸기우유']}
+                setState={mentorInfoState.setJob}
+                endIcon={<KeyboardArrowDownIcon color={colorTextLight} />}
+                onClickProps={() => { }}></SimpleMenu>
             <EmptyHeight height='16px' />
             <CustomTextField
-                onChange={(event) => { }}
+                onChange={(event) => { mentorInfoState.setJobInComp(event.target.value) }}
                 variant="filled"
                 InputProps={{ disableUnderline: true, }}
                 fullWidth={true}
@@ -207,7 +172,7 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
             </TextSubtitle2>
             <EmptyHeight height='16px' />
             <CustomTextField
-                onChange={(event) => { }}
+                onChange={(event) => { mentorInfoState.setDivisInComp(event.target.value) }}
                 variant="filled"
                 InputProps={{ disableUnderline: true, }}
                 fullWidth={true}
@@ -225,7 +190,10 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
             <TextBody2 color={colorTextLight}>추후 공개 여부 변경 가능</TextBody2>
             <EmptyHeight height='16px' />
             <Flex style={{ alignItems: 'center' }}>
-                <CustomToggleButton />
+                <CustomToggleButton
+                    checked={mentorInfoState.divisIsPub}
+                    onChange={(e) => { onChangeToggle(e, mentorInfoState.divisIsPub, mentorInfoState.setDivisIsPub) }}
+                />
                 <EmptyWidth width={'8px'} />
                 <TextBody2 color={colorCareerDiveBlue}>공개</TextBody2>
             </Flex>
@@ -236,7 +204,7 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
             </TextSubtitle2>
             <EmptyHeight height='16px' />
             <CustomTextField
-                onChange={(event) => { }}
+                onChange={(event) => { mentorInfoState.setTagsString(event.target.value) }}
                 variant="filled"
                 InputProps={{ disableUnderline: true, }}
                 fullWidth={true}
@@ -249,13 +217,20 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
 
 
             <ButtonWrapper>
-                <CustomButton
-                    onClick={() => {
-                        updateSignUpData(signUpData, setSignUpData);
-                        setSignUpStep(signUpStep + 1)
-                    }}>
-                    다음
-                </CustomButton>
+                {nextButtonDisable ?
+                    <CustomButton
+                        background_color={colorBackgroundGrayLight}
+                        custom_color={colorTextDisabled}
+                    >
+                        다음
+                    </CustomButton>
+                    :
+                    <CustomButton
+                        onClick={() => {
+                            setSignUpStep(signUpStep + 1)
+                        }}>
+                        다음
+                    </CustomButton>}
             </ButtonWrapper>
             <EmptyHeight height='30px' />
 
@@ -263,10 +238,8 @@ function MentorInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
     );
 }
 
-function CareerCertificate({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
-    const updatePhoneAuth = () => {
-        const updateData = Object.assign(signUpData, { phoneAuth: true })
-        setSignUpData(updateData)
+function CareerCertificate({ signUpStep, setSignUpStep }) {
+    const onClickAuthRequest = () => {
     }
     const [uploadingFiles, setUploadingFiles] = useState([])
 
@@ -311,7 +284,7 @@ function CareerCertificate({ signUpStep, setSignUpStep, signUpData, setSignUpDat
             <EmptyHeight height={'30px'} />
             <ButtonWrapper>
                 <CustomButton
-                    onClick={() => { updatePhoneAuth(); setSignUpStep(signUpStep + 1) }}
+                    onClick={() => { onClickAuthRequest(); setSignUpStep(signUpStep + 1) }}
                     height="50px">
                     인증 요청
                 </CustomButton>
