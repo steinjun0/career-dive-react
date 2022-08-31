@@ -166,6 +166,21 @@ export default {
     return scheduleRes
   },
 
+  async postConsultScheduleRule(startTime, endTime, weekDay, type, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
+    return scheduleRes
+  },
+
+  async postAccountMentor(inService, job, jobInComp, divisInComp, divisIsPub, tags) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/mentor`, { Mentor: { Inservice: inService, Job: job, JobInComp: jobInComp, DivisInComp: divisInComp, DivisIsPub: divisIsPub }, Tags: tags })
+    return scheduleRes
+  },
+
+  async postAccountMentorFile(id, file) {
+    const scheduleRes = await this.postAxiosFormData(`${CAREER_DIVE_API_URL}/account/mentor/${id}/file`, file)
+    return scheduleRes
+  },
+
   async patchAccount(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
     return userRes
@@ -176,8 +191,21 @@ export default {
     return userRes
   },
 
+  async patchConsultScheduleRule(ruleId, startTime, endTime, weekDay, type, mentorId) {
+    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
+    return patchRes
+  },
+
   async deleteConsultSchedule(shceduleId) {
     const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}/consult/schedule/${shceduleId}`)
+    return deleteRes
+  },
+
+  async deleteConsultScheduleRule(ruleId, startDate) {
+    // startDate form = yyyy-mm-dd
+    console.log('startDate', startDate)
+    console.log(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}?${startDate ? `startDate=${startDate}` : ''}`)
+    const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}?${startDate ? `startDate=${startDate}` : ''}`)
     return deleteRes
   },
 

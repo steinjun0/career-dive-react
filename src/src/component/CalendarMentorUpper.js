@@ -107,9 +107,9 @@ const getDatesOfMonth = (year, month) => {
 }
 
 
-function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp }) {
+function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp, month, setMonth }) {
   const year = 2022;
-  const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : '0월');
+  // const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : '0월');
 
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
   // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
@@ -136,7 +136,7 @@ function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp
   // }, [month])
 
   const onClickMonth = () => {
-    if (prevMonth !== '0월' && month.length !== 0) {
+    if (month.length !== 0) {
       setSelectedDate(0)
     }
     const selectedDateObj = new Date(year, Number(month.slice(0, -1)), 0)

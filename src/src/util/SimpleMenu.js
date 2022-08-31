@@ -48,7 +48,7 @@ function SimpleMenu({ title, menuItems = [], style = {}, setState = () => { }, e
             }}
         >
             {menuItems.map((element, index) =>
-                <MenuItem key={index} onClick={(element) => { onClick(element) }}>{element}</MenuItem>
+                <MenuItem style={{ width: style.width }} key={index} onClick={(element) => { onClick(element) }}>{element}</MenuItem>
             )}
         </Menu>
     </div>);

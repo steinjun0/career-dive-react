@@ -26,6 +26,7 @@ import MentorSchedule from "pages/Mentor/Schedule";
 import Sendbird from "pages/Sendbird";
 import Session from "./pages/Session";
 import MentorCalendar from "pages/Mentor/Calendar";
+import MentorRegister from "pages/MentorRegister";
 
 const theme = createTheme({
   palette: {
@@ -66,6 +67,8 @@ ReactDOM.render(
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentee/mypage/account/change" element={<MyPage />} />
           <Route path="/mentee/mypage" element={<Navigate replace to="/mentee/mypage/profile" />} />
+
+          <Route path="/mentor/register" element={<MentorRegister />} />
 
           <Route path="/mentor/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentor/mypage/account/change" element={<MyPage />} />

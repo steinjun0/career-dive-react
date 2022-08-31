@@ -51,9 +51,19 @@ const calendarSimpleMenuStyle = {
   borderRadius: '8px'
 };
 
+const repeatOptionConverter = {
+  '반복 없음': 'custom',
+  '매일 반복': 'day',
+  '매주 반복': 'week',
+  'custom': '반복 없음',
+  'day': '매일 반복',
+  'week': '매주 반복',
+}
+
 function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
-  let housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-  let minsList = ['00', '10', '20', '30', '40', '50']
+  const housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+  const minsList = ['00', '10', '20', '30', '40', '50']
+
   const [startAMPM, setStartAMPM] = useState('오전')
   const [startHour, setStartHour] = useState('01')
   const [startMin, setStartMin] = useState('00')
@@ -146,8 +156,6 @@ function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
 
       {!initialTime && <CustomButton
         style={{ padding: 0, marginLeft: 'auto', padding: '4px 12px' }}
-        height={'32px'}
-        width={'0px'}
         onClick={() => {
           onSetTime({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
         }}
@@ -177,7 +185,7 @@ function CalendarMentor({ setIsFinishSet }) {
   const location = useLocation();
 
   const year = 2022;
-  const [month, setMonth] = useState('0월');
+  const [month, setMonth] = useState(`${new Date().getMonth() + 1}월`);
 
   const [selectedDate, setSelectedDate] = useState(0);
 
@@ -205,6 +213,7 @@ function CalendarMentor({ setIsFinishSet }) {
       temp[selectedDate] = [{ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption }]
     }
     postConsultSchedule(temp)
+    postConsultScheduleRule(temp)
     setAvailableTimes(temp)
   }
 
@@ -229,7 +238,7 @@ function CalendarMentor({ setIsFinishSet }) {
       if (res.status === 200) {
         if (res.data.DayTimes !== null) {
           const tempDayTimes = []
-          const tempAvailableTime = availableTimes
+          const tempAvailableTime = {}
           res.data.DayTimes.map((e) => {
             tempDayTimes.push(e.Day)
             tempAvailableTime[e.Day] = []
@@ -250,7 +259,8 @@ function CalendarMentor({ setIsFinishSet }) {
                 startAMPM, startHour, startMin,
                 endAMPM, endHour, endMin,
                 repeatOption,
-                scheduleId: i.ScheduleID
+                scheduleId: i.ScheduleID,
+                ruleId: i.RuleID
               })
 
             })
@@ -258,6 +268,9 @@ function CalendarMentor({ setIsFinishSet }) {
           })
           setAvailableDates(tempDayTimes)
           setAvailableTimes(tempAvailableTime)
+        } else {
+          setAvailableDates([])
+          setAvailableTimes({})
         }
       }
     } catch (error) {
@@ -268,9 +281,13 @@ function CalendarMentor({ setIsFinishSet }) {
   const postConsultSchedule = async (availableTimesProps) => {
     const dayTimes = [...Object.keys(availableTimesProps).map((date) => {
       return {
-        Day: selectedDate,
-        StartEnds: [...availableTimesProps[date].map((e) => {
-
+        Day: Number(date),
+        StartEnds: [...availableTimesProps[date].filter((e) => {
+          if (e.repeatOption === '반복 없음') {
+            return true
+          }
+          return false
+        }).map((e) => {
           return {
             StartTime: `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`,
             EndTime: `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`,
@@ -279,27 +296,99 @@ function CalendarMentor({ setIsFinishSet }) {
       }
     })]
 
-    console.log('dayTimes', dayTimes)
-
     const res = await API.postConsultSchedule(dayTimes,
       year,
       Number(month.slice(0, -1)),
       Number(localStorage.getItem('UserID'))
     )
-
     getConsultSchedule()
   }
 
-  const saveConsultSchedule = async () => {
-    tempAvailableTime.map(async (e) => {
-      const res = await API.deleteConsultSchedule(e.scheduleId)
-    })
-    const res = await API.postConsultSchedule(availableTimes)
+  const postConsultScheduleRule = async (availableTimesProps) => {
+    await Promise.all(
+      availableTimesProps[selectedDate].filter((e) => {
+        if (e.repeatOption === '반복 없음') {
+          return false
+        }
+        return true
+      }).map(
+        async (e) => {
+          const startTime = `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
+          const endTime = `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
+          const weekDay = new Date(year, Number(month.slice(0, -1)) - 1, selectedDate).getDay()
+          const type = e.repeatOption
+
+          const res = await API.postConsultScheduleRule(
+            startTime,
+            endTime,
+            weekDay,
+            repeatOptionConverter[type],
+            Number(localStorage.getItem('UserID'))
+          )
+        })
+    )
+    getConsultSchedule()
   }
+
+  const patchConsultScheduleRule = async (availableTimesProps) => {
+    await Promise.all(
+      availableTimesProps[selectedDate].filter((e) => {
+        if (e.repeatOption === '반복 없음') {
+          return false
+        }
+        return true
+      }).map(
+        async (e) => {
+          const startTime = `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
+          const endTime = `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
+          const weekDay = new Date(year, Number(month.slice(0, -1)) - 1, selectedDate).getDay()
+          const type = repeatOptionConverter[e.repeatOption]
+
+          const res = await API.patchConsultScheduleRule(
+            e.ruleId,
+            startTime,
+            endTime,
+            weekDay,
+            type,
+            Number(localStorage.getItem('UserID'))
+          )
+        })
+    )
+    getConsultSchedule()
+  }
+
+
+  const deleteDateConsultSchedule = async () => {
+    await Promise.all(tempAvailableTime.map(async (e) => {
+      if (e.ruleId === -1) {
+        const res = await API.deleteConsultSchedule(e.scheduleId)
+        return res
+      }
+    }))
+  }
+
+  const deleteDateConsultScheduleRule = async () => {
+    let popList = []
+    await Promise.all(tempAvailableTime.map(async (e) => {
+      if (e.isDeleting) {
+        const res = await API.deleteConsultScheduleRule(e.ruleId, `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${selectedDate}`)
+        popList.push(e)
+        return res
+      }
+    }))
+
+    popList.map((e) => {
+      const index = tempAvailableTime.indexOf(e);
+      if (index > -1) {
+        tempAvailableTime.splice(index, 1);
+      }
+    })
+
+  }
+
 
   useEffect(async () => {
     getConsultSchedule()
-
   }, [month])
 
 
@@ -315,7 +404,6 @@ function CalendarMentor({ setIsFinishSet }) {
       ]
       setIsFinishSet && setIsFinishSet(true)
       updateReservation(params.id, updatingData)
-
     } else {
       setIsFinishSet && setIsFinishSet(false)
     }
@@ -324,26 +412,27 @@ function CalendarMentor({ setIsFinishSet }) {
 
   useEffect(() => {
     setSelectedDate(selectedDateObj.getDate())
-    setMonth((selectedDateObj.getMonth() + 1) + '월')
+    // setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
 
   useEffect(() => {
-    console.log('availableTimes', availableTimes)
-    console.log('availableDates', availableDates)
+    // console.log('availableTimes', availableTimes)
+    // console.log('availableDates', availableDates)
   }, [availableTimes])
 
   return (
     <CalendarWrapper>
       <Card title={'상담 가능 일정'} min_width={'400px'}>
         <CalendarContentWrapper>
-
           <CalendarMentorUpper
             availableDates={availableDates}
             selectedDateObjProp={selectedDateObj}
             onClickAvailableDateProps={onClickAvailableDate}
             onDateChange={(dateObject) => {
               setSelectedDateObj(dateObject);
-            }} />
+            }}
+            month={month}
+            setMonth={setMonth} />
           {/* {`${year}-${selectedDateObj.getMonth() + 1}-${selectedDateObj.getDate()}`}
           <AddOutlined /> */}
           <Flex style={{ justifyContent: 'space-between', marginTop: '24px', marginBottom: '8px' }}>
@@ -351,11 +440,9 @@ function CalendarMentor({ setIsFinishSet }) {
             {!isAdding && !isEditing && <CustomButton
               background_color={colorBackgroundGrayLight}
               custom_color={colorTextLight}
-              width={'0px'}
-              height={'32px'}
               style={{ padding: '4px 12px' }}
               onClick={() => {
-                setTempAvailableTime([...availableTimes[selectedDate]])
+                setTempAvailableTime(availableTimes[selectedDate] ? [...availableTimes[selectedDate]] : [])
                 setIsEditing(true)
               }}
             >
@@ -367,8 +454,6 @@ function CalendarMentor({ setIsFinishSet }) {
               <CustomButton
                 background_color={colorBackgroundGrayLight}
                 custom_color={colorTextLight}
-                width={'0px'}
-                height={'32px'}
                 style={{ padding: '4px 12px' }}
                 onClick={() => {
                   availableTimes[selectedDate] = tempAvailableTime
@@ -384,11 +469,12 @@ function CalendarMentor({ setIsFinishSet }) {
               <CustomButton
                 background_color={colorCareerDiveBlue}
                 custom_color={'white'}
-                width={'0px'}
-                height={'32px'}
                 style={{ padding: '4px 12px' }}
                 onClick={async () => {
-                  await saveConsultSchedule()
+                  await deleteDateConsultSchedule()
+                  await postConsultSchedule(availableTimes)
+                  await patchConsultScheduleRule(availableTimes)
+                  await deleteDateConsultScheduleRule()
                   setIsEditing(false)
                 }}
               >
@@ -427,6 +513,10 @@ function CalendarMentor({ setIsFinishSet }) {
                 if (index > -1) {
                   availableTimes[selectedDate].splice(index, 1);
                 }
+
+                if (e.ruleId !== -1) {
+                  availableTimes[selectedDate].push({ isDeleting: true, ruleId: e.ruleId })
+                }
               }}
               initialTime={e} />
           })}
@@ -443,8 +533,6 @@ function CalendarMentor({ setIsFinishSet }) {
               <CustomButton
                 background_color={colorBackgroundCareerDiveBlue}
                 custom_color={colorCareerDiveBlue}
-                width={'0px'}
-                height={'0px'}
                 onClick={async () => {
                   setIsAdding(true)
                 }}
