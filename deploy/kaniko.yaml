@@ -16,6 +16,7 @@ spec:
     - secretRef:
         name: kaniko-secret
   restartPolicy: Never
+  nodeName: bdg-msi
   volumes:
   - name: docker-config
     configMap:
