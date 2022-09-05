@@ -10,6 +10,7 @@ import {
   colorBackgroundGrayLight,
   colorTextLight,
   EmptyWidth,
+  VerticalFlex,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
@@ -46,6 +47,9 @@ export const TextFieldWrapper = styled(Flex)`
 
 const UrlWrapper = styled(TextFieldWrapper)`
   margin-top: 0;
+  .css-10botns-MuiInputBase-input-MuiFilledInput-input{
+    padding: 10px 20px;
+  }
 `;
 
 
@@ -78,46 +82,50 @@ function MenteeIntroduce() {
 
   return (
     <MenteeIntroduceWrapper>
-      <Card title={'내 소개'} titleTail={
-        <Flex>
-          {!isEditing ?
-            <Flex>
+      <Card title={
+        <VerticalFlex>
+          내 소개
+          <Subtitle style={{ margin: '20px 0 0 0' }}>상담을 요청한 멘토에게만 공개됩니다.</Subtitle>
+        </VerticalFlex>} titleTail={
+          <Flex>
+            {!isEditing ?
+              <Flex>
+                <Flex>
+                  <CustomButton
+                    id='edit'
+                    width={'82px'}
+                    background_color={colorBackgroundGrayLight}
+                    custom_color={colorTextLight}
+                    onClick={() => { setIsEditing(true) }}
+                  >수정</CustomButton>
+                </Flex>
+              </Flex>
+              :
               <Flex>
                 <CustomButton
-                  id='edit'
+                  id='cancel'
+                  height={'48px'}
                   width={'82px'}
                   background_color={colorBackgroundGrayLight}
                   custom_color={colorTextLight}
-                  onClick={() => { setIsEditing(true) }}
-                >수정</CustomButton>
+                  onClick={cancelEditing}
+                >취소</CustomButton>
+                <EmptyWidth width='16px' />
+                <CustomButton
+                  width={'82px'}
+                  onClick={() => { saveEditing(true) }}
+                >저장</CustomButton>
               </Flex>
-            </Flex>
-            :
-            <Flex>
-              <CustomButton
-                id='cancel'
-                width={'82px'}
-                background_color={colorBackgroundGrayLight}
-                custom_color={colorTextLight}
-                onClick={cancelEditing}
-              >취소</CustomButton>
-              <EmptyWidth width='16px' />
-              <CustomButton
-                width={'82px'}
-                onClick={() => { saveEditing(true) }}
-              >저장</CustomButton>
-            </Flex>
-          }
-        </Flex>
-      }>
-        <Subtitle>상담을 요청한 멘토에게만 공개됩니다.</Subtitle>
+            }
+          </Flex>
+        }>
         <TextFieldWrapper>
           <TextField
             id="outlined-textarea"
-            placeholder="자기소개는 여기에 들어갑니다."
+            placeholder="1. 학교·직장&#13;&#10;2. 경력·활동&#13;&#10;3. 어학·자격증&#13;&#10;4. 취업·이직 준비에 관한 고민 등"
             multiline
             variant="filled"
-            InputProps={{ disableUnderline: true, readOnly: !isEditing }}
+            InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, padding: 20, borderRadius: 8, } }}
             minRows={4}
             maxRows={8}
             fullWidth={true}
@@ -141,7 +149,7 @@ function MenteeIntroduce() {
             id="outlined-textarea"
             placeholder="자신을 소개하는 url을 작성해보세요"
             variant="filled"
-            InputProps={{ disableUnderline: true, readOnly: !isEditing }}
+            InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, borderRadius: 8, } }}
             rows={1}
             fullWidth={true}
           />
