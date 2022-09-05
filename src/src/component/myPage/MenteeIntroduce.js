@@ -11,6 +11,9 @@ import {
   colorTextLight,
   EmptyWidth,
   VerticalFlex,
+  TextBody2,
+  colorCareerDivePink,
+  EmptyHeight,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
@@ -57,6 +60,7 @@ const UrlWrapper = styled(TextFieldWrapper)`
 
 function MenteeIntroduce() {
   const [isEditing, setIsEditing] = useState(false)
+  const [uploadingFiles, setUploadingFiles] = useState([])
 
   const cancelEditing = () => {
     setIsEditing(false)
@@ -94,6 +98,7 @@ function MenteeIntroduce() {
                   <CustomButton
                     id='edit'
                     width={'82px'}
+                    height={'48px'}
                     background_color={colorBackgroundGrayLight}
                     custom_color={colorTextLight}
                     onClick={() => { setIsEditing(true) }}
@@ -133,7 +138,33 @@ function MenteeIntroduce() {
         </TextFieldWrapper>
 
         <Subtitle>파일 업로드(최대 2개)</Subtitle>
-        <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
+        {uploadingFiles.map((e, i) => {
+          return <Flex key={i}>
+            <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{e}</TextBody2>
+            <TextBody2
+              style={{ cursor: isEditing ? 'pointer' : 'default' }}
+              color={colorCareerDivePink}
+              onClick={() => {
+                if (isEditing) {
+                  const temp = JSON.parse(JSON.stringify(uploadingFiles))
+                  temp.splice(temp.indexOf(e), 1)
+                  setUploadingFiles(temp)
+                }
+              }}>삭제</TextBody2>
+          </Flex>;
+        })}
+        <EmptyHeight height='20px'></EmptyHeight>
+        <Dropzone onDrop={acceptedFiles => {
+          if (uploadingFiles.length + acceptedFiles.length > 2) {
+            alert('업로드 파일이 3개 이상입니다.')
+            return
+          }
+          const temp = []
+          acceptedFiles.forEach(file => {
+            temp.push(file.path)
+          })
+          setUploadingFiles([...uploadingFiles, ...temp])
+        }}>
           {({ getRootProps, getInputProps }) => (
             <section>
               <DropzoneWrapper {...getRootProps()}>
