@@ -60,6 +60,7 @@ const UrlWrapper = styled(TextFieldWrapper)`
 
 function MenteeIntroduce() {
   const [isEditing, setIsEditing] = useState(false)
+  const [introduceText, setIntroduceText] = useState('')
   const [uploadingFiles, setUploadingFiles] = useState([])
 
   const cancelEditing = () => {
@@ -125,16 +126,24 @@ function MenteeIntroduce() {
           </Flex>
         }>
         <TextFieldWrapper>
-          <TextField
-            id="outlined-textarea"
-            placeholder="1. 학교·직장&#13;&#10;2. 경력·활동&#13;&#10;3. 어학·자격증&#13;&#10;4. 취업·이직 준비에 관한 고민 등"
-            multiline
-            variant="filled"
-            InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, padding: 20, borderRadius: 8, } }}
-            minRows={4}
-            maxRows={8}
-            fullWidth={true}
-          />
+          {!isEditing ?
+            <TextBody2 style={{ whiteSpace: 'pre' }} color={colorTextLight}>
+              {introduceText}
+            </TextBody2> :
+            <TextField
+              id="outlined-textarea"
+              value={introduceText}
+              placeholder="1. 학교·직장&#13;&#10;2. 경력·활동&#13;&#10;3. 어학·자격증&#13;&#10;4. 취업·이직 준비에 관한 고민 등"
+              multiline
+              variant="filled"
+              InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, padding: 20, borderRadius: 8, } }}
+              minRows={4}
+              maxRows={8}
+              fullWidth={true}
+              onChange={(e) => {
+                setIntroduceText(e.target.value)
+              }}
+            />}
         </TextFieldWrapper>
 
         <Subtitle>파일 업로드(최대 2개)</Subtitle>
