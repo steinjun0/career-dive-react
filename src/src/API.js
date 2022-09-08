@@ -202,9 +202,6 @@ export default {
   },
 
   async deleteConsultScheduleRule(ruleId, startDate) {
-    // startDate form = yyyy-mm-dd
-    console.log('startDate', startDate)
-    console.log(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}?${startDate ? `startDate=${startDate}` : ''}`)
     const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}?${startDate ? `startDate=${startDate}` : ''}`)
     return deleteRes
   },

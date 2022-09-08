@@ -367,9 +367,9 @@ function CalendarMentor({ setIsFinishSet }) {
     }))
   }
 
-  const deleteDateConsultScheduleRule = async () => {
+  const deleteDateConsultScheduleRule = async (availableTimesProps) => {
     let popList = []
-    await Promise.all(tempAvailableTime.map(async (e) => {
+    await Promise.all(availableTimesProps[selectedDate].map(async (e) => {
       if (e.isDeleting) {
         const res = await API.deleteConsultScheduleRule(e.ruleId, `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${selectedDate}`)
         popList.push(e)
@@ -474,8 +474,9 @@ function CalendarMentor({ setIsFinishSet }) {
                   await deleteDateConsultSchedule()
                   await postConsultSchedule(availableTimes)
                   await patchConsultScheduleRule(availableTimes)
-                  await deleteDateConsultScheduleRule()
+                  await deleteDateConsultScheduleRule(availableTimes)
                   setIsEditing(false)
+                  await getConsultSchedule()
                 }}
               >
                 <TextBody2>
