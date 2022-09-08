@@ -58,7 +58,7 @@ const UrlWrapper = styled(TextFieldWrapper)`
 
 
 
-function MenteeIntroduce() {
+function MentorIntroduce() {
   const [isEditing, setIsEditing] = useState(false)
   const [introduceText, setIntroduceText] = useState('')
   const [uploadingFiles, setUploadingFiles] = useState([])
@@ -89,8 +89,8 @@ function MenteeIntroduce() {
     <MenteeIntroduceWrapper>
       <Card title={
         <VerticalFlex>
-          내 소개
-          <Subtitle style={{ margin: '20px 0 0 0' }}>상담을 요청한 멘토에게만 공개됩니다.</Subtitle>
+          멘토 소개
+          <Subtitle style={{ margin: '20px 0 0 0' }}>작성하신 정보는 멘토 프로필에 노출됩니다.</Subtitle>
         </VerticalFlex>} titleTail={
           <Flex>
             {!isEditing ?
@@ -133,7 +133,7 @@ function MenteeIntroduce() {
             <TextField
               id="outlined-textarea"
               value={introduceText}
-              placeholder="1. 학교·직장&#13;&#10;2. 경력·활동&#13;&#10;3. 어학·자격증&#13;&#10;4. 취업·이직 준비에 관한 고민 등"
+              placeholder="1. 직장&#13;&#10;2. 경력·활동&#13;&#10;3. 어학·자격증"
               multiline
               variant="filled"
               InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, padding: 20, borderRadius: 8, } }}
@@ -201,7 +201,7 @@ function MenteeIntroduce() {
   );
 }
 
-export default MenteeIntroduce;
+export default MentorIntroduce;
 
 
 

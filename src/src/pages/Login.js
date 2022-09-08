@@ -147,6 +147,7 @@ function Login() {
                                 <EmptyHeight height={'24px'} />
                                 <ButtonWrapper>
                                     <CustomButton
+                                        height={'48px'}
                                         onClick={onClickLogin}>
                                         로그인
                                     </CustomButton>
