@@ -34,6 +34,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomToggleButton, onChangeToggle } from 'util/Custom/CutomToggleButton.js';
 import Dropzone from 'react-dropzone';
 import UploadIcon from 'assets/icon/UploadIcon'
+import { convertStringToTags } from 'util/util.js';
 
 
 const LoginWrapper = styled(VerticalFlex)`
@@ -64,12 +65,8 @@ function MentorRegister() {
     const [tagsString, setTagsString] = useState('')
     const [tags, setTags] = useState([])
     useEffect(() => {
-        const pureTags = tagsString.split(',').map(element => element.trim()).filter((e) => e.length === 0 ? false : true)
-        let tempTags = []
-        pureTags.map((e) => {
-            tempTags.push({ Name: e })
-        })
-        setTags(tempTags)
+        const arrayTags = convertStringToTags(tagsString)
+        setTags(arrayTags)
 
     }, [tagsString])
 
