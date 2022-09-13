@@ -78,3 +78,12 @@ export function usePrevious(value) {
   });
   return ref.current;
 }
+
+export function convertStringToTags(tagsString) {
+  const pureTags = tagsString.split(',').map(element => element.trim()).filter((e) => e.length === 0 ? false : true)
+  let arrayTags = []
+  pureTags.map((e) => {
+    arrayTags.push({ Name: e })
+  })
+  return arrayTags
+}
