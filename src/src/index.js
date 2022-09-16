@@ -75,7 +75,7 @@ ReactDOM.render(
           <Route path="/mentor/mypage/:subPage" element={<MentorMyPage />} />
           <Route path="/mentor/mypage/account/change" element={<MentorMyPage />} />
           <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
-          <Route path="/mentor/home" element={<MentorHome />} />
+          <Route path="/mentor" element={<MentorHome />} />
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
           <Route path="/mentor/calendar" element={<MentorCalendar />} />
           <Route path="/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewerMentor />} />

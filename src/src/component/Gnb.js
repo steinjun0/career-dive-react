@@ -11,6 +11,7 @@ import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import API from "API";
+import { isMentorUrl } from "util/util";
 
 
 const GnbFullWidthWrapper = styled("nav")`
@@ -125,10 +126,7 @@ const onClickLogout = () => {
 
 function Gnb() {
   const location = useLocation().pathname;
-  const navigate = useNavigate();
-  const isInMentor = () => {
-    return location.slice(0, 9).includes('mentor')
-  }
+
   const isPresentUrl = (url) => {
     return url === location
   }
@@ -179,8 +177,8 @@ function Gnb() {
       <GnbWrapper>
 
         <LeftTopGnb>
-          <LinkNoDeco to={'/'}>
-            {isInMentor() ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
+          <LinkNoDeco to={isMentorUrl() ? '/mentor' : '/'}>
+            {isMentorUrl() ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
 
           </LinkNoDeco>
         </LeftTopGnb>
@@ -208,7 +206,7 @@ function Gnb() {
         }
 
         {isLogin && <RightTopGnb>
-          {isInMentor() ? <LinkNoDeco to={'/'}>
+          {isMentorUrl() ? <LinkNoDeco to={'/'}>
             <CustomButton
               width={'83px'}
               height={'43px'}
@@ -220,7 +218,7 @@ function Gnb() {
                 멘티 모드
               </TextSubtitle2>
             </CustomButton>
-          </LinkNoDeco> : <LinkNoDeco to={'/mentor/home'}>
+          </LinkNoDeco> : <LinkNoDeco to={'/mentor'}>
             <CustomButton
               width={'83px'}
               height={'48px'}
