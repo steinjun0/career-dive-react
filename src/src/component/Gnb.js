@@ -185,13 +185,13 @@ function Gnb() {
 
         {isLogin && isMentorUrl() && <CenterGnb>
           <CenterMenu>
-            <LinkNoDeco to={`/mentor/home`}>
-              <GnbLi present_link={isPresentUrl(`/mentor/home`).toString()}>상담</GnbLi>
+            <LinkNoDeco to={`/mentor`}>
+              <GnbLi present_link={isPresentUrl(`/mentor`).toString()}>상담</GnbLi>
             </LinkNoDeco>
             <LinkNoDeco to={`/mentor/calendar`}>
               <GnbLi>일정 등록</GnbLi>
             </LinkNoDeco>
-            <LinkNoDeco to={`/mentor/home`}>
+            <LinkNoDeco to={`/mentor`}>
               <GnbLi>실적</GnbLi>
             </LinkNoDeco>
           </CenterMenu>
@@ -214,7 +214,7 @@ function Gnb() {
         {!isLogin &&
           <RightTopGnb>
             <LinkNoDeco to={'/login'}>
-              <CustomButton width={'67px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
+              <CustomButton height={'48px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
             </LinkNoDeco>
           </RightTopGnb>
         }
