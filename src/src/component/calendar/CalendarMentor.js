@@ -21,7 +21,7 @@ import {
 import { TagLarge } from "util/Custom/CustomTag";
 
 import { CustomButton } from "util/Custom/CustomButton";
-import CalendarMentorUpper from "component/CalendarMentorUpper";
+import CalendarMentorUpper from "component/calendar/CalendarMentorUpper";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import SimpleMenu from "util/SimpleMenu";
 import { CustomIconButton } from "util/Custom/CustomIconButton";

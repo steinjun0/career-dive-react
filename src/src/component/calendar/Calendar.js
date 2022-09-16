@@ -17,7 +17,7 @@ import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { addMinute, checkUrlInclude, isMentorUrl, updateReservation, usePrevious } from "util/util";
-import CalendarUpper from "component/CalendarUpper";
+import CalendarUpper from "component/calendar/CalendarUpper";
 
 
 const CalendarWrapper = styled(Flex)`

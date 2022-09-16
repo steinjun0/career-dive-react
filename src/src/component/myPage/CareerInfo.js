@@ -37,7 +37,7 @@ function CareerInfo() {
           height={'48px'}
           background_color={colorBackgroundGrayLight}
           custom_color={colorTextLight}
-          onClick={() => { }}
+          onClick={() => { navigate('/mentor/mypage/career/change') }}
         >수정</CustomButton>
       }>
         <SubtitleWarpper>

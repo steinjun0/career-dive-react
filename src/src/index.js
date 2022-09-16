@@ -28,6 +28,7 @@ import Session from "./pages/Session";
 import MentorCalendar from "pages/Mentor/Calendar";
 import MentorRegister from "pages/MentorRegister";
 import MentorMyPage from "./pages/Mentor/MyPage";
+import CareerInfoChange from "component/myPage/\bCareerInfoChange";
 
 
 const theme = createTheme({
@@ -74,10 +75,12 @@ ReactDOM.render(
 
           <Route path="/mentor/mypage/:subPage" element={<MentorMyPage />} />
           <Route path="/mentor/mypage/account/change" element={<MentorMyPage />} />
+          <Route path="/mentor/mypage/career/change" element={<MentorMyPage />} />
           <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
           <Route path="/mentor" element={<MentorHome />} />
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
           <Route path="/mentor/calendar" element={<MentorCalendar />} />
+
           <Route path="/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewerMentor />} />
 
           <Route path="/sendbird" element={<Sendbird />} />

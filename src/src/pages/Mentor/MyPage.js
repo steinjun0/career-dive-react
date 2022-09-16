@@ -20,6 +20,8 @@ import { useLocation, useParams } from "react-router-dom";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import CareerInfo from "component/myPage/CareerInfo";
 import MentorIntroduce from "component/myPage/MentorIntroduce";
+import CareerInfoChange from "component/myPage/\bCareerInfoChange";
+import { isMentorUrl } from "util/util";
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-top: 30px;
@@ -45,7 +47,16 @@ function MyPage() {
   const params = useParams();
   const location = useLocation();
   const isInAccountChange = () => location.pathname.includes('/account/change');
-
+  const isHidingSideNavigation = () => {
+    const hideUrlList = ['/account/change', '/mentor/mypage/career/change']
+    let result = false;
+    hideUrlList.forEach((url) => {
+      if (location.pathname.includes(url)) {
+        result = true
+      }
+    })
+    return result
+  }
   return (
     <FullWidthWrapper>
       <GrayBackground>
@@ -54,16 +65,16 @@ function MyPage() {
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={3}>
                 {
-                  !isInAccountChange() &&
+                  !isHidingSideNavigation() &&
                   <SideNavigationWrapper>
                     <SideNavigation />
                   </SideNavigationWrapper>
                 }
                 {
-                  isInAccountChange() &&
+                  isHidingSideNavigation() &&
                   <div>
                     <SideNavigationWrapper>
-                      <LinkNoDeco to={'/mentee/mypage/account'}>
+                      <LinkNoDeco to={`/${isMentorUrl() ? 'mentor/mypage/profile' : 'mentee/mypage/account'}`}>
                         <MoveBackButtonWrapper>
                           <ChevronLeftIcon />
                         </MoveBackButtonWrapper>
@@ -93,6 +104,12 @@ function MyPage() {
                   isInAccountChange() &&
                   <div>
                     <AccountInfoChange />
+                  </div>
+                }
+                {
+                  location.pathname.includes('/mentor/mypage/career/change') &&
+                  <div>
+                    <CareerInfoChange />
                   </div>
                 }
               </Grid>

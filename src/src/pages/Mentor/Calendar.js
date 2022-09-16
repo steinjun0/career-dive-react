@@ -12,7 +12,7 @@ import {
 } from "util/styledComponent";
 
 
-import CalendarMentor from "component/mentor/CalendarMentor";
+import CalendarMentor from "component/calendar/CalendarMentor";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
