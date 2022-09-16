@@ -46,7 +46,14 @@ export const getDayInKorean = (date) => {
 }
 
 export const updateReservation = (id, updateDataArray) => {
-  let reservations = JSON.parse(localStorage.getItem('reservations'))
+  let prefix = ''
+  if (isMentorUrl()) {
+    prefix = 'mentor'
+  } else {
+    prefix = 'mentee'
+  }
+
+  let reservations = JSON.parse(localStorage.getItem(`${prefix}-reservations`))
   let reservation = {}
 
   if (reservations !== null) {
@@ -68,7 +75,7 @@ export const updateReservation = (id, updateDataArray) => {
   // reservation['consultingStartTime'] = consultingStartTime
 
   reservations[id] = reservation
-  localStorage.setItem('reservations', JSON.stringify(reservations))
+  localStorage.setItem(`${prefix}-reservations`, JSON.stringify(reservations))
 }
 
 export function usePrevious(value) {
@@ -86,4 +93,26 @@ export function convertStringToTags(tagsString) {
     arrayTags.push({ Name: e })
   })
   return arrayTags
+}
+
+export function checkUrlInclude(string) {
+  let temp = window.location.href
+  const firstSlice = temp.indexOf('//')
+  temp = temp.slice(firstSlice + 2)
+  const secondSlice = temp.indexOf('/')
+  temp = temp.slice(secondSlice + 1)
+  return temp.slice(0, 9).includes(string)
+}
+
+export function isMentorUrl() {
+  let temp = window.location.href
+  const firstSlice = temp.indexOf('//')
+  temp = temp.slice(firstSlice + 2)
+  const secondSlice = temp.indexOf('/')
+  temp = temp.slice(secondSlice + 1)
+  if (temp.indexOf('mentor') == 0) {
+    return true
+  } else {
+    return false
+  }
 }

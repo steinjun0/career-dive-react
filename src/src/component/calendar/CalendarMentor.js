@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { useEffect, useState } from "react";
+import { styled } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Card } from "util/Card"
@@ -21,14 +21,11 @@ import {
 import { TagLarge } from "util/Custom/CustomTag";
 
 import { CustomButton } from "util/Custom/CustomButton";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { addMinute, updateReservation, usePrevious } from "util/util";
-import CalendarMentorUpper from "component/CalendarMentorUpper";
+import CalendarMentorUpper from "component/calendar/CalendarMentorUpper";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import SimpleMenu from "util/SimpleMenu";
 import { CustomIconButton } from "util/Custom/CustomIconButton";
 import API from "API";
-import { type } from "@testing-library/user-event/dist/type";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -180,17 +177,11 @@ function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
 }
 
 
-function CalendarMentor({ setIsFinishSet }) {
-  const params = useParams();
-  const location = useLocation();
-
+function CalendarMentor() {
   const year = 2022;
   const [month, setMonth] = useState(`${new Date().getMonth() + 1}월`);
 
   const [selectedDate, setSelectedDate] = useState(0);
-
-  const [consultingTime, setConsultingTime] = useState(-1);
-  const [consultingStartTime, setConsultingStartTime] = useState(0);
 
   const [selectedDateObj, setSelectedDateObj] = useState(new Date());
 
@@ -220,17 +211,7 @@ function CalendarMentor({ setIsFinishSet }) {
   // 날짜 선택시, 기존값 초기화
   const onClickAvailableDate = (date) => {
     setSelectedDate(date);
-    setConsultingTime(0);
-    setConsultingStartTime(0);
   }
-
-  // 상담시간 변경시 시작시간 초기화
-  const prevConsultingTime = usePrevious(consultingTime);
-  useEffect(() => {
-    if (prevConsultingTime !== -1) {
-      setConsultingStartTime(0)
-    }
-  }, [consultingTime])
 
   const getConsultSchedule = async () => {
     try {
@@ -393,32 +374,8 @@ function CalendarMentor({ setIsFinishSet }) {
 
 
   useEffect(() => {
-    if (consultingStartTime == null) {
-      setConsultingStartTime(0);
-    }
-    if (consultingStartTime !== 0) {
-      const updatingData = [
-        { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
-        { name: 'consultingTime', data: consultingTime },
-        { name: 'consultingStartTime', data: consultingStartTime },
-      ]
-      setIsFinishSet && setIsFinishSet(true)
-      updateReservation(params.id, updatingData)
-    } else {
-      setIsFinishSet && setIsFinishSet(false)
-    }
-  }, [consultingStartTime])
-
-
-  useEffect(() => {
     setSelectedDate(selectedDateObj.getDate())
-    // setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
-
-  useEffect(() => {
-    // console.log('availableTimes', availableTimes)
-    // console.log('availableDates', availableDates)
-  }, [availableTimes])
 
   return (
     <CalendarWrapper>

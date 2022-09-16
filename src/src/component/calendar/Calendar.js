@@ -16,8 +16,8 @@ import {
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { addMinute, updateReservation, usePrevious } from "util/util";
-import CalendarUpper from "component/CalendarUpper";
+import { addMinute, checkUrlInclude, isMentorUrl, updateReservation, usePrevious } from "util/util";
+import CalendarUpper from "component/calendar/CalendarUpper";
 
 
 const CalendarWrapper = styled(Flex)`
@@ -252,7 +252,14 @@ function Calendar({ setIsFinishSet }) {
   }, [consultingTime])
 
   const setDataFromLocalStorage = () => {
-    const reservations = JSON.parse(localStorage.getItem('reservations'))
+    let prefix = ''
+    if (isMentorUrl()) {
+      prefix = 'mentor'
+    } else {
+      prefix = 'mentee'
+    }
+
+    const reservations = JSON.parse(localStorage.getItem(`${prefix}-reservations`))
     if (reservations !== null) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {

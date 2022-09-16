@@ -11,6 +11,7 @@ import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import API from "API";
+import { isMentorUrl } from "util/util";
 
 
 const GnbFullWidthWrapper = styled("nav")`
@@ -125,10 +126,7 @@ const onClickLogout = () => {
 
 function Gnb() {
   const location = useLocation().pathname;
-  const navigate = useNavigate();
-  const isInMentor = () => {
-    return location.slice(0, 9).includes('mentor')
-  }
+
   const isPresentUrl = (url) => {
     return url === location
   }
@@ -179,13 +177,26 @@ function Gnb() {
       <GnbWrapper>
 
         <LeftTopGnb>
-          <LinkNoDeco to={'/'}>
-            {isInMentor() ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
+          <LinkNoDeco to={isMentorUrl() ? '/mentor' : '/'}>
+            {isMentorUrl() ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
 
           </LinkNoDeco>
         </LeftTopGnb>
 
-        {isLogin && <CenterGnb>
+        {isLogin && isMentorUrl() && <CenterGnb>
+          <CenterMenu>
+            <LinkNoDeco to={`/mentor`}>
+              <GnbLi present_link={isPresentUrl(`/mentor`).toString()}>상담</GnbLi>
+            </LinkNoDeco>
+            <LinkNoDeco to={`/mentor/calendar`}>
+              <GnbLi present_link={isPresentUrl(`/mentor/calendar`).toString()}>일정 등록</GnbLi>
+            </LinkNoDeco>
+            <LinkNoDeco to={`/mentor`}>
+              <GnbLi>실적</GnbLi>
+            </LinkNoDeco>
+          </CenterMenu>
+        </CenterGnb>}
+        {isLogin && !isMentorUrl() && <CenterGnb>
           <CenterMenu>
             <LinkNoDeco to={`/mentee/schedule`}>
               <GnbLi present_link={isPresentUrl(`/mentee/schedule`).toString()}>내 상담</GnbLi>
@@ -196,19 +207,20 @@ function Gnb() {
             <LinkNoDeco to={`/mentee/schedule`}>
               <GnbLi>상담 후기</GnbLi>
             </LinkNoDeco>
+
           </CenterMenu>
         </CenterGnb>}
 
         {!isLogin &&
           <RightTopGnb>
             <LinkNoDeco to={'/login'}>
-              <CustomButton width={'67px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
+              <CustomButton height={'48px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
             </LinkNoDeco>
           </RightTopGnb>
         }
 
         {isLogin && <RightTopGnb>
-          {isInMentor() ? <LinkNoDeco to={'/'}>
+          {isMentorUrl() ? <LinkNoDeco to={'/'}>
             <CustomButton
               width={'83px'}
               height={'43px'}
@@ -220,7 +232,7 @@ function Gnb() {
                 멘티 모드
               </TextSubtitle2>
             </CustomButton>
-          </LinkNoDeco> : <LinkNoDeco to={'/mentor/home'}>
+          </LinkNoDeco> : <LinkNoDeco to={'/mentor'}>
             <CustomButton
               width={'83px'}
               height={'48px'}
@@ -248,25 +260,45 @@ function Gnb() {
               }, 300);
             }}>
             <ProfileImg src={testProfileImage} alt="" />
-            <ProfileMenu is_hide={String(isHideProfileMenu)}>
-              <LinkNoDeco to={'mentee/mypage/profile'}>
-                <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
-              </LinkNoDeco>
+            {isMentorUrl() ?
+              <ProfileMenu is_hide={String(isHideProfileMenu)}>
+                <LinkNoDeco to={`${'mentor'}/mypage/profile`}>
+                  <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>멘토 프로필</TextSubtitle2>
+                </LinkNoDeco>
 
-              <LinkNoDeco to={'mentee/mypage/account'}>
-                <TextSubtitle2>계정</TextSubtitle2>
-              </LinkNoDeco>
-              <LinkNoDeco to={'mentee/mypage/review'}>
-                <TextSubtitle2>후기</TextSubtitle2>
-              </LinkNoDeco>
-              <LinkNoDeco to={'mentee/mypage/payment'}>
-                <TextSubtitle2>결제</TextSubtitle2>
-              </LinkNoDeco>
-              <Divider></Divider>
-              <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
-              <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
-                onClick={onClickLogout}>로그아웃</TextBody2>
-            </ProfileMenu>
+                <LinkNoDeco to={`${'mentor'}/mypage/account`}>
+                  <TextSubtitle2>계정</TextSubtitle2>
+                </LinkNoDeco>
+                <LinkNoDeco to={`${'mentor'}/mypage/review`}>
+                  <TextSubtitle2>대금 수령</TextSubtitle2>
+                </LinkNoDeco>
+                <Divider></Divider>
+                <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
+                <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
+                  onClick={onClickLogout}>로그아웃</TextBody2>
+              </ProfileMenu>
+              :
+              <ProfileMenu is_hide={String(isHideProfileMenu)}>
+                <LinkNoDeco to={`${'mentee'}/mypage/profile`}>
+                  <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
+                </LinkNoDeco>
+
+                <LinkNoDeco to={`${'mentee'}/mypage/account`}>
+                  <TextSubtitle2>계정</TextSubtitle2>
+                </LinkNoDeco>
+                <LinkNoDeco to={`${'mentee'}/mypage/review`}>
+                  <TextSubtitle2>후기</TextSubtitle2>
+                </LinkNoDeco>
+                <LinkNoDeco to={`${'mentee'}/mypage/payment`}>
+                  <TextSubtitle2>결제</TextSubtitle2>
+                </LinkNoDeco>
+                <Divider></Divider>
+                <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
+                <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
+                  onClick={onClickLogout}>로그아웃</TextBody2>
+              </ProfileMenu>
+            }
+
           </Flex>
 
 
