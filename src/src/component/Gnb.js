@@ -183,7 +183,20 @@ function Gnb() {
           </LinkNoDeco>
         </LeftTopGnb>
 
-        {isLogin && <CenterGnb>
+        {isLogin && isMentorUrl() && <CenterGnb>
+          <CenterMenu>
+            <LinkNoDeco to={`/mentor/home`}>
+              <GnbLi present_link={isPresentUrl(`/mentor/home`).toString()}>상담</GnbLi>
+            </LinkNoDeco>
+            <LinkNoDeco to={`/mentor/calendar`}>
+              <GnbLi>일정 등록</GnbLi>
+            </LinkNoDeco>
+            <LinkNoDeco to={`/mentor/home`}>
+              <GnbLi>실적</GnbLi>
+            </LinkNoDeco>
+          </CenterMenu>
+        </CenterGnb>}
+        {isLogin && !isMentorUrl() && <CenterGnb>
           <CenterMenu>
             <LinkNoDeco to={`/mentee/schedule`}>
               <GnbLi present_link={isPresentUrl(`/mentee/schedule`).toString()}>내 상담</GnbLi>
@@ -194,6 +207,7 @@ function Gnb() {
             <LinkNoDeco to={`/mentee/schedule`}>
               <GnbLi>상담 후기</GnbLi>
             </LinkNoDeco>
+
           </CenterMenu>
         </CenterGnb>}
 
@@ -246,25 +260,45 @@ function Gnb() {
               }, 300);
             }}>
             <ProfileImg src={testProfileImage} alt="" />
-            <ProfileMenu is_hide={String(isHideProfileMenu)}>
-              <LinkNoDeco to={`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/profile`}>
-                <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
-              </LinkNoDeco>
+            {isMentorUrl() ?
+              <ProfileMenu is_hide={String(isHideProfileMenu)}>
+                <LinkNoDeco to={`${'mentor'}/mypage/profile`}>
+                  <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>멘토 프로필</TextSubtitle2>
+                </LinkNoDeco>
 
-              <LinkNoDeco to={`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/account`}>
-                <TextSubtitle2>계정</TextSubtitle2>
-              </LinkNoDeco>
-              <LinkNoDeco to={`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/review`}>
-                <TextSubtitle2>후기</TextSubtitle2>
-              </LinkNoDeco>
-              <LinkNoDeco to={`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/payment`}>
-                <TextSubtitle2>결제</TextSubtitle2>
-              </LinkNoDeco>
-              <Divider></Divider>
-              <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
-              <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
-                onClick={onClickLogout}>로그아웃</TextBody2>
-            </ProfileMenu>
+                <LinkNoDeco to={`${'mentor'}/mypage/account`}>
+                  <TextSubtitle2>계정</TextSubtitle2>
+                </LinkNoDeco>
+                <LinkNoDeco to={`${'mentor'}/mypage/review`}>
+                  <TextSubtitle2>대금 수령</TextSubtitle2>
+                </LinkNoDeco>
+                <Divider></Divider>
+                <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
+                <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
+                  onClick={onClickLogout}>로그아웃</TextBody2>
+              </ProfileMenu>
+              :
+              <ProfileMenu is_hide={String(isHideProfileMenu)}>
+                <LinkNoDeco to={`${'mentee'}/mypage/profile`}>
+                  <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
+                </LinkNoDeco>
+
+                <LinkNoDeco to={`${'mentee'}/mypage/account`}>
+                  <TextSubtitle2>계정</TextSubtitle2>
+                </LinkNoDeco>
+                <LinkNoDeco to={`${'mentee'}/mypage/review`}>
+                  <TextSubtitle2>후기</TextSubtitle2>
+                </LinkNoDeco>
+                <LinkNoDeco to={`${'mentee'}/mypage/payment`}>
+                  <TextSubtitle2>결제</TextSubtitle2>
+                </LinkNoDeco>
+                <Divider></Divider>
+                <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
+                <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
+                  onClick={onClickLogout}>로그아웃</TextBody2>
+              </ProfileMenu>
+            }
+
           </Flex>
 
 
