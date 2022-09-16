@@ -247,17 +247,17 @@ function Gnb() {
             }}>
             <ProfileImg src={testProfileImage} alt="" />
             <ProfileMenu is_hide={String(isHideProfileMenu)}>
-              <LinkNoDeco to={'mentee/mypage/profile'}>
+              <LinkNoDeco to={`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/profile`}>
                 <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
               </LinkNoDeco>
 
-              <LinkNoDeco to={'mentee/mypage/account'}>
+              <LinkNoDeco to={`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/account`}>
                 <TextSubtitle2>계정</TextSubtitle2>
               </LinkNoDeco>
-              <LinkNoDeco to={'mentee/mypage/review'}>
+              <LinkNoDeco to={`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/review`}>
                 <TextSubtitle2>후기</TextSubtitle2>
               </LinkNoDeco>
-              <LinkNoDeco to={'mentee/mypage/payment'}>
+              <LinkNoDeco to={`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/payment`}>
                 <TextSubtitle2>결제</TextSubtitle2>
               </LinkNoDeco>
               <Divider></Divider>
