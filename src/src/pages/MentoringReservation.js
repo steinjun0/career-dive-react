@@ -13,7 +13,6 @@ import MentorCalendar from 'component/mentor/Calendar'
 import SelectContent from 'component/mentor/apply/SelectContent'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { updateReservation } from "util/util";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;

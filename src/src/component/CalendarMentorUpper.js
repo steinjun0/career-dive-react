@@ -14,7 +14,7 @@ import {
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { updateReservation, usePrevious } from "util/util";
+import { usePrevious } from "util/util";
 
 
 const CalendarWrapper = styled(Flex)`
