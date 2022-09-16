@@ -189,7 +189,7 @@ function Gnb() {
               <GnbLi present_link={isPresentUrl(`/mentor`).toString()}>상담</GnbLi>
             </LinkNoDeco>
             <LinkNoDeco to={`/mentor/calendar`}>
-              <GnbLi>일정 등록</GnbLi>
+              <GnbLi present_link={isPresentUrl(`/mentor/calendar`).toString()}>일정 등록</GnbLi>
             </LinkNoDeco>
             <LinkNoDeco to={`/mentor`}>
               <GnbLi>실적</GnbLi>
