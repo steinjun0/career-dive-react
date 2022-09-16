@@ -33,6 +33,7 @@ const CustomToggleButtonWrapper = styled(ToggleButtonGroup)`
   display: flex;
   flex-wrap: wrap;
   margin-right: -16px;
+  padding-left:1px;
 `
 
 export function CustomToggleButtonGroup({ value, valueArray, onChange, isExclusive }) {
