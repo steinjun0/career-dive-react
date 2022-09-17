@@ -19,6 +19,7 @@ import { useState } from "react";
 import SimpleMenu from "util/SimpleMenu";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomToggleButton, onChangeToggle } from "util/Custom/CutomToggleButton";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
@@ -31,6 +32,8 @@ export const TextFieldWrapper = styled(Flex)`
 `;
 
 function CareerInfoChange() {
+  const navigate = useNavigate()
+
   const [inService, setInService] = useState(true)
   const [job, setJob] = useState('')
   const [jobInComp, setJobInComp] = useState('')
@@ -72,7 +75,7 @@ function CareerInfoChange() {
             </TextBody2>
           </Flex>
           <EmptyHeight height={'28px'} />
-          <CustomButton height={'48px'}>재직 재인증</CustomButton>
+          <CustomButton height={'48px'} onClick={() => { navigate('/mentor/register') }}>재직 재인증</CustomButton>
         </VerticalFlex>
         <EmptyHeight height={'28px'} />
         <Divider></Divider>
