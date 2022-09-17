@@ -64,16 +64,19 @@ function MentorRegister() {
     const [divisIsPub, setDivisIsPub] = useState(true)
     const [tagsString, setTagsString] = useState('')
     const [tags, setTags] = useState([])
+
+    const mentorInfoState = {
+        inService, setInService, job, setJob, jobInComp, setJobInComp, divisInComp, setDivisInComp,
+        divisIsPub, setDivisIsPub, tagsString, setTagsString, tags, setTags
+    }
+
     useEffect(() => {
         const arrayTags = convertStringToTags(tagsString)
         setTags(arrayTags)
 
     }, [tagsString])
 
-    const mentorInfoState = {
-        inService, setInService, job, setJob, jobInComp, setJobInComp, divisInComp, setDivisInComp,
-        divisIsPub, setDivisIsPub, tagsString, setTagsString, tags, setTags
-    }
+
 
     return (
         <FullHeightFullWidthWrapper>
@@ -268,8 +271,6 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
         } else {
             alert('멘토 정보 등록 실패')
         }
-
-
     }
 
     return (

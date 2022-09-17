@@ -131,12 +131,14 @@ function Gnb() {
     return url === location
   }
   const [isLogin, setIsLogin] = useState(false)
+  const [isMentor, setIsMentor] = useState(false)
   const [isHideProfileMenu, setIsHideProfileMenu] = useState(true)
   const isMouseOnProfileMenuRef = useRef(false);
 
 
   useEffect(async () => {
     const AccessToken = localStorage.getItem('AccessToken')
+    setIsMentor(JSON.parse(localStorage.getItem('IsMentor')))
 
     if (AccessToken !== null) {
       // TODO: token확인 후 로그인 여부 확인.
@@ -161,6 +163,7 @@ function Gnb() {
     }
     setIsLogin(false)
   }, [location])
+
 
   // useEffect(async () => {
   //   const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
@@ -220,7 +223,7 @@ function Gnb() {
         }
 
         {isLogin && <RightTopGnb>
-          {isMentorUrl() ? <LinkNoDeco to={'/'}>
+          {isMentorUrl() && <LinkNoDeco to={'/'}>
             <CustomButton
               width={'83px'}
               height={'43px'}
@@ -232,7 +235,21 @@ function Gnb() {
                 멘티 모드
               </TextSubtitle2>
             </CustomButton>
-          </LinkNoDeco> : <LinkNoDeco to={'/mentor'}>
+          </LinkNoDeco>}
+          {!isMentorUrl() && !isMentor && <LinkNoDeco to={'/mentor/register'}>
+            <CustomButton
+              width={'83px'}
+              height={'48px'}
+              padding={'12px 14px'}
+              style={{ marginRight: 24, }}
+              background_color={colorBackgroundGrayLight}
+              custom_color={colorCareerDiveBlue}>
+              <TextSubtitle2>
+                멘토 되기
+              </TextSubtitle2>
+            </CustomButton>
+          </LinkNoDeco>}
+          {!isMentorUrl() && isMentor && <LinkNoDeco to={'/mentor'}>
             <CustomButton
               width={'83px'}
               height={'48px'}
@@ -245,6 +262,7 @@ function Gnb() {
               </TextSubtitle2>
             </CustomButton>
           </LinkNoDeco>}
+
 
           <NotificationsNoneIcon style={{ marginRight: 14 }} />
           <Flex

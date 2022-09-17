@@ -9,12 +9,17 @@ import {
   colorBackgroundGrayLight,
   EmptyWidth,
   colorCareerDiveBlue,
-  TextSubtitle2
+  TextSubtitle2,
+  VerticalFlex
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
 import { CustomTextField } from 'util/Custom/CustomTextField';
 import { useState } from "react";
+import SimpleMenu from "util/SimpleMenu";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { CustomToggleButton, onChangeToggle } from "util/Custom/CutomToggleButton";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
@@ -27,69 +32,124 @@ export const TextFieldWrapper = styled(Flex)`
 `;
 
 function CareerInfoChange() {
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate()
+
+  const [inService, setInService] = useState(true)
+  const [job, setJob] = useState('')
+  const [jobInComp, setJobInComp] = useState('')
+  const [divisInComp, setDivisInComp] = useState('')
+  const [divisIsPub, setDivisIsPub] = useState(true)
+  const [tagsString, setTagsString] = useState('')
+  const [tags, setTags] = useState([])
+
+  const mentorInfoState = {
+    inService, setInService, job, setJob, jobInComp, setJobInComp, divisInComp, setDivisInComp,
+    divisIsPub, setDivisIsPub, tagsString, setTagsString, tags, setTags
+  }
+
   const isEditing = (value) => {
     return value !== ''
   }
   return (
     <UserProfileCardWrapper>
-      <Card title={'비밀번호 변경'} no_divider={'true'} max_width={'583px'}>
-        <TextFieldWrapper>
-          <CustomTextField
-            placeholder="변경 할 비밀번호"
-            onChange={(event) => { setPassword(event.target.value) }}
-            variant="filled"
-            InputProps={{ disableUnderline: true }}
-            rows={1}
-            fullWidth={true}
-          />
-          <EmptyWidth width={'16px'} />
-          <CustomButton
-            width={'83px'}
-            custom_color={isEditing(password) ? 'white' : colorTextLight}
-            background_color={isEditing(password) ? colorCareerDiveBlue : colorBackgroundGrayLight}>
+      <Card title={'경력 정보 수정'} no_divider={'false'} max_width={'583px'}>
+        <EmptyHeight height={'28px'} />
+        <VerticalFlex>
+          <Flex>
             <TextSubtitle2>
-              저장
+              직장명
             </TextSubtitle2>
-          </CustomButton>
-        </TextFieldWrapper>
-
-        <EmptyHeight height={'20px'}></EmptyHeight>
-        <Divider></Divider>
-        <EmptyHeight height={'20px'}></EmptyHeight>
-
-        <TextHeading6>이메일 변경</TextHeading6>
-        <TextFieldWrapper>
-          <CustomTextField
-            onChange={(event) => { setEmail(event.target.value) }}
-            placeholder="birdrick@gamil.com"
-            variant="filled"
-            InputProps={{ disableUnderline: true }}
-            rows={1}
-            fullWidth={true}
-          />
-          <EmptyWidth width={'16px'} />
-          <CustomButton
-            width={'83px'}
-            custom_color={isEditing(email) ? 'white' : colorTextLight}
-            background_color={isEditing(email) ? colorCareerDiveBlue : colorBackgroundGrayLight}>
+            <EmptyWidth width={'20px'} />
+            <TextBody2>
+              (주)다파다
+            </TextBody2>
+          </Flex>
+          <EmptyHeight height={'8px'} />
+          <Flex>
             <TextSubtitle2>
-              저장
+              재직여부
             </TextSubtitle2>
-          </CustomButton>
-        </TextFieldWrapper>
-
-
-        <EmptyHeight height={'20px'}></EmptyHeight>
+            <EmptyWidth width={'20px'} />
+            <TextBody2>
+              현직자
+            </TextBody2>
+          </Flex>
+          <EmptyHeight height={'28px'} />
+          <CustomButton height={'48px'} onClick={() => { navigate('/mentor/register') }}>재직 재인증</CustomButton>
+        </VerticalFlex>
+        <EmptyHeight height={'28px'} />
         <Divider></Divider>
-        <EmptyHeight height={'20px'}></EmptyHeight>
+        <EmptyHeight height={'28px'} />
+        <VerticalFlex>
+          <TextSubtitle2>직무</TextSubtitle2>
+          <EmptyHeight height={'28px'} />
+          <Flex style={{ width: '100%' }}>
+            <SimpleMenu
+              width={'100%'}
+              title={<TextBody2>{mentorInfoState.job === '' ? '선택' : mentorInfoState.job}</TextBody2>}
+              font
+              style={{ width: '100%', height: '48px', backgroundColor: colorBackgroundGrayLight, justifyContent: 'space-between', padding: '10px 20px ' }}
+              menuItems={['딸기우유']}
+              setState={mentorInfoState.setJob}
+              endIcon={<KeyboardArrowDownIcon color={colorTextLight} />}
+              onClickProps={() => { }}></SimpleMenu>
+            <EmptyWidth width={'16px'} />
+            <CustomButton width={'82px'}>저장</CustomButton>
+          </Flex>
+        </VerticalFlex>
+        <EmptyHeight height={'28px'} />
+        <VerticalFlex>
+          <TextSubtitle2>사내 직무명</TextSubtitle2>
+          <EmptyHeight height={'16px'} />
+          <Flex>
+            <CustomTextField
+              onChange={(event) => { mentorInfoState.setJobInComp(event.target.value) }}
+              variant="filled"
+              InputProps={{ disableUnderline: true, }}
+              fullWidth={true}
+              margin="dense"
+              size="small"
+              hiddenLabel
+              placeholder="최대 10자"
+            />
+            <EmptyWidth width={'16px'} />
+            <CustomButton width={'82px'}>저장</CustomButton>
+          </Flex>
+        </VerticalFlex>
+        <EmptyHeight height={'28px'} />
+        <VerticalFlex>
+          <TextSubtitle2>부서</TextSubtitle2>
+          <EmptyHeight height={'16px'} />
+          <Flex>
+            <CustomTextField
+              onChange={(event) => { mentorInfoState.setJobInComp(event.target.value) }}
+              variant="filled"
+              InputProps={{ disableUnderline: true, }}
+              fullWidth={true}
+              margin="dense"
+              size="small"
+              hiddenLabel
+              placeholder="최대 10자"
+            />
+            <EmptyWidth width={'16px'} />
+            <CustomButton width={'82px'}>저장</CustomButton>
+          </Flex>
+        </VerticalFlex>
 
-        <TextHeading6>휴대전화 변경</TextHeading6>
-        <EmptyHeight height={'8px'}></EmptyHeight>
-        <TextBody2 style={{ color: colorTextLight }}>본인인증을 통해 자동 저장됩니다.</TextBody2>
-        <EmptyHeight height={'16px'}></EmptyHeight>
-        <CustomButton height={'44px'} custom_color={colorCareerDiveBlue} background_color={colorBackgroundGrayLight}>본인인증</CustomButton>
+        <EmptyHeight height={'28px'} />
+
+        <VerticalFlex>
+          <Flex style={{ alignItems: 'center' }}>
+            <TextSubtitle2>부서 공개 여부</TextSubtitle2>
+            <EmptyWidth width={'20px'} />
+            <CustomToggleButton
+              checked={mentorInfoState.divisIsPub}
+              onChange={(e) => { onChangeToggle(e, mentorInfoState.divisIsPub, mentorInfoState.setDivisIsPub) }}
+            />
+            <EmptyWidth width={'8px'} />
+            <TextBody2 color={colorCareerDiveBlue}>공개</TextBody2>
+          </Flex>
+        </VerticalFlex>
 
       </Card>
     </UserProfileCardWrapper >

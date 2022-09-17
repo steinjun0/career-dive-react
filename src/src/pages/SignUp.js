@@ -289,6 +289,8 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
                 window.localStorage.setItem('UserID', accountCreateResponse.data.UserID)
                 window.localStorage.setItem('AccessToken', accountCreateResponse.data.AccessToken)
                 window.localStorage.setItem('RefreshToken', accountCreateResponse.data.RefreshToken)
+                window.localStorage.setItem('IsMentor', accountCreateResponse.data['IsMentor'])
+                window.localStorage.setItem('isAutoLogin', true)
                 alert('회원가입이 완료되었습니다!')
                 navigate('/')
 
