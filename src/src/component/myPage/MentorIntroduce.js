@@ -181,8 +181,8 @@ function MentorIntroduce() {
         <TextSubtitle2 color={colorCareerDiveBlue}>일반</TextSubtitle2>
         <EmptyHeight height={'14px'} />
         <Flex>
-          {basicConsultContent.map((e) => {
-            return <Flex>
+          {basicConsultContent.map((e, index) => {
+            return <Flex key={index}>
               <TagLarge
                 style={{ cursor: 'pointer' }}
                 color={selectedBasicConsultContent.includes(e) ? colorCareerDiveBlue : null}
@@ -209,8 +209,8 @@ function MentorIntroduce() {
         <TextSubtitle2 color={colorCareerDivePink}>프리미엄</TextSubtitle2>
         <EmptyHeight height={'14px'} />
         <Flex>
-          {premiumConsultContent.map((e) => {
-            return <Flex>
+          {premiumConsultContent.map((e, index) => {
+            return <Flex key={index}>
               <TagLarge
                 style={{ cursor: 'pointer' }}
                 color={selectedPremiumConsultContent.includes(e) ? colorCareerDivePink : null}
