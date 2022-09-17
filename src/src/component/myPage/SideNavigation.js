@@ -7,6 +7,9 @@ import {
   UlNoDeco,
 } from "util/styledComponent";
 import { Card } from "util/Card";
+import { isMentorUrl } from "util/util";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const NavigationListItem = styled(`li`)`
   margin-top: 20px;
@@ -25,22 +28,52 @@ const NavigationUndorderedList = styled(UlNoDeco)`
 `;
 
 function SideNavigation() {
-  const navigationList = ['프로필', '계정', '후기', '결제'];
-  const mapRoutetoSubPage = { 'profile': '프로필', 'account': '계정', 'review': '후기', 'payment': '결제', }
-  const mapSubPageToRoute = { '프로필': 'profile', '계정': 'account', '후기': 'review', '결제': 'payment', }
+  const menteeNavigationList = ['프로필', '계정', '후기', '결제'];
+  const mentorNavigationList = ['멘토 프로필', '계정', '대금 수령'];
+  const menteeMapRouteSubPage = {
+    '/mentee/mypage/profile': '프로필',
+    '/mentee/mypage/account': '계정',
+    '/mentee/mypage/review': '후기',
+    '/mentee/mypage/payment': '결제',
+    '프로필': '/mentee/mypage/profile',
+    '계정': '/mentee/mypage/account',
+    '후기': '/mentee/mypage/review',
+    '결제': '/mentee/mypage/payment'
+  }
+  const mentorMapRouteSubPage = {
+    '/mentor/mypage/profile': '멘토 프로필',
+    '/mentor/mypage/account': '계정',
+    '/mentor/mypage/recieve': '대금 수령',
+    '멘토 프로필': '/mentor/mypage/profile',
+    '계정': '/mentor/mypage/account',
+    '대금 수령': '/mentor/mypage/recieve',
+  }
   const params = useParams();
   const navigater = useNavigate();
+  const [navigationList, setNavigationList] = useState([]);
+  const [mapRouteSubPage, setMapRouteSubPage] = useState({});
 
   const onClickListItem = (subPage) => {
-    navigater(`/mentee/mypage/${subPage}`)
+    navigater(subPage)
   };
+
+  useEffect(() => {
+    if (isMentorUrl()) {
+      setNavigationList(mentorNavigationList)
+      setMapRouteSubPage(mentorMapRouteSubPage)
+    } else {
+      setNavigationList(menteeNavigationList)
+      setMapRouteSubPage(menteeMapRouteSubPage)
+    }
+  }, [])
+
 
   return (
     <Card id='my-page-side-nav' title={'마이페이지'}>
       <VerticalFlex>
         <NavigationUndorderedList>
           {navigationList.map((subPage, index) => {
-            if (subPage === mapRoutetoSubPage[params.subPage])
+            if (subPage === mapRouteSubPage[params.subPage])
               return (
                 <NavigationListItem key={index}>
                   <SelectedNavigation>
@@ -52,7 +85,7 @@ function SideNavigation() {
             else
               return (
                 <NavigationListItem key={index}>
-                  <UnselectedNavigation onClick={() => { onClickListItem(mapSubPageToRoute[subPage]) }}>
+                  <UnselectedNavigation onClick={() => { onClickListItem(mapRouteSubPage[subPage]) }}>
                     {subPage}
                   </UnselectedNavigation>
                 </NavigationListItem>

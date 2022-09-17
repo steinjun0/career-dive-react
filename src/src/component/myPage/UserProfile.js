@@ -7,10 +7,13 @@ import {
   TextBody1,
   Flex,
   RowAlignCenterFlex,
-  colorTextLight
+  colorTextLight,
+  colorBackgroundGrayLight,
+  colorCareerDiveBlue
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { useState } from "react";
+import { CustomButton } from "util/Custom/CustomButton";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
@@ -42,13 +45,38 @@ const EditTextButton = styled(TextBody1)`
 `
 
 function UserProfile() {
-  const [isEditingNickname, setIsEditingNickname] = useState(false);
-  const onClickEditNickname = () => {
-    setIsEditingNickname(!isEditingNickname)
+  const [isEditing, setIsEditing] = useState(false);
+  const onClickEdit = () => {
+    setIsEditing(true)
+  }
+  const onClickSave = () => {
+    setIsEditing(false)
   }
   return (
     <UserProfileCardWrapper>
-      <Card title={'유저 프로필'}>
+      <Card title={'유저 프로필'}
+        titleTail={
+          !isEditing ?
+            <Flex>
+              <CustomButton
+                id='edit'
+                width={'82px'}
+                height={'48px'}
+                background_color={colorBackgroundGrayLight}
+                custom_color={colorTextLight}
+                onClick={onClickEdit}
+              >수정</CustomButton>
+            </Flex> :
+            <Flex>
+              <CustomButton
+                id='edit'
+                width={'82px'}
+                height={'48px'}
+                background_color={colorCareerDiveBlue}
+                custom_color={'white'}
+                onClick={onClickSave}
+              >저장</CustomButton>
+            </Flex>}>
         <SubtitleWarpper>
           <Subtitle>프로필 이미지</Subtitle>
         </SubtitleWarpper>
@@ -59,12 +87,11 @@ function UserProfile() {
 
         <SubtitleWarpper>
           <Subtitle>닉네임</Subtitle>
-          <EditTextButton onClick={onClickEditNickname}>수정하기</EditTextButton>
         </SubtitleWarpper>
 
 
         <TextContentWrapper>
-          {isEditingNickname ? <TextField variant="standard" defaultValue={'일하는 베짱이'}></TextField> : <TextBody1>일하는 베짱이</TextBody1>}
+          {isEditing ? <TextField variant="standard" defaultValue={'일하는 베짱이'}></TextField> : <TextBody1>일하는 베짱이</TextBody1>}
         </TextContentWrapper>
 
       </Card>

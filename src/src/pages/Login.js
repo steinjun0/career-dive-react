@@ -79,9 +79,10 @@ function Login() {
         try {
             const loginResponse = await API.postAccountLogin(email, password);
             if (loginResponse.status === 200) {
-                window.localStorage.setItem('UserId', loginResponse.data['UserID'])
+                window.localStorage.setItem('UserID', loginResponse.data['UserID'])
                 window.localStorage.setItem('AccessToken', loginResponse.data['AccessToken'])
                 window.localStorage.setItem('RefreshToken', loginResponse.data['RefreshToken'])
+                window.localStorage.setItem('IsMentor', loginResponse.data['IsMentor'])
                 window.localStorage.setItem('isAutoLogin', isAutoLogin)
                 navigate('/')
             } else {
@@ -147,6 +148,7 @@ function Login() {
                                 <EmptyHeight height={'24px'} />
                                 <ButtonWrapper>
                                     <CustomButton
+                                        height={'48px'}
                                         onClick={onClickLogin}>
                                         로그인
                                     </CustomButton>

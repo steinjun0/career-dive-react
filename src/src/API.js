@@ -1,14 +1,25 @@
 import axios from 'axios'
 const CAREER_DIVE_API_URL = 'https://api.careerdive.deagwon.com'
+// const CAREER_DIVE_API_URL = 'https://devapi.careerdive.deagwon.com'
 
-let user = JSON.parse(localStorage.getItem('userData'))
+// let user = JSON.parse(localStorage.getItem('userData'))
+// let tokenHeader = false
+
+// if (user !== null) {
+//   tokenHeader = { headers: { Authorization: `${user.token}` } }
+// } else {
+//   tokenHeader = false
+// }
+let accessToken = localStorage.getItem('AccessToken')
 let tokenHeader = false
 
-if (user !== null) {
-  tokenHeader = { headers: { Authorization: `Bearer ${user.token}` } }
+if (accessToken !== null) {
+  tokenHeader = { headers: { Authorization: `${accessToken}` } }
 } else {
   tokenHeader = false
 }
+
+
 const getValidError = exception => {
   if (exception.response !== undefined && exception.response.data !== undefined && exception.response.data.errors !== undefined) {
     return exception.response.data.errors
@@ -39,14 +50,13 @@ export default {
       const res = tokenHeader ? await axios.get(url, tokenHeader) : await axios.get(url)
       return res
     } catch (e) {
-      // console.log(e);
       return { error: getValidError(e) }
     }
   },
   async getAxiosZip(url) {
     this.refreshUserData()
     try {
-      const res = user.token ? await axios.get(url, { headers: { Authorization: `Bearer ${user.token}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
+      const res = tokenHeader ? await axios.get(url, { headers: { Authorization: `${accessToken}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -56,6 +66,7 @@ export default {
     this.refreshUserData()
     try {
       const res = await axios.get(url, {
+        headers: { Authorization: `${accessToken}` },
         params: param,
       }, tokenHeader)
       return res
@@ -75,7 +86,7 @@ export default {
   async postAxiosFormData(url, data) {
     this.refreshUserData()
     try {
-      const res = user.token ? await axios.post(url, data, { headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+      const res = tokenHeader ? await axios.post(url, data, { headers: { Authorization: `${accessToken}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -93,7 +104,7 @@ export default {
   async patchAxiosFormData(url, data) {
     this.refreshUserData()
     try {
-      const res = user.token ? await axios.patch(url, data, { headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+      const res = tokenHeader ? await axios.patch(url, data, { headers: { Authorization: `${accessToken}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -125,6 +136,11 @@ export default {
     return loginRes
   },
 
+  async getConsultSchedule(year, month, mentorId) {
+    const scheduleRes = await this.getAxiosWithParams(`${CAREER_DIVE_API_URL}/consult/schedule`, { 'Year': year, 'Month': month, 'MentorID': mentorId })
+    return scheduleRes
+  },
+
   async postAccount(email, password, nickname) {
     const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
     return loginRes
@@ -145,14 +161,48 @@ export default {
     return loginRes
   },
 
+  async postConsultSchedule(dayTimes, year, month, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule`, { DayTimes: dayTimes, MentorID: mentorId, Month: month, Year: year })
+    return scheduleRes
+  },
+
+  async postConsultScheduleRule(startTime, endTime, weekDay, type, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
+    return scheduleRes
+  },
+
+  async postAccountMentor(inService, job, jobInComp, divisInComp, divisIsPub, tags) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/mentor`, { Mentor: { Inservice: inService, Job: job, JobInComp: jobInComp, DivisInComp: divisInComp, DivisIsPub: divisIsPub }, Tags: tags })
+    return scheduleRes
+  },
+
+  async postAccountMentorFile(id, file) {
+    const scheduleRes = await this.postAxiosFormData(`${CAREER_DIVE_API_URL}/account/mentor/${id}/file`, file)
+    return scheduleRes
+  },
+
+  async patchAccount(userData) {
+    const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
+    return userRes
+  },
 
   async patchUser(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}auth/user/`, userData)
     return userRes
   },
 
-  async deleteTask(taskId) {
-    const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}task/task/${taskId}/`)
+  async patchConsultScheduleRule(ruleId, startTime, endTime, weekDay, type, mentorId) {
+    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
+    return patchRes
+  },
+
+  async deleteConsultSchedule(shceduleId) {
+    const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}/consult/schedule/${shceduleId}`)
+    return deleteRes
+  },
+
+  async deleteConsultScheduleRule(ruleId, startDate) {
+    const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}?${startDate ? `startDate=${startDate}` : ''}`)
     return deleteRes
   },
 

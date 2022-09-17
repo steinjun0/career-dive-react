@@ -9,11 +9,10 @@ import {
 } from "util/styledComponent";
 
 import MentorProfile from 'component/mentor/Profile'
-import MentorCalendar from 'component/mentor/Calendar'
+import MentorCalendar from 'component/calendar/Calendar'
 import SelectContent from 'component/mentor/apply/SelectContent'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { updateReservation } from "util/util";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -41,7 +40,7 @@ function MentoringReservation() {
 
   const [isFinishSet, setIsFinishSet] = useState(false)
   useEffect(() => {
-    console.log(isFinishSet)
+    // console.log(isFinishSet)
   }, [isFinishSet])
 
   return (

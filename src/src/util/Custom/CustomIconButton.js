@@ -32,16 +32,19 @@ const IconText = styled(TextSubtitle1)`
 // }
 `;
 
-export function CustomIconButton({ Icon, text, width, default_color, default_text_color, hover_color, text_color, onClick }) {
+export function CustomIconButton({ Icon, text, style, width, default_color, default_text_color, hover_color, text_color, onClick }) {
   const [isHover, setIsHover] = useState(false)
   return (
     <CustomIconButtonStyle width={width} hover_color={hover_color} default_color={default_color}
       onClick={onClick}
+      style={style}
       onMouseEnter={() => { setIsHover(true) }}
       onMouseLeave={() => { setIsHover(false) }}>
       {/* <SizedImg style={{ marginRight: '8px', color: text_color }} src={icon} width='24px' height='24px'></SizedImg> */}
       <Flex style={{ marginRight: '8px', minWidth: '24px', minHeight: '24px' }}>
-        <Icon color={isHover ? text_color : default_text_color ? default_text_color : colorTextLight}></Icon>
+        <Icon
+          style={{ transition: 'all 0.3s ease-out', color: isHover ? text_color : default_text_color ? default_text_color : colorTextLight }}
+          color={isHover ? text_color : default_text_color ? default_text_color : colorTextLight}></Icon>
       </Flex>
       <IconText color={default_text_color ? default_text_color : colorTextLight} style={{}} hover_color={text_color} hover={String(isHover)}>
         {text}

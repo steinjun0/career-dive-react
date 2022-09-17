@@ -229,6 +229,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
             <EmptyHeight height={'12px'} />
             <ButtonWrapper>
                 <CustomButton
+                    height={'48px'}
                     onClick={() => {
                         updateSignUpData(signUpData, setSignUpData);
                         setSignUpStep(signUpStep + 1)
@@ -285,9 +286,11 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
         try {
             const accountCreateResponse = await API.postAccount(signUpData.email, signUpData.password, signUpData.nickName);
             if (accountCreateResponse.status === 200) {
-                window.localStorage.setItem('UserId', accountCreateResponse.data.UserId)
+                window.localStorage.setItem('UserID', accountCreateResponse.data.UserID)
                 window.localStorage.setItem('AccessToken', accountCreateResponse.data.AccessToken)
                 window.localStorage.setItem('RefreshToken', accountCreateResponse.data.RefreshToken)
+                window.localStorage.setItem('IsMentor', accountCreateResponse.data['IsMentor'])
+                window.localStorage.setItem('isAutoLogin', true)
                 alert('회원가입이 완료되었습니다!')
                 navigate('/')
 

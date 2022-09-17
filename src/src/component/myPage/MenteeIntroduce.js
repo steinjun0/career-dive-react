@@ -9,11 +9,21 @@ import {
   Flex,
   colorBackgroundGrayLight,
   colorTextLight,
+  EmptyWidth,
+  VerticalFlex,
+  TextBody2,
+  colorCareerDivePink,
+  EmptyHeight,
 } from "util/styledComponent";
 import { Card } from "util/Card";
+import { CustomButton } from "util/Custom/CustomButton";
+import { useState } from "react";
+
+import API from "API";
+
 
 const MenteeIntroduceWrapper = styled(Flex)`
-  width: 100%;
+  // width: 100%;
 `;
 
 const Subtitle = styled(TextSubtitle2)`
@@ -28,7 +38,7 @@ const DropzoneWrapper = styled(Flex)`
   align-items: center;
   background-color: ${colorBackgroundGrayLight};
   color: ${colorTextLight};
-  width: 840px;
+  width: 100%;
   height: 100px;
   border-radius: 8px;
 `;
@@ -40,30 +50,130 @@ export const TextFieldWrapper = styled(Flex)`
 
 const UrlWrapper = styled(TextFieldWrapper)`
   margin-top: 0;
+  .css-10botns-MuiInputBase-input-MuiFilledInput-input{
+    padding: 10px 20px;
+  }
 `;
 
 
+
+
 function MenteeIntroduce() {
+  const [isEditing, setIsEditing] = useState(false)
+  const [introduceText, setIntroduceText] = useState('')
+  const [uploadingFiles, setUploadingFiles] = useState([])
+
+  const cancelEditing = () => {
+    setIsEditing(false)
+  }
+
+  const saveEditing = async () => {
+    const validResponse = await API.patchAccount({
+      AgreeAdb: true,
+      AgreeNoti: true,
+      "BirthDate": "string",
+      "Email": "email@careerdive.com",
+      "Name": "string",
+      "Nickname": "string",
+      "Password": "p@ssw0rd",
+      "Phone": "string",
+      "Sex": true
+    });
+    if (validResponse.status === 200) {
+      setIsEditing(false)
+      return
+    }
+  }
+
   return (
     <MenteeIntroduceWrapper>
-      <Card title={'내 소개'} no_divider={'true'}>
-        <Subtitle>상담을 요청한 멘토에게만 공개됩니다.</Subtitle>
-        <Divider></Divider>
+      <Card title={
+        <VerticalFlex>
+          내 소개
+          <Subtitle style={{ margin: '20px 0 0 0' }}>상담을 요청한 멘토에게만 공개됩니다.</Subtitle>
+        </VerticalFlex>} titleTail={
+          <Flex>
+            {!isEditing ?
+              <Flex>
+                <Flex>
+                  <CustomButton
+                    id='edit'
+                    width={'82px'}
+                    height={'48px'}
+                    background_color={colorBackgroundGrayLight}
+                    custom_color={colorTextLight}
+                    onClick={() => { setIsEditing(true) }}
+                  >수정</CustomButton>
+                </Flex>
+              </Flex>
+              :
+              <Flex>
+                <CustomButton
+                  id='cancel'
+                  height={'48px'}
+                  width={'82px'}
+                  background_color={colorBackgroundGrayLight}
+                  custom_color={colorTextLight}
+                  onClick={cancelEditing}
+                >취소</CustomButton>
+                <EmptyWidth width='16px' />
+                <CustomButton
+                  width={'82px'}
+                  onClick={() => { saveEditing(true) }}
+                >저장</CustomButton>
+              </Flex>
+            }
+          </Flex>
+        }>
         <TextFieldWrapper>
-          <TextField
-            id="outlined-textarea"
-            placeholder="자기소개는 여기에 들어갑니다."
-            multiline
-            variant="filled"
-            InputProps={{ disableUnderline: true, }}
-            minRows={4}
-            maxRows={8}
-            fullWidth={true}
-          />
+          {!isEditing ?
+            <TextBody2 style={{ whiteSpace: 'pre' }} color={colorTextLight}>
+              {introduceText}
+            </TextBody2> :
+            <TextField
+              id="outlined-textarea"
+              value={introduceText}
+              placeholder="1. 학교·직장&#13;&#10;2. 경력·활동&#13;&#10;3. 어학·자격증&#13;&#10;4. 취업·이직 준비에 관한 고민 등"
+              multiline
+              variant="filled"
+              InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, padding: 20, borderRadius: 8, } }}
+              minRows={4}
+              maxRows={8}
+              fullWidth={true}
+              onChange={(e) => {
+                setIntroduceText(e.target.value)
+              }}
+            />}
         </TextFieldWrapper>
 
         <Subtitle>파일 업로드(최대 2개)</Subtitle>
-        <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
+        {uploadingFiles.map((e, i) => {
+          return <Flex key={i}>
+            <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{e}</TextBody2>
+            <TextBody2
+              style={{ cursor: isEditing ? 'pointer' : 'default' }}
+              color={colorCareerDivePink}
+              onClick={() => {
+                if (isEditing) {
+                  const temp = JSON.parse(JSON.stringify(uploadingFiles))
+                  temp.splice(temp.indexOf(e), 1)
+                  setUploadingFiles(temp)
+                }
+              }}>삭제</TextBody2>
+          </Flex>;
+        })}
+        <EmptyHeight height='20px'></EmptyHeight>
+        <Dropzone onDrop={acceptedFiles => {
+          if (uploadingFiles.length + acceptedFiles.length > 2) {
+            alert('업로드 파일이 3개 이상입니다.')
+            return
+          }
+          const temp = []
+          acceptedFiles.forEach(file => {
+            temp.push(file.path)
+          })
+          setUploadingFiles([...uploadingFiles, ...temp])
+        }}>
           {({ getRootProps, getInputProps }) => (
             <section>
               <DropzoneWrapper {...getRootProps()}>
@@ -79,7 +189,7 @@ function MenteeIntroduce() {
             id="outlined-textarea"
             placeholder="자신을 소개하는 url을 작성해보세요"
             variant="filled"
-            InputProps={{ disableUnderline: true }}
+            InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, borderRadius: 8, } }}
             rows={1}
             fullWidth={true}
           />
