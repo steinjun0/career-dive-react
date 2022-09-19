@@ -4,7 +4,7 @@ WORKDIR /root/src
 RUN npm i --only=production
 RUN npm run build
 
-COPY ./vscode-server-bin /root/.vscode-server/bin
+# COPY ./vscode-server-bin /root/.vscode-server/bin
 
 FROM nginx:latest AS careerdive-frontend
 COPY --from=builder /root/src/build /src/build
