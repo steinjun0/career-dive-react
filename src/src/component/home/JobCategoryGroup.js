@@ -2,14 +2,14 @@ import { styled } from "@mui/material";
 import { RowAlignCenterFlex } from 'util/styledComponent'
 import JobCategoryCard from './JobCategoryCard'
 
-import design from '../../assets/icon/jobCategory/design.png'
-import dev from '../../assets/icon/jobCategory/dev.png'
-import finance from '../../assets/icon/jobCategory/finance.png'
-import manufacturing from '../../assets/icon/jobCategory/manufacturing.png'
-import marketing from '../../assets/icon/jobCategory/marketing.png'
-import media from '../../assets/icon/jobCategory/media.png'
-import plan from '../../assets/icon/jobCategory/plan.png'
-import sales from '../../assets/icon/jobCategory/sales.png'
+import design from '../../assets/icon/jobCategory/design.svg'
+import dev from '../../assets/icon/jobCategory/dev.svg'
+import finance from '../../assets/icon/jobCategory/finance.svg'
+import manufacturing from '../../assets/icon/jobCategory/manufacturing.svg'
+import marketing from '../../assets/icon/jobCategory/marketing.svg'
+import media from '../../assets/icon/jobCategory/media.svg'
+import contents from '../../assets/icon/jobCategory/contents.svg'
+import logistics from '../../assets/icon/jobCategory/logistics.svg'
 
 // change job category icon svg to png
 // before svg file is from figma, which is converted from image not vector
@@ -36,7 +36,7 @@ function JobCategoryGroup() {
 
             <JobCategoryCardLine>
                 <JobCategoryCard icon={marketing} name={'마케팅·광고·홍보'} ></JobCategoryCard>
-                <JobCategoryCard icon={plan} name={'서비스·콘텐츠 기획'} ></JobCategoryCard>
+                <JobCategoryCard icon={contents} name={'서비스·콘텐츠 기획'} ></JobCategoryCard>
                 <JobCategoryCard icon={media} name={'방송·미디어'} ></JobCategoryCard>
                 <JobCategoryCard icon={finance} name={'은행·금융'} ></JobCategoryCard>
             </JobCategoryCardLine>
@@ -44,7 +44,7 @@ function JobCategoryGroup() {
             <JobCategoryCardLine>
                 <JobCategoryCard icon={dev} name={'IT·SW'} ></JobCategoryCard>
                 <JobCategoryCard icon={manufacturing} name={'제조·생산·품질'} ></JobCategoryCard>
-                <JobCategoryCard icon={sales} name={'유통·물류·무역'} ></JobCategoryCard>
+                <JobCategoryCard icon={logistics} name={'유통·물류·무역'} ></JobCategoryCard>
                 <JobCategoryCard icon={design} name={'디자인'} ></JobCategoryCard>
             </JobCategoryCardLine>
 
