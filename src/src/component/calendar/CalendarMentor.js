@@ -16,7 +16,8 @@ import {
   colorBackgroundCareerDiveBlue,
   TextHeading6,
   colorBackgroundCareerDivePink,
-  colorCareerDivePink
+  colorCareerDivePink,
+  EmptyHeight
 } from "util/styledComponent";
 import { TagLarge } from "util/Custom/CustomTag";
 
@@ -57,7 +58,7 @@ const repeatOptionConverter = {
   'week': '매주 반복',
 }
 
-function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
+function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTime, style }) {
   const housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
   const minsList = ['00', '10', '20', '30', '40', '50']
 
@@ -69,7 +70,7 @@ function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
   const [endMin, setEndMin] = useState('00')
   const [repeatOption, setRepeatOption] = useState('매일 반복')
   const [isShow, setIsShow] = useState(true)
-
+  const [isShowDeleteDropDown, setIsShowDeleteDropDown] = useState(false)
   useEffect(() => {
     if (initialTime) {
       setStartAMPM(initialTime.startAMPM)
@@ -82,6 +83,13 @@ function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
     }
   }, [])
 
+  const openDeleteDropDown = () => {
+    setIsShowDeleteDropDown(true)
+  }
+
+  const closeDeleteDropDown = () => {
+    setIsShowDeleteDropDown(false)
+  }
 
   return (isShow &&
     <RowAlignCenterFlex
@@ -166,11 +174,34 @@ function SetAvailableTime({ onSetTime, onRemove, initialTime, style }) {
         default_text_color={colorCareerDivePink}
         hover_color={colorCareerDivePink}
         onClick={() => {
-          onRemove()
-          setIsShow(false)
+          if (repeatOption === '반복 없음') {
+            onRemoveNotRule()
+            setIsShow(false)
+          }
+          else {
+            openDeleteDropDown()
+          }
         }}
-      />}
-
+      />}{
+        isShowDeleteDropDown && <Flex style={{ position: 'relative' }}>
+          <VerticalFlex style={{ position: 'absolute', top: '24px', left: '-40px', width: '70px', padding: '8px', backgroundColor: 'gray' }}>
+            <Flex style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => closeDeleteDropDown()}>X</Flex>
+            <Flex
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                onRemoveRule()
+                setIsShow(false)
+              }}>규칙 삭제</Flex>
+            <EmptyHeight height="8px" />
+            <Flex
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                onRemoveNotRule()
+                setIsShow(false)
+              }}>일자 삭제</Flex>
+          </VerticalFlex>
+        </Flex>
+      }
     </RowAlignCenterFlex>
   )
 
@@ -466,15 +497,13 @@ function CalendarMentor() {
             return <SetAvailableTime
               key={index}
               style={{ marginTop: '16px' }}
-              onRemove={() => {
+              onRemoveRule={() => {
                 const index = availableTimes[selectedDate].indexOf(e);
-                if (index > -1) {
-                  availableTimes[selectedDate].splice(index, 1);
-                }
-
-                if (e.ruleId !== -1) {
-                  availableTimes[selectedDate].push({ isDeleting: true, ruleId: e.ruleId })
-                }
+                availableTimes[selectedDate].push({ isDeleting: true, ruleId: e.ruleId })
+              }}
+              onRemoveNotRule={() => {
+                const index = availableTimes[selectedDate].indexOf(e);
+                availableTimes[selectedDate].splice(index, 1);
               }}
               initialTime={e} />
           })}
