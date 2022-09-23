@@ -1,9 +1,11 @@
-import { styled } from "@mui/material";
+import { Divider, styled } from "@mui/material";
 import {
   RowAlignCenterFlex,
   Flex,
   VerticalFlex,
   colorCareerDiveBlue,
+  colorBackgroundGrayMedium,
+  colorTextLight,
 } from "util/styledComponent";
 
 import speechBubble from "../assets/icon/speechBubble.svg";
@@ -12,30 +14,30 @@ const FooterFullWidthWrapper = styled(Flex)`
   position: relative;
   flex-direction: column;
   justify-content: center;
-  align-items: start;
-  height: 188px;
+  align-items: center;
+  height: 218px;
   width: 100%;
   background-color: white;
-  padding-top: 26px;
 `;
 
 const FooterTop = styled(Flex)`
-  height: 152px;
+  height: 172px;
   width: 100%;
   justify-content: center;
+  align-items: center;
 `;
 
 const FooterBottom = styled(Flex)`
-  height: 36px;
+  height: 46px;
   width: 100%;
-  background-color: ${colorCareerDiveBlue};
   justify-content: center;
+  border-top: 1px solid ${colorBackgroundGrayMedium};
 `;
 
 const FooterWrapper = styled(RowAlignCenterFlex)`
   flex-direction: row;
   justify-content: start;
-  height: 96px;
+  height: 100px;
   width: 100%;
   max-width: 1194px;
 `;
@@ -45,7 +47,7 @@ const FooterBottomWrapper = styled(RowAlignCenterFlex)`
   width: 100%;
   max-width: 1194px;
   font-size: 12px;
-  color:white;
+  color: ${colorTextLight};
 `;
 
 const ColumnSet = styled(VerticalFlex)`
@@ -57,7 +59,6 @@ const ColumnSet = styled(VerticalFlex)`
 `;
 
 const ColumnTitle = styled('span')`
-  color: ${colorCareerDiveBlue};
   font-weight: 700;
 `
 
@@ -103,14 +104,14 @@ function Footer() {
           </ColumnSet>
           <ContactCCudaButton>
             <SpeechBubbleIcon src={speechBubble} alt='speech-bubble' />
-            꾸다에게 문의하기
+            문의하기
           </ContactCCudaButton>
         </FooterWrapper>
       </FooterTop>
       <FooterBottom>
         <FooterBottomWrapper>
-          <div>(주)꾸다, 사업자 등록 번호: 876-22-01034, 통신판매업 등록번호</div>
-          <div>Copyright 2022, (주)꾸다, AllRights reserved.</div>
+          <div>artisd.studio, 사업자 등록 번호: 876-22-01034, 대표자: 김인종</div>
+          <div>Copyright 2022, 커리어다이브, All Rights Reserved.</div>
         </FooterBottomWrapper>
       </FooterBottom>
     </FooterFullWidthWrapper>
