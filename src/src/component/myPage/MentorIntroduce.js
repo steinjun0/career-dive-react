@@ -21,7 +21,7 @@ import {
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import API from "API";
 import { CustomTextField } from "util/Custom/CustomTextField";
@@ -96,6 +96,13 @@ function MentorIntroduce() {
     }
   }
 
+  useEffect(() => {
+    if (introduceText === '') {
+      setIsEditing(true)
+    }
+  }, [introduceText])
+
+
   return (
     <MenteeIntroduceWrapper>
       <Card
@@ -138,8 +145,8 @@ function MentorIntroduce() {
             }
           </Flex>
         }>
+        <Subtitle style={{ margin: '20px 0 0 0' }}>작성하신 정보는 멘토 프로필에 노출됩니다.</Subtitle>
         <TextFieldWrapper>
-          <Subtitle style={{ margin: '0 0 0 0' }}>작성하신 정보는 멘토 프로필에 노출됩니다.</Subtitle>
           {!isEditing ?
             <TextBody2 style={{ whiteSpace: 'pre' }} color={colorTextLight}>
               {introduceText}
