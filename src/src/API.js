@@ -1,5 +1,6 @@
 import axios from 'axios'
-const CAREER_DIVE_API_URL = 'https://api.careerdive.deagwon.com'
+const CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
+// const CAREER_DIVE_API_URL = 'https://api.careerdive.co.kr'
 // const CAREER_DIVE_API_URL = 'https://devapi.careerdive.deagwon.com'
 
 // let user = JSON.parse(localStorage.getItem('userData'))
