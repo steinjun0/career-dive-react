@@ -106,7 +106,7 @@ function Footer() {
             <ColumnSet>
               <ColumnTitle>SUPPORT</ColumnTitle>
               <div>FAQ</div>
-              <div>꾸다센터</div>
+              <div>커다센터</div>
             </ColumnSet>
             <ContactCCudaButton>
               <SpeechBubbleIcon src={speechBubble} alt='speech-bubble' />
