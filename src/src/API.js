@@ -1,7 +1,7 @@
 import axios from 'axios'
-const CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
+// const CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
+const CAREER_DIVE_API_URL = 'https://api.dev.careerdive.co.kr'
 // const CAREER_DIVE_API_URL = 'https://api.careerdive.co.kr'
-// const CAREER_DIVE_API_URL = 'https://devapi.careerdive.deagwon.com'
 
 // let user = JSON.parse(localStorage.getItem('userData'))
 // let tokenHeader = false
@@ -13,6 +13,7 @@ const CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
 // }
 let accessToken = localStorage.getItem('AccessToken')
 let tokenHeader = false
+
 
 if (accessToken !== null) {
   tokenHeader = { headers: { Authorization: `${accessToken}` } }
@@ -29,12 +30,11 @@ const getValidError = exception => {
 }
 export default {
   refreshUserData() {
-    // user = JSON.parse(localStorage.getItem('userData'))
-    // if (user !== null) {
-    //   tokenHeader = { headers: { Authorization: `Bearer ${user.token}` } }
-    // } else {
-    //   tokenHeader = false
-    // }
+    if (accessToken !== null) {
+      tokenHeader = { headers: { Authorization: `${accessToken}` } }
+    } else {
+      tokenHeader = false
+    }
   },
   async getAxios(url) {
     this.refreshUserData()
@@ -78,7 +78,7 @@ export default {
   async postAxios(url, data) {
     this.refreshUserData()
     try {
-      const res = tokenHeader ? await axios.post(url, data, tokenHeader) : await axios.post(url, data)
+      const res = tokenHeader ? await axios.post(url, data, { headers: { Authorization: `${accessToken}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data)
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -174,6 +174,11 @@ export default {
 
   async postAccountMentor(inService, job, jobInComp, divisInComp, divisIsPub, tags) {
     const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/mentor`, { Mentor: { Inservice: inService, Job: job, JobInComp: jobInComp, DivisInComp: divisInComp, DivisIsPub: divisIsPub }, Tags: tags })
+    return scheduleRes
+  },
+
+  async postAccountConsultContent(consultContents, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/consultContent`, { ConsulltContents: consultContents, MentorID: mentorId })
     return scheduleRes
   },
 
