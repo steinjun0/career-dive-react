@@ -424,7 +424,7 @@ function CalendarMentor() {
           {/* {`${year}-${selectedDateObj.getMonth() + 1}-${selectedDateObj.getDate()}`}
           <AddOutlined /> */}
           <Flex style={{ justifyContent: 'space-between', marginTop: '24px', marginBottom: '8px' }}>
-            <TextHeading6>상담 가능 시간대 설정</TextHeading6>
+            <TextHeading6>세부 시간 설정</TextHeading6>
             {!isAdding && !isEditing && <CustomButton
               background_color={colorBackgroundGrayLight}
               custom_color={colorTextLight}
