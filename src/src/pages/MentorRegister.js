@@ -169,7 +169,7 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                 margin="dense"
                 size="small"
                 hiddenLabel
-                placeholder="최대 10자"
+                placeholder="사내직무명"
             />
 
             <EmptyHeight height='30px' />
