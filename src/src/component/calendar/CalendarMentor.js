@@ -250,6 +250,7 @@ function CalendarMentor() {
         year,
         month.slice(0, -1),
         Number(localStorage.getItem('UserID')))
+      console.log('res', res)
       if (res.status === 200) {
         if (res.data.DayTimes !== null) {
           const tempDayTimes = []
@@ -281,6 +282,9 @@ function CalendarMentor() {
             })
             // setAvailableDates([...availableDates, e.Day])
           })
+          console.log('tempDayTimes', tempDayTimes)
+          console.log('tempAvailableTime', tempAvailableTime)
+
           setAvailableDates(tempDayTimes)
           setAvailableTimes(tempAvailableTime)
         } else {
@@ -316,7 +320,7 @@ function CalendarMentor() {
       Number(month.slice(0, -1)),
       Number(localStorage.getItem('UserID'))
     )
-    getConsultSchedule()
+    // getConsultSchedule()
   }
 
   const postConsultScheduleRule = async (availableTimesProps) => {
@@ -343,7 +347,7 @@ function CalendarMentor() {
           )
         })
     )
-    getConsultSchedule()
+    // getConsultSchedule()
   }
 
   const patchConsultScheduleRule = async (availableTimesProps) => {
@@ -373,7 +377,7 @@ function CalendarMentor() {
           }
         })
     )
-    getConsultSchedule()
+    // getConsultSchedule()
   }
 
 
