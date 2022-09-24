@@ -171,24 +171,24 @@ function ConsultRange() {
         </Flex>
         <EmptyHeight height={'20px'} />
         <VerticalFlex style={{ backgroundColor: colorBackgroundGrayLight, padding: '24px', borderRadius: '8px', color: colorTextLight }}>
-          <Flex>
-            <VerticalFlex>
+          <Flex style={{ justifyContent: 'center' }}>
+            <VerticalFlex style={{ flex: 1 }}>
               <TextSubtitle1>
                 커리어 상담
               </TextSubtitle1>
               <EmptyHeight height={'16px'} />
               <TextBody2>
-                상담 비용은 00,000원(수수료 포함)이며, 사전 준비를 요구하지 않습니다.
+                상담 비용은 다음과 같습니다. <br />멘티의 자료를 사전에 검토하지 않는 경우, 20분 13,900원, 40분 24,900원이며, 멘티의 자료를 사전에 검토하는 경우, 20분 25,400원, 40분 39,900원입니다.
               </TextBody2>
             </VerticalFlex>
             <EmptyWidth width={'24px'} />
-            <VerticalFlex>
+            <VerticalFlex style={{ flex: 1 }}>
               <TextSubtitle1>
                 전형 준비
               </TextSubtitle1>
               <EmptyHeight height={'16px'} />
               <TextBody2>
-                상담 비용은 00,000원(수수료 포함)이며, 상담 이전 준비가 필수입니다.
+                상담 비용은 20분 40,900원, 40분 53,900원입니다.
               </TextBody2>
             </VerticalFlex>
           </Flex>

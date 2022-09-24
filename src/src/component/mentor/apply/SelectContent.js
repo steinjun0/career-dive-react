@@ -87,7 +87,7 @@ function Introduction({ applyInformation }) {
         <EmptyHeight height='28px' />
         <Flex>
           <TextSubtitle1>
-            자료 사전 검토 희망 여부
+            사전에 자료를 검토하기를 원하시나요?
           </TextSubtitle1>
           <EmptyWidth width="8px"></EmptyWidth>
         </Flex>
