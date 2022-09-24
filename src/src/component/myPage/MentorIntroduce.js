@@ -26,6 +26,7 @@ import { useEffect, useState } from "react";
 import API from "API";
 import { CustomTextField } from "util/Custom/CustomTextField";
 import { TagLarge } from "util/Custom/CustomTag";
+import TagShowAndInput from "component/TagShowAndInput";
 
 
 const MenteeIntroduceWrapper = styled(Flex)`
@@ -50,7 +51,7 @@ const DropzoneWrapper = styled(Flex)`
   border-radius: 8px;
 `;
 
-export const TextFieldWrapper = styled(Flex)`
+const TextFieldWrapper = styled(Flex)`
   margin-top: 20px;
   width: 100%;
 `;
@@ -62,19 +63,19 @@ const UrlWrapper = styled(TextFieldWrapper)`
   }
 `;
 
+const mentorIntroducePlaceholder = '작성된 소개가 없습니다. 멘티에게 노출 될 소개를 작성해주세요!';
 
 
 
 function MentorIntroduce() {
   const [isEditing, setIsEditing] = useState(false)
   const [introduceText, setIntroduceText] = useState('')
-  const [basicConsultContent, setBasicConsultContent] = useState(['직무 소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기'])
-  const [selectedBasicConsultContent, setSelectedBasicConsultContent] = useState([])
-  const [premiumConsultContent, setPremiumConsultContent] = useState(['자소서 첨삭', '자소서 구성', 'CV 첨삭', '포트폴리오 첨삭', '코드 리뷰', '면접 대비'])
-  const [selectedPremiumConsultContent, setSelectedPremiumConsultContent] = useState([])
-  const [selectedPremiumTab, setSelectedPremiumTab] = useState(premiumConsultContent[0])
+  const [tagList, setTagList] = useState([]);
+  const [tagListBackup, setTagListBackup] = useState([]);
 
   const cancelEditing = () => {
+    console.log('tagListBackup', tagListBackup)
+    setTagList(tagListBackup)
     setIsEditing(false)
   }
 
@@ -91,16 +92,44 @@ function MentorIntroduce() {
       "Sex": true
     });
     if (validResponse.status === 200) {
+      await postMentorTag() // TODO: try catch
       setIsEditing(false)
       return
     }
+  }
+
+  const getMentorTag = async () => {
+    const mentorRes = await API.getAccountMentor(localStorage.getItem('UserID'))
+    if (mentorRes.status === 200) {
+      let newTagList = mentorRes.data.Tags.map((e) => {
+        return e.Name
+      })
+      return newTagList
+    }
+  }
+
+  const postMentorTag = async () => {
+    const convertedTagList = tagList.map((e) => {
+      return { Name: e }
+    })
+    API.postAccountTag(convertedTagList, localStorage.getItem('UserID'))
   }
 
   useEffect(() => {
     if (introduceText === '') {
       setIsEditing(true)
     }
-  }, [introduceText])
+  }, [])
+
+  useEffect(async () => {
+    if (isEditing) {
+      let tags = await getMentorTag()
+      setTagListBackup(tags)
+      setTagList(tags)
+    }
+  }, [isEditing])
+
+
 
 
   return (
@@ -128,16 +157,18 @@ function MentorIntroduce() {
               </Flex>
               :
               <Flex>
-                <CustomButton
+                {introduceText !== '' && <CustomButton
                   id='cancel'
                   height={'48px'}
                   width={'82px'}
                   background_color={colorBackgroundGrayLight}
                   custom_color={colorTextLight}
                   onClick={cancelEditing}
-                >취소</CustomButton>
+                >취소</CustomButton>}
                 <EmptyWidth width='16px' />
                 <CustomButton
+                  disabled={introduceText === ''}
+                  height={'48px'}
                   width={'82px'}
                   onClick={() => { saveEditing(true) }}
                 >저장</CustomButton>
@@ -154,11 +185,11 @@ function MentorIntroduce() {
             <TextField
               id="outlined-textarea"
               value={introduceText}
-              placeholder="1. 직장&#13;&#10;2. 경력·활동&#13;&#10;3. 어학·자격증"
+              placeholder={mentorIntroducePlaceholder}
               multiline
               variant="filled"
               InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, padding: 20, borderRadius: 8, } }}
-              minRows={4}
+              minRows={6}
               maxRows={8}
               fullWidth={true}
               onChange={(e) => {
@@ -167,20 +198,8 @@ function MentorIntroduce() {
             />}
         </TextFieldWrapper>
         <EmptyHeight height={'20px'} />
-        <TextSubtitle1>태그</TextSubtitle1>
-        <EmptyHeight height={'20px'} />
-        <CustomTextField
-          onChange={(event) => {
-            // mentorInfoState.setTagsString(event.target.value)
-          }}
-          variant="filled"
-          InputProps={{ disableUnderline: true, }}
-          fullWidth={true}
-          margin="dense"
-          size="small"
-          hiddenLabel
-          placeholder="ex. 커리어다이브, 플랫폼, 에듀테크, 금융서비스 등"
-        />
+        <TagShowAndInput tagList={tagList} setTagList={setTagList} isEditing={isEditing} />
+
       </Card>
     </MenteeIntroduceWrapper>
 
