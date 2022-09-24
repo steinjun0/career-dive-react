@@ -126,6 +126,7 @@ const onClickLogout = () => {
 
 function Gnb() {
   const location = useLocation().pathname;
+  const navigator = useNavigate();
 
   const isPresentUrl = (url) => {
     return url === location
@@ -277,7 +278,7 @@ function Gnb() {
                 setIsHideProfileMenu(!isMouseOnProfileMenuRef.current)
               }, 300);
             }}>
-            <ProfileImg src={testProfileImage} alt="" />
+            <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigator(`${'mentor'}/mypage/profile`) }} src={testProfileImage} alt="" />
             {isMentorUrl() ?
               <ProfileMenu is_hide={String(isHideProfileMenu)}>
                 <LinkNoDeco to={`${'mentor'}/mypage/profile`}>
