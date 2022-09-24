@@ -53,7 +53,7 @@ export const updateReservation = (id, updateDataArray) => {
     prefix = 'mentee'
   }
 
-  let reservations = JSON.parse(localStorage.getItem(`${prefix}-reservations`))
+  let reservations = JSON.parse(localStorage.getItem(`reservations`))
   let reservation = {}
 
   if (reservations !== null) {
@@ -75,7 +75,7 @@ export const updateReservation = (id, updateDataArray) => {
   // reservation['consultingStartTime'] = consultingStartTime
 
   reservations[id] = reservation
-  localStorage.setItem(`${prefix}-reservations`, JSON.stringify(reservations))
+  localStorage.setItem(`reservations`, JSON.stringify(reservations))
 }
 
 export function usePrevious(value) {

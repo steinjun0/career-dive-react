@@ -259,7 +259,7 @@ function Calendar({ setIsFinishSet }) {
       prefix = 'mentee'
     }
 
-    const reservations = JSON.parse(localStorage.getItem(`${prefix}-reservations`))
+    const reservations = JSON.parse(localStorage.getItem(`reservations`))
     if (reservations !== null) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {
