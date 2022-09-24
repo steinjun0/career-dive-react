@@ -13,7 +13,8 @@ import {
   VerticalFlex,
   colorBackgroundCareerDiveBlue,
   colorCareerDivePink,
-  colorBackgroundCareerDivePink
+  colorBackgroundCareerDivePink,
+  TextCaption
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
@@ -164,8 +165,13 @@ function Request() {
             minRows={5}
           />
           <EmptyHeight height='16px' />
-          <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
 
+
+          <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
+          <TextBody2 color={colorCareerDivePink}>
+            (닉네임)님의 경력과 스펙을 작성해 주세요.
+          </TextBody2>
+          <EmptyHeight height='8px' />
           {/* TODO: upload 파일 취소 버튼 필요 */}
           <Dropzone onDrop={acceptedFiles => {
             if (uploadingFiles.length + acceptedFiles.length > 2) {
