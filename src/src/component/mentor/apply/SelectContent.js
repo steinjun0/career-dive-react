@@ -97,10 +97,8 @@ function Introduction({ applyInformation }) {
               alert('상담 유형을 선택하세요')
             } else {
               updateReservation(params.id, updatingData)
-              navigater(`/mentee/mentor/mentoring/apply/${params.id}`)
+              navigater(`/mentee/request/form/generalType1/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
             }
-
-
           }}
         >
           <TextHeading6>

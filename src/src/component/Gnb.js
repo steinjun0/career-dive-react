@@ -202,13 +202,13 @@ function Gnb() {
         </CenterGnb>}
         {isLogin && !isMentorUrl() && <CenterGnb>
           <CenterMenu>
-            <LinkNoDeco to={`/mentee/schedule`}>
-              <GnbLi present_link={isPresentUrl(`/mentee/schedule`).toString()}>내 상담</GnbLi>
+            <LinkNoDeco to={`/mentee/sessionList`}>
+              <GnbLi present_link={isPresentUrl(`/mentee/sessionList`).toString()}>내 상담</GnbLi>
             </LinkNoDeco>
-            <LinkNoDeco to={`/mentee/schedule`}>
+            <LinkNoDeco to={`/mentee/sessionList`}>
               <GnbLi>찜한 멘토</GnbLi>
             </LinkNoDeco>
-            <LinkNoDeco to={`/mentee/schedule`}>
+            <LinkNoDeco to={`/mentee/sessionList`}>
               <GnbLi>상담 후기</GnbLi>
             </LinkNoDeco>
 
