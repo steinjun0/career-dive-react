@@ -129,18 +129,18 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
 
             <RowAlignCenterFlex >
                 <CustomButton
-                    background_color={!mentorInfoState.inService ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight}
-                    custom_color={!mentorInfoState.inService ? colorCareerDiveBlue : colorTextLight}
-                    height='44px' width='82px'
-                    onClick={() => mentorInfoState.setInService(false)}>
-                    <TextBody2>현 직장</TextBody2>
-                </CustomButton>
-                <EmptyWidth width={'16px'}></EmptyWidth>
-                <CustomButton
                     background_color={mentorInfoState.inService ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight}
                     custom_color={mentorInfoState.inService ? colorCareerDiveBlue : colorTextLight}
                     height='44px' width='82px'
                     onClick={() => mentorInfoState.setInService(true)}>
+                    <TextBody2>현 직장</TextBody2>
+                </CustomButton>
+                <EmptyWidth width={'16px'}></EmptyWidth>
+                <CustomButton
+                    background_color={!mentorInfoState.inService ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight}
+                    custom_color={!mentorInfoState.inService ? colorCareerDiveBlue : colorTextLight}
+                    height='44px' width='82px'
+                    onClick={() => mentorInfoState.setInService(false)}>
 
                     <TextBody2>전 직장</TextBody2>
                 </CustomButton>
