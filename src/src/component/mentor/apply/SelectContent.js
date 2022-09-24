@@ -3,6 +3,7 @@ import {
   EmptyHeight,
   EmptyWidth,
   Flex,
+  TextBody1,
   TextBody2,
   TextHeading6,
   TextSubtitle1,
@@ -23,9 +24,10 @@ function Introduction({ applyInformation }) {
   const navigater = useNavigate()
   const params = useParams()
 
-  const [mentoringCategory, setMentoringCategory] = useState(null)
+  const [mentoringCategory, setMentoringCategory] = useState('커리어 상담')
   const [mentoringContent, setMentoringContent] = useState([])
   const [mentoringDate, setMentoringDate] = useState()
+  const [isFilePreOpen, setIsFilePreOpen] = useState()
 
   useEffect(() => {
     const reservations = JSON.parse(localStorage.getItem('reservations'))
@@ -82,6 +84,19 @@ function Introduction({ applyInformation }) {
             valueArray={['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기']}
             onChange={(event, value) => { addMentoringContent(value) }}></CustomToggleButtonGroup>
         </Flex>
+        <EmptyHeight height='28px' />
+        <Flex>
+          <TextSubtitle1>
+            자료 사전 검토 희망 여부
+          </TextSubtitle1>
+          <EmptyWidth width="8px"></EmptyWidth>
+        </Flex>
+        <TextBody2 color={colorTextLight}>현직자가 자료를 검토하면 더 효율적이고 깊은 대호를 나눌 수 있어요!</TextBody2>
+        <CustomToggleButtonGroup
+          value={isFilePreOpen}
+          isExclusive={false}
+          valueArray={['희망', '비희망']}
+          onChange={(event, value) => { setIsFilePreOpen(value) }}></CustomToggleButtonGroup>
         <EmptyHeight height='28px' />
         <CustomButton
           height='52px'
