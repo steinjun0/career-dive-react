@@ -39,6 +39,7 @@ export const TextBody2 = styled(`p`)`
 
 export const TextSubtitle1 = styled(`span`)`
   font-weight: 700;
+  font-size: 16px;
   line-height: 24px;
   color: ${props => props.color};
   text-overflow: inherit;

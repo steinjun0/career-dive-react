@@ -35,9 +35,9 @@ const ApplyButton = styled(CustomButton)`
 `;
 
 const getCategoryColor = (category) => {
-  if (category === '일반') {
+  if (category === '커리어 상담') {
     return colorCareerDiveBlue
-  } else if (category === '프리미엄') {
+  } else if (category === '전형 준비') {
     return colorCareerDivePink
   } else {
     return colorTextLight
@@ -45,9 +45,9 @@ const getCategoryColor = (category) => {
 }
 
 const getCategoryBackgroundColor = (category) => {
-  if (category === '일반') {
+  if (category === '커리어 상담') {
     return colorBackgroundCareerDiveBlue
-  } else if (category === '프리미엄') {
+  } else if (category === '전형 준비') {
     return colorBackgroundCareerDivePink
   } else {
     return colorBackgroundGrayLight
@@ -63,7 +63,7 @@ const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
   `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
 
 function Request() {
-  const mentoringCategory = '일반'
+  const mentoringCategory = '커리어 상담'
   const [mentoringContents, setMentoringContents] = useState([])
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()

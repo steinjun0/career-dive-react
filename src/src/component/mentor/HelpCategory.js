@@ -53,21 +53,21 @@ const PremiumLegend = styled('span')`
 `;
 
 function HelpCategory() {
-  const regularTags = ['직무 소개', '취업 상담', '진로 상담', '이직 준비', '면접 팁', '업계 이야기'];
-  const premiumTags = ['자소서 구성', '자소서 첨삭', 'CV 첨삭', '포트폴리오 첨삭', '코드 리뷰', '면접 대비'];
+  const regularTags = ['직무 이야기', '업계 이야기', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '진로 상담', '사내 문화', '면접 팁', '기타'];
+  const premiumTags = ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰'];
   return (
     <HelpCategoryWrapper>
       <Card no_divider={'true'} title={'이런 도움을 줄 수 있어요 😀'}
         titleTail={
           <RowAlignCenterFlex>
-            <RegularLegend>• 일반</RegularLegend>
-            <PremiumLegend>• 프리미엄</PremiumLegend>
+            <RegularLegend>• 커리어 상담</RegularLegend>
+            <PremiumLegend>• 전형 준비</PremiumLegend>
           </RowAlignCenterFlex>
         }>
         <EmptyHeight height='16px'></EmptyHeight>
-        <RowAlignCenterFlex>
+        <Flex style={{ flexWrap: 'wrap' }}>
           {regularTags.map((tag, index) =>
-            <Flex key={index}>
+            <Flex key={index} style={{ marginBottom: '8px' }}>
               <TagMedium
                 color={colorCareerDiveBlue}
                 background_color={colorBackgroundCareerDiveBlue}
@@ -77,9 +77,6 @@ function HelpCategory() {
               <EmptyWidth width='8px'></EmptyWidth>
             </Flex>
           )}
-        </RowAlignCenterFlex>
-        <EmptyHeight height='16px'></EmptyHeight>
-        <RowAlignCenterFlex>
           {premiumTags.map((tag, index) =>
             <Flex key={index}>
               <TagMedium
@@ -91,7 +88,7 @@ function HelpCategory() {
               <EmptyWidth width='8px'></EmptyWidth>
             </Flex>
           )}
-        </RowAlignCenterFlex>
+        </Flex>
 
       </Card>
     </HelpCategoryWrapper>

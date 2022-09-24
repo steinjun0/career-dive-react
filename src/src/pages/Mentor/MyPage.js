@@ -22,6 +22,7 @@ import CareerInfo from "component/myPage/CareerInfo";
 import MentorIntroduce from "component/myPage/MentorIntroduce";
 import CareerInfoChange from "component/myPage/\bCareerInfoChange";
 import { isMentorUrl } from "util/util";
+import ConsultRange from "component/myPage/ConsultRange";
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-top: 30px;
@@ -91,6 +92,7 @@ function MyPage() {
                     <UserProfile />
                     <CareerInfo />
                     <MentorIntroduce />
+                    <ConsultRange />
                   </div>
                 }
                 {

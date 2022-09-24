@@ -95,7 +95,7 @@ function ConsultingRequest() {
                   <CustomIconButton
                     Icon={RequestFormIcon}
                     text='요청서'
-                    width='90px'
+                    width='92px'
                     hover_color={colorCareerDiveBlue}
                     text_color={'#fff'}
                     onClick={() => { }}
@@ -107,7 +107,7 @@ function ConsultingRequest() {
                   <CustomIconButton
                     Icon={CircleDecline}
                     text='상담 취소'
-                    width='105px'
+                    width='110px'
                     hover_color={colorCareerDivePink}
                     text_color={'#fff'}
                     default_color={colorCareerDivePink}
@@ -118,7 +118,7 @@ function ConsultingRequest() {
                   <CustomIconButton
                     Icon={CircleAccept}
                     text='상담 수락'
-                    width='105px'
+                    width='112px'
                     hover_color={colorSuccess}
                     text_color={'#fff'}
                     default_color={colorSuccess}

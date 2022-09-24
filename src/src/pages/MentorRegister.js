@@ -133,8 +133,7 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                     custom_color={mentorInfoState.inService ? colorCareerDiveBlue : colorTextLight}
                     height='44px' width='82px'
                     onClick={() => mentorInfoState.setInService(true)}>
-
-                    <TextBody2>전 직장</TextBody2>
+                    <TextBody2>현 직장</TextBody2>
                 </CustomButton>
                 <EmptyWidth width={'16px'}></EmptyWidth>
                 <CustomButton
@@ -142,7 +141,8 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                     custom_color={!mentorInfoState.inService ? colorCareerDiveBlue : colorTextLight}
                     height='44px' width='82px'
                     onClick={() => mentorInfoState.setInService(false)}>
-                    <TextBody2>현 직장</TextBody2>
+
+                    <TextBody2>전 직장</TextBody2>
                 </CustomButton>
             </RowAlignCenterFlex>
 
@@ -169,7 +169,7 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                 margin="dense"
                 size="small"
                 hiddenLabel
-                placeholder="최대 10자"
+                placeholder="사내직무명"
             />
 
             <EmptyHeight height='30px' />

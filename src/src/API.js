@@ -1,7 +1,7 @@
 import axios from 'axios'
 const CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
+// const CAREER_DIVE_API_URL = 'https://api.dev.careerdive.co.kr'
 // const CAREER_DIVE_API_URL = 'https://api.careerdive.co.kr'
-// const CAREER_DIVE_API_URL = 'https://devapi.careerdive.deagwon.com'
 
 // let user = JSON.parse(localStorage.getItem('userData'))
 // let tokenHeader = false
@@ -13,6 +13,7 @@ const CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
 // }
 let accessToken = localStorage.getItem('AccessToken')
 let tokenHeader = false
+
 
 if (accessToken !== null) {
   tokenHeader = { headers: { Authorization: `${accessToken}` } }
@@ -29,12 +30,12 @@ const getValidError = exception => {
 }
 export default {
   refreshUserData() {
-    // user = JSON.parse(localStorage.getItem('userData'))
-    // if (user !== null) {
-    //   tokenHeader = { headers: { Authorization: `Bearer ${user.token}` } }
-    // } else {
-    //   tokenHeader = false
-    // }
+    let accessToken = localStorage.getItem('AccessToken')
+    if (accessToken !== null) {
+      tokenHeader = { headers: { Authorization: `${accessToken}` } }
+    } else {
+      tokenHeader = false
+    }
   },
   async getAxios(url) {
     this.refreshUserData()
@@ -138,37 +139,47 @@ export default {
   },
 
   async getConsultSchedule(year, month, mentorId) {
-    const scheduleRes = await this.getAxiosWithParams(`${CAREER_DIVE_API_URL}/consult/schedule`, { 'Year': year, 'Month': month, 'MentorID': mentorId })
+    const scheduleRes = await this.getAxiosWithParams(`${CAREER_DIVE_API_URL}/consult/schedule`, { 'Year': year, 'Month': month, 'MentorID': +mentorId })
     return scheduleRes
+  },
+
+  async getAccount(id) {
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/${id}`)
+    return accountRes
+  },
+
+  async getAccountMentor(id) {
+    const accountMentornRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/mentor/${id}`)
+    return accountMentornRes
   },
 
   async postAccount(email, password, nickname) {
-    const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
-    return loginRes
+    const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
+    return res
   },
 
   async postAccountLogin(email, password) {
-    const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/login`, { email, password })
-    return loginRes
+    const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account/login`, { email, password })
+    return res
   },
 
   async postAccountValid(accessToken) {
-    const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/valid`, { 'AccessToken': accessToken })
-    return loginRes
+    const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account/valid`, { 'AccessToken': accessToken })
+    return res
   },
 
   async postAccountRenew(refreshToken) {
-    const loginRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/renew`, { 'RefreshToken': refreshToken })
-    return loginRes
+    const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account/renew`, { 'RefreshToken': refreshToken })
+    return res
   },
 
   async postConsultSchedule(dayTimes, year, month, mentorId) {
-    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule`, { DayTimes: dayTimes, MentorID: mentorId, Month: month, Year: year })
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule`, { DayTimes: dayTimes, MentorID: +mentorId, Month: month, Year: year })
     return scheduleRes
   },
 
-  async postConsultScheduleRule(startTime, endTime, weekDay, type, mentorId) {
-    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
+  async postConsultScheduleRule(startTime, endTime, weekDay, type, mentorId, startDate) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: +mentorId, StartDate: startDate })
     return scheduleRes
   },
 
@@ -182,6 +193,16 @@ export default {
     return scheduleRes
   },
 
+  async postAccountConsultContent(consultContents, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/consultContent`, { ConsulltContents: consultContents, MentorID: +mentorId })
+    return scheduleRes
+  },
+
+  async postAccountTag(tags, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/tag`, { Tags: tags, MentorID: +mentorId })
+    return scheduleRes
+  },
+
   async patchAccount(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
     return userRes
@@ -192,8 +213,8 @@ export default {
     return userRes
   },
 
-  async patchConsultScheduleRule(ruleId, startTime, endTime, weekDay, type, mentorId) {
-    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: mentorId })
+  async patchConsultScheduleRule(ruleId, startTime, endTime, weekDay, type, mentorId, startDate) {
+    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: +mentorId, StartDate: startDate })
     return patchRes
   },
 

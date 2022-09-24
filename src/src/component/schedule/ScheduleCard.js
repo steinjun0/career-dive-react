@@ -106,7 +106,7 @@ function ScheduleCard({ schedule, requestFormOnClick, changeOnClick, enterOnClic
             <CustomIconButton
               Icon={RequestFormIcon}
               text='요청서'
-              width='90px'
+              width='92px'
               hover_color={colorCareerDiveBlue}
               text_color={'#fff'}
               onClick={requestFormOnClick}
@@ -118,7 +118,7 @@ function ScheduleCard({ schedule, requestFormOnClick, changeOnClick, enterOnClic
             <CustomIconButton
               Icon={EditCalendarIcon}
               text='예약 변경'
-              width='105px'
+              width='112px'
               hover_color={colorCareerDiveBlue}
               text_color={'#fff'}
               onClick={changeOnClick}
@@ -128,7 +128,7 @@ function ScheduleCard({ schedule, requestFormOnClick, changeOnClick, enterOnClic
             <CustomIconButton
               Icon={PhoneIcon}
               text='상담 입장'
-              width='105px'
+              width='112px'
               hover_color={colorCareerDiveBlue}
               text_color={'#fff'}
               onClick={enterOnClick}></CustomIconButton>

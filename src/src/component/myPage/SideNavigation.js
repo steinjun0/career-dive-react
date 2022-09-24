@@ -28,17 +28,17 @@ const NavigationUndorderedList = styled(UlNoDeco)`
 `;
 
 function SideNavigation() {
-  const menteeNavigationList = ['프로필', '계정', '후기', '결제'];
+  const menteeNavigationList = ['프로필', '계정', '리뷰', '결제 관리'];
   const mentorNavigationList = ['멘토 프로필', '계정', '대금 수령'];
   const menteeMapRouteSubPage = {
     '/mentee/mypage/profile': '프로필',
     '/mentee/mypage/account': '계정',
-    '/mentee/mypage/review': '후기',
-    '/mentee/mypage/payment': '결제',
+    '/mentee/mypage/review': '리뷰',
+    '/mentee/mypage/payment': '결제 관리',
     '프로필': '/mentee/mypage/profile',
     '계정': '/mentee/mypage/account',
-    '후기': '/mentee/mypage/review',
-    '결제': '/mentee/mypage/payment'
+    '리뷰': '/mentee/mypage/review',
+    '결제 관리': '/mentee/mypage/payment'
   }
   const mentorMapRouteSubPage = {
     '/mentor/mypage/profile': '멘토 프로필',

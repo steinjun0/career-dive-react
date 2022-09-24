@@ -6,6 +6,7 @@ import {
   colorCareerDiveBlue,
   EmptyHeight,
   LinkNoDeco,
+  TextBody1,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 
@@ -46,7 +47,7 @@ function ScheduleList() {
   const [category, setCategory] = useState('전체');
   return (
     <ScheduleListWrapper>
-      <Card no_divider={'true'} title={<LinkNoDeco to={'/mentor/schedule'}>내 신청 내역</LinkNoDeco>}
+      <Card no_divider={'true'} title={<LinkNoDeco to={'/mentor/schedule'}>내 상담 내역</LinkNoDeco>}
         titleHead={
           <LinkNoDeco to={'/mentor/schedule'}>
             <ChevronRight fontSize="medium" />
@@ -56,9 +57,20 @@ function ScheduleList() {
         <Flex>
           {categories.map((element, index) => {
             if (element === category) {
-              return <TextBody2 style={{ cursor: 'pointer', paddingBottom: '12px', marginRight: '24px', borderBottom: `3px solid ${colorCareerDiveBlue}` }} color={colorCareerDiveBlue} key={`${index}`}>{element}</TextBody2>;
+              return <TextBody1
+                style={{ cursor: 'pointer', paddingBottom: '12px', marginRight: '24px', borderBottom: `3px solid ${colorCareerDiveBlue}` }}
+                color={colorCareerDiveBlue}
+                key={`${index}`}>
+                {element}
+              </TextBody1>;
             } else {
-              return <TextBody2 style={{ cursor: 'pointer', marginRight: '24px' }} is_selected={'false'} key={index} onClick={() => { setCategory(element) }}>{element}</TextBody2>;
+              return <TextBody1
+                style={{ cursor: 'pointer', marginRight: '24px' }}
+                is_selected={'false'}
+                key={index}
+                onClick={() => { setCategory(element) }}>
+                {element}
+              </TextBody1>;
             }
           })}
         </Flex>
