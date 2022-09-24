@@ -85,7 +85,7 @@ const ProfileImg = styled(CircleImg)`
   `;
 
 const HomeLogo = styled('img')`
-    height: 28px;
+    height: 24px;
 `
 
 const GnbLi = styled('li')`
