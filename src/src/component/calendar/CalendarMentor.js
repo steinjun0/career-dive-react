@@ -234,7 +234,7 @@ function CalendarMentor() {
     } else {
       temp[selectedDate] = [{ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption }]
     }
-    postConsultSchedule(temp)
+    postConsultScheduleList(temp)
     postConsultScheduleRule(temp)
     setAvailableTimes(temp)
   }
@@ -290,7 +290,7 @@ function CalendarMentor() {
     }
   }
 
-  const postConsultSchedule = async (availableTimesProps) => {
+  const postConsultScheduleList = async (availableTimesProps) => {
     const dayTimes = [...Object.keys(availableTimesProps).map((date) => {
       return {
         Day: Number(date),
@@ -370,16 +370,31 @@ function CalendarMentor() {
   }
 
 
-  const deleteDateConsultSchedule = async () => {
-    await Promise.all(tempAvailableTime.map(async (e) => {
-      if (e.ruleId === -1) {
+  const deleteConsultScheduleList = async (availableTimesProps) => {
+    let popList = []
+    await Promise.all(availableTimesProps[selectedDate].map(async (e) => {
+      if (e.isDeleting) {
         const res = await API.deleteConsultSchedule(e.scheduleId)
+        popList.push(e)
         return res
       }
     }))
+
+    popList.map((e) => {
+      const index = tempAvailableTime.indexOf(e);
+      if (index > -1) {
+        tempAvailableTime.splice(index, 1);
+      }
+    })
   }
 
-  const deleteDateConsultScheduleRule = async (availableTimesProps) => {
+  const cleanIsDeletingSchedule = (scheduleList) => {
+    availableTimes[selectedDate].map(() => {
+
+    })
+  }
+
+  const deleteConsultScheduleRuleQueue = async (availableTimesProps) => {
     let popList = []
     await Promise.all(availableTimesProps[selectedDate].map(async (e) => {
       if (e.isDeleting) {
@@ -395,7 +410,6 @@ function CalendarMentor() {
         tempAvailableTime.splice(index, 1);
       }
     })
-
   }
 
 
@@ -459,10 +473,10 @@ function CalendarMentor() {
                 custom_color={'white'}
                 style={{ padding: '4px 12px' }}
                 onClick={async () => {
-                  await deleteDateConsultSchedule()
-                  await postConsultSchedule(availableTimes)
+                  await postConsultScheduleList(availableTimes)
                   await patchConsultScheduleRule(availableTimes)
-                  await deleteDateConsultScheduleRule(availableTimes)
+                  await deleteConsultScheduleList(availableTimes)
+                  await deleteConsultScheduleRuleQueue(availableTimes)
                   setIsEditing(false)
                   await getConsultSchedule()
                 }}
@@ -498,12 +512,12 @@ function CalendarMentor() {
               key={index}
               style={{ marginTop: '16px' }}
               onRemoveRule={() => {
-                const index = availableTimes[selectedDate].indexOf(e);
                 availableTimes[selectedDate].push({ isDeleting: true, ruleId: e.ruleId })
               }}
               onRemoveNotRule={() => {
-                const index = availableTimes[selectedDate].indexOf(e);
-                availableTimes[selectedDate].splice(index, 1);
+                // const index = availableTimes[selectedDate].indexOf(e);
+                // availableTimes[selectedDate].splice(index, 1);
+                availableTimes[selectedDate].push({ isDeleting: true, scheduleId: e.scheduleId })
               }}
               initialTime={e} />
           })}
