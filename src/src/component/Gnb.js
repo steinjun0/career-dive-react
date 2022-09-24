@@ -1,5 +1,5 @@
 import { Divider, styled } from "@mui/material";
-import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight } from 'util/styledComponent';
+import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth } from 'util/styledComponent';
 
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -54,7 +54,7 @@ const CenterMenu = styled("ul")`
 
     margin: 0;
     height: 100%;
-    width: 270px;
+    // width: 270px;
     max-width: 1194px;
     background-color: white;
     
@@ -91,12 +91,12 @@ const HomeLogo = styled('img')`
 const GnbLi = styled('li')`
   ${props => props.present_link === 'true' ? `
     color: ${colorCareerDiveBlue} !important;
-  padding-top: 4px;
-  border-bottom: 4px solid ${colorCareerDiveBlue};
-  height: 100%;
-  display:flex;
-  align-items: center;
-  box-sizing: border-box;
+    padding-top: 4px;
+    border-bottom: 4px solid ${colorCareerDiveBlue};
+    height: 100%;
+    display:flex;
+    align-items: center;
+    box-sizing: border-box;
   `: ''
   }
 `;
@@ -192,9 +192,11 @@ function Gnb() {
             <LinkNoDeco to={`/mentor`}>
               <GnbLi present_link={isPresentUrl(`/mentor`).toString()}>상담</GnbLi>
             </LinkNoDeco>
+            <EmptyWidth width={'32px'} />
             <LinkNoDeco to={`/mentor/calendar`}>
               <GnbLi present_link={isPresentUrl(`/mentor/calendar`).toString()}>일정 등록</GnbLi>
             </LinkNoDeco>
+            <EmptyWidth width={'32px'} />
             <LinkNoDeco to={`/mentor`}>
               <GnbLi>실적</GnbLi>
             </LinkNoDeco>
@@ -205,9 +207,11 @@ function Gnb() {
             <LinkNoDeco to={`/mentee/sessionList`}>
               <GnbLi present_link={isPresentUrl(`/mentee/sessionList`).toString()}>내 상담</GnbLi>
             </LinkNoDeco>
+            <EmptyWidth width={'32px'} />
             <LinkNoDeco to={`/mentee/sessionList`}>
               <GnbLi>찜한 멘토</GnbLi>
             </LinkNoDeco>
+            <EmptyWidth width={'32px'} />
             <LinkNoDeco to={`/mentee/sessionList`}>
               <GnbLi>상담 후기</GnbLi>
             </LinkNoDeco>
