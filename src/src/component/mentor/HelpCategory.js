@@ -60,8 +60,8 @@ function HelpCategory() {
       <Card no_divider={'true'} title={'이런 도움을 줄 수 있어요 😀'}
         titleTail={
           <RowAlignCenterFlex>
-            <RegularLegend>• 일반</RegularLegend>
-            <PremiumLegend>• 프리미엄</PremiumLegend>
+            <RegularLegend>• 커리어 상담</RegularLegend>
+            <PremiumLegend>• 전형 준비</PremiumLegend>
           </RowAlignCenterFlex>
         }>
         <EmptyHeight height='16px'></EmptyHeight>
