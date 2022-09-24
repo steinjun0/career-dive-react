@@ -68,7 +68,7 @@ function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTim
   const [endAMPM, setEndAMPM] = useState('오전')
   const [endHour, setEndHour] = useState('01')
   const [endMin, setEndMin] = useState('00')
-  const [repeatOption, setRepeatOption] = useState('매일 반복')
+  const [repeatOption, setRepeatOption] = useState('매주 반복')
   const [isShow, setIsShow] = useState(true)
   const [isShowDeleteDropDown, setIsShowDeleteDropDown] = useState(false)
   useEffect(() => {

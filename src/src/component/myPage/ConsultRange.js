@@ -67,9 +67,9 @@ const UrlWrapper = styled(TextFieldWrapper)`
 function ConsultRange() {
   const [isEditing, setIsEditing] = useState(false)
   const [introduceText, setIntroduceText] = useState('')
-  const [basicConsultContent, setBasicConsultContent] = useState(['직무 소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기'])
+  const [basicConsultContent, setBasicConsultContent] = useState(['직무 이야기', '업계 이야기', '진로 상담', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '사내 문화', '면접 팁'])
   const [selectedBasicConsultContent, setSelectedBasicConsultContent] = useState([])
-  const [premiumConsultContent, setPremiumConsultContent] = useState(['자소서 첨삭', '자소서 구성', 'CV 첨삭', '포트폴리오 첨삭', '코드 리뷰', '면접 대비'])
+  const [premiumConsultContent, setPremiumConsultContent] = useState(['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰'])
   const [selectedPremiumConsultContent, setSelectedPremiumConsultContent] = useState([])
   const [selectedPremiumTab, setSelectedPremiumTab] = useState(premiumConsultContent[0])
 
@@ -100,11 +100,13 @@ function ConsultRange() {
       <Card
         title={
           <VerticalFlex>
-            상담 영역
+            상담 가능 영역
           </VerticalFlex>
         }>
         <EmptyHeight height={'20px'} />
-        <TextSubtitle2 color={colorCareerDiveBlue}>일반</TextSubtitle2>
+        <TextSubtitle2>멘티에게 제공할 수 있는 상담 영역을 선택해주세요!</TextSubtitle2>
+        <EmptyHeight height={'20px'} />
+        <TextSubtitle2 color={colorCareerDiveBlue}>커리어 상담</TextSubtitle2>
         <EmptyHeight height={'14px'} />
         <Flex>
           {basicConsultContent.map((e, index) => {
@@ -132,7 +134,7 @@ function ConsultRange() {
         </Flex>
 
         <EmptyHeight height={'20px'} />
-        <TextSubtitle2 color={colorCareerDivePink}>프리미엄</TextSubtitle2>
+        <TextSubtitle2 color={colorCareerDivePink}>전형 준비</TextSubtitle2>
         <EmptyHeight height={'14px'} />
         <Flex>
           {premiumConsultContent.map((e, index) => {
@@ -163,7 +165,7 @@ function ConsultRange() {
           <Flex>
             <VerticalFlex>
               <TextSubtitle1>
-                일반
+                커리어 상담
               </TextSubtitle1>
               <EmptyHeight height={'16px'} />
               <TextBody2>
@@ -173,7 +175,7 @@ function ConsultRange() {
             <EmptyWidth width={'24px'} />
             <VerticalFlex>
               <TextSubtitle1>
-                프리미엄
+                전형 준비
               </TextSubtitle1>
               <EmptyHeight height={'16px'} />
               <TextBody2>

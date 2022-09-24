@@ -63,7 +63,7 @@ function Introduction({ applyInformation }) {
           <CustomToggleButtonGroup
             value={mentoringCategory}
             isExclusive={true}
-            valueArray={['일반', '프리미엄']}
+            valueArray={['커리어 상담', '전형 준비']}
             onChange={(event, value) => { setMentoringCategory(value) }}></CustomToggleButtonGroup>
         </Flex>
         <EmptyHeight height='16px'></EmptyHeight>

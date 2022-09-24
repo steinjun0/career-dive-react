@@ -278,7 +278,7 @@ function Gnb() {
                 setIsHideProfileMenu(!isMouseOnProfileMenuRef.current)
               }, 300);
             }}>
-            <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigator(`${'mentor'}/mypage/profile`) }} src={testProfileImage} alt="" />
+            <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigator(`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
             {isMentorUrl() ?
               <ProfileMenu is_hide={String(isHideProfileMenu)}>
                 <LinkNoDeco to={`${'mentor'}/mypage/profile`}>
@@ -306,10 +306,10 @@ function Gnb() {
                   <TextSubtitle2>계정</TextSubtitle2>
                 </LinkNoDeco>
                 <LinkNoDeco to={`${'mentee'}/mypage/review`}>
-                  <TextSubtitle2>후기</TextSubtitle2>
+                  <TextSubtitle2>리뷰</TextSubtitle2>
                 </LinkNoDeco>
                 <LinkNoDeco to={`${'mentee'}/mypage/payment`}>
-                  <TextSubtitle2>결제</TextSubtitle2>
+                  <TextSubtitle2>결제 관리</TextSubtitle2>
                 </LinkNoDeco>
                 <Divider></Divider>
                 <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
