@@ -178,8 +178,8 @@ export default {
     return scheduleRes
   },
 
-  async postConsultScheduleRule(startTime, endTime, weekDay, type, mentorId) {
-    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: +mentorId })
+  async postConsultScheduleRule(startTime, endTime, weekDay, type, mentorId, startDate) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: +mentorId, StartDate: startDate })
     return scheduleRes
   },
 
@@ -213,8 +213,8 @@ export default {
     return userRes
   },
 
-  async patchConsultScheduleRule(ruleId, startTime, endTime, weekDay, type, mentorId) {
-    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: +mentorId })
+  async patchConsultScheduleRule(ruleId, startTime, endTime, weekDay, type, mentorId, startDate) {
+    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: +mentorId, StartDate: startDate })
     return patchRes
   },
 

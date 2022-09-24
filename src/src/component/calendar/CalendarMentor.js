@@ -246,7 +246,10 @@ function CalendarMentor() {
 
   const getConsultSchedule = async () => {
     try {
-      const res = await API.getConsultSchedule(year, month.slice(0, -1), Number(localStorage.getItem('UserID')))
+      const res = await API.getConsultSchedule(
+        year,
+        month.slice(0, -1),
+        Number(localStorage.getItem('UserID')))
       if (res.status === 200) {
         if (res.data.DayTimes !== null) {
           const tempDayTimes = []
@@ -335,7 +338,8 @@ function CalendarMentor() {
             endTime,
             weekDay,
             repeatOptionConverter[type],
-            Number(localStorage.getItem('UserID'))
+            Number(localStorage.getItem('UserID')),
+            `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
           )
         })
     )
@@ -345,25 +349,28 @@ function CalendarMentor() {
   const patchConsultScheduleRule = async (availableTimesProps) => {
     await Promise.all(
       availableTimesProps[selectedDate].filter((e) => {
-        if (e.repeatOption === '반복 없음') {
+        if (e.repeatOption === '반복 없음') { // rule만 골라내는 filter
           return false
+        } else {
+          return true
         }
-        return true
       }).map(
         async (e) => {
           const startTime = `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
           const endTime = `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
           const weekDay = new Date(year, Number(month.slice(0, -1)) - 1, selectedDate).getDay()
           const type = repeatOptionConverter[e.repeatOption]
-
-          const res = await API.patchConsultScheduleRule(
-            e.ruleId,
-            startTime,
-            endTime,
-            weekDay,
-            type,
-            Number(localStorage.getItem('UserID'))
-          )
+          if (e.ruleId !== undefined) {
+            const res = await API.patchConsultScheduleRule(
+              e.ruleId,
+              startTime,
+              endTime,
+              weekDay,
+              type,
+              Number(localStorage.getItem('UserID')),
+              `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
+            )
+          }
         })
     )
     getConsultSchedule()
@@ -395,10 +402,13 @@ function CalendarMentor() {
   }
 
   const deleteConsultScheduleRuleQueue = async (availableTimesProps) => {
+    console.log('availableTimesProps[selectedDate]', availableTimesProps[selectedDate])
     let popList = []
     await Promise.all(availableTimesProps[selectedDate].map(async (e) => {
-      if (e.isDeleting) {
-        const res = await API.deleteConsultScheduleRule(e.ruleId, `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${selectedDate}`)
+      if (e.isDeleting && e.ruleId !== undefined) {
+        const res = await API.deleteConsultScheduleRule(
+          e.ruleId,
+          `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`)
         popList.push(e)
         return res
       }
@@ -512,10 +522,12 @@ function CalendarMentor() {
               key={index}
               style={{ marginTop: '16px' }}
               onRemoveRule={() => {
-                availableTimes[selectedDate].push({ isDeleting: true, ruleId: e.ruleId })
+                const index = availableTimes[selectedDate].indexOf(e);
+                Object.assign(availableTimes[selectedDate][index], { isDeleting: true, scheduleId: e.scheduleId })
               }}
               onRemoveNotRule={() => {
                 // const index = availableTimes[selectedDate].indexOf(e);
+                // Object.assign(availableTimes[selectedDate][index], { isDeleting: true, scheduleId: e.scheduleId })
                 // availableTimes[selectedDate].splice(index, 1);
                 availableTimes[selectedDate].push({ isDeleting: true, scheduleId: e.scheduleId })
               }}
