@@ -70,6 +70,15 @@ function ConsultRange() {
   const [basicConsultContent, setBasicConsultContent] = useState(['직무 이야기', '업계 이야기', '진로 상담', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '사내 문화', '면접 팁'])
   const [selectedBasicConsultContent, setSelectedBasicConsultContent] = useState([])
   const [premiumConsultContent, setPremiumConsultContent] = useState(['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰'])
+  const consultRangeInfos = {
+    '면접 대비': '멘티의 경력, 스펙 그리고 자소서를 토대로 한 예상 면접 질문을 제공합니다.',
+    '자소서 구성': '멘티의 경력과 스펙을 토대로 자기소개서 구성을 도와줍니다.',
+    '자소서 첨삭': '작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.',
+    '포트폴리오 첨삭': '멘티의 작성한 초안을 토대로 흐름 및 내용 등에 관한 피드백을 제공합니다.',
+    '이력서 첨삭': '멘티의 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.',
+    'CV/CL 첨삭': '멘티의 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.',
+    '코드 리뷰': '멘티가 작성한 코드를 토대로 피드백을 제공합니다.'
+  }
   const [selectedPremiumConsultContent, setSelectedPremiumConsultContent] = useState([])
   const [selectedPremiumTab, setSelectedPremiumTab] = useState(premiumConsultContent[0])
 
@@ -162,24 +171,24 @@ function ConsultRange() {
         </Flex>
         <EmptyHeight height={'20px'} />
         <VerticalFlex style={{ backgroundColor: colorBackgroundGrayLight, padding: '24px', borderRadius: '8px', color: colorTextLight }}>
-          <Flex>
-            <VerticalFlex>
+          <Flex style={{ justifyContent: 'center' }}>
+            <VerticalFlex style={{ flex: 1 }}>
               <TextSubtitle1>
                 커리어 상담
               </TextSubtitle1>
               <EmptyHeight height={'16px'} />
               <TextBody2>
-                상담 비용은 00,000원(수수료 포함)이며, 사전 준비를 요구하지 않습니다.
+                상담 비용은 다음과 같습니다. <br />멘티의 이력서를 사전에 검토하지 않는 경우, 20분 13,900원, 40분 24,900원이며, 사전에 검토하는 경우, 20분 25,400원, 40분 39,900원입니다.
               </TextBody2>
             </VerticalFlex>
             <EmptyWidth width={'24px'} />
-            <VerticalFlex>
+            <VerticalFlex style={{ flex: 1 }}>
               <TextSubtitle1>
                 전형 준비
               </TextSubtitle1>
               <EmptyHeight height={'16px'} />
               <TextBody2>
-                상담 비용은 00,000원(수수료 포함)이며, 상담 이전 준비가 필수입니다.
+                상담 비용은 20분 40,900원, 40분 53,900원입니다.
               </TextBody2>
             </VerticalFlex>
           </Flex>
@@ -187,7 +196,7 @@ function ConsultRange() {
           <Flex>
             {premiumConsultContent.map((element, index) => {
               if (element === selectedPremiumTab) {
-                return <TextBody2 style={{ cursor: 'pointer', paddingBottom: '12px', marginRight: '24px', borderBottom: `3px solid ${colorCareerDiveBlue}` }} color={colorCareerDiveBlue} key={`${index}`}>{element}</TextBody2>;
+                return <TextBody2 style={{ cursor: 'pointer', paddingBottom: '12px', marginRight: '24px', borderBottom: `3px solid ${colorCareerDivePink}` }} color={colorCareerDivePink} key={`${index}`}>{element}</TextBody2>;
               } else {
                 return <TextBody2 style={{ cursor: 'pointer', marginRight: '24px' }} is_selected={'false'} key={index} onClick={() => { setSelectedPremiumTab(element) }}>{element}</TextBody2>;
               }
@@ -196,7 +205,7 @@ function ConsultRange() {
           <Divider />
           <EmptyHeight height={'36px'} />
           <TextBody2>
-            멘티의 경력과 스펙을 토대로 자기소개서 구성을 도와줍니다.
+            {consultRangeInfos[selectedPremiumTab]}
           </TextBody2>
         </VerticalFlex>
 

@@ -62,11 +62,12 @@ ReactDOM.render(
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/mentee/mentor/profile/:id" element={<Mentor />} />
-          <Route path="/mentee/mentor/mentoring/reservation/:id" element={<MentoringReservation />} />
-          <Route path="/mentee/mentor/mentoring/apply/:id" element={<MentoringApply />} />
-          <Route path="/mentee/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewer />} />
-          <Route path="/mentee/schedule" element={<Schedule />} />
+          <Route path="/mentorCard/:id" element={<Mentor />} />
+          <Route path="/mentee/request/:id" element={<MentoringReservation />} />
+          <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
+          {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}
+          <Route path="/mentee/sessionList/form/:id" element={<MentoringApplyViewer />} />
+          <Route path="/mentee/sessionList" element={<Schedule />} />
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentee/mypage/account/change" element={<MyPage />} />
           <Route path="/mentee/mypage" element={<Navigate replace to="/mentee/mypage/profile" />} />
@@ -81,7 +82,8 @@ ReactDOM.render(
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
           <Route path="/mentor/calendar" element={<MentorCalendar />} />
 
-          <Route path="/mentor/mentoring/apply/viewer/:id" element={<MentoringApplyViewerMentor />} />
+          <Route path="/mentor/sessionList/form/:id" element={<MentoringApplyViewerMentor />} />
+          {/* TODO: 멘토가 진입하는 멘티 요청서 화면 */}
 
           <Route path="/sendbird" element={<Sendbird />} />
           <Route path="/session" element={<Session />} />

@@ -259,7 +259,7 @@ function Calendar({ setIsFinishSet }) {
       prefix = 'mentee'
     }
 
-    const reservations = JSON.parse(localStorage.getItem(`${prefix}-reservations`))
+    const reservations = JSON.parse(localStorage.getItem(`reservations`))
     if (reservations !== null) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {
@@ -398,7 +398,7 @@ function Calendar({ setIsFinishSet }) {
                   { name: 'consultingStartTime', data: consultingStartTime },
                 ]
                 updateReservation(params.id, updatingData)
-                navigater(`/mentee/mentor/mentoring/reservation/${params.id}`)
+                navigater(`/mentee/request/${params.id}`)
               }}>
               신청
             </CustomButton>

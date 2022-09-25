@@ -80,7 +80,7 @@ function ScheduleList() {
             if (category === '전체' || schedule.category === category) {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  <ScheduleCard schedule={schedule} requestFormOnClick={() => { navigater(`/mentee/mentor/mentoring/apply/viewer/1`) }}></ScheduleCard>
+                  <ScheduleCard schedule={schedule} requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}></ScheduleCard>
                 </Grid>
               );
             }

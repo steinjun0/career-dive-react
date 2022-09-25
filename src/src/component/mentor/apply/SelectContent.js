@@ -3,9 +3,11 @@ import {
   EmptyHeight,
   EmptyWidth,
   Flex,
+  TextBody1,
   TextBody2,
   TextHeading6,
   TextSubtitle1,
+  VerticalFlex,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { styled } from "@mui/material";
@@ -14,6 +16,7 @@ import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { useEffect, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
+import { CustomToggleButton } from "util/Custom/CutomToggleButton";
 
 const IntroductionWrapper = styled(Flex)`
   width: 100%;
@@ -23,9 +26,10 @@ function Introduction({ applyInformation }) {
   const navigater = useNavigate()
   const params = useParams()
 
-  const [mentoringCategory, setMentoringCategory] = useState(null)
+  const [mentoringCategory, setMentoringCategory] = useState('커리어 상담')
   const [mentoringContent, setMentoringContent] = useState([])
   const [mentoringDate, setMentoringDate] = useState()
+  const [isFilePreOpen, setIsFilePreOpen] = useState()
 
   useEffect(() => {
     const reservations = JSON.parse(localStorage.getItem('reservations'))
@@ -41,10 +45,20 @@ function Introduction({ applyInformation }) {
 
 
   const addMentoringContent = (contents) => {
-    if (contents.length <= 3) {
+    if (contents.length <= (mentoringCategory === '커리어 상담' ? 3 : 1)) {
       setMentoringContent(contents)
     }
   }
+
+  useEffect(() => {
+    setMentoringContent([])
+  }, [mentoringCategory])
+
+  const mentoringContents = {
+    '커리어 상담': ['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기'],
+    '전형 준비': ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰']
+  }
+
 
   return (
     <IntroductionWrapper>
@@ -59,6 +73,7 @@ function Introduction({ applyInformation }) {
         <TextSubtitle1>
           상담 유형
         </TextSubtitle1>
+
         <Flex>
           <CustomToggleButtonGroup
             value={mentoringCategory}
@@ -73,16 +88,35 @@ function Introduction({ applyInformation }) {
             상담 내용
           </TextSubtitle1>
           <EmptyWidth width="8px"></EmptyWidth>
-          <TextBody2 color={colorTextLight}>최대 3개 선택 가능</TextBody2>
+          {mentoringCategory === '커리어 상담' ? <TextBody2 color={colorTextLight}>최대 3개 선택 가능해요</TextBody2> : <TextBody2 color={colorTextLight}>1개만 선택 가능해요</TextBody2>}
         </Flex>
         <Flex>
           <CustomToggleButtonGroup
             value={mentoringContent}
             isExclusive={false}
-            valueArray={['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기']}
+            valueArray={mentoringContents[mentoringCategory]}
             onChange={(event, value) => { addMentoringContent(value) }}></CustomToggleButtonGroup>
         </Flex>
         <EmptyHeight height='28px' />
+
+
+        {mentoringCategory === '커리어 상담' && <VerticalFlex>
+          <Flex>
+            <TextSubtitle1>
+              이력서 사전 검토
+            </TextSubtitle1>
+            <EmptyWidth width="8px"></EmptyWidth>
+          </Flex>
+          <TextBody2 color={colorTextLight}>현직자가 자료를 검토하면 더 효율적이고 깊은 대화를 나눌 수 있어요!</TextBody2>
+          <CustomToggleButtonGroup
+            value={isFilePreOpen}
+            isExclusive={false}
+            valueArray={['희망', '비희망']}
+            onChange={(event, value) => { setIsFilePreOpen(value) }}></CustomToggleButtonGroup>
+          <EmptyHeight height='28px' />
+        </VerticalFlex>}
+
+
         <CustomButton
           height='52px'
           onClick={() => {
@@ -97,10 +131,8 @@ function Introduction({ applyInformation }) {
               alert('상담 유형을 선택하세요')
             } else {
               updateReservation(params.id, updatingData)
-              navigater(`/mentee/mentor/mentoring/apply/${params.id}`)
+              navigater(`/mentee/request/form/generalType1/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
             }
-
-
           }}
         >
           <TextHeading6>

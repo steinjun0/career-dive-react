@@ -58,7 +58,7 @@ export default {
   async getAxiosZip(url) {
     this.refreshUserData()
     try {
-      const res = tokenHeader ? await axios.get(url, { headers: { Authorization: `${accessToken}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
+      const res = tokenHeader ? await axios.get(url, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -88,7 +88,7 @@ export default {
   async postAxiosFormData(url, data) {
     this.refreshUserData()
     try {
-      const res = tokenHeader ? await axios.post(url, data, { headers: { Authorization: `${accessToken}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+      const res = tokenHeader ? await axios.post(url, data, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }
@@ -106,7 +106,7 @@ export default {
   async patchAxiosFormData(url, data) {
     this.refreshUserData()
     try {
-      const res = tokenHeader ? await axios.patch(url, data, { headers: { Authorization: `${accessToken}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+      const res = tokenHeader ? await axios.patch(url, data, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
       return res
     } catch (e) {
       return { error: getValidError(e) }

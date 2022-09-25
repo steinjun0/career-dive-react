@@ -120,7 +120,7 @@ function MentorProfile({ name = '', discription = '' }) {
         <ApplyMentoringButton
           startIcon={<img src={EditCalendarIcon} alt={'calendar'} />}
           disableElevation
-          onClick={() => { navigater(`/mentee/mentor/mentoring/reservation/${params.id}`) }}
+          onClick={() => { navigater(`/mentee/request/${params.id}`) }}
         >
           상담 신청
         </ApplyMentoringButton>
