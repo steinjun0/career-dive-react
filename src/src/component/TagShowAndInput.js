@@ -32,8 +32,6 @@ function TagShowAndInput({ tagList, setTagList, isEditing }) {
 
 
   return <VerticalFlex>
-    <TextSubtitle1>태그</TextSubtitle1>
-    <EmptyHeight height={'20px'} />
     <Flex style={{ flexWrap: 'wrap' }}>
       {tagList.map((e, i) => {
         return <Flex key={i} style={{ marginRight: '10px', marginBottom: '8px' }}>

@@ -177,6 +177,8 @@ function MentorIntroduce() {
             />}
         </TextFieldWrapper>
         <EmptyHeight height={'20px'} />
+        <TextSubtitle1>태그</TextSubtitle1>
+        <EmptyHeight height={'20px'} />
         <TagShowAndInput tagList={tagList} setTagList={setTagList} isEditing={isEditing} />
 
       </Card>

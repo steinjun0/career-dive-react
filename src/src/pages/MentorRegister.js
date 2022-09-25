@@ -21,20 +21,17 @@ import {
     TextSubtitle2,
     EmptyWidth,
     colorBackgroundCareerDiveBlue,
-    colorTextDisabled
+    colorTextDisabled,
+    colorBackgroundGrayDark
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
-import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
-import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
-import { useNavigate } from 'react-router-dom';
-import SimpleMenu from 'util/SimpleMenu.js';
-
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { CustomToggleButton, onChangeToggle } from 'util/Custom/CutomToggleButton.js';
 import Dropzone from 'react-dropzone';
 import UploadIcon from 'assets/icon/UploadIcon'
 import { convertStringToTags } from 'util/util.js';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import TagShowAndInput from 'component/TagShowAndInput.js';
 
 
 const LoginWrapper = styled(VerticalFlex)`
@@ -58,15 +55,17 @@ function MentorRegister() {
     const [signUpStep, setSignUpStep] = useState(1);
 
     const [inService, setInService] = useState(true)
-    const [job, setJob] = useState('')
+    const [upperJobCategory, setUpperJobCategory] = useState('')
+    const [lowerJobCategory, setLowerJobCategory] = useState('')
     const [jobInComp, setJobInComp] = useState('')
+    const [compName, setCompName] = useState('')
     const [divisInComp, setDivisInComp] = useState('')
     const [divisIsPub, setDivisIsPub] = useState(true)
     const [tagsString, setTagsString] = useState('')
     const [tags, setTags] = useState([])
 
     const mentorInfoState = {
-        inService, setInService, job, setJob, jobInComp, setJobInComp, divisInComp, setDivisInComp,
+        inService, setInService, upperJobCategory, setUpperJobCategory, lowerJobCategory, setLowerJobCategory, jobInComp, setJobInComp, divisInComp, setDivisInComp,
         divisIsPub, setDivisIsPub, tagsString, setTagsString, tags, setTags
     }
 
@@ -104,8 +103,29 @@ function MentorRegister() {
     );
 }
 
+const jobInformation = {
+    'SW개발': ['프론트엔드', '백엔드', '안드로이드 개발', 'iOS 개발', '응용 프로그래머', '시스템 프로그래머', '데이터베이스·인프라', '네트워크·서버', '보안', '게임', '데이터 분석	인공지능', 'QA·테스터·검증', 'ERP·시스템분석·설계'],
+    '기획': ['PM·PO', '서비스 기획', '콘텐츠 기획', 'UX 리서치'],
+    '마케팅·광고·홍보': ['마케팅', '광고 기획(AE)', '홍보·PR', '조사·분석·통계', '전시·컨벤션'],
+    '경영·사무·행정': [],
+    '유통·물류·무역': [],
+    'CS·영업': [],
+    '디자인': [],
+    '제조·생산·품질': [],
+    '방송·미디어': [],
+    '은행·금융·보험': [],
+    '건설·엔지니어링': [],
+    '항공': [],
+    '교육': [],
+    '연구개발': [],
+    '기타': []
+}
+
 function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
     const [nextButtonDisable, setNextButtonDisable] = useState(true)
+    const [isShowCategoryDropDown, setIsShowCategoryDropDown] = useState(false)
+    const [tagList, setTagList] = useState([])
+
 
     useEffect(() => {
         if (mentorInfoState.job !== '' && mentorInfoState.divisInComp !== '') {
@@ -114,6 +134,19 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
             setNextButtonDisable(true)
         }
     }, [...Object.keys(mentorInfoState).map((k) => mentorInfoState[k])])
+
+    useEffect(() => {
+        mentorInfoState.setLowerJobCategory('')
+    }, [mentorInfoState.upperJobCategory])
+
+    const [upperJobCategory, setUpperJobCategory] = useState(
+        ['SW개발', '기획', '마케팅·광고·홍보', '경영·사무·행정', '유통·물류·무역', 'CS·영업', '디자인', '제조·생산·품질', '방송·미디어',
+            '은행·금융·보험', '건설·엔지니어링', '항공', '교육', '연구개발', '기타']
+    );
+    const [lowerJobCategory, setLowerJobCategory] = useState(
+        ['프론트엔드', '백엔드', '안드로이드 개발', 'iOS 개발', '응용 프로그래머', '시스템 프로그래머', '데이터베이스·인프라', '네트워크·서버', '보안', '게임',
+            '데이터 분석', '인공지능', 'QA·테스터·검증', 'ERP·시스템분석·설계']
+    );
 
     return (
         <VerticalFlex>
@@ -149,77 +182,160 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
             <EmptyHeight height='30px' />
 
             <TextSubtitle2>
-                직무 정보
+                회사명
             </TextSubtitle2>
             <EmptyHeight height='16px' />
-            <SimpleMenu
-                title={<TextBody2>{mentorInfoState.job === '' ? '선택' : mentorInfoState.job}</TextBody2>}
-                font
-                style={{ width: '378px', height: '48px', backgroundColor: colorBackgroundGrayLight, justifyContent: 'space-between', padding: '10px 20px ' }}
-                menuItems={['딸기우유']}
-                setState={mentorInfoState.setJob}
-                endIcon={<KeyboardArrowDownIcon color={colorTextLight} />}
-                onClickProps={() => { }}></SimpleMenu>
-            <EmptyHeight height='16px' />
             <CustomTextField
-                onChange={(event) => { mentorInfoState.setJobInComp(event.target.value) }}
+                onChange={(event) => { mentorInfoState.setCompName(event.target.value) }}
                 variant="filled"
                 InputProps={{ disableUnderline: true, }}
                 fullWidth={true}
                 margin="dense"
                 size="small"
                 hiddenLabel
-                placeholder="사내직무명"
+                placeholder="회사"
             />
+            <EmptyHeight height='30px' />
+
+            <TextSubtitle2>
+                직무 정보
+            </TextSubtitle2>
+            <EmptyHeight height='16px' />
+
+            <Flex
+                style={{ backgroundColor: colorBackgroundGrayLight, color: colorTextLight, padding: '10px 20px', justifyContent: 'space-between', cursor: 'pointer' }}
+                onClick={() => {
+                    setIsShowCategoryDropDown(!isShowCategoryDropDown)
+                }}
+            >
+                <TextBody2 color={colorTextLight} style={{ lineHeight: '28px' }}>{mentorInfoState.lowerJobCategory !== '' ? `${mentorInfoState.upperJobCategory} | ${mentorInfoState.lowerJobCategory}` : '직무'}</TextBody2>
+                <KeyboardArrowDownIcon color={colorTextLight} />
+            </Flex>
+
+            {isShowCategoryDropDown &&
+                <VerticalFlex >
+                    <Flex style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '8px', marginTop: '16px', overflow: 'hidden' }}>
+                        <VerticalFlex
+                            style={{ borderRight: `1px solid ${colorBackgroundGrayMedium}` }}>
+                            {upperJobCategory.map((e, i) => {
+                                return <Flex
+                                    key={i}
+                                    style={{
+                                        padding: '4px 20px',
+                                        cursor: 'pointer',
+                                        color: mentorInfoState.upperJobCategory === e ? colorCareerDiveBlue : 'black',
+                                        backgroundColor: mentorInfoState.upperJobCategory === e ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight,
+                                    }}
+                                    onClick={() => {
+                                        mentorInfoState.setUpperJobCategory(e)
+                                    }}>
+                                    <TextBody2 style={{ lineHeight: '28px' }}>{e}</TextBody2>
+                                </Flex>
+                            })}
+                        </VerticalFlex>
+                        <VerticalFlex style={{ flex: 1 }}>
+                            {mentorInfoState.upperJobCategory !== '' && jobInformation[mentorInfoState.upperJobCategory].map((e, i) => {
+                                return <Flex
+                                    key={i}
+                                    style={{
+                                        padding: '4px 20px',
+                                        color: mentorInfoState.lowerJobCategory === e ? colorCareerDiveBlue : colorBackgroundGrayDark,
+                                        backgroundColor: mentorInfoState.lowerJobCategory === e ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight,
+                                        cursor: 'pointer'
+                                    }}
+                                    onClick={() => {
+                                        mentorInfoState.setLowerJobCategory(e)
+                                    }}>
+                                    <TextBody2 style={{ lineHeight: '28px' }}>{e}</TextBody2>
+                                </Flex>
+                            })}
+                        </VerticalFlex>
+                    </Flex>
+                    <EmptyHeight height={'16px'} />
+                    <CustomTextField
+                        onChange={(event) => { mentorInfoState.setDivisInComp(event.target.value) }}
+                        variant="filled"
+                        InputProps={{ disableUnderline: true, }}
+                        fullWidth={true}
+                        margin="dense"
+                        size="small"
+                        hiddenLabel
+                        placeholder="사내 직무명"
+                    />
+                </VerticalFlex>
+            }
 
             <EmptyHeight height='30px' />
 
             <TextSubtitle2>
-                부서
+                부서·팀
             </TextSubtitle2>
+            <EmptyHeight height='4px' />
+            <TextCaption>
+                공개 여부는 프로필 페이지에서 변경 가능합니다.
+            </TextCaption>
             <EmptyHeight height='16px' />
-            <CustomTextField
-                onChange={(event) => { mentorInfoState.setDivisInComp(event.target.value) }}
-                variant="filled"
-                InputProps={{ disableUnderline: true, }}
-                fullWidth={true}
-                margin="dense"
-                size="small"
-                hiddenLabel
-                placeholder="부서"
-            />
-            <EmptyHeight height='16px' />
-
-            <TextSubtitle2>
-                부서 공개 여부
-            </TextSubtitle2>
-            <EmptyHeight height='16px' />
-            <TextBody2 color={colorTextLight}>추후 공개 여부 변경 가능</TextBody2>
-            <EmptyHeight height='16px' />
-            <Flex style={{ alignItems: 'center' }}>
-                <CustomToggleButton
-                    checked={mentorInfoState.divisIsPub}
-                    onChange={(e) => { onChangeToggle(e, mentorInfoState.divisIsPub, mentorInfoState.setDivisIsPub) }}
+            <Flex>
+                <CustomTextField
+                    onChange={(event) => { mentorInfoState.setDivisInComp(event.target.value) }}
+                    variant="filled"
+                    InputProps={{ disableUnderline: true, }}
+                    fullWidth={true}
+                    margin="dense"
+                    size="small"
+                    hiddenLabel
+                    placeholder="부서·팀명"
                 />
-                <EmptyWidth width={'8px'} />
-                <TextBody2 color={colorCareerDiveBlue}>공개</TextBody2>
+                <EmptyWidth width={'16px'} />
+                <Flex style={{ minWidth: '146px', justifyContent: 'space-between', backgroundColor: colorBackgroundGrayLight, borderRadius: '8px' }}>
+                    <Flex
+                        style={{
+                            padding: '12px 20px',
+                            borderRight: `1px solid ${colorBackgroundGrayMedium}`,
+                            backgroundColor: mentorInfoState.divisIsPub ? colorBackgroundGrayLight : colorBackgroundCareerDiveBlue,
+                            borderTopLeftRadius: '8px',
+                            borderBottomLeftRadius: '8px',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => {
+                            mentorInfoState.setDivisIsPub(false)
+                        }}
+                    >
+                        <TextBody2
+                            color={mentorInfoState.divisIsPub ? colorTextLight : colorCareerDiveBlue}>
+                            비공개
+                        </TextBody2>
+                    </Flex>
+                    <Flex
+                        style={{
+                            padding: '12px 20px',
+                            backgroundColor: !mentorInfoState.divisIsPub ? colorBackgroundGrayLight : colorBackgroundCareerDiveBlue,
+                            borderTopRightRadius: '8px',
+                            borderBottomRightRadius: '8px',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => {
+                            mentorInfoState.setDivisIsPub(true)
+                        }}>
+                        <TextBody2
+                            color={!mentorInfoState.divisIsPub ? colorTextLight : colorCareerDiveBlue}>
+                            공개
+                        </TextBody2>
+                    </Flex>
+                </Flex>
             </Flex>
+
             <EmptyHeight height='30px' />
 
             <TextSubtitle2>
                 태그
             </TextSubtitle2>
+            <EmptyHeight height='4px' />
+            <TextCaption>
+                최대 10개까지 입력이 가능합니다.
+            </TextCaption>
             <EmptyHeight height='16px' />
-            <CustomTextField
-                onChange={(event) => { mentorInfoState.setTagsString(event.target.value) }}
-                variant="filled"
-                InputProps={{ disableUnderline: true, }}
-                fullWidth={true}
-                margin="dense"
-                size="small"
-                hiddenLabel
-                placeholder="ex. 커리어다이브, 플랫폼, 에듀테크, 금융서비스 등"
-            />
+            <TagShowAndInput tagList={tagList} setTagList={setTagList} isEditing={true} />
             <EmptyHeight height='30px' />
 
 
