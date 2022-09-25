@@ -330,6 +330,10 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
             <TextSubtitle2>
                 태그
             </TextSubtitle2>
+            <EmptyHeight height='4px' />
+            <TextCaption>
+                최대 10개까지 입력이 가능합니다.
+            </TextCaption>
             <EmptyHeight height='16px' />
             <TagShowAndInput tagList={tagList} setTagList={setTagList} isEditing={true} />
             <EmptyHeight height='30px' />
