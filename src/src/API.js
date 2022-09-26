@@ -68,7 +68,7 @@ export default {
     this.refreshUserData()
     try {
       const res = await axios.get(url, {
-        headers: { Authorization: `${accessToken}` },
+        headers: { Authorization: `${tokenHeader.headers.Authorization}` },
         params: param,
       }, tokenHeader)
       return res
