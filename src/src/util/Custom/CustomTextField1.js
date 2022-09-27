@@ -4,7 +4,7 @@ import { CustomTextField } from "./CustomTextField";
 function CustomTextField1({ onChange, onEnter, placeholder, fullWidth, value }) {
   return <CustomTextField
     onKeyPress={(e) => {
-      if (e.code === 'Enter') {
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
         onEnter();
       }
     }}
