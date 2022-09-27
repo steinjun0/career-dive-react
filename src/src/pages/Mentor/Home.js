@@ -70,9 +70,6 @@ function MentorHome() {
               <Grid item xs={12}>
                 <ScheduleList></ScheduleList>
               </Grid>
-              <Grid item xs={6}>
-                <CalendarMentor></CalendarMentor>
-              </Grid>
             </Grid>
           </CardsWrapper>
         </MaxWidthDiv>
