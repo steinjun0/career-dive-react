@@ -1,87 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
-
-import { Card } from "util/Card"
-import SimpleMenu from "util/SimpleMenu"
-
-import {
-  RowAlignCenterFlex,
-  VerticalFlex,
-  colorCareerDiveBlue,
-  colorTextLight,
-  Flex,
-} from "util/styledComponent";
-
+import { useEffect, useState } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { usePrevious } from "util/util";
+import { AvailableDateBox, CalendarContentWrapper, DateBox, DateDisableBox, DateWrapper, DayBox, DayWrapper, SelectedDateBox, WeekBox, YearMonthMenu, YearMonthMenuWrapper } from "./CalendarStyledComponents";
 
 
-const CalendarWrapper = styled(Flex)`
-  width: 100%;
-  // margin-top: 30px;
-  transition: all 0.3s ease-out;
-`
-
-const DateWrapper = styled(VerticalFlex)`
-  border-bottom: 1px solid #CFD6E0;
-  padding-bottom: 16px;
-`;
-
-const WeekBox = styled(RowAlignCenterFlex)`
-  justify-content: space-between;
-  // width: 534px;
-  height: 44px;
-  width: 100%;
-  margin-top: 16px;
-`;
-
-const DateBox = styled(RowAlignCenterFlex)`
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius:12px;
-  color: ${colorTextLight};
-  cursor: pointer;
-`;
-
-const DayWrapper = styled(Flex)`
-  justify-content: space-between;
-  font-weight: 700;
-  color: black;
-  margin-top: 10px;
-`;
-
-const DayBox = styled(DateBox)`
-  color: black;
-`;
-
-const AvailableDateBox = styled(DateBox)`
-  background-color: rgba(105, 140, 255, 0.2);
-  color: ${colorCareerDiveBlue};
-  cursor: pointer;
-`;
-
-const SelectedDateBox = styled(DateBox)`
-  background-color:${colorCareerDiveBlue};
-  color: white;
-  cursor: pointer;
-`;
-
-const CalendarContentWrapper = styled(VerticalFlex)`
-  justify-content: start;
-  min-width: 400px;
-`;
-
-
-const YearMonthMenuWrapper = styled(RowAlignCenterFlex)`
- justify-content: center;
- margin: 16px 0;
- height: 24px;
-`
-
-const YearMonthMenu = styled(SimpleMenu)`
-`;
 
 
 const getDatesOfMonth = (year, month) => {
@@ -122,18 +44,6 @@ function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp
   }
 
 
-
-  const prevMonth = usePrevious(month);
-  // useEffect(() => {
-  //   setDates(getDatesOfMonth(year, month.slice(0, month.length - 1)))
-  //   if (prevMonth !== '0월' && month.length !== 0) {
-  //     setSelectedDate(0)
-  //   }
-  //   const selectedDateObj = new Date(year, Number(month.slice(0, -1)), 0)
-  //   if (selectedDateObj instanceof Date) {
-  //     onDateChange(selectedDateObj)
-  //   }
-  // }, [month])
 
   const onClickMonth = () => {
     if (month.length !== 0) {
@@ -188,14 +98,17 @@ function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp
         {dates.map((week, weekIndex) =>
           <WeekBox key={weekIndex}>
             {week.map((date, dateIndex) => {
+
+              // date === 0 -> 없는 날짜
               if (date === 0) return <DateBox key={`${weekIndex}${dateIndex}`}></DateBox>
               else {
                 if (date === selectedDate) {
                   return <SelectedDateBox key={`${weekIndex}${dateIndex}`}>{date}</SelectedDateBox>
                 } else if (availableDates.includes(date)) {
                   return <AvailableDateBox onClick={() => { onClickDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
-                }
-                else {
+                } else if (+month.slice(0, -1) <= (new Date().getMonth() + 1) && date < new Date().getDate()) {
+                  return <DateDisableBox key={`${weekIndex}${dateIndex}`}>{date}</DateDisableBox>
+                } else {
                   return <DateBox onClick={() => { onClickDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</DateBox>
                 }
               }

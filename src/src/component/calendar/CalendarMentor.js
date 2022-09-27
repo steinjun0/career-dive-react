@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { styled } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+
 
 import { Card } from "util/Card"
 
@@ -27,6 +27,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import SimpleMenu from "util/SimpleMenu";
 import { CustomIconButton } from "util/Custom/CustomIconButton";
 import API from "API";
+
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckIcon from '@mui/icons-material/Check';
+import ShortcutOutlinedIcon from '@mui/icons-material/ShortcutOutlined';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+
 
 
 const CalendarWrapper = styled(Flex)`
@@ -58,7 +65,7 @@ const repeatOptionConverter = {
   'week': '매주 반복',
 }
 
-function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTime, style }) {
+function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTime, setIsAdding, setIsEditing, style }) {
   const housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
   const minsList = ['00', '10', '20', '30', '40', '50']
 
@@ -159,14 +166,40 @@ function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTim
       <EmptyWidth width={'4px'} />
 
 
-      {!initialTime && <CustomButton
-        style={{ padding: 0, marginLeft: 'auto', padding: '4px 12px' }}
-        onClick={() => {
-          onSetTime({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
-        }}
-      >
-        <TextBody2>확인</TextBody2>
-      </CustomButton>}
+      {!initialTime && <Flex>
+        <CustomButton
+          background_color={colorBackgroundGrayLight}
+          custom_color={colorTextLight}
+
+          style={{ padding: 0, marginLeft: 'auto', padding: '7px', }}
+          onClick={() => {
+            setIsAdding(false)
+
+          }}
+        >
+          <ShortcutOutlinedIcon
+            style={{ transform: 'scaleX(-1)' }}
+            fontSize={'small'}
+          />
+        </CustomButton>
+        <EmptyWidth width={'10px'} />
+        <CustomButton
+          background_color={colorBackgroundCareerDiveBlue}
+          custom_color={colorCareerDiveBlue}
+
+          style={{ padding: 0, marginLeft: 'auto', padding: '7px', }}
+          onClick={() => {
+            onSetTime({ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption })
+
+          }}
+        >
+          <CheckIcon
+            color={colorCareerDiveBlue}
+            fontSize={'small'}
+          />
+        </CustomButton>
+      </Flex>}
+
       {initialTime && <CustomIconButton
         style={{ marginLeft: 'auto' }}
         Icon={DeleteIcon}
@@ -234,8 +267,9 @@ function CalendarMentor() {
     } else {
       temp[selectedDate] = [{ startAMPM, startHour, startMin, endAMPM, endHour, endMin, repeatOption }]
     }
-    postConsultScheduleList(temp)
-    postConsultScheduleRule(temp)
+    await postConsultScheduleList(temp)
+    await postConsultScheduleRule(temp)
+    const res = await getConsultSchedule()
     setAvailableTimes(temp)
   }
 
@@ -250,7 +284,6 @@ function CalendarMentor() {
         year,
         month.slice(0, -1),
         Number(localStorage.getItem('UserID')))
-      console.log('res', res)
       if (res.status === 200) {
         if (res.data.DayTimes !== null) {
           const tempDayTimes = []
@@ -282,8 +315,6 @@ function CalendarMentor() {
             })
             // setAvailableDates([...availableDates, e.Day])
           })
-          console.log('tempDayTimes', tempDayTimes)
-          console.log('tempAvailableTime', tempAvailableTime)
 
           setAvailableDates(tempDayTimes)
           setAvailableTimes(tempAvailableTime)
@@ -324,6 +355,7 @@ function CalendarMentor() {
   }
 
   const postConsultScheduleRule = async (availableTimesProps) => {
+    console.log('rule enter')
     await Promise.all(
       availableTimesProps[selectedDate].filter((e) => {
         if (e.repeatOption === '반복 없음') {
@@ -335,13 +367,13 @@ function CalendarMentor() {
           const startTime = `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
           const endTime = `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
           const weekDay = new Date(year, Number(month.slice(0, -1)) - 1, selectedDate).getDay()
-          const type = e.repeatOption
+          const type = repeatOptionConverter[e.repeatOption]
 
           const res = await API.postConsultScheduleRule(
             startTime,
             endTime,
             weekDay,
-            repeatOptionConverter[type],
+            type,
             Number(localStorage.getItem('UserID')),
             `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
           )
@@ -351,6 +383,8 @@ function CalendarMentor() {
   }
 
   const patchConsultScheduleRule = async (availableTimesProps) => {
+    console.log('availableTimesProps', availableTimesProps)
+    console.log('patch enter')
     await Promise.all(
       availableTimesProps[selectedDate].filter((e) => {
         if (e.repeatOption === '반복 없음') { // rule만 골라내는 filter
@@ -365,16 +399,31 @@ function CalendarMentor() {
           const weekDay = new Date(year, Number(month.slice(0, -1)) - 1, selectedDate).getDay()
           const type = repeatOptionConverter[e.repeatOption]
           if (e.ruleId !== undefined) {
-            const res = await API.patchConsultScheduleRule(
-              e.ruleId,
-              startTime,
-              endTime,
-              weekDay,
-              type,
-              Number(localStorage.getItem('UserID')),
-              `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
-            )
+            if (e.ruleId !== -1) {
+              const res = await API.patchConsultScheduleRule(
+                e.ruleId,
+                startTime,
+                endTime,
+                weekDay,
+                type,
+                Number(localStorage.getItem('UserID')),
+                `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
+              )
+              return
+            }
           }
+
+          // console.log('e', e)
+          const res = await API.postConsultScheduleRule(
+            startTime,
+            endTime,
+            weekDay,
+            type,
+            Number(localStorage.getItem('UserID')),
+            `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
+          )
+          // console.log('post res', res)
+
         })
     )
     // getConsultSchedule()
@@ -406,7 +455,6 @@ function CalendarMentor() {
   }
 
   const deleteConsultScheduleRuleQueue = async (availableTimesProps) => {
-    console.log('availableTimesProps[selectedDate]', availableTimesProps[selectedDate])
     let popList = []
     await Promise.all(availableTimesProps[selectedDate].map(async (e) => {
       if (e.isDeleting && e.ruleId !== undefined) {
@@ -453,39 +501,38 @@ function CalendarMentor() {
           <AddOutlined /> */}
           <Flex style={{ justifyContent: 'space-between', marginTop: '24px', marginBottom: '8px' }}>
             <TextHeading6>세부 시간 설정</TextHeading6>
-            {!isAdding && !isEditing && <CustomButton
+            {!isAdding && availableTimes[selectedDate] && !isEditing && <CustomButton
               background_color={colorBackgroundGrayLight}
               custom_color={colorTextLight}
-              style={{ padding: '4px 12px' }}
+              style={{ padding: '7px' }}
               onClick={() => {
                 setTempAvailableTime(availableTimes[selectedDate] ? [...availableTimes[selectedDate]] : [])
                 setIsEditing(true)
               }}
             >
-              <TextBody2>
-                수정
-              </TextBody2>
+              <ModeEditOutlineOutlinedIcon fontSize={'small'} />
             </CustomButton>}
             {isEditing && <Flex>
               <CustomButton
                 background_color={colorBackgroundGrayLight}
                 custom_color={colorTextLight}
-                style={{ padding: '4px 12px' }}
+                style={{ padding: '7px' }}
                 onClick={() => {
                   availableTimes[selectedDate] = tempAvailableTime
                   setTempAvailableTime([])
                   setIsEditing(false)
                 }}
               >
-                <TextBody2>
-                  취소
-                </TextBody2>
+                <ShortcutOutlinedIcon
+                  style={{ transform: 'scaleX(-1)' }}
+                  fontSize={'small'}
+                />
               </CustomButton>
               <EmptyWidth width={'16px'} />
               <CustomButton
-                background_color={colorCareerDiveBlue}
-                custom_color={'white'}
-                style={{ padding: '4px 12px' }}
+                background_color={colorBackgroundCareerDiveBlue}
+                custom_color={colorCareerDiveBlue}
+                style={{ padding: '7px' }}
                 onClick={async () => {
                   await postConsultScheduleList(availableTimes)
                   await patchConsultScheduleRule(availableTimes)
@@ -495,9 +542,9 @@ function CalendarMentor() {
                   await getConsultSchedule()
                 }}
               >
-                <TextBody2>
-                  저장
-                </TextBody2>
+                <CheckIcon
+                  fontSize={'small'}
+                />
               </CustomButton>
             </Flex>}
 
@@ -525,6 +572,7 @@ function CalendarMentor() {
             return <SetAvailableTime
               key={index}
               style={{ marginTop: '16px' }}
+              setIsEditing={setIsEditing}
               onRemoveRule={() => {
                 const index = availableTimes[selectedDate].indexOf(e);
                 Object.assign(availableTimes[selectedDate][index], { isDeleting: true, scheduleId: e.scheduleId })
@@ -539,10 +587,13 @@ function CalendarMentor() {
           })}
 
           {isAdding && <Flex style={{ marginTop: '16px' }}>
-            <SetAvailableTime onSetTime={async (time) => {
-              await addNewAvailableTime(selectedDate, time)
-              setIsAdding(false)
-            }} />
+            <SetAvailableTime
+              onSetTime={async (time) => {
+                await addNewAvailableTime(selectedDate, time)
+                setIsAdding(false)
+              }}
+              setIsAdding={setIsAdding}
+            />
           </Flex>}
 
           {!isAdding && !isEditing &&
@@ -553,11 +604,9 @@ function CalendarMentor() {
                 onClick={async () => {
                   setIsAdding(true)
                 }}
-                style={{ marginTop: '16px', padding: '4px 12px' }}
+                style={{ marginTop: '16px', width: '32px', height: '32px' }}
               >
-                <TextBody2>
-                  추가
-                </TextBody2>
+                <AddIcon />
               </CustomButton>
             </Flex>
           }
