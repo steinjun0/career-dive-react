@@ -1,4 +1,5 @@
 import { styled } from "@mui/material";
+import MentorCard from "component/mentor/MentorCard";
 import { RowAlignCenterFlex } from "util/styledComponent";
 import FamousMentorCard from "./FamousMentorCard";
 
@@ -38,19 +39,36 @@ function JobCategoryGroup() {
       </TopWrapper>
 
       <FamousMentorCardsWrapper>
-        <FamousMentorCard
-          company={"삼성전자"}
-          department={"빅스비"}
-          job={"비서"}
-          tag={"현직자"}
-          name="박서비"
-          rating={3.5}
-          index={1}
-        />
-        <FamousMentorCard />
-        <FamousMentorCard />
-        <FamousMentorCard />
-
+        <MentorCard
+          company={"LF"}
+          department={"서비스 기획자"}
+          job={"UX 리서처"}
+          name={"Sarah"}
+          inJob={"현직자"}
+          duration={"기간"}
+          rating={4.5}
+          userId={0}
+          isShowRating={false}
+          isShowTag={true} />
+        <MentorCard
+          company={"넥스트 유니콘"}
+          department={"앱 개발팀"}
+          job={"데이터 사이언티스트"}
+          name={"Soo"}
+          inJob={"현직자"}
+          duration={"기간"}
+          rating={4.5}
+          userId={0} />
+        <MentorCard
+          company={"커리어다이브"}
+          department={"디자이너"}
+          job={"매드로봇"}
+          name={"Sarah"}
+          inJob={"현직자"}
+          duration={"기간"}
+          rating={4.5}
+          userId={0} />
+        <MentorCard />
       </FamousMentorCardsWrapper>
     </FamousMentorGroupWrapper>
   );
