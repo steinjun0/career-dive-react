@@ -183,8 +183,22 @@ export default {
     return scheduleRes
   },
 
-  async postAccountMentor(inService, job, jobInComp, divisInComp, divisIsPub, tags) {
-    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/mentor`, { Mentor: { Inservice: inService, Job: job, JobInComp: jobInComp, DivisInComp: divisInComp, DivisIsPub: divisIsPub }, Tags: tags })
+  async postAccountMentor(inService, job, jobInComp, divisInComp, divisIsPub, compName, tags) {
+    const convertedTags = tags.map((e) => {
+      return { Name: e }
+    })
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/mentor`,
+      {
+        Mentor: {
+          Inservice: inService,
+          Job: job,
+          JobInComp: jobInComp,
+          DivisInComp: divisInComp,
+          DivisIsPub: divisIsPub,
+          CompName: compName
+        },
+        Tags: convertedTags
+      })
     return scheduleRes
   },
 

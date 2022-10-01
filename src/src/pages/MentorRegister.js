@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import API from '../API.js'
-import { Grid, styled, Divider } from "@mui/material";
+import { Grid, styled } from "@mui/material";
 
 import {
     FullHeightFullWidthWrapper,
@@ -17,7 +17,6 @@ import {
     TextCaption,
     colorCareerDiveBlue,
     colorBackgroundGrayMedium,
-    FullWidthWrapper,
     TextSubtitle2,
     EmptyWidth,
     colorBackgroundCareerDiveBlue,
@@ -26,7 +25,6 @@ import {
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
-import { CustomToggleButton, onChangeToggle } from 'util/Custom/CutomToggleButton.js';
 import Dropzone from 'react-dropzone';
 import UploadIcon from 'assets/icon/UploadIcon'
 import { convertStringToTags } from 'util/util.js';
@@ -61,21 +59,12 @@ function MentorRegister() {
     const [compName, setCompName] = useState('')
     const [divisInComp, setDivisInComp] = useState('')
     const [divisIsPub, setDivisIsPub] = useState(true)
-    const [tagsString, setTagsString] = useState('')
     const [tags, setTags] = useState([])
 
     const mentorInfoState = {
-        inService, setInService, upperJobCategory, setUpperJobCategory, lowerJobCategory, setLowerJobCategory, jobInComp, setJobInComp, divisInComp, setDivisInComp,
-        divisIsPub, setDivisIsPub, tagsString, setTagsString, tags, setTags
+        inService, setInService, compName, setCompName, upperJobCategory, setUpperJobCategory, lowerJobCategory, setLowerJobCategory, jobInComp, setJobInComp, divisInComp, setDivisInComp,
+        divisIsPub, setDivisIsPub, tags, setTags
     }
-
-    useEffect(() => {
-        const arrayTags = convertStringToTags(tagsString)
-        setTags(arrayTags)
-
-    }, [tagsString])
-
-
 
     return (
         <FullHeightFullWidthWrapper>
@@ -124,7 +113,6 @@ const jobInformation = {
 function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
     const [nextButtonDisable, setNextButtonDisable] = useState(true)
     const [isShowCategoryDropDown, setIsShowCategoryDropDown] = useState(false)
-    const [tagList, setTagList] = useState([])
 
 
     useEffect(() => {
@@ -251,19 +239,19 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                             })}
                         </VerticalFlex>
                     </Flex>
-                    <EmptyHeight height={'16px'} />
-                    <CustomTextField
-                        onChange={(event) => { mentorInfoState.setDivisInComp(event.target.value) }}
-                        variant="filled"
-                        InputProps={{ disableUnderline: true, }}
-                        fullWidth={true}
-                        margin="dense"
-                        size="small"
-                        hiddenLabel
-                        placeholder="사내 직무명"
-                    />
                 </VerticalFlex>
             }
+            <EmptyHeight height={'16px'} />
+            <CustomTextField
+                onChange={(event) => { mentorInfoState.setJobInComp(event.target.value) }}
+                variant="filled"
+                InputProps={{ disableUnderline: true, }}
+                fullWidth={true}
+                margin="dense"
+                size="small"
+                hiddenLabel
+                placeholder="사내 직무명"
+            />
 
             <EmptyHeight height='30px' />
 
@@ -335,7 +323,7 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                 최대 10개까지 입력이 가능합니다.
             </TextCaption>
             <EmptyHeight height='16px' />
-            <TagShowAndInput tagList={tagList} setTagList={setTagList} isEditing={true} />
+            <TagShowAndInput tagList={mentorInfoState.tags} setTagList={mentorInfoState.setTags} isEditing={true} />
             <EmptyHeight height='30px' />
 
 
@@ -372,6 +360,7 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
             mentorInfoState.jobInComp,
             mentorInfoState.divisInComp,
             mentorInfoState.divisIsPub,
+            mentorInfoState.compName,
             mentorInfoState.tags)
 
         if (accountRes.status === 200) {

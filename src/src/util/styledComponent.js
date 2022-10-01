@@ -28,7 +28,7 @@ export const TextBody1 = styled(`span`)`
 
 export const TextBody2 = styled(`p`)`
   font-size: 14px;
-  line-height: 24px;
+  line-height: ${props => props.line_height ? props.line_height : '24px'};
   font-weight: 400;
   margin: 0;
   color: ${props => props.color};

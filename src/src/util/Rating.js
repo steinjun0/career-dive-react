@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { RowAlignCenterFlex } from './styledComponent'
+import { colorCareerDivePink, EmptyWidth, RowAlignCenterFlex, TextCaption } from './styledComponent'
 
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { Rating } from '@mui/material'
@@ -21,10 +21,11 @@ function CustomRating({ value = 0, size = '16px' }) {
             emptyIcon={<FavoriteIcon fontSize="inherit" style={{ color: '#EDEDED' }} />}
             sx={{
                 fontSize: size,
-                color: '#E25D7D'
+                color: colorCareerDivePink
             }}
         />
-        <RatingScore>{value}</RatingScore>
+        <EmptyWidth width={'6px'} />
+        <TextCaption color={colorCareerDivePink}>{value}</TextCaption>
     </RowAlignCenterFlex>);
 }
 export default CustomRating;
