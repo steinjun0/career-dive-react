@@ -153,6 +153,11 @@ export default {
     return accountMentornRes
   },
 
+  async getAccountConsultContent(type) {
+    const contentRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/consultContent/list?type=${type}`)
+    return contentRes
+  },
+
   async postAccount(email, password, nickname) {
     const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
     return res
