@@ -5,7 +5,6 @@ import {
   CenterWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
-  VerticalFlex,
   Flex
 } from "util/styledComponent";
 
@@ -13,18 +12,16 @@ import MentorProfile from 'component/mentor/Profile'
 import MentorCalendar from 'component/calendar/Calendar'
 import HelpCategory from "component/mentor/HelpCategory";
 import Introduction from "component/mentor/Introduction";
-import RatingAndReview from "component/mentor/RatingAndReview";
-import Request from "component/mentor/apply/RequestView";
+
+import { useEffect, useState } from "react";
+import API from 'API';
+import { useParams } from "react-router-dom";
+
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
   flex-direction: row;
   align-items: center;
-`;
-
-const MentorCalendarWrapper = styled('div')`
-  margin-top: 30px;
-  margin-bottom: 30px;
 `;
 
 const CardsWrapper = styled(Flex)`
@@ -35,6 +32,37 @@ const CardsWrapper = styled(Flex)`
 
 
 function Mentor() {
+
+  const params = useParams();
+
+  const [mentorData, setMentorData] = useState({});
+  const [consultContents, setConsultContents] = useState({})
+
+
+
+  useEffect(() => {
+    const res = API.getAccountMentor(params.id)
+    res.then((value) => {
+      if (value.status === 200) {
+        setMentorData(value.data)
+      }
+    })
+    API.getAccountConsultContent('일반').then((res) => {
+      if (res.stauts === 200) {
+        console.log(res.data)
+        setConsultContents(Object.assign(consultContents, { regular: res.data }))
+      }
+    })
+
+    API.getAccountConsultContent('프리미엄').then((res) => {
+      if (res.stauts === 200) {
+        console.log(res.data)
+        setConsultContents(Object.assign(consultContents, { premium: res.data }))
+      }
+    })
+
+  }, [])
+
   return (
     <div>
       <FullWidthWrapper>
@@ -47,12 +75,11 @@ function Mentor() {
           <MaxWidthDiv>
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>
-
                 <Grid container item xs={12} md={6}>
                   <Grid item xs={12} >
-                    <HelpCategory></HelpCategory>
-                    <Introduction></Introduction>
-                    <RatingAndReview></RatingAndReview>
+                    <HelpCategory ></HelpCategory>
+                    <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
+                    {/* <RatingAndReview></RatingAndReview> */}
                   </Grid>
                 </Grid>
 
@@ -69,7 +96,7 @@ function Mentor() {
           </MaxWidthDiv>
         </GrayBackground>
       </FullWidthWrapper>
-    </div>
+    </div >
   );
 }
 
