@@ -9,7 +9,8 @@ import {
   RowAlignCenterFlex,
   colorTextLight,
   colorBackgroundGrayLight,
-  colorCareerDiveBlue
+  colorCareerDiveBlue,
+  VerticalFlex
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ import API from "API";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
+  height: 336px;
 `;
 
 const SubtitleWarpper = styled(RowAlignCenterFlex)`
@@ -32,7 +34,7 @@ const Subtitle = styled(TextSubtitle1)`
 const ProfileImg = styled(CircleImg)`
   width: 120px;
   height: 120px;
-  margin: 20px 0;
+  margin: 38px 0 20px 0;
 `;
 
 const TextContentWrapper = styled(Flex)`
@@ -76,7 +78,8 @@ function UserProfile() {
 
   return (
     <UserProfileCardWrapper>
-      <Card title={'유저 프로필'}
+      <Card
+        title={'멘토 프로필'}
         titleTail={
           !isEditing ?
             <Flex>
@@ -99,28 +102,20 @@ function UserProfile() {
                 onClick={onClickSave}
               >저장</CustomButton>
             </Flex>}>
-        <SubtitleWarpper>
-          <Subtitle>프로필 이미지</Subtitle>
-        </SubtitleWarpper>
+        <VerticalFlex style={{ alignItems: 'center' }}>
+          <ProfileImg src={testMentorImage} alt="profile-image" />
+          <Flex>
+            {isEditing ? <TextField
+              variant="standard"
+              value={nickName}
+              onChange={(e) => {
+                setNickName(e.target.value)
+              }}
+            ></TextField> : <TextSubtitle1>{nickName}</TextSubtitle1>}
+          </Flex>
+        </VerticalFlex>
 
-        <ProfileImg src={testMentorImage} alt="profile-image" />
 
-        <Divider></Divider>
-
-        <SubtitleWarpper>
-          <Subtitle>닉네임</Subtitle>
-        </SubtitleWarpper>
-
-
-        <TextContentWrapper>
-          {isEditing ? <TextField
-            variant="standard"
-            value={nickName}
-            onChange={(e) => {
-              setNickName(e.target.value)
-            }}
-          ></TextField> : <TextBody1>{nickName}</TextBody1>}
-        </TextContentWrapper>
 
       </Card>
     </UserProfileCardWrapper >
