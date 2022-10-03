@@ -12,7 +12,7 @@ import {
   colorCareerDiveBlue
 } from "util/styledComponent";
 import { Card } from "util/Card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 
 import API from "API";
@@ -66,6 +66,14 @@ function UserProfile() {
       return
     }
   }
+
+  useEffect(async () => {
+    const res = await API.getAccount(localStorage.getItem('UserID'))
+    if (res.status === 200) {
+      setNickName(res.data.Nickname)
+    }
+  }, [])
+
   return (
     <UserProfileCardWrapper>
       <Card title={'유저 프로필'}
@@ -111,7 +119,7 @@ function UserProfile() {
             onChange={(e) => {
               setNickName(e.target.value)
             }}
-            defaultValue={'일하는 베짱이'}></TextField> : <TextBody1>일하는 베짱이</TextBody1>}
+          ></TextField> : <TextBody1>{nickName}</TextBody1>}
         </TextContentWrapper>
 
       </Card>
