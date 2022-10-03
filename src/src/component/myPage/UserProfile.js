@@ -15,6 +15,8 @@ import { Card } from "util/Card";
 import { useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 
+import API from "API";
+
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
 `;
@@ -46,11 +48,23 @@ const EditTextButton = styled(TextBody1)`
 
 function UserProfile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [nickName, setNickName] = useState('');
   const onClickEdit = () => {
     setIsEditing(true)
   }
-  const onClickSave = () => {
-    setIsEditing(false)
+  const onClickSave = async () => {
+    await saveEditing()
+    // setIsEditing(false)
+  }
+
+  const saveEditing = async () => {
+    const validResponse = await API.patchAccount({
+      Nickname: nickName
+    });
+    if (validResponse.status === 200) {
+      setIsEditing(false)
+      return
+    }
   }
   return (
     <UserProfileCardWrapper>
@@ -91,7 +105,13 @@ function UserProfile() {
 
 
         <TextContentWrapper>
-          {isEditing ? <TextField variant="standard" defaultValue={'일하는 베짱이'}></TextField> : <TextBody1>일하는 베짱이</TextBody1>}
+          {isEditing ? <TextField
+            variant="standard"
+            value={nickName}
+            onChange={(e) => {
+              setNickName(e.target.value)
+            }}
+            defaultValue={'일하는 베짱이'}></TextField> : <TextBody1>일하는 베짱이</TextBody1>}
         </TextContentWrapper>
 
       </Card>
