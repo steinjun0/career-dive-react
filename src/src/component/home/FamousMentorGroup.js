@@ -47,7 +47,7 @@ function JobCategoryGroup() {
           inJob={"현직자"}
           duration={"기간"}
           rating={4.5}
-          userId={0}
+          userId={1}
           isShowRating={false}
           isShowTag={true} />
         <MentorCard
@@ -58,7 +58,7 @@ function JobCategoryGroup() {
           inJob={"현직자"}
           duration={"기간"}
           rating={4.5}
-          userId={0} />
+          userId={1} />
         <MentorCard
           company={"커리어다이브"}
           department={"디자이너"}
@@ -67,7 +67,7 @@ function JobCategoryGroup() {
           inJob={"현직자"}
           duration={"기간"}
           rating={4.5}
-          userId={0} />
+          userId={1} />
         <MentorCard />
       </FamousMentorCardsWrapper>
     </FamousMentorGroupWrapper>

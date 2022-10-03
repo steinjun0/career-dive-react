@@ -153,6 +153,11 @@ export default {
     return accountMentornRes
   },
 
+  async getAccountConsultContent(type) {
+    const contentRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/consultContent/list?type=${type}`)
+    return contentRes
+  },
+
   async postAccount(email, password, nickname) {
     const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
     return res
@@ -222,13 +227,25 @@ export default {
     return userRes
   },
 
+  async patchAccountMentor(mentorData) {
+    const mentorRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/mentor`, mentorData)
+    return mentorRes
+  },
+
   async patchUser(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}auth/user/`, userData)
     return userRes
   },
 
+  async patchConsultSchedule(scheduleId, startTime, endTime, mentorId, date) {
+    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/${scheduleId}`,
+      { Date: date, StartTime: startTime, EndTime: endTime, MentorID: +mentorId })
+    return patchRes
+  },
+
   async patchConsultScheduleRule(ruleId, startTime, endTime, weekDay, type, mentorId, startDate) {
-    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}`, { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: +mentorId, StartDate: startDate })
+    const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}`,
+      { StartTime: startTime, EndTime: endTime, WeekDay: weekDay, Type: type, MentorID: +mentorId, StartDate: startDate })
     return patchRes
   },
 

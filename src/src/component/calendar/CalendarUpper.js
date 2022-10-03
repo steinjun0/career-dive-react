@@ -29,7 +29,7 @@ const getDatesOfMonth = (year, month) => {
 }
 
 
-function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp, onClickAvailableDateProps }) {
+function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDateObjProp, onClickAvailableDateProps }) {
   const year = 2022;
   const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : '0월');
 
@@ -47,7 +47,7 @@ function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp, onCl
 
 
   const prevMonth = usePrevious(month);
-  const onClickMonth = () => {
+  const onClickMonth = (month) => {
     if (prevMonth !== '0월' && month.length !== 0) {
       setSelectedDate(0)
     }
@@ -55,6 +55,7 @@ function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp, onCl
     if (selectedDateObj instanceof Date) {
       onDateChange(selectedDateObj)
     }
+    onMonthChange(month)
   }
 
   useEffect(() => {
@@ -77,6 +78,8 @@ function CalendarUpper({ availableDates, onDateChange, selectedDateObjProp, onCl
   useEffect(() => {
   }, [selectedDateObjProp])
 
+  useEffect(() => {
+  }, [month])
 
 
 

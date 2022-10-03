@@ -89,8 +89,16 @@ function MyPage() {
                 {
                   params.subPage === 'profile' &&
                   <div>
-                    <UserProfile />
-                    <CareerInfo />
+                    <Grid container spacing={'30px'}>
+                      <Grid item xs={6}>
+                        <UserProfile />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <CareerInfo />
+                      </Grid>
+
+
+                    </Grid>
                     <MentorIntroduce />
                     <ConsultRange />
                   </div>

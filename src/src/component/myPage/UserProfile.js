@@ -9,14 +9,18 @@ import {
   RowAlignCenterFlex,
   colorTextLight,
   colorBackgroundGrayLight,
-  colorCareerDiveBlue
+  colorCareerDiveBlue,
+  VerticalFlex
 } from "util/styledComponent";
 import { Card } from "util/Card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
+
+import API from "API";
 
 const UserProfileCardWrapper = styled(Flex)`
   margin-bottom: 38px;
+  height: 336px;
 `;
 
 const SubtitleWarpper = styled(RowAlignCenterFlex)`
@@ -30,7 +34,7 @@ const Subtitle = styled(TextSubtitle1)`
 const ProfileImg = styled(CircleImg)`
   width: 120px;
   height: 120px;
-  margin: 20px 0;
+  margin: 38px 0 20px 0;
 `;
 
 const TextContentWrapper = styled(Flex)`
@@ -46,15 +50,36 @@ const EditTextButton = styled(TextBody1)`
 
 function UserProfile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [nickName, setNickName] = useState('');
   const onClickEdit = () => {
     setIsEditing(true)
   }
-  const onClickSave = () => {
-    setIsEditing(false)
+  const onClickSave = async () => {
+    await saveEditing()
+    // setIsEditing(false)
   }
+
+  const saveEditing = async () => {
+    const validResponse = await API.patchAccount({
+      Nickname: nickName
+    });
+    if (validResponse.status === 200) {
+      setIsEditing(false)
+      return
+    }
+  }
+
+  useEffect(async () => {
+    const res = await API.getAccount(localStorage.getItem('UserID'))
+    if (res.status === 200) {
+      setNickName(res.data.Nickname)
+    }
+  }, [])
+
   return (
     <UserProfileCardWrapper>
-      <Card title={'유저 프로필'}
+      <Card
+        title={'멘토 프로필'}
         titleTail={
           !isEditing ?
             <Flex>
@@ -77,22 +102,20 @@ function UserProfile() {
                 onClick={onClickSave}
               >저장</CustomButton>
             </Flex>}>
-        <SubtitleWarpper>
-          <Subtitle>프로필 이미지</Subtitle>
-        </SubtitleWarpper>
+        <VerticalFlex style={{ alignItems: 'center' }}>
+          <ProfileImg src={testMentorImage} alt="profile-image" />
+          <Flex>
+            {isEditing ? <TextField
+              variant="standard"
+              value={nickName}
+              onChange={(e) => {
+                setNickName(e.target.value)
+              }}
+            ></TextField> : <TextSubtitle1>{nickName}</TextSubtitle1>}
+          </Flex>
+        </VerticalFlex>
 
-        <ProfileImg src={testMentorImage} alt="profile-image" />
 
-        <Divider></Divider>
-
-        <SubtitleWarpper>
-          <Subtitle>닉네임</Subtitle>
-        </SubtitleWarpper>
-
-
-        <TextContentWrapper>
-          {isEditing ? <TextField variant="standard" defaultValue={'일하는 베짱이'}></TextField> : <TextBody1>일하는 베짱이</TextBody1>}
-        </TextContentWrapper>
 
       </Card>
     </UserProfileCardWrapper >

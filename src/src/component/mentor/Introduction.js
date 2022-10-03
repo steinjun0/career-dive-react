@@ -16,19 +16,19 @@ const HtmlWrapper = styled('div')`
   color: ${colorTextBody};
 `;
 
-function Introduction() {
-  const introductionText = `<p>안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.</p>
-  <ul>
-    <li>직무소개</li>
-    <li>취업상담</li>
-    <li>진로상담</li>
-    <li>이직준비</li>
-    <li>면접 팁</li>
-  </ul>
-  
-  <p>안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.</p>`;
+function Introduction({ introductionText = '' }) {
+  // const introductionText = `<p>안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.</p>
+  // <ul>
+  //   <li>직무소개</li>
+  //   <li>취업상담</li>
+  //   <li>진로상담</li>
+  //   <li>이직준비</li>
+  //   <li>면접 팁</li>
+  // </ul>
+
+  // <p>안녕하세요, 현재 (주)다파다의 디자이너로 재직 중인 다슬기입니다. Dapada Edu와 Stock 등의 서비스의 디자인 총괄을 맡고있습니다.</p>`;
   return (
-    <IntroductionWrapper>
+    <IntroductionWrapper >
       <Card no_divider={'true'} title={'멘토 소개'}>
         <VerticalFlex>
           <HtmlWrapper dangerouslySetInnerHTML={{ __html: introductionText }}></HtmlWrapper>

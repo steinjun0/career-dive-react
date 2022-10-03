@@ -56,58 +56,61 @@ function MentorIntroduce() {
   const [tagList, setTagList] = useState([]);
   const [tagListBackup, setTagListBackup] = useState([]);
 
+
+
   const cancelEditing = () => {
     setTagList(tagListBackup)
     setIsEditing(false)
   }
 
   const saveEditing = async () => {
-    const validResponse = await API.patchAccount({
-      AgreeAdb: true,
-      AgreeNoti: true,
-      "BirthDate": "string",
-      "Email": "email@careerdive.com",
-      "Name": "string",
-      "Nickname": "string",
-      "Password": "p@ssw0rd",
-      "Phone": "string",
-      "Sex": true
+    const validResponse = await API.patchAccountMentor({
+      Mentor: {
+        Introduction: introduceText
+      }
     });
-    if (validResponse.status === 200) {
-      await postMentorTag() // TODO: try catch
+    const tagRes = await postMentorTag()
+    console.log(tagRes)
+    if (validResponse.status === 200 && tagRes.status === 200) {
       setIsEditing(false)
       return
     }
   }
 
-  const getMentorTag = async () => {
-    const mentorRes = await API.getAccountMentor(localStorage.getItem('UserID'))
-    if (mentorRes.status === 200) {
-      let newTagList = mentorRes.data.Tags.map((e) => {
-        return e.Name
-      })
-      return newTagList
-    }
+  const getMentorTag = async (apiTags) => {
+    let newTagList = apiTags.map((e) => {
+      return e.Name
+    })
+    return newTagList
   }
 
   const postMentorTag = async () => {
     const convertedTagList = tagList.map((e) => {
       return { Name: e }
     })
-    API.postAccountTag(convertedTagList, localStorage.getItem('UserID'))
+    return await API.postAccountTag(convertedTagList, localStorage.getItem('UserID'))
   }
 
   useEffect(() => {
-    if (introduceText === '') {
-      setIsEditing(true)
-    }
+    API.getAccountMentor(localStorage.getItem('UserID')).then(async (res) => {
+      if (res.status === 200) {
+        let tags = await getMentorTag(res.data.Tags)
+        setTagList(typeof tags === 'object' ? tags : [])
+        setIntroduceText(res.data.Introduction)
+
+        if (res.data.Introduction === '') {
+          setIsEditing(true)
+        }
+      }
+    })
+
+
+
   }, [])
 
-  useEffect(async () => {
+  useEffect(() => {
     if (isEditing) {
-      let tags = await getMentorTag()
-      setTagListBackup(typeof tags === 'object' ? tags : [])
-      setTagList(typeof tags === 'object' ? tags : [])
+      setTagListBackup(tagList)
     }
   }, [isEditing])
 
