@@ -18,6 +18,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { addMinute, checkUrlInclude, isMentorUrl, updateReservation, usePrevious } from "util/util";
 import CalendarUpper from "component/calendar/CalendarUpper";
+import API from 'API';
 
 
 const CalendarWrapper = styled(Flex)`
@@ -97,15 +98,15 @@ function SelectionConsultingStartTime({ title, timeArray, consultingStartTime, o
 
 }
 
-const originData = [{ date: 9, availableTime: [['09:00', '10:30']] },
-{ date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
-{ date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
-{ date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
-{ date: 17, availableTime: [['09:00', '09:30']] },
-{ date: 18, availableTime: [['09:00', '09:30']] },
-]
+// const originData = [{ date: 9, availableTime: [['09:00', '10:30']] },
+// { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
+// { date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
+// { date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
+// { date: 17, availableTime: [['09:00', '09:30']] },
+// { date: 18, availableTime: [['09:00', '09:30']] },
+// ]
 
-const availableDates = [9, 10, 11, 16, 17, 18];
+// const availableDates = [9, 10, 11, 16, 17, 18];
 
 
 function Calendar({ setIsFinishSet }) {
@@ -113,6 +114,18 @@ function Calendar({ setIsFinishSet }) {
   const params = useParams();
   const location = useLocation();
   const [isApplyPage, setIsApplyPage] = useState(false);
+
+  // const [originData, setOriginData] = useState([{ date: 9, availableTime: [['09:00', '10:30']] },
+  // { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
+  // { date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
+  // { date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
+  // { date: 17, availableTime: [['09:00', '09:30']] },
+  // { date: 18, availableTime: [['09:00', '09:30']] },
+  // ])
+  const [originData, setOriginData] = useState([])
+
+  const [availableDates, setAvailableDates] = useState([]);
+
 
   const year = 2022;
   const [month, setMonth] = useState('0월');
@@ -209,21 +222,22 @@ function Calendar({ setIsFinishSet }) {
       cardWidth = (1194 / 2) - 48 - 60
     } else {
       cardWidth = (window.innerWidth / 2) - 48 - 60
-      if (cardWidth < 534) cardWidth = 534
+      if (cardWidth < 520) cardWidth = 520
     }
 
     if (tempAvailableAMTime.length === 0) {
       setAmLines(0)
     }
     else {
-      setAmLines(1 + parseInt((tempAvailableAMTime.length * 76) / cardWidth))
+      // cardwidth로 나누는건 반응형 도입 이후
+      setAmLines(1 + parseInt((tempAvailableAMTime.length) / 5))
     }
 
     if (tempAvailablePMTime.length === 0) {
       setPmLines(0)
     }
     else {
-      setPmLines(1 + parseInt((tempAvailablePMTime.length * 76) / cardWidth))
+      setPmLines(1 + parseInt((tempAvailablePMTime.length) / 5))
     }
   }
 
@@ -287,11 +301,39 @@ function Calendar({ setIsFinishSet }) {
 
   }
 
-  useEffect(() => {
+  useEffect(async () => {
+    const res = await API.getConsultSchedule(
+      year,
+      new Date().getMonth() + 1,
+      params.id)
+    setOriginData(res.data.DayTimes.map((e) => {
+      return { date: e.Day, availableTime: e.StartEnds.map((time) => [time.StartTime, time.EndTime]) }
+    }))
+    setAvailableDates(res.data.DayTimes.map((e) => e.Day))
+
     setIsApplyPage(location.pathname.includes('reservation'))
     setDataFromLocalStorage()
   }, [])
 
+  const onMonthChange = async (month) => {
+    console.log(month)
+    const res = await API.getConsultSchedule(
+      year,
+      month.slice(0, month.length - 1),
+      params.id)
+    if (res.status === 200) {
+      if (res.data.DayTimes === null) {
+        setOriginData([])
+        setAvailableDates([])
+      } else {
+        setOriginData(res.data.DayTimes.map((e) => {
+          return { date: e.Day, availableTime: e.StartEnds.map((time) => [time.StartTime, time.EndTime]) }
+        }))
+        setAvailableDates(res.data.DayTimes.map((e) => e.Day))
+      }
+
+    }
+  }
 
   useEffect(() => {
     if (consultingStartTime == null) {
@@ -329,7 +371,11 @@ function Calendar({ setIsFinishSet }) {
             onClickAvailableDateProps={onClickAvailableDate}
             onDateChange={(dateObject) => {
               setSelectedDateObj(dateObject);
-            }} />
+            }}
+            onMonthChange={(month) => {
+              onMonthChange(month)
+            }
+            } />
 
 
           <TimeSelectWrapper
