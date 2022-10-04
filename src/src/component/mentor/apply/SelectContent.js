@@ -25,7 +25,7 @@ const IntroductionWrapper = styled(Flex)`
 `;
 
 const mentoringContents = {
-  '커리어 상담': ['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기'],
+  '커리어 상담': ['직무 이야기', '업계 이야기', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '진로 상담', '사내 문화', '면접 팁', '기타'],
   '전형 준비': ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰']
 }
 
@@ -118,7 +118,12 @@ function Introduction({ applyInformation }) {
                 addMentoringContent(value)
               }
               else if (mentoringCategory === '전형 준비') {
-                value.splice(value.indexOf(mentoringContent[0]), 1)
+                if (value.length === 2) {
+                  value.splice(value.indexOf(mentoringContent[0]), 1)
+                }
+                if (value.length === 0) {
+                  setContentGuide('')
+                }
                 setMentoringContent(value)
                 if (value in contentGuideObject) {
                   setContentGuide(contentGuideObject[value])
