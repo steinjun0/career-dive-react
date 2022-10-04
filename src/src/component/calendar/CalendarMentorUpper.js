@@ -104,10 +104,10 @@ function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp
               else {
                 if (date === selectedDate) {
                   return <SelectedDateBox key={`${weekIndex}${dateIndex}`}>{date}</SelectedDateBox>
-                } else if (availableDates.includes(date)) {
-                  return <AvailableDateBox onClick={() => { onClickDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
                 } else if (+month.slice(0, -1) <= (new Date().getMonth() + 1) && date < new Date().getDate()) {
                   return <DateDisableBox key={`${weekIndex}${dateIndex}`}>{date}</DateDisableBox>
+                } else if (availableDates.includes(date)) {
+                  return <AvailableDateBox onClick={() => { onClickDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
                 } else {
                   return <DateBox onClick={() => { onClickDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</DateBox>
                 }

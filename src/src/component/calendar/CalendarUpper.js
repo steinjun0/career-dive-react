@@ -108,10 +108,10 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
               else {
                 if (date === selectedDate) {
                   return <SelectedDateBox key={`${weekIndex}${dateIndex}`}>{date}</SelectedDateBox>
-                } else if (availableDates.includes(date)) {
-                  return <AvailableDateBox onClick={() => { onClickAvailableDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
                 } else if (+month.slice(0, -1) <= (new Date().getMonth() + 1) && date < new Date().getDate()) {
                   return <DateDisableBox key={`${weekIndex}${dateIndex}`}>{date}</DateDisableBox>
+                } else if (availableDates.includes(date)) {
+                  return <AvailableDateBox onClick={() => { onClickAvailableDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
                 } else {
                   return <DateBoxNoPointer key={`${weekIndex}${dateIndex}`}>{date}</DateBoxNoPointer>
                 }

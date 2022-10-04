@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from './pages/SignUp';
 import Mentor from "./pages/Mentor";
-import MentoringReservation from './pages/MentoringReservation'
+import MentoringReservation from './pages/request/MentoringReservation'
 import MentoringApply from './pages/MentoringApply'
 import MentoringApplyViewer from './pages/MentoringApplyViewer'
 import MentoringApplyViewerMentor from './pages/Mentor/MentoringApplyViewer'
