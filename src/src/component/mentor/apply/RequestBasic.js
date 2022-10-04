@@ -63,7 +63,7 @@ const CategoryTag = styled(TagLarge)`
 const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
   `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
 
-const maxLength = 1500;
+const maxLength = 600;
 
 function Request() {
   const mentoringCategory = '커리어 상담'
@@ -152,7 +152,9 @@ function Request() {
             placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
             minRows={5}
           />
-          <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+          <Flex style={{ justifyContent: 'end', marginTop: '4px' }}>
+            <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+          </Flex>
           <EmptyHeight height='16px' />
         </Card>
       </RequestCardWrapper >

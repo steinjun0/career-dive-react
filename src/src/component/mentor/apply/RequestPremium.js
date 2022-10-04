@@ -87,7 +87,7 @@ const belowGuideObject = {
   '포트폴리오 첨삭': `포트폴리오 초안을 업로드해 주세요.`,
 }
 
-const maxLength = 1500;
+const maxLength = 2000;
 
 function Request() {
   const mentoringCategory = '전형 준비'
@@ -194,7 +194,10 @@ function Request() {
             placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
             minRows={5}
           />
-          <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+          <Flex style={{ justifyContent: 'end', marginTop: '4px' }}>
+            <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+          </Flex>
+
           <EmptyHeight height='16px' />
 
 
