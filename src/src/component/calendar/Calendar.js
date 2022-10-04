@@ -311,7 +311,7 @@ function Calendar({ setIsFinishSet }) {
     }))
     setAvailableDates(res.data.DayTimes.map((e) => e.Day))
 
-    setIsApplyPage(location.pathname.includes('reservation'))
+    setIsApplyPage(location.pathname.includes('request'))
     setDataFromLocalStorage()
   }, [])
 
