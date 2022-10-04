@@ -39,6 +39,7 @@ function Introduction({ applyInformation }) {
         reservation['mentoringCategory'] && setMentoringCategory(reservation['mentoringCategory'])
         reservation['mentoringContent'] && setMentoringContent(reservation['mentoringContent'])
         reservation['consultingDate'] && setMentoringDate(new Date(reservation['consultingDate']['year'], reservation['consultingDate']['month'] - 1, reservation['consultingDate']['date']))
+        reservation['isFilePreOpen'] && setIsFilePreOpen(reservation['isFilePreOpen'])
       }
     }
   }, [])
@@ -50,9 +51,6 @@ function Introduction({ applyInformation }) {
     }
   }
 
-  useEffect(() => {
-    setMentoringContent([])
-  }, [mentoringCategory])
 
   const mentoringContents = {
     '커리어 상담': ['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기'],
@@ -79,7 +77,10 @@ function Introduction({ applyInformation }) {
             value={mentoringCategory}
             isExclusive={true}
             valueArray={['커리어 상담', '전형 준비']}
-            onChange={(event, value) => { setMentoringCategory(value) }}></CustomToggleButtonGroup>
+            onChange={(event, value) => {
+              setMentoringCategory(value)
+              setMentoringContent([])
+            }}></CustomToggleButtonGroup>
         </Flex>
         <EmptyHeight height='16px'></EmptyHeight>
 
@@ -110,9 +111,11 @@ function Introduction({ applyInformation }) {
           <TextBody2 color={colorTextLight}>현직자가 자료를 검토하면 더 효율적이고 깊은 대화를 나눌 수 있어요!</TextBody2>
           <CustomToggleButtonGroup
             value={isFilePreOpen}
-            isExclusive={false}
+            isExclusive={true}
             valueArray={['희망', '비희망']}
-            onChange={(event, value) => { setIsFilePreOpen(value) }}></CustomToggleButtonGroup>
+            onChange={(event, value) => {
+              setIsFilePreOpen(value);
+            }}></CustomToggleButtonGroup>
           <EmptyHeight height='28px' />
         </VerticalFlex>}
 
@@ -122,7 +125,8 @@ function Introduction({ applyInformation }) {
           onClick={() => {
             const updatingData = [
               { name: 'mentoringContent', data: mentoringContent },
-              { name: 'mentoringCategory', data: mentoringCategory }
+              { name: 'mentoringCategory', data: mentoringCategory },
+              { name: 'isFilePreOpen', data: isFilePreOpen }
             ]
             if (mentoringContent === []) {
               alert('상담 내용을 선택하세요')
