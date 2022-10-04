@@ -46,7 +46,12 @@ export function CustomToggleButtonGroup({ value, valueArray, onChange, isExclusi
     >
       {
         valueArray.map((value, index) => {
-          return <CustomToggleButton selected_color={selectedColor} background_color={backgroundColor} value={value} aria-label={`${value}`} key={index}>
+          return <CustomToggleButton
+            selected_color={selectedColor}
+            background_color={backgroundColor}
+            value={value}
+            aria-label={`${value}`}
+            key={index}>
             <TextBody2>{value}</TextBody2>
           </CustomToggleButton>
         })

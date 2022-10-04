@@ -1,4 +1,6 @@
 import {
+  colorBackgroundCareerDivePink,
+  colorCareerDivePink,
   colorTextLight,
   EmptyHeight,
   EmptyWidth,
@@ -22,6 +24,21 @@ const IntroductionWrapper = styled(Flex)`
   width: 100%;
 `;
 
+const mentoringContents = {
+  '커리어 상담': ['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기'],
+  '전형 준비': ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰']
+}
+
+const contentGuideObject = {
+  '면접 대비': `경력, 스펙 그리고 자소서를 토대로 한 예상 면접 질문을 제공합니다.`,
+  '자소서 구성': `${localStorage.getItem('UserID')}님의 경력과 스펙을 토대로 자기소개서 구성을 도와줍니다.`,
+  '자소서 첨삭': `${localStorage.getItem('UserID')}님이 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.`,
+  '포트폴리오 첨삭': `${localStorage.getItem('UserID')}님이 작성한 초안을 토대로 구성 및 내용 등에 관한 피드백을 제공합니다. `,
+  '이력서 첨삭': ``,
+  'CV/CL 첨삭': `${localStorage.getItem('UserID')}님이 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.`,
+  '코드 리뷰': `멘토는 작성된 코드를 토대로 피드백을 제공합니다.`
+}
+
 function Introduction({ applyInformation }) {
   const navigater = useNavigate()
   const params = useParams()
@@ -30,6 +47,8 @@ function Introduction({ applyInformation }) {
   const [mentoringContent, setMentoringContent] = useState([])
   const [mentoringDate, setMentoringDate] = useState()
   const [isFilePreOpen, setIsFilePreOpen] = useState()
+
+  const [contentGuide, setContentGuide] = useState('');
 
   useEffect(() => {
     const reservations = JSON.parse(localStorage.getItem('reservations'))
@@ -52,12 +71,6 @@ function Introduction({ applyInformation }) {
   }
 
 
-  const mentoringContents = {
-    '커리어 상담': ['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기'],
-    '전형 준비': ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰']
-  }
-
-
   return (
     <IntroductionWrapper>
       <Card
@@ -77,6 +90,8 @@ function Introduction({ applyInformation }) {
             value={mentoringCategory}
             isExclusive={true}
             valueArray={['커리어 상담', '전형 준비']}
+            selectedColor={mentoringCategory === '전형 준비' ? colorCareerDivePink : null}
+            backgroundColor={mentoringCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event, value) => {
               setMentoringCategory(value)
               setMentoringContent([])
@@ -96,8 +111,25 @@ function Introduction({ applyInformation }) {
             value={mentoringContent}
             isExclusive={false}
             valueArray={mentoringContents[mentoringCategory]}
-            onChange={(event, value) => { addMentoringContent(value) }}></CustomToggleButtonGroup>
+            selectedColor={mentoringCategory === '전형 준비' ? colorCareerDivePink : null}
+            backgroundColor={mentoringCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
+            onChange={(event, value) => {
+              if (mentoringCategory === '커리어 상담') {
+                addMentoringContent(value)
+              }
+              else if (mentoringCategory === '전형 준비') {
+                value.splice(value.indexOf(mentoringContent[0]), 1)
+                setMentoringContent(value)
+                if (value in contentGuideObject) {
+                  setContentGuide(contentGuideObject[value])
+                }
+              }
+
+
+            }}></CustomToggleButtonGroup>
         </Flex>
+        {mentoringCategory === '전형 준비' && <TextBody2 color={colorCareerDivePink} style={{ marginTop: '28px' }}>{contentGuide}</TextBody2>}
+
         <EmptyHeight height='28px' />
 
 
@@ -119,7 +151,6 @@ function Introduction({ applyInformation }) {
           <EmptyHeight height='28px' />
         </VerticalFlex>}
 
-
         <CustomButton
           height='52px'
           onClick={() => {
@@ -139,6 +170,7 @@ function Introduction({ applyInformation }) {
             }
           }}
         >
+
           <TextHeading6>
             다음
           </TextHeading6>
