@@ -1,5 +1,5 @@
 import { styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { colorBackgroundGrayLight, colorCareerDiveBlue, colorTextLight, TextBody2 } from '../styledComponent';
+import { colorBackgroundCareerDiveBlue, colorBackgroundGrayLight, colorCareerDiveBlue, colorTextLight, TextBody2 } from '../styledComponent';
 
 
 const CustomToggleButton = styled(ToggleButton)`
@@ -18,14 +18,14 @@ const CustomToggleButton = styled(ToggleButton)`
  width: auto;
 
  &.Mui-selected {
-  color: ${colorCareerDiveBlue};
-  border: 1px ${colorCareerDiveBlue} solid !important;
-  background-color: rgba(105, 140, 255, 0.2);
+  color: ${props => props.selected_color || colorCareerDiveBlue};
+  border: 1px ${props => props.selected_color || colorCareerDiveBlue} solid !important;
+  background-color: ${props => props.background_color || colorBackgroundCareerDiveBlue}; 
  }
  &.Mui-selected:hover {
-  color: ${colorCareerDiveBlue};
-  border: 1px ${colorCareerDiveBlue} solid !important;
-  background-color: rgba(105, 140, 255, 0.3);
+  color: ${props => props.selected_color || colorCareerDiveBlue};
+  border: 1px ${props => props.selected_color || colorCareerDiveBlue} solid !important;
+  background-color: ${props => props.background_color || colorBackgroundCareerDiveBlue}; 
  }
 `
 
@@ -36,7 +36,7 @@ const CustomToggleButtonWrapper = styled(ToggleButtonGroup)`
   padding-left:1px;
 `
 
-export function CustomToggleButtonGroup({ value, valueArray, onChange, isExclusive }) {
+export function CustomToggleButtonGroup({ value, valueArray, onChange, isExclusive, selectedColor, backgroundColor }) {
   return (
     <CustomToggleButtonWrapper
       value={value}
@@ -46,7 +46,7 @@ export function CustomToggleButtonGroup({ value, valueArray, onChange, isExclusi
     >
       {
         valueArray.map((value, index) => {
-          return <CustomToggleButton value={value} aria-label={`${value}`} key={index}>
+          return <CustomToggleButton selected_color={selectedColor} background_color={backgroundColor} value={value} aria-label={`${value}`} key={index}>
             <TextBody2>{value}</TextBody2>
           </CustomToggleButton>
         })
