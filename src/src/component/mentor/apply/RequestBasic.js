@@ -13,7 +13,8 @@ import {
   VerticalFlex,
   colorBackgroundCareerDiveBlue,
   colorCareerDivePink,
-  colorBackgroundCareerDivePink
+  colorBackgroundCareerDivePink,
+  TextCaption
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
@@ -62,6 +63,8 @@ const CategoryTag = styled(TagLarge)`
 const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
   `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
 
+const maxLength = 1500;
+
 function Request() {
   const mentoringCategory = '커리어 상담'
   const [mentoringContents, setMentoringContents] = useState([])
@@ -69,6 +72,8 @@ function Request() {
   const [consultingStartTime, setConsultingStartTime] = useState()
   const [consultingTime, setConsultingTime] = useState(20)
   const [applymentContent, setApplymentContent] = useState('')
+
+  const [requestText, setRequestText] = useState('');
 
   const params = useParams()
 
@@ -140,12 +145,14 @@ function Request() {
               const updatingData = [
                 { name: 'applymentContent', data: event.target.value },
               ]
+              setRequestText(event.target.value)
               updateReservation(params.id, updatingData)
             }}
-
+            maxLength={maxLength}
             placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
             minRows={5}
           />
+          <TextCaption>{requestText.length}/{maxLength}</TextCaption>
           <EmptyHeight height='16px' />
         </Card>
       </RequestCardWrapper >
