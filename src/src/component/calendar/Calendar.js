@@ -402,10 +402,10 @@ function Calendar({ setIsFinishSet }) {
 
           <TimeSelectWrapper
             is_show={(selectedDate != 0).toString()}
-            height={consultingStartTime == 0 ? 56 : 76}
+            height={consultingStartTime == 0 ? 0 : 76}
           >
             <DateTitle>
-              상담 시작 시간
+              상담 진행 시간
             </DateTitle>
             <EmptyHeight height='16px' />
             <TextSubtitle1 color={colorCareerDiveBlue}>
