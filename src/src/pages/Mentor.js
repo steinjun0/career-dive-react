@@ -81,7 +81,7 @@ function Mentor() {
         <MaxWidthDiv>
           <MetorProfileBanner>
 
-            <MentorProfile name={nickName} discription={`${mentorData.CompName} | ${mentorData.DivisInComp} | ${mentorData.Job}`} />
+            <MentorProfile name={nickName} discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`} />
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
