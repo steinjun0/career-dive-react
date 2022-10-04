@@ -233,6 +233,7 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                                     }}
                                     onClick={() => {
                                         mentorInfoState.setLowerJobCategory(e)
+                                        setIsShowCategoryDropDown(false)
                                     }}>
                                     <TextBody2 style={{ lineHeight: '28px' }}>{e}</TextBody2>
                                 </Flex>
