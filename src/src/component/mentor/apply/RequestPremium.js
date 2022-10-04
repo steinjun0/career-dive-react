@@ -76,6 +76,17 @@ const CategoryTag = styled(TagLarge)`
 const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
   `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
 
+const upperGuideObject = {
+  '자소서 구성': `${localStorage.getItem('UserID')}님의 경력과 스펙을 작성해 주세요.`,
+  '면접 대비': `${localStorage.getItem('UserID')}님의 자소서, 경력, 스펙 등을 작성해 주세요. 멘토는 이를 토대로 한 예상 면접 질문을 제공합니다.`
+}
+const belowGuideObject = {
+  '자소서 첨삭': `자소서 초안을 업로드해 주세요.`,
+  'CV/CL 첨삭': `CV 혹은 커버레터 초안을 업로드해 주세요.`,
+  '코드 리뷰': `멘토가 리뷰할 코드를 업로드해 주세요.`,
+  '포트폴리오 첨삭': `포트폴리오 초안을 업로드해 주세요.`,
+}
+
 function Request() {
   const mentoringCategory = '전형 준비'
 
@@ -85,6 +96,9 @@ function Request() {
   const [consultingStartTime, setConsultingStartTime] = useState()
   const [consultingTime, setConsultingTime] = useState(20)
   const [applymentContent, setApplymentContent] = useState('')
+
+  const [upperGuide, setUpperGuide] = useState('')
+  const [belowGuide, setBelowGuide] = useState('')
 
   const params = useParams()
 
@@ -96,6 +110,16 @@ function Request() {
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
       setApplymentContent(reservation['applymentContent'])
+
+      if (reservation['mentoringCategory'] === '전형 준비') {
+        if (reservation['mentoringContent'][0] in upperGuideObject) {
+          setUpperGuide(upperGuideObject[reservation['mentoringContent'][0]])
+        }
+        if (reservation['mentoringContent'][0] in belowGuideObject) {
+          setBelowGuide(belowGuideObject[reservation['mentoringContent'][0]])
+        }
+      }
+
     } catch (error) {
       console.log(error)
       alert('누락된 상담 내용 정보가 있습니다.')
@@ -142,9 +166,9 @@ function Request() {
             <br></br>
             • &nbsp;&nbsp;선택하신 희망 상담 내용 이외의 정보(섭외, 광고 등)를 요청할 수 없습니다.
           </TextBody2>
-          <TextBody2 color={colorCareerDivePink}>
-            • &nbsp;&nbsp;자소서 초안(최대 1,500자)을 업로드해 주세요. 멘토는 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.
-          </TextBody2>
+          {upperGuide !== '' && <TextBody2 color={colorCareerDivePink}>
+            • &nbsp;&nbsp;{upperGuide}
+          </TextBody2>}
           <EmptyHeight height='16px' />
           <CustomTextArea
             defaultValue={applymentContent}
@@ -169,7 +193,7 @@ function Request() {
 
           <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
           <TextBody2 color={colorCareerDivePink}>
-            (닉네임)님의 경력과 스펙을 작성해 주세요.
+            {belowGuide}
           </TextBody2>
           <EmptyHeight height='8px' />
           {/* TODO: upload 파일 취소 버튼 필요 */}
