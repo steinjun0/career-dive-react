@@ -30,6 +30,8 @@ import MentorRegister from "pages/MentorRegister";
 import MentorMyPage from "./pages/Mentor/MyPage";
 import CareerInfoChange from "component/myPage/\bCareerInfoChange";
 
+import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
+
 
 const theme = createTheme({
   palette: {
@@ -65,6 +67,7 @@ ReactDOM.render(
           <Route path="/mentorCard/:id" element={<Mentor />} />
           <Route path="/mentee/request/:id" element={<MentoringReservation />} />
           <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
+          <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />
           {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}
           <Route path="/mentee/sessionList/form/:id" element={<MentoringApplyViewer />} />
           <Route path="/mentee/sessionList" element={<Schedule />} />

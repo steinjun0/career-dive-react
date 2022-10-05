@@ -24,7 +24,7 @@ import { CustomButton } from "util/Custom/CustomButton";
 import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 import { CustomTextField } from "util/Custom/CustomTextField";
 import CustomTextField1 from "util/Custom/CustomTextField1";
@@ -38,6 +38,8 @@ const ApplyButton = styled(CustomButton)`
   width: 378px;
   margin-top: 30px;
   margin-left: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
 const getCategoryColor = (category) => {
@@ -93,6 +95,8 @@ const belowGuideObject = {
 const maxLength = 2000;
 
 function Request() {
+  const params = useParams()
+  const navigate = useNavigate()
   const mentoringCategory = '전형 준비'
 
   const [mentoringContents, setMentoringContents] = useState([])
@@ -107,7 +111,7 @@ function Request() {
   const [upperGuide, setUpperGuide] = useState('')
   const [belowGuide, setBelowGuide] = useState('')
 
-  const params = useParams()
+
 
   useEffect(() => {
     try {
@@ -212,7 +216,7 @@ function Request() {
           {/* TODO: upload 파일 취소 버튼 필요 */}
           <Dropzone onDrop={acceptedFiles => {
             if (uploadingFiles.length + acceptedFiles.length > 2) {
-              alert('업로드 파일이 3개 이상입니다.')
+              alert('업로드 파일은 최대 2개입니다.')
               return
             }
             const temp = []
@@ -255,7 +259,10 @@ function Request() {
         </Card>
       </RequestCardWrapper >
 
-      <ApplyButton>
+      <ApplyButton
+        onClick={() => {
+          navigate('/mentee/request/finish')
+        }}>
         <TextHeading6>
           다음
         </TextHeading6>

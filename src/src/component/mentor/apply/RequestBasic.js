@@ -21,7 +21,7 @@ import { TagLarge } from "util/Custom/CustomTag";
 import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
@@ -66,6 +66,8 @@ const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
 const maxLength = 600;
 
 function Request() {
+  const navigate = useNavigate()
+
   const mentoringCategory = '커리어 상담'
   const [mentoringContents, setMentoringContents] = useState([])
   const [consultingDate, setConsultingDate] = useState({})
@@ -159,7 +161,10 @@ function Request() {
         </Card>
       </RequestCardWrapper >
 
-      <ApplyButton>
+      <ApplyButton
+        onClick={() => {
+          navigate('/mentee/request/finish')
+        }}>
         <TextHeading6>
           다음
         </TextHeading6>
