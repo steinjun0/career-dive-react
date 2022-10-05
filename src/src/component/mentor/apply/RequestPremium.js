@@ -14,7 +14,8 @@ import {
   colorBackgroundCareerDiveBlue,
   colorCareerDivePink,
   colorBackgroundCareerDivePink,
-  TextCaption
+  TextCaption,
+  TextSubtitle2
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
@@ -25,6 +26,8 @@ import UploadIcon from 'assets/icon/UploadIcon'
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
+import { CustomTextField } from "util/Custom/CustomTextField";
+import CustomTextField1 from "util/Custom/CustomTextField1";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -241,7 +244,14 @@ function Request() {
                 }}>삭제</TextBody2>
             </Flex>
           })}
-          <EmptyHeight height='16px' />
+          {/* <Flex>
+            <Flex style={{ width: '320px' }}>
+              <CustomTextField1 fullWidth={'320px'} placeholder={'링크'}></CustomTextField1>
+            </Flex>
+            <EmptyWidth width={'16px'} />
+            <CustomButton style={{ padding: '12px 28px' }}><TextSubtitle2>추가</TextSubtitle2></CustomButton>
+          </Flex> */}
+
         </Card>
       </RequestCardWrapper >
 
