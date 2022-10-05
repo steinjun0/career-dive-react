@@ -229,7 +229,17 @@ function Request() {
           </Dropzone>
           <EmptyHeight height='16px' />
           {uploadingFiles.map((items, index) => {
-            return <UnderlineText key={index}>{items}</UnderlineText>
+            return <Flex key={index}>
+              <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items}</TextBody2>
+              <TextBody2
+                style={{ cursor: 'pointer' }}
+                color={colorCareerDivePink}
+                onClick={() => {
+                  const temp = JSON.parse(JSON.stringify(uploadingFiles))
+                  temp.splice(temp.indexOf(items), 1)
+                  setUploadingFiles(temp)
+                }}>삭제</TextBody2>
+            </Flex>
           })}
           <EmptyHeight height='16px' />
         </Card>
