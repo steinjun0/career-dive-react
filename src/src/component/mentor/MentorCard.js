@@ -36,8 +36,9 @@ function MentorCard({
     <LinkNoDeco to={"/mentorCard/" + userId}>
       <Card
         title={
-          <TextHeading6>{company}</TextHeading6>
-
+          <Flex>
+            <TextHeading6>{company}</TextHeading6>
+          </Flex>
         }
         no_divider="true"
         min_width="228px"
@@ -66,6 +67,7 @@ function MentorCard({
             <Flex>
               {tags.map((e, i) =>
                 <TextBody2
+                  key={i}
                   style={{ marginRight: i !== (tags.length - 1) && '8px' }}
                   line_height={'18px'}
                   color={colorTextLight}>
