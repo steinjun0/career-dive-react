@@ -39,6 +39,11 @@ const contentGuideObject = {
   '코드 리뷰': `멘토는 작성된 코드를 토대로 피드백을 제공합니다.`
 }
 
+const mentoringCategoryConverter = {
+  '커리어 상담': 'careerConsult',
+  '전형 준비': 'prepare'
+}
+
 function Introduction({ applyInformation }) {
   const navigater = useNavigate()
   const params = useParams()
@@ -158,6 +163,7 @@ function Introduction({ applyInformation }) {
 
         <CustomButton
           height='52px'
+          disabled={mentoringContent.length <= 0}
           onClick={() => {
             const updatingData = [
               { name: 'mentoringContent', data: mentoringContent },
@@ -171,7 +177,7 @@ function Introduction({ applyInformation }) {
               alert('상담 유형을 선택하세요')
             } else {
               updateReservation(params.id, updatingData)
-              navigater(`/mentee/request/form/generalType1/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
+              navigater(`/mentee/request/form/${mentoringCategoryConverter[mentoringCategory]}/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
             }
           }}
         >

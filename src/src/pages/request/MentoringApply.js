@@ -29,6 +29,7 @@ const CardsWrapper = styled(Flex)`
 
 
 function MentoringReservation() {
+  const params = useParams()
   return (
     <div>
       <FullWidthWrapper>
@@ -44,8 +45,8 @@ function MentoringReservation() {
                 {/* {
                   isPremium ? <RequestPremium /> : <RequestBasic />
                 } */}
-                <RequestPremium />
-                <RequestBasic />
+                {params.type === 'careerConsult' && <RequestBasic />}
+                {params.type === 'prepare' && <RequestPremium />}
               </Grid>
             </Grid>
             <CardsWrapper>
