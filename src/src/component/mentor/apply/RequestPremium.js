@@ -114,6 +114,7 @@ function Request() {
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()
   const [consultingTime, setConsultingTime] = useState(20)
+  const [scheduleId, setScheduleId] = useState(0)
   const [applymentContent, setApplymentContent] = useState('')
 
   const [requestText, setRequestText] = useState('');
@@ -130,6 +131,7 @@ function Request() {
       setConsultingDate(reservation['consultingDate'])
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
+      setScheduleId(reservation['scheduleId'])
       setApplymentContent(reservation['applymentContent'])
 
       if (reservation['mentoringCategory'] === '전형 준비') {
@@ -275,12 +277,12 @@ function Request() {
           const endTimeDate = new Date(startTimeDate.getTime() + consultingTime * 60000)
           API.postConsult({
             requestContent: requestText,
-            startTime: startTimeDate,
-            endTime: endTimeDate,
-            menteeId: localStorage.getItem('UserID'),
-            mentorId: params.id,
+            startTime: `${startTimeDate.getFullYear()}-${startTimeDate.getMonth().toString().padStart(2, '0')}-${startTimeDate.getDate().toString().padStart(2, '0')} ${startTimeDate.getHours().toString().padStart(2, '0')}:${startTimeDate.getMinutes().toString().padStart(2, '0')}`,
+            endTime: `${endTimeDate.getFullYear()}-${endTimeDate.getMonth().toString().padStart(2, '0')}-${endTimeDate.getDate().toString().padStart(2, '0')} ${endTimeDate.getHours().toString().padStart(2, '0')}:${endTimeDate.getMinutes().toString().padStart(2, '0')}`,
+            menteeId: +localStorage.getItem('UserID'),
+            mentorId: +params.id,
             type: 'premium',
-            scheduleId: '',
+            scheduleId: scheduleId
             // TODO calendar 구조 변경하기
             // onClick과 같은 함수는 범용 props를 받도록 설정하기(적어도 object로)
             // 특정 type 만 받도록 하면 다 수정해야한다.

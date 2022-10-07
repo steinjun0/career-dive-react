@@ -222,13 +222,13 @@ export default {
     return scheduleRes
   },
 
-  async postConsult({ startTime, endTime, menteeId, mentorId, requestContent, type, scheduleID, preReview }) {
-    console.log({ startTime, endTime, menteeId, mentorId, requestContent, type, scheduleID, preReview })
+  async postConsult({ startTime, endTime, menteeId, mentorId, requestContent, type, scheduleId, preReview }) {
+    console.log({ startTime, endTime, menteeId, mentorId, requestContent, type, scheduleId, preReview })
     const res = await this.postAxios(`${CAREER_DIVE_API_URL}/consult`, {
       StartTime: startTime, EndTime: endTime,
       MenteeId: menteeId, MentorId: mentorId,
       RequestContent: requestContent,
-      ScheduleID: scheduleID,
+      ScheduleID: scheduleId,
       PreReview: preReview,
       Type: type
     })

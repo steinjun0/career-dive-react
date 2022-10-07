@@ -169,8 +169,10 @@ function Calendar({ setIsFinishSet }) {
     function getAvailableTimes(consultingTime, selectedDate) {
       let tempAvailableTimes = []
       originData.forEach((element) => {
+        console.log('element', element)
         if (element.Day === selectedDate) {
           for (const schedule of element.StartEnds) {
+            console.log('schedule', schedule)
             let termCount = 0
             const startDate = new Date(`2021/01/01 ${schedule.StartTime}`);
             const endDate = new Date(`2021/01/01 ${schedule.EndTime}`);

@@ -46,16 +46,9 @@ export const getDayInKorean = (date) => {
 }
 
 export const updateReservation = (id, updateDataArray) => {
-  let prefix = ''
-  if (isMentorUrl()) {
-    prefix = 'mentor'
-  } else {
-    prefix = 'mentee'
-  }
-
   let reservations = JSON.parse(localStorage.getItem(`reservations`))
   let reservation = {}
-
+  console.log('reservations', reservations)
   if (reservations !== null) {
     if (id in reservations) {
       reservation = reservations[id]
