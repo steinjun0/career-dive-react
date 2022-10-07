@@ -277,8 +277,8 @@ function Request() {
           const endTimeDate = new Date(startTimeDate.getTime() + consultingTime * 60000)
           API.postConsult({
             requestContent: requestText,
-            startTime: `${startTimeDate.getFullYear()}-${startTimeDate.getMonth().toString().padStart(2, '0')}-${startTimeDate.getDate().toString().padStart(2, '0')} ${startTimeDate.getHours().toString().padStart(2, '0')}:${startTimeDate.getMinutes().toString().padStart(2, '0')}`,
-            endTime: `${endTimeDate.getFullYear()}-${endTimeDate.getMonth().toString().padStart(2, '0')}-${endTimeDate.getDate().toString().padStart(2, '0')} ${endTimeDate.getHours().toString().padStart(2, '0')}:${endTimeDate.getMinutes().toString().padStart(2, '0')}`,
+            startTime: `${startTimeDate.getHours().toString().padStart(2, '0')}:${startTimeDate.getMinutes().toString().padStart(2, '0')}`,
+            endTime: `${endTimeDate.getHours().toString().padStart(2, '0')}:${endTimeDate.getMinutes().toString().padStart(2, '0')}`,
             menteeId: +localStorage.getItem('UserID'),
             mentorId: +params.id,
             type: 'premium',
