@@ -28,6 +28,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 import { CustomTextField } from "util/Custom/CustomTextField";
 import CustomTextField1 from "util/Custom/CustomTextField1";
+import API from "API"
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -78,8 +79,17 @@ const CategoryTag = styled(TagLarge)`
   color:${props => getCategoryColor(props.category)};
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
-const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
-  `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
+const getConsultingRangeInKorean = (consultingStartTime, consultingTime) => {
+  const consultingStartTimeDate = new Date(`2022-01-02 ${consultingStartTime}`);
+  if (!isNaN(consultingStartTimeDate.getTime())) {
+    const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+    const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+    return `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(consultingEndTime)} ${consultingEndTime}`
+  }
+  else {
+    return ''
+  }
+}
 
 const upperGuideObject = {
   '자소서 구성': `${localStorage.getItem('UserID')}님의 경력과 스펙을 작성해 주세요.`,
@@ -130,11 +140,11 @@ function Request() {
           setBelowGuide(belowGuideObject[reservation['mentoringContent'][0]])
         }
       }
-
     } catch (error) {
       console.log(error)
       alert('누락된 상담 내용 정보가 있습니다.')
     }
+
   }, [])
 
   return (
@@ -261,6 +271,20 @@ function Request() {
 
       <ApplyButton
         onClick={() => {
+          const startTimeDate = new Date(`${consultingDate['year']}-${consultingDate['month']}-${consultingDate['date']} ${consultingStartTime}`)
+          const endTimeDate = new Date(startTimeDate.getTime() + consultingTime * 60000)
+          API.postConsult({
+            requestContent: requestText,
+            startTime: startTimeDate,
+            endTime: endTimeDate,
+            menteeId: localStorage.getItem('UserID'),
+            mentorId: params.id,
+            type: 'premium',
+            scheduleId: '',
+            // TODO calendar 구조 변경하기
+            // onClick과 같은 함수는 범용 props를 받도록 설정하기(적어도 object로)
+            // 특정 type 만 받도록 하면 다 수정해야한다.
+          })
           navigate('/mentee/request/finish')
         }}>
         <TextHeading6>

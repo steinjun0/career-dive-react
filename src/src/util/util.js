@@ -10,18 +10,18 @@ export const getDifferenceMinutes = (startTime, finishTime) => {
   return mm
 }
 
-export const addMinute = (hourAndMin, addingMin) => {
+export const addMinute = (beforeDate, addingMin) => {
 
-  const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
+  // const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
   const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
 
   const hour = `${'00' + afterDate.getHours()}`.slice(-2)
   const min = `${'00' + afterDate.getMinutes()}`.slice(-2)
 
-  if (isNaN(hour) || isNaN(hour)) {
+  if (isNaN(hour) || isNaN(min)) {
     return ''
   }
-  return `${hour}:${min}`
+  return afterDate
 }
 
 export const getAMOrPM = (hourAndMin) => {

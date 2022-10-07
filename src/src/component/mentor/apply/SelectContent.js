@@ -168,7 +168,7 @@ function Introduction({ applyInformation }) {
             const updatingData = [
               { name: 'mentoringContent', data: mentoringContent },
               { name: 'mentoringCategory', data: mentoringCategory },
-              { name: 'isFilePreOpen', data: isFilePreOpen }
+              { name: 'isFilePreOpen', data: isFilePreOpen },
             ]
             if (mentoringContent === []) {
               alert('상담 내용을 선택하세요')

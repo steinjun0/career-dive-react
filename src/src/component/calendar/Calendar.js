@@ -16,7 +16,7 @@ import {
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { addMinute, checkUrlInclude, isMentorUrl, updateReservation, usePrevious } from "util/util";
+import { addMinute, isMentorUrl, updateReservation, usePrevious } from "util/util";
 import CalendarUpper from "component/calendar/CalendarUpper";
 import API from 'API';
 
@@ -76,6 +76,7 @@ const TimeButtonWrapper = styled(ToggleButtonGroup)`
 `
 
 function SelectionConsultingStartTime({ title, timeArray, consultingStartTime, onClickconsultingStartTime }) {
+
   if (timeArray.length == 0) {
     return <div></div>
   } else {
@@ -87,9 +88,11 @@ function SelectionConsultingStartTime({ title, timeArray, consultingStartTime, o
         </DateTitle>
         <CustomToggleButtonGroup
           value={consultingStartTime}
-          valueArray={timeArray}
+          valueArray={timeArray.map((e) => e.time)}
           isExclusive={true}
-          onChange={onClickconsultingStartTime}
+          onChange={(e, v) => {
+            onClickconsultingStartTime(e, v)
+          }}
           aria-label="text alignment"
         />
       </VerticalFlex>
@@ -98,30 +101,12 @@ function SelectionConsultingStartTime({ title, timeArray, consultingStartTime, o
 
 }
 
-// const originData = [{ date: 9, availableTime: [['09:00', '10:30']] },
-// { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
-// { date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
-// { date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
-// { date: 17, availableTime: [['09:00', '09:30']] },
-// { date: 18, availableTime: [['09:00', '09:30']] },
-// ]
-
-// const availableDates = [9, 10, 11, 16, 17, 18];
-
-
 function Calendar({ setIsFinishSet }) {
   const navigater = useNavigate();
   const params = useParams();
   const location = useLocation();
   const [isApplyPage, setIsApplyPage] = useState(false);
 
-  // const [originData, setOriginData] = useState([{ date: 9, availableTime: [['09:00', '10:30']] },
-  // { date: 10, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['13:30', '14:30']] },
-  // { date: 11, availableTime: [['09:00', '09:30'], ['17:00', '19:00']] },
-  // { date: 16, availableTime: [['09:00', '09:30'], ['12:00', '13:00'], ['17:00', '19:00'], ['21:00', '22:00']] },
-  // { date: 17, availableTime: [['09:00', '09:30']] },
-  // { date: 18, availableTime: [['09:00', '09:30']] },
-  // ])
   const [originData, setOriginData] = useState([])
 
   const [availableDates, setAvailableDates] = useState([]);
@@ -132,14 +117,15 @@ function Calendar({ setIsFinishSet }) {
 
   const [selectedDate, setSelectedDate] = useState(0);
 
-  const [availableAMTime, setAvailableAMTime] = useState([]);
-  const [availablePMTime, setAvailablePMTime] = useState([]);
+  const [availableAMTimes, setAvailableAMTimes] = useState([]);
+  const [availablePMTimes, setAvailablePMTimes] = useState([]);
 
   const [amLines, setAmLines] = useState(0)
   const [pmLines, setPmLines] = useState(0)
 
   const [consultingTime, setConsultingTime] = useState(-1);
   const [consultingStartTime, setConsultingStartTime] = useState(0);
+  const [scheduleId, setScheduleId] = useState();
 
   const [selectedDateObj, setSelectedDateObj] = useState(new Date());
 
@@ -175,45 +161,47 @@ function Calendar({ setIsFinishSet }) {
     setSelectedDate(date);
     setConsultingTime(0);
     setConsultingStartTime(0);
-    setAvailableAMTime([])
-    setAvailablePMTime([])
+    setAvailableAMTimes([])
+    setAvailablePMTimes([])
   }
 
   const updateAvailableTimes = (consultingTime, selectedDate) => {
-    let tempAvailableTime = []
-    originData.forEach((element) => {
-      if (element.date === selectedDate) {
-        for (const time of element.availableTime) {
-          let termCount = 0
-          while (new Date(`2021/01/01 ${time[1]}`) - new Date(`2021/01/01 ${time[0]}`) > (consultingTime * 60 * 1000 + 10) * (termCount + 1)) {
-            const addingTime = Number(time[0].slice(3)) + termCount * 30
-            let addedHour = Number(time[0].slice(0, 2)) + parseInt(addingTime / 60)
-            let addedMin
-            if (addingTime % 60 == 30) {
-              addedMin = '30'
-            } else if (addingTime % 60 == 0) {
-              addedMin = '00'
+    function getAvailableTimes(consultingTime, selectedDate) {
+      let tempAvailableTimes = []
+      originData.forEach((element) => {
+        if (element.Day === selectedDate) {
+          for (const schedule of element.StartEnds) {
+            let termCount = 0
+            const startDate = new Date(`2021/01/01 ${schedule.StartTime}`);
+            const endDate = new Date(`2021/01/01 ${schedule.EndTime}`);
+            while (endDate > addMinute(startDate, termCount * 30 + consultingTime)) {
+              const caculatedTime = addMinute(startDate, termCount * 30);
+              const tempAvailableTime = `${caculatedTime.getHours()}`.padStart(2, '0') +
+                ":" +
+                `${caculatedTime.getMinutes()}`.padStart(2, '0')
+              tempAvailableTimes.push({ time: tempAvailableTime, scheduleId: schedule.ScheduleID })
+              termCount += 1
             }
-            addedHour = `${addedHour}`.padStart(2, '0')
-
-            const addedTime = addedHour + ':' + addedMin
-            tempAvailableTime.push(addedTime)
-            termCount += 1
           }
         }
-      }
-    })
-    let tempAvailableAMTime = []
-    let tempAvailablePMTime = []
-    tempAvailableTime.forEach((element) => {
-      if (Number(element.slice(0, 2)) < 12) {
-        tempAvailableAMTime.push(element)
+      })
+      return tempAvailableTimes
+    }
+
+    const availableTimes = getAvailableTimes(consultingTime, selectedDate)
+
+    let tempavailableAMTimes = []
+    let tempavailablePMTimes = []
+    availableTimes.forEach((element) => {
+      if (Number(element.time.slice(0, 2)) < 12) {
+        tempavailableAMTimes.push(element)
       } else {
-        tempAvailablePMTime.push(element)
+        tempavailablePMTimes.push(element)
       }
     })
-    setAvailableAMTime(tempAvailableAMTime)
-    setAvailablePMTime(tempAvailablePMTime)
+
+    setAvailableAMTimes(tempavailableAMTimes)
+    setAvailablePMTimes(tempavailablePMTimes)
     // window.innerWidth / 2 : 6 grid
     // - 48 : card padding
     // - 60 : page padding
@@ -225,19 +213,19 @@ function Calendar({ setIsFinishSet }) {
       if (cardWidth < 520) cardWidth = 520
     }
 
-    if (tempAvailableAMTime.length === 0) {
+    if (tempavailableAMTimes.length === 0) {
       setAmLines(0)
     }
     else {
       // cardwidth로 나누는건 반응형 도입 이후
-      setAmLines(1 + parseInt((tempAvailableAMTime.length) / 5))
+      setAmLines(1 + parseInt((tempavailableAMTimes.length) / 5))
     }
 
-    if (tempAvailablePMTime.length === 0) {
+    if (tempavailablePMTimes.length === 0) {
       setPmLines(0)
     }
     else {
-      setPmLines(1 + parseInt((tempAvailablePMTime.length) / 5))
+      setPmLines(1 + parseInt((tempavailablePMTimes.length) / 5))
     }
   }
 
@@ -254,6 +242,13 @@ function Calendar({ setIsFinishSet }) {
 
   const onClickconsultingStartTime = (event, consultingStartTime) => {
     setConsultingStartTime(consultingStartTime)
+
+    Array(...availableAMTimes, ...availablePMTimes).map((e) => {
+      if (e.time === consultingStartTime) {
+        console.log('e.scheduleId', e.scheduleId)
+        setScheduleId(e.scheduleId)
+      }
+    })
   }
 
 
@@ -266,13 +261,6 @@ function Calendar({ setIsFinishSet }) {
   }, [consultingTime])
 
   const setDataFromLocalStorage = () => {
-    let prefix = ''
-    if (isMentorUrl()) {
-      prefix = 'mentor'
-    } else {
-      prefix = 'mentee'
-    }
-
     const reservations = JSON.parse(localStorage.getItem(`reservations`))
     if (reservations !== null) {
       const reservation = reservations[params.id]
@@ -306,17 +294,18 @@ function Calendar({ setIsFinishSet }) {
       year,
       new Date().getMonth() + 1,
       params.id)
-    setOriginData(res.data.DayTimes.map((e) => {
-      return { date: e.Day, availableTime: e.StartEnds.map((time) => [time.StartTime, time.EndTime]) }
-    }))
+    setOriginData(res.data.DayTimes)
     setAvailableDates(res.data.DayTimes.map((e) => e.Day))
+    let scheduleIdsTemp = {}
+    res.data.DayTimes.map((e) => {
+      Object.assign(scheduleIdsTemp, {})
+    })
 
     setIsApplyPage(location.pathname.includes('request'))
     setDataFromLocalStorage()
   }, [])
 
   const onMonthChange = async (month) => {
-    console.log(month)
     const res = await API.getConsultSchedule(
       year,
       month.slice(0, month.length - 1),
@@ -326,9 +315,7 @@ function Calendar({ setIsFinishSet }) {
         setOriginData([])
         setAvailableDates([])
       } else {
-        setOriginData(res.data.DayTimes.map((e) => {
-          return { date: e.Day, availableTime: e.StartEnds.map((time) => [time.StartTime, time.EndTime]) }
-        }))
+        setOriginData(res.data.DayTimes)
         setAvailableDates(res.data.DayTimes.map((e) => e.Day))
       }
 
@@ -344,6 +331,7 @@ function Calendar({ setIsFinishSet }) {
         { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
         { name: 'consultingTime', data: consultingTime },
         { name: 'consultingStartTime', data: consultingStartTime },
+        { name: 'scheduleId', data: scheduleId },
       ]
       setIsFinishSet && setIsFinishSet(true)
       updateReservation(params.id, updatingData)
@@ -355,6 +343,7 @@ function Calendar({ setIsFinishSet }) {
 
 
   useEffect(() => {
+    console.log(availableDates)
     setSelectedDate(selectedDateObj.getDate())
     setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
@@ -410,7 +399,13 @@ function Calendar({ setIsFinishSet }) {
             <EmptyHeight height='16px' />
             <TextSubtitle1 color={colorCareerDiveBlue}>
               {
-                consultingStartTime === 0 ? '' : `${consultingStartTime} ~ ${addMinute(consultingStartTime, consultingTime)}`
+
+                consultingStartTime === 0 ? '' : `${consultingStartTime}` +
+                  '~' +
+                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getHours()
+                    }`.padStart(2, '0') +
+                  ':' +
+                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getMinutes()} `.padStart(2, '0')
               }
 
 
@@ -425,14 +420,14 @@ function Calendar({ setIsFinishSet }) {
               title={'오전'}
               consultingStartTime={consultingStartTime}
               onClickconsultingStartTime={onClickconsultingStartTime}
-              timeArray={availableAMTime}
+              timeArray={availableAMTimes}
             />
 
             <SelectionConsultingStartTime
               title={'오후'}
               consultingStartTime={consultingStartTime}
               onClickconsultingStartTime={onClickconsultingStartTime}
-              timeArray={availablePMTime}
+              timeArray={availablePMTimes}
             />
             <EmptyHeight height='28px'></EmptyHeight>
             <CustomButton
@@ -442,9 +437,10 @@ function Calendar({ setIsFinishSet }) {
                   { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
                   { name: 'consultingTime', data: consultingTime },
                   { name: 'consultingStartTime', data: consultingStartTime },
+                  { name: 'scheduleId', data: scheduleId }
                 ]
                 updateReservation(params.id, updatingData)
-                navigater(`/mentee/request/${params.id}`)
+                navigater(`/ mentee / request / ${params.id} `)
               }}>
               신청
             </CustomButton>
