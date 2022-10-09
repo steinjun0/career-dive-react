@@ -442,7 +442,7 @@ function Calendar({ setIsFinishSet }) {
                   { name: 'scheduleId', data: scheduleId }
                 ]
                 updateReservation(params.id, updatingData)
-                navigater(`/ mentee / request / ${params.id} `)
+                navigater(`/mentee/request/${params.id}`)
               }}>
               신청
             </CustomButton>
