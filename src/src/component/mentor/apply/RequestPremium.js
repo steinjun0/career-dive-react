@@ -14,7 +14,8 @@ import {
   colorBackgroundCareerDiveBlue,
   colorCareerDivePink,
   colorBackgroundCareerDivePink,
-  TextCaption
+  TextCaption,
+  TextSubtitle2
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
@@ -23,8 +24,11 @@ import { CustomButton } from "util/Custom/CustomButton";
 import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
+import { CustomTextField } from "util/Custom/CustomTextField";
+import CustomTextField1 from "util/Custom/CustomTextField1";
+import API from "API"
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -35,6 +39,8 @@ const ApplyButton = styled(CustomButton)`
   width: 378px;
   margin-top: 30px;
   margin-left: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
 const getCategoryColor = (category) => {
@@ -73,8 +79,17 @@ const CategoryTag = styled(TagLarge)`
   color:${props => getCategoryColor(props.category)};
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
-const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
-  `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
+const getConsultingRangeInKorean = (consultingStartTime, consultingTime) => {
+  const consultingStartTimeDate = new Date(`2022-01-02 ${consultingStartTime}`);
+  if (!isNaN(consultingStartTimeDate.getTime())) {
+    const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+    const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+    return `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(consultingEndTime)} ${consultingEndTime}`
+  }
+  else {
+    return ''
+  }
+}
 
 const upperGuideObject = {
   '자소서 구성': `${localStorage.getItem('UserID')}님의 경력과 스펙을 작성해 주세요.`,
@@ -87,9 +102,11 @@ const belowGuideObject = {
   '포트폴리오 첨삭': `포트폴리오 초안을 업로드해 주세요.`,
 }
 
-const maxLength = 1500;
+const maxLength = 2000;
 
 function Request() {
+  const params = useParams()
+  const navigate = useNavigate()
   const mentoringCategory = '전형 준비'
 
   const [mentoringContents, setMentoringContents] = useState([])
@@ -97,6 +114,7 @@ function Request() {
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()
   const [consultingTime, setConsultingTime] = useState(20)
+  const [scheduleId, setScheduleId] = useState(0)
   const [applymentContent, setApplymentContent] = useState('')
 
   const [requestText, setRequestText] = useState('');
@@ -104,7 +122,7 @@ function Request() {
   const [upperGuide, setUpperGuide] = useState('')
   const [belowGuide, setBelowGuide] = useState('')
 
-  const params = useParams()
+
 
   useEffect(() => {
     try {
@@ -113,6 +131,7 @@ function Request() {
       setConsultingDate(reservation['consultingDate'])
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
+      setScheduleId(reservation['scheduleId'])
       setApplymentContent(reservation['applymentContent'])
 
       if (reservation['mentoringCategory'] === '전형 준비') {
@@ -123,11 +142,11 @@ function Request() {
           setBelowGuide(belowGuideObject[reservation['mentoringContent'][0]])
         }
       }
-
     } catch (error) {
       console.log(error)
       alert('누락된 상담 내용 정보가 있습니다.')
     }
+
   }, [])
 
   return (
@@ -194,7 +213,10 @@ function Request() {
             placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
             minRows={5}
           />
-          <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+          <Flex style={{ justifyContent: 'end', marginTop: '4px' }}>
+            <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+          </Flex>
+
           <EmptyHeight height='16px' />
 
 
@@ -206,7 +228,7 @@ function Request() {
           {/* TODO: upload 파일 취소 버튼 필요 */}
           <Dropzone onDrop={acceptedFiles => {
             if (uploadingFiles.length + acceptedFiles.length > 2) {
-              alert('업로드 파일이 3개 이상입니다.')
+              alert('업로드 파일은 최대 2개입니다.')
               return
             }
             const temp = []
@@ -226,13 +248,47 @@ function Request() {
           </Dropzone>
           <EmptyHeight height='16px' />
           {uploadingFiles.map((items, index) => {
-            return <UnderlineText key={index}>{items}</UnderlineText>
+            return <Flex key={index}>
+              <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items}</TextBody2>
+              <TextBody2
+                style={{ cursor: 'pointer' }}
+                color={colorCareerDivePink}
+                onClick={() => {
+                  const temp = JSON.parse(JSON.stringify(uploadingFiles))
+                  temp.splice(temp.indexOf(items), 1)
+                  setUploadingFiles(temp)
+                }}>삭제</TextBody2>
+            </Flex>
           })}
-          <EmptyHeight height='16px' />
+          {/* <Flex>
+            <Flex style={{ width: '320px' }}>
+              <CustomTextField1 fullWidth={'320px'} placeholder={'링크'}></CustomTextField1>
+            </Flex>
+            <EmptyWidth width={'16px'} />
+            <CustomButton style={{ padding: '12px 28px' }}><TextSubtitle2>추가</TextSubtitle2></CustomButton>
+          </Flex> */}
+
         </Card>
       </RequestCardWrapper >
 
-      <ApplyButton>
+      <ApplyButton
+        onClick={() => {
+          const startTimeDate = new Date(`${consultingDate['year']}-${consultingDate['month']}-${consultingDate['date']} ${consultingStartTime}`)
+          const endTimeDate = new Date(startTimeDate.getTime() + consultingTime * 60000)
+          API.postConsult({
+            requestContent: requestText,
+            startTime: `${startTimeDate.getHours().toString().padStart(2, '0')}:${startTimeDate.getMinutes().toString().padStart(2, '0')}`,
+            endTime: `${endTimeDate.getHours().toString().padStart(2, '0')}:${endTimeDate.getMinutes().toString().padStart(2, '0')}`,
+            menteeId: +localStorage.getItem('UserID'),
+            mentorId: +params.id,
+            type: 'premium',
+            scheduleId: scheduleId
+            // TODO calendar 구조 변경하기
+            // onClick과 같은 함수는 범용 props를 받도록 설정하기(적어도 object로)
+            // 특정 type 만 받도록 하면 다 수정해야한다.
+          })
+          navigate('/mentee/request/finish')
+        }}>
         <TextHeading6>
           다음
         </TextHeading6>

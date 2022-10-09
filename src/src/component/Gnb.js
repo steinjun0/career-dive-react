@@ -269,7 +269,7 @@ function Gnb() {
           </LinkNoDeco>}
 
 
-          <NotificationsNoneIcon style={{ marginRight: 14 }} />
+          <NotificationsNoneIcon style={{ marginRight: 24 }} />
           <Flex
             style={{ position: 'relative' }}
             onMouseEnter={() => {

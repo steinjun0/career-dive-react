@@ -21,7 +21,7 @@ import { TagLarge } from "util/Custom/CustomTag";
 import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
@@ -63,9 +63,11 @@ const CategoryTag = styled(TagLarge)`
 const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
   `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
 
-const maxLength = 1500;
+const maxLength = 600;
 
 function Request() {
+  const navigate = useNavigate()
+
   const mentoringCategory = '커리어 상담'
   const [mentoringContents, setMentoringContents] = useState([])
   const [consultingDate, setConsultingDate] = useState({})
@@ -152,12 +154,17 @@ function Request() {
             placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
             minRows={5}
           />
-          <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+          <Flex style={{ justifyContent: 'end', marginTop: '4px' }}>
+            <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+          </Flex>
           <EmptyHeight height='16px' />
         </Card>
       </RequestCardWrapper >
 
-      <ApplyButton>
+      <ApplyButton
+        onClick={() => {
+          navigate('/mentee/request/finish')
+        }}>
         <TextHeading6>
           다음
         </TextHeading6>

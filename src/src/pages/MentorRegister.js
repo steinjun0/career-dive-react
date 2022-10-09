@@ -30,6 +30,7 @@ import UploadIcon from 'assets/icon/UploadIcon'
 import { convertStringToTags } from 'util/util.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import TagShowAndInput from 'component/TagShowAndInput.js';
+import { useNavigate } from 'react-router-dom';
 
 
 const LoginWrapper = styled(VerticalFlex)`
@@ -233,6 +234,7 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
                                     }}
                                     onClick={() => {
                                         mentorInfoState.setLowerJobCategory(e)
+                                        setIsShowCategoryDropDown(false)
                                     }}>
                                     <TextBody2 style={{ lineHeight: '28px' }}>{e}</TextBody2>
                                 </Flex>
@@ -430,6 +432,7 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
 }
 
 function Finish() {
+    const navigate = useNavigate();
     return (
         <VerticalFlex>
             <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
@@ -446,7 +449,7 @@ function Finish() {
 
             <ButtonWrapper>
                 <CustomButton
-                    onClick={() => { }}
+                    onClick={() => { navigate('/mentor') }}
                     height="50px">
                     완료
                 </CustomButton>

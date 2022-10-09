@@ -13,6 +13,7 @@ import MentorCalendar from 'component/calendar/Calendar'
 import SelectContent from 'component/mentor/apply/SelectContent'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import API from "API";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -37,18 +38,35 @@ const CardsWrapper2 = styled(Flex)`
 
 function MentoringReservation() {
   const params = useParams();
+  const [mentorData, setMentorData] = useState({});
+  const [nickName, setNickName] = useState('');
 
   const [isFinishSet, setIsFinishSet] = useState(false)
   useEffect(() => {
     // console.log(isFinishSet)
   }, [isFinishSet])
 
+  useEffect(() => {
+    API.getAccountMentor(params.id).then((value) => {
+      if (value.status === 200) {
+        setMentorData(value.data)
+      }
+    })
+
+    API.getAccount(params.id).then((value) => {
+      if (value.status === 200) {
+        setNickName(value.data.Nickname);
+      }
+    })
+  }, [])
+
+
   return (
     <div>
       <FullWidthWrapper>
         <MaxWidthDiv>
           <MetorProfileBanner>
-            <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
+            <MentorProfile name={nickName} discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`} />
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground >

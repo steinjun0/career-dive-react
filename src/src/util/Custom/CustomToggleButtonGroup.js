@@ -45,7 +45,7 @@ export function CustomToggleButtonGroup({ value, valueArray, onChange, isExclusi
       aria-label="text alignment"
     >
       {
-        valueArray.map((value, index) => {
+        valueArray && valueArray.map((value, index) => {
           return <CustomToggleButton
             selected_color={selectedColor}
             background_color={backgroundColor}

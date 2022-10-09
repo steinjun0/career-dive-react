@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import SignUp from './pages/SignUp';
 import Mentor from "./pages/Mentor";
 import MentoringReservation from './pages/request/MentoringReservation'
-import MentoringApply from './pages/MentoringApply'
+import MentoringApply from './pages/request/MentoringApply'
 import MentoringApplyViewer from './pages/MentoringApplyViewer'
 import MentoringApplyViewerMentor from './pages/Mentor/MentoringApplyViewer'
 
@@ -29,6 +29,8 @@ import MentorCalendar from "pages/Mentor/Calendar";
 import MentorRegister from "pages/MentorRegister";
 import MentorMyPage from "./pages/Mentor/MyPage";
 import CareerInfoChange from "component/myPage/\bCareerInfoChange";
+
+import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
 
 
 const theme = createTheme({
@@ -65,6 +67,7 @@ ReactDOM.render(
           <Route path="/mentorCard/:id" element={<Mentor />} />
           <Route path="/mentee/request/:id" element={<MentoringReservation />} />
           <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
+          <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />
           {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}
           <Route path="/mentee/sessionList/form/:id" element={<MentoringApplyViewer />} />
           <Route path="/mentee/sessionList" element={<Schedule />} />

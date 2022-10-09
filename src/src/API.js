@@ -222,6 +222,19 @@ export default {
     return scheduleRes
   },
 
+  async postConsult({ startTime, endTime, menteeId, mentorId, requestContent, type, scheduleId, preReview }) {
+    console.log({ startTime, endTime, menteeId, mentorId, requestContent, type, scheduleId, preReview })
+    const res = await this.postAxios(`${CAREER_DIVE_API_URL}/consult`, {
+      StartTime: startTime, EndTime: endTime,
+      MenteeId: menteeId, MentorId: mentorId,
+      RequestContent: requestContent,
+      ScheduleID: scheduleId,
+      PreReview: preReview,
+      Type: type
+    })
+    return res
+  },
+
   async patchAccount(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
     return userRes

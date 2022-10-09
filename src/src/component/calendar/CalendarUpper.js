@@ -47,6 +47,7 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
 
 
   const prevMonth = usePrevious(month);
+
   const onClickMonth = (month) => {
     if (prevMonth !== '0월' && month.length !== 0) {
       setSelectedDate(0)

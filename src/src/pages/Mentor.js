@@ -36,17 +36,24 @@ function Mentor() {
   const params = useParams();
 
   const [mentorData, setMentorData] = useState({});
+  const [nickName, setNickName] = useState('');
   const [consultContents, setConsultContents] = useState({})
 
 
 
   useEffect(() => {
-    const res = API.getAccountMentor(params.id)
-    res.then((value) => {
+    API.getAccountMentor(params.id).then((value) => {
       if (value.status === 200) {
         setMentorData(value.data)
       }
     })
+
+    API.getAccount(params.id).then((value) => {
+      if (value.status === 200) {
+        setNickName(value.data.Nickname);
+      }
+    })
+
     API.getAccountConsultContent('일반').then((res) => {
       if (res.stauts === 200) {
         console.log(res.data)
@@ -63,15 +70,23 @@ function Mentor() {
 
   }, [])
 
+  useEffect(() => {
+    console.log('mentorData', mentorData)
+  }, [mentorData])
+
+
   return (
     <div>
       <FullWidthWrapper>
         <MaxWidthDiv>
           <MetorProfileBanner>
-            <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
+
+            <MentorProfile name={nickName} discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`} />
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
+          {mentorData.Nickname}
+
           <MaxWidthDiv>
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>

@@ -25,7 +25,7 @@ const IntroductionWrapper = styled(Flex)`
 `;
 
 const mentoringContents = {
-  '커리어 상담': ['직무소개', '취업 상담', '진로 상담', '면접 팁', '업계 이야기'],
+  '커리어 상담': ['직무 이야기', '업계 이야기', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '진로 상담', '사내 문화', '면접 팁', '기타'],
   '전형 준비': ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰']
 }
 
@@ -37,6 +37,11 @@ const contentGuideObject = {
   '이력서 첨삭': ``,
   'CV/CL 첨삭': `${localStorage.getItem('UserID')}님이 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.`,
   '코드 리뷰': `멘토는 작성된 코드를 토대로 피드백을 제공합니다.`
+}
+
+const mentoringCategoryConverter = {
+  '커리어 상담': 'careerConsult',
+  '전형 준비': 'prepare'
 }
 
 function Introduction({ applyInformation }) {
@@ -118,7 +123,12 @@ function Introduction({ applyInformation }) {
                 addMentoringContent(value)
               }
               else if (mentoringCategory === '전형 준비') {
-                value.splice(value.indexOf(mentoringContent[0]), 1)
+                if (value.length === 2) {
+                  value.splice(value.indexOf(mentoringContent[0]), 1)
+                }
+                if (value.length === 0) {
+                  setContentGuide('')
+                }
                 setMentoringContent(value)
                 if (value in contentGuideObject) {
                   setContentGuide(contentGuideObject[value])
@@ -153,11 +163,12 @@ function Introduction({ applyInformation }) {
 
         <CustomButton
           height='52px'
+          disabled={mentoringContent.length <= 0}
           onClick={() => {
             const updatingData = [
               { name: 'mentoringContent', data: mentoringContent },
               { name: 'mentoringCategory', data: mentoringCategory },
-              { name: 'isFilePreOpen', data: isFilePreOpen }
+              { name: 'isFilePreOpen', data: isFilePreOpen },
             ]
             if (mentoringContent === []) {
               alert('상담 내용을 선택하세요')
@@ -166,7 +177,7 @@ function Introduction({ applyInformation }) {
               alert('상담 유형을 선택하세요')
             } else {
               updateReservation(params.id, updatingData)
-              navigater(`/mentee/request/form/generalType1/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
+              navigater(`/mentee/request/form/${mentoringCategoryConverter[mentoringCategory]}/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
             }
           }}
         >
