@@ -31,6 +31,7 @@ import MentorMyPage from "./pages/Mentor/MyPage";
 import CareerInfoChange from "component/myPage/\bCareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
+import Search from 'pages/Search'
 
 
 const theme = createTheme({
@@ -90,6 +91,8 @@ ReactDOM.render(
 
           <Route path="/sendbird" element={<Sendbird />} />
           <Route path="/session" element={<Session />} />
+          <Route path="/search" element={<Search />} />
+
 
         </Routes>
       </VerticalFlex>
