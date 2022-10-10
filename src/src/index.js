@@ -90,7 +90,7 @@ ReactDOM.render(
           {/* TODO: 멘토가 진입하는 멘티 요청서 화면 */}
 
           <Route path="/sendbird" element={<Sendbird />} />
-          <Route path="/session" element={<Session />} />
+          <Route path="/session/:id" element={<Session />} />
           <Route path="/search" element={<Search />} />
 
 
