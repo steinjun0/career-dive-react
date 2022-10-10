@@ -158,6 +158,12 @@ export default {
     return contentRes
   },
 
+  async getConsultMenteeList(id, status) {
+    // 생성된(created), 대기(pending), 승인(approved), 완료(done)
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/consult/mentee/${id}/list?status=${status}`)
+    return accountRes
+  },
+
   async postAccount(email, password, nickname) {
     const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
     return res
