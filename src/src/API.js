@@ -1,8 +1,11 @@
 import axios from 'axios'
+import SendBirdCall from "sendbird-calls";
+
 const CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
 // const CAREER_DIVE_API_URL = 'https://api.dev.careerdive.co.kr'
 // const CAREER_DIVE_API_URL = 'https://api.careerdive.co.kr'
 
+const APP_ID = 'DCFAABFA-CE04-46DC-877A-C3C87B929C2D'
 // let user = JSON.parse(localStorage.getItem('userData'))
 // let tokenHeader = false
 
@@ -164,6 +167,11 @@ export default {
     return accountRes
   },
 
+  async getConsult(id) {
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/consult/${id}`)
+    return accountRes
+  },
+
   async postAccount(email, password, nickname) {
     const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
     return res
@@ -277,5 +285,142 @@ export default {
     const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}/consult/schedule/rule/${ruleId}?${startDate ? `startDate=${startDate}` : ''}`)
     return deleteRes
   },
+
+
+
+
+
+
+  Sendbird: {
+    initSendbird() {
+      SendBirdCall.init(APP_ID)
+    },
+
+    async checkAuth(USER_ID, ACCESS_TOKEN) {
+      // Authentication
+      const authOption = { userId: USER_ID, accessToken: ACCESS_TOKEN };
+
+      await SendBirdCall.authenticate(authOption, (res, error) => {
+        if (error) {
+          // auth failed
+          alert('auth fail')
+        } else {
+          // auth succeeded
+          alert('auth success')
+
+        }
+      });
+    },
+
+    connectWebSocket() {
+      // Websocket Connection
+      SendBirdCall.connectWebSocket()
+        .then(/* connect succeeded */)
+        .catch(/* connect failed */);
+    },
+
+    addEventHandler() {
+      SendBirdCall.addListener(1, {
+        onRinging: (call) => {
+          alert('onRinging')
+        },
+        onAudioInputDeviceChanged: (currentDevice, availableDevices) => {
+          alert('onAudioInputDeviceChanged')
+        },
+        onAudioOutputDeviceChanged: (currentDevice, availableDevices) => {
+          alert('onAudioOutputDeviceChanged')
+        },
+        onVideoInputDeviceChanged: (currentDevice, availableDevices) => {
+          alert('onVideoInputDeviceChanged')
+        }
+      });
+    },
+
+    makeACall(calleeId) {
+      const dialParams = {
+        userId: `${calleeId}`,
+        isVideoCall: true,
+        callOption: {
+          localMediaView: document.getElementById('1'),
+          remoteMediaView: document.getElementById('2'),
+          audioEnabled: true,
+          videoEnabled: false
+        }
+      };
+      console.log('dialParams', dialParams)
+
+      const call = SendBirdCall.dial(dialParams, (call, error) => {
+        if (error) {
+          // dial failed
+          alert('dial failed')
+          console.log(error)
+        }
+        else {
+          alert('dial succeeded')
+        }
+
+        // dial succeeded
+      });
+
+      call.onEstablished = (call) => {
+        alert('established!')
+      };
+
+      call.onConnected = (call) => {
+        alert('onConnected!')
+      };
+
+      call.onEnded = (call) => {
+        alert('onEnded!')
+      };
+
+      call.onRemoteAudioSettingsChanged = (call) => {
+        alert('onRemoteAudioSettingsChanged!')
+      };
+
+      call.onRemoteVideoSettingsChanged = (call) => {
+        alert('onRemoteVideoSettingsChanged!')
+      };
+    },
+
+    receiveACall(setCall) {
+      SendBirdCall.addListener(2, {
+        onRinging: (call) => {
+          call.onEstablished = (call) => {
+            alert('established!')
+          };
+
+          call.onConnected = (call) => {
+            alert('onConnected!')
+          };
+
+          call.onEnded = (call) => {
+            alert('onEnded!')
+          };
+
+          call.onRemoteAudioSettingsChanged = (call) => {
+            alert('onRemoteAudioSettingsChanged!')
+          };
+
+          call.onRemoteVideoSettingsChanged = (call) => {
+            alert('onRemoteVideoSettingsChanged!')
+          };
+
+          const acceptParams = {
+            callOption: {
+              localMediaView: document.getElementById('1'),
+              remoteMediaView: document.getElementById('2'),
+              audioEnabled: true,
+              videoEnabled: true
+            }
+          };
+
+          call.accept(acceptParams);
+          console.log('call', call)
+          setCall(call)
+        }
+      });
+    },
+  }
 
 }
