@@ -303,10 +303,10 @@ export default {
       await SendBirdCall.authenticate(authOption, (res, error) => {
         if (error) {
           // auth failed
-          alert('auth fail')
+          console.log('auth fail')
         } else {
           // auth succeeded
-          alert('auth success')
+          console.log('auth success')
 
         }
       });
@@ -322,16 +322,16 @@ export default {
     addEventHandler() {
       SendBirdCall.addListener(1, {
         onRinging: (call) => {
-          alert('onRinging')
+          console.log('onRinging')
         },
         onAudioInputDeviceChanged: (currentDevice, availableDevices) => {
-          alert('onAudioInputDeviceChanged')
+          console.log('onAudioInputDeviceChanged')
         },
         onAudioOutputDeviceChanged: (currentDevice, availableDevices) => {
-          alert('onAudioOutputDeviceChanged')
+          console.log('onAudioOutputDeviceChanged')
         },
         onVideoInputDeviceChanged: (currentDevice, availableDevices) => {
-          alert('onVideoInputDeviceChanged')
+          console.log('onVideoInputDeviceChanged')
         }
       });
     },
@@ -352,34 +352,34 @@ export default {
       const call = SendBirdCall.dial(dialParams, (call, error) => {
         if (error) {
           // dial failed
-          alert('dial failed')
+          console.log('dial failed')
           console.log(error)
         }
         else {
-          alert('dial succeeded')
+          console.log('dial succeeded')
         }
 
         // dial succeeded
       });
 
       call.onEstablished = (call) => {
-        alert('established!')
+        console.log('established!')
       };
 
       call.onConnected = (call) => {
-        alert('onConnected!')
+        console.log('onConnected!')
       };
 
       call.onEnded = (call) => {
-        alert('onEnded!')
+        console.log('onEnded!')
       };
 
       call.onRemoteAudioSettingsChanged = (call) => {
-        alert('onRemoteAudioSettingsChanged!')
+        console.log('onRemoteAudioSettingsChanged!')
       };
 
       call.onRemoteVideoSettingsChanged = (call) => {
-        alert('onRemoteVideoSettingsChanged!')
+        console.log('onRemoteVideoSettingsChanged!')
       };
     },
 
@@ -387,23 +387,23 @@ export default {
       SendBirdCall.addListener(2, {
         onRinging: (call) => {
           call.onEstablished = (call) => {
-            alert('established!')
+            console.log('established!')
           };
 
           call.onConnected = (call) => {
-            alert('onConnected!')
+            console.log('onConnected!')
           };
 
           call.onEnded = (call) => {
-            alert('onEnded!')
+            console.log('onEnded!')
           };
 
           call.onRemoteAudioSettingsChanged = (call) => {
-            alert('onRemoteAudioSettingsChanged!')
+            console.log('onRemoteAudioSettingsChanged!')
           };
 
           call.onRemoteVideoSettingsChanged = (call) => {
-            alert('onRemoteVideoSettingsChanged!')
+            console.log('onRemoteVideoSettingsChanged!')
           };
 
           const acceptParams = {
