@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RequestView from "../component/mentor/apply/RequestView";
 import { Card } from "../util/Card";
 import { CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex } from "../util/styledComponent";
@@ -14,6 +14,8 @@ import 'react-reflex/styles.css'
 import styled from "styled-components";
 import { Button } from "@mui/material";
 import { CustomButton } from 'util/Custom/CustomButton'
+import { useParams } from "react-router-dom";
+import API from "API"
 
 
 const APP_ID = '825BA0D4-461A-4AA3-9A79-D2DD587356A2'
@@ -26,7 +28,7 @@ const ProfileImg = styled(CircleImg)`
 `;
 
 function Session() {
-
+  const params = useParams()
   // (window.RTCPeerConnection) ? alert('supported') : alert('not supported')
 
   let USER_ID = ''
@@ -35,10 +37,42 @@ function Session() {
   const [calleeId, setCalleeId] = useState('')
   const [call, setCall] = useState('')
 
+  useEffect(async () => {
+    const res = await API.getConsult(params.id)
+    if (res.status === 200) {
+      if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
+        setCalleeId(res.data.MentorID)
+      } else {
+        setCalleeId(res.data.MenteeID)
+      }
+    }
+
+    // params.id
+    API.Sendbird.initSendbird()
+    await API.Sendbird.checkAuth(+localStorage.getItem("UserID"), localStorage.getItem("SendbirdToken"))
+    API.Sendbird.connectWebSocket()
+    API.Sendbird.addEventHandler()
+    API.Sendbird.receiveACall(setCall)
+  }, [])
 
 
   return (
     <GrayBackground>
+      <CustomButton onClick={() => {
+        API.Sendbird.connectWebSocket()
+      }}>1</CustomButton>
+      <CustomButton onClick={() => {
+        API.Sendbird.makeACall(calleeId)
+      }}>2</CustomButton>
+      <Flex>
+        local_video_element_id
+        <video id="1" autoPlay muted />
+      </Flex>
+
+      <Flex>
+        remote_video_element_id
+        <video id="2" autoPlay />
+      </Flex>
       <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 300px)' }}>
 
         <ReflexElement className="left-pane" maxSize="350">
