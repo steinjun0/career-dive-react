@@ -173,6 +173,10 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
             <TextSubtitle2>
                 회사명
             </TextSubtitle2>
+            <EmptyHeight height='4px' />
+            <TextCaption>
+                회사의 공식 법인명을 입력해주세요. ex) 비바리퍼블리카, 씨제이이엔엠
+            </TextCaption>
             <EmptyHeight height='16px' />
             <CustomTextField
                 onChange={(event) => { mentorInfoState.setCompName(event.target.value) }}
