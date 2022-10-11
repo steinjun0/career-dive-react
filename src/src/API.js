@@ -339,7 +339,7 @@ export default {
     makeACall(calleeId, setCall) {
       const dialParams = {
         userId: `${calleeId}`,
-        isVideoCall: true,
+        isVideoCall: false,
         callOption: {
           localMediaView: document.getElementById('1'),
           remoteMediaView: document.getElementById('2'),
