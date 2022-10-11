@@ -12,11 +12,13 @@ import {
 } from "util/styledComponent";
 
 import OnComingShedule from "component/schedule/OnComingSchedule";
-import ScheduleList from "component/schedule/ScheduleList";
+import ConsultList from "component/schedule/ConsultList";
 import ConsultingRequest from "component/schedule/ConsultingRequest"
 import { Card } from "util/Card";
 import { ChevronRight } from "@material-ui/icons";
 import CalendarMentor from "component/calendar/CalendarMentor";
+import { useEffect, useState } from "react";
+import API from "API";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -30,6 +32,16 @@ const dummyData = ['매드로봇님이 상담을 요청하였습니다.',
   '커리어다이브 클로즈드 베타 오픈 이벤트 🤙​']
 
 function MentorHome() {
+
+  const [consultList, setConsultList] = useState([])
+  useEffect(async () => {
+    const res = await API.getConsultMentorList(localStorage.getItem('UserID'), 'created')
+    if (res.status === 200) {
+      setConsultList(res.data)
+      console.log('consultList', res.data)
+    }
+  }, [])
+
   return (
     <FullWidthWrapper>
       <GrayBackground>
@@ -68,7 +80,7 @@ function MentorHome() {
                 <ConsultingRequest></ConsultingRequest>
               </Grid>
               <Grid item xs={12}>
-                <ScheduleList></ScheduleList>
+                <ConsultList consultList={consultList}></ConsultList>
               </Grid>
             </Grid>
           </CardsWrapper>

@@ -8,7 +8,9 @@ import {
 } from "util/styledComponent";
 
 import OnComingShedule from "component/schedule/OnComingSchedule";
-import ScheduleList from "component/schedule/ScheduleList";
+import ConsultList from "component/schedule/ConsultList";
+import { useEffect, useState } from "react";
+import API from "API";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -17,6 +19,16 @@ const CardsWrapper = styled(Flex)`
 `;
 
 function Schedule() {
+  const [consultList, setConsultList] = useState([])
+  useEffect(async () => {
+    const res = await API.getConsultMenteeList(localStorage.getItem('UserID'), 'created')
+    if (res.status === 200) {
+      setConsultList(res.data)
+      console.log('consultList', res.data)
+    }
+  }, [])
+
+
   return (
     <FullWidthWrapper>
       <GrayBackground>
@@ -27,7 +39,7 @@ function Schedule() {
                 <OnComingShedule></OnComingShedule>
               </Grid>
               <Grid item xs={12}>
-                <ScheduleList></ScheduleList>
+                <ConsultList consultList={consultList}></ConsultList>
               </Grid>
             </Grid>
           </CardsWrapper>

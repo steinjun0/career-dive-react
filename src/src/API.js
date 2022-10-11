@@ -167,6 +167,12 @@ export default {
     return accountRes
   },
 
+  async getConsultMentorList(id, status) {
+    // 생성된(created), 대기(pending), 승인(approved), 완료(done)
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/consult/mentor/${id}/list?status=${status}`)
+    return accountRes
+  },
+
   async getConsult(id) {
     const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/consult/${id}`)
     return accountRes

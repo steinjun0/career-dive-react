@@ -22,7 +22,7 @@ import calendarWait from 'assets/icon/schedule/calendarWait.svg'
 import calendarCancel from 'assets/icon/schedule/calendarCancel.svg'
 
 
-const ScheduleCardWrapper = styled(Flex)`
+const ConsultCardWrapper = styled(Flex)`
   align-items: stretch;
   border: 1px solid ${colorBlueGray};
   border-radius: 8px;
@@ -35,72 +35,70 @@ const CategoryImg = styled('img')`
   height: 28px;
 `;
 
-const ScheduleCardLeft = styled(Flex)`
+const ConsultCardLeft = styled(Flex)`
   background-color: ${colorBackgroundGrayLight};
   padding: 10px;
   align-items: center;
   width: 28px;
 `;
 
-const ScheduleCardRight = styled(VerticalFlex)`
+const ConsultCardRight = styled(VerticalFlex)`
   padding: 24px;
   align-items: start;
 `;
 
-const ScheduleDate = styled(TextBody2)`
+const ConsultDate = styled(TextBody2)`
   margin-bottom: 4px;
   margin-right: 4px;
 `
 
-const ScheduleTime = styled(TextSubtitle1)`
+const ConsultTime = styled(TextSubtitle2)`
   margin-bottom: 10px;
 `
 
-
-
-function ScheduleCard({ schedule, requestFormOnClick, changeOnClick, enterOnClick }) {
+function ConsultCard({ consult, requestFormOnClick, changeOnClick, enterOnClick }) {
   let categoryIcon;
-  if (schedule.category == '예약 성공') {
+  if (consult.Approved) {
     categoryIcon = calendarSuccess;
-  } else if (schedule.category == '예약 대기') {
+  } else if (consult.Status == 'pending') {
     categoryIcon = calendarWait;
-  } else if (schedule.category == '예약 실패') {
+  } else if (consult.Status == 'done') {
     categoryIcon = calendarCancel;
-  } else if (schedule.category == '상담 완료') {
+  } else if (consult.Status == 'done') {
     categoryIcon = calendarSuccess;
   } else {
     categoryIcon = calendarSuccess;
   }
   return (
-    <ScheduleCardWrapper>
-      <ScheduleCardLeft>
+    <ConsultCardWrapper>
+      <ConsultCardLeft>
         <CategoryImg src={categoryIcon}></CategoryImg>
-      </ScheduleCardLeft>
+      </ConsultCardLeft>
 
-      <ScheduleCardRight>
+      <ConsultCardRight>
         <TextHeading6 style={{ marginBottom: '10px' }}>
-          {schedule.company}
+          {consult.CompName}
         </TextHeading6>
         <VerticalFlex>
           <Flex style={{ marginBottom: '4px' }}>
             <TextSubtitle2>
-              {schedule.name}
+              {consult.Job}
             </TextSubtitle2>
             <TextBody2 style={{ margin: '0 4px' }}>
               ·
             </TextBody2>
             <TextBody2>
-              {schedule.position}
+              {consult.Nickname}
             </TextBody2>
           </Flex>
 
           <Flex>
-            <ScheduleDate>
-              {schedule.date}
-            </ScheduleDate>
-            <ScheduleTime>
-              {schedule.time}
-            </ScheduleTime>
+            <ConsultDate>
+              {new Date(consult.Date).getFullYear()}년 {new Date(consult.Date).getMonth()}월 {new Date(consult.Date).getDate()}일
+            </ConsultDate>
+            <ConsultTime>
+              {consult.StartTime}
+            </ConsultTime>
           </Flex>
           <Flex>
             <CustomIconButton
@@ -136,9 +134,9 @@ function ScheduleCard({ schedule, requestFormOnClick, changeOnClick, enterOnClic
           </Flex>
         </VerticalFlex>
 
-      </ScheduleCardRight>
-    </ScheduleCardWrapper >
+      </ConsultCardRight>
+    </ConsultCardWrapper >
   );
 }
 
-export default ScheduleCard
+export default ConsultCard

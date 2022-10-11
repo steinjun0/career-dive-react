@@ -16,6 +16,7 @@ import { Button } from "@mui/material";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { useParams } from "react-router-dom";
 import API from "API"
+import { usePrompt } from "util/usePromprt";
 
 
 const APP_ID = '825BA0D4-461A-4AA3-9A79-D2DD587356A2'
@@ -35,7 +36,8 @@ function Session() {
   // Sendbird.init(APP_ID, USER_ID, ACCESS_TOKEN)
 
   const [calleeId, setCalleeId] = useState('')
-  const [call, setCall] = useState('')
+  const [call, setCall] = useState('no call')
+
 
   useEffect(async () => {
     const res = await API.getConsult(params.id)
@@ -55,22 +57,30 @@ function Session() {
     API.Sendbird.receiveACall(setCall)
   }, [])
 
+  usePrompt('dd', true, () => {
+    if (call !== 'no call') API.Sendbird.stopCalling(call)
+  })
 
   return (
     <GrayBackground>
+
       <CustomButton onClick={() => {
         API.Sendbird.connectWebSocket()
       }}>1</CustomButton>
+
       <CustomButton onClick={() => {
-        API.Sendbird.makeACall(calleeId)
+        API.Sendbird.makeACall(calleeId, setCall)
       }}>2</CustomButton>
-      <Flex>
-        local_video_element_id
+
+      <CustomButton onClick={() => {
+        console.log('call', call)
+      }}>3</CustomButton>
+
+      <Flex style={{ height: 0 }}>
         <video id="1" autoPlay muted />
       </Flex>
 
-      <Flex>
-        remote_video_element_id
+      <Flex style={{ height: 0 }}>
         <video id="2" autoPlay />
       </Flex>
       <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 300px)' }}>
