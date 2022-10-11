@@ -336,7 +336,7 @@ export default {
       });
     },
 
-    makeACall(calleeId) {
+    makeACall(calleeId, setCall) {
       const dialParams = {
         userId: `${calleeId}`,
         isVideoCall: true,
@@ -347,7 +347,6 @@ export default {
           videoEnabled: false
         }
       };
-      console.log('dialParams', dialParams)
 
       const call = SendBirdCall.dial(dialParams, (call, error) => {
         if (error) {
@@ -358,7 +357,6 @@ export default {
         else {
           console.log('dial succeeded')
         }
-
         // dial succeeded
       });
 
@@ -381,6 +379,8 @@ export default {
       call.onRemoteVideoSettingsChanged = (call) => {
         console.log('onRemoteVideoSettingsChanged!')
       };
+      setCall(call)
+      return call
     },
 
     receiveACall(setCall) {
@@ -416,11 +416,15 @@ export default {
           };
 
           call.accept(acceptParams);
-          console.log('call', call)
           setCall(call)
         }
       });
     },
+    stopCalling(call) {
+      console.log(call)
+      call.end()
+      SendBirdCall.removeAllListeners()
+    }
   }
 
 }
