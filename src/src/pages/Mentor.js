@@ -71,7 +71,7 @@ function Mentor() {
   }, [])
 
   useEffect(() => {
-    console.log('mentorData', mentorData)
+    // console.log('mentorData', mentorData)
   }, [mentorData])
 
 
