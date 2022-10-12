@@ -108,7 +108,7 @@ function ConsultRange({ mentorData }) {
     let tempBasicTagList = []
     let tempPremiumTagList = []
     mentorData.ConsultContents.forEach(element => {
-      if (element.Type === '일반') {
+      if (element.Type === '커리어 상담') {
         tempBasicTagList.push(element.Name)
       } else {
         tempPremiumTagList.push(element.Name)
@@ -125,13 +125,13 @@ function ConsultRange({ mentorData }) {
         ...selectedBasicConsultContent.map((e) => {
           return {
             Name: e,
-            Type: '일반'
+            Type: '커리어 상담'
           }
         }),
         ...selectedPremiumConsultContent.map((e) => {
           return {
             Name: e,
-            Type: '프리미엄'
+            Type: '전형 준비'
           }
         })
       ]

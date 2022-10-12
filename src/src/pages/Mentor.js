@@ -37,8 +37,6 @@ function Mentor() {
 
   const [mentorData, setMentorData] = useState();
   const [nickName, setNickName] = useState('');
-  const [consultContents, setConsultContents] = useState({})
-
 
 
   useEffect(() => {
