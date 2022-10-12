@@ -233,7 +233,7 @@ export default {
   },
 
   async postAccountConsultContent(consultContents, mentorId) {
-    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/consultContent`, { ConsulltContents: consultContents, MentorID: +mentorId })
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/consultContent`, { ConsultContents: consultContents, MentorID: +mentorId })
     return scheduleRes
   },
 

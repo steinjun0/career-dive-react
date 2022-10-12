@@ -23,6 +23,8 @@ import MentorIntroduce from "component/myPage/MentorIntroduce";
 import CareerInfoChange from "component/myPage/\bCareerInfoChange";
 import { isMentorUrl } from "util/util";
 import ConsultRange from "component/myPage/ConsultRange";
+import { useEffect, useState } from "react";
+import API from "API";
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-top: 30px;
@@ -58,6 +60,24 @@ function MyPage() {
     })
     return result
   }
+
+  const [mentorData, setMentorData] = useState()
+
+  useEffect(() => {
+    API.getAccountMentor(localStorage.getItem('UserID')).then(async (res) => {
+      if (res.status === 200) {
+        setMentorData(res.data)
+        // let tags = await getMentorTag(res.data.Tags)
+        // setTagList(typeof tags === 'object' ? tags : [])
+        // setIntroduceText(res.data.Introduction)
+
+        // if (res.data.Introduction === '') {
+        //   setIsEditing(true)
+        // }
+      }
+    })
+
+  }, [])
   return (
     <FullWidthWrapper>
       <GrayBackground>
@@ -99,8 +119,8 @@ function MyPage() {
 
 
                     </Grid>
-                    <MentorIntroduce />
-                    <ConsultRange />
+                    {mentorData && <MentorIntroduce mentorData={mentorData} />}
+                    {mentorData && <ConsultRange mentorData={mentorData} />}
                   </div>
                 }
                 {
