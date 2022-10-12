@@ -175,14 +175,12 @@ function Calendar({ setIsFinishSet }) {
     setAvailablePMTimes([])
   }
 
-  const updateAvailableTimes = (consultingTime, selectedDate) => {
+  const updateAvailableTimes = (consultingTime, selectedDate, originData) => {
     function getAvailableTimes(consultingTime, selectedDate) {
       let tempAvailableTimes = []
       originData.forEach((element) => {
-        console.log('element', element)
         if (element.Day === selectedDate) {
           for (const schedule of element.StartEnds) {
-            console.log('schedule', schedule)
             let termCount = 0
             const startDate = new Date(`2021/01/01 ${schedule.StartTime}`);
             const endDate = new Date(`2021/01/01 ${schedule.EndTime}`);
@@ -248,7 +246,7 @@ function Calendar({ setIsFinishSet }) {
     }
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
-    updateAvailableTimes(newConsultingTime, selectedDate)
+    updateAvailableTimes(newConsultingTime, selectedDate, originData)
 
   };
 
@@ -257,7 +255,6 @@ function Calendar({ setIsFinishSet }) {
 
     Array(...availableAMTimes, ...availablePMTimes).map((e) => {
       if (e.time === consultingStartTime) {
-        console.log('e.scheduleId', e.scheduleId)
         setScheduleId(e.scheduleId)
       }
     })
@@ -272,7 +269,7 @@ function Calendar({ setIsFinishSet }) {
     }
   }, [consultingTime])
 
-  const setDataFromLocalStorage = () => {
+  const setDataFromLocalStorage = (originData) => {
     const reservations = JSON.parse(localStorage.getItem(`reservations`))
     if (reservations !== null) {
       const reservation = reservations[params.id]
@@ -288,10 +285,13 @@ function Calendar({ setIsFinishSet }) {
           setConsultingTime(reservation['consultingTime'])
         }
         if ('consultingTime' in reservation && 'consultingDate' in reservation) {
-          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date)
+          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date, originData)
         }
         if ('consultingStartTime' in reservation) {
           setConsultingStartTime(reservation['consultingStartTime'])
+        }
+        if ('scheduleId' in reservation) {
+          setScheduleId(reservation['scheduleId'])
         }
       } else {
         setMonth((new Date().getMonth() + 1) + '월')
@@ -315,7 +315,7 @@ function Calendar({ setIsFinishSet }) {
     })
 
     setIsApplyPage(location.pathname.includes('request'))
-    setDataFromLocalStorage()
+    setDataFromLocalStorage(res.data.DayTimes)
   }, [])
 
   const onMonthChange = async (month) => {
@@ -352,11 +352,10 @@ function Calendar({ setIsFinishSet }) {
     } else {
       setIsFinishSet && setIsFinishSet(false)
     }
-  }, [consultingStartTime])
+  }, [scheduleId])
 
 
   useEffect(() => {
-    console.log('selectedDateObj', selectedDateObj)
     // setSelectedDate(selectedDateObj.getDate())
     // setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
@@ -423,7 +422,6 @@ function Calendar({ setIsFinishSet }) {
 
             </TextSubtitle1>
           </TimeSelectWrapper>
-
           <TimeSelectWrapper
             is_show={(consultingTime != 0).toString()}
             height={getTimeSelectWrapperHeight(amLines, pmLines, isApplyPage)}
