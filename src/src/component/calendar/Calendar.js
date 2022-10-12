@@ -127,7 +127,17 @@ function Calendar({ setIsFinishSet }) {
   const [consultingStartTime, setConsultingStartTime] = useState(0);
   const [scheduleId, setScheduleId] = useState();
 
-  const [selectedDateObj, setSelectedDateObj] = useState(new Date());
+  const reservations = JSON.parse(localStorage.getItem(`reservations`))
+  let initialDate = undefined
+  if (reservations !== null) {
+    const reservation = reservations[params.id]
+    if (reservation !== undefined && 'consultingDate' in reservation) {
+      initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
+    }
+  }
+
+  const [selectedDateObj, setSelectedDateObj] = useState(initialDate);
+
 
   const getTimeSelectWrapperHeight = (amLines, pmLines, isHidingButton) => {
     // margin-top
@@ -270,6 +280,7 @@ function Calendar({ setIsFinishSet }) {
         if ('consultingDate' in reservation) {
           setMonth(reservation['consultingDate'].month + '월')
           setSelectedDate(reservation['consultingDate'].date)
+          setSelectedDateObj(new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`))
         } else {
           setMonth((new Date().getMonth() + 1) + '월')
         }
@@ -345,11 +356,10 @@ function Calendar({ setIsFinishSet }) {
 
 
   useEffect(() => {
-    console.log(availableDates)
-    setSelectedDate(selectedDateObj.getDate())
-    setMonth((selectedDateObj.getMonth() + 1) + '월')
+    console.log('selectedDateObj', selectedDateObj)
+    // setSelectedDate(selectedDateObj.getDate())
+    // setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
-
 
   return (
     <CalendarWrapper>
