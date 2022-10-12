@@ -94,6 +94,7 @@ function Request() {
   const [consultingTime, setConsultingTime] = useState(20)
   const [applymentContent, setApplymentContent] = useState('')
 
+  const [isFilePreOpen, setIsFilePreOpen] = useState('')
   const [uploadingFiles, setUploadingFiles] = useState([])
 
 
@@ -109,6 +110,8 @@ function Request() {
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
       setApplymentContent(reservation['applymentContent'])
+      setIsFilePreOpen(reservation['isFilePreOpen'])
+
     } catch (error) {
       console.log(error)
       alert('누락된 상담 내용 정보가 있습니다.')
@@ -181,46 +184,50 @@ function Request() {
           </Flex>
           <EmptyHeight height='16px' />
 
-          <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
-          <TextBody2 color={colorCareerDiveBlue}>
-            안내문구
-          </TextBody2>
-          <EmptyHeight height='8px' />
-          {/* TODO: upload 파일 취소 버튼 필요 */}
-          <Dropzone onDrop={acceptedFiles => {
-            if (uploadingFiles.length + acceptedFiles.length > 2) {
-              alert('업로드 파일은 최대 2개입니다.')
-              return
-            }
-            const temp = []
-            acceptedFiles.forEach(file => {
-              temp.push(file.path)
-            })
-            setUploadingFiles([...uploadingFiles, ...temp])
-          }}>
-            {({ getRootProps, getInputProps }) => (
-              <section>
-                <FileDropzoneContent {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <UploadIcon color={colorTextLight} />
-                </FileDropzoneContent>
-              </section>
-            )}
-          </Dropzone>
-          <EmptyHeight height='16px' />
-          {uploadingFiles.map((items, index) => {
-            return <Flex key={index}>
-              <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items}</TextBody2>
-              <TextBody2
-                style={{ cursor: 'pointer' }}
-                color={colorCareerDivePink}
-                onClick={() => {
-                  const temp = JSON.parse(JSON.stringify(uploadingFiles))
-                  temp.splice(temp.indexOf(items), 1)
-                  setUploadingFiles(temp)
-                }}>삭제</TextBody2>
-            </Flex>
-          })}
+
+          {isFilePreOpen === '희망' && <VerticalFlex>
+            <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
+            <TextBody2 color={colorCareerDiveBlue}>
+              안내문구
+            </TextBody2>
+            <EmptyHeight height='8px' />
+            {/* TODO: upload 파일 취소 버튼 필요 */}
+            <Dropzone onDrop={acceptedFiles => {
+              if (uploadingFiles.length + acceptedFiles.length > 2) {
+                alert('업로드 파일은 최대 2개입니다.')
+                return
+              }
+              const temp = []
+              acceptedFiles.forEach(file => {
+                temp.push(file.path)
+              })
+              setUploadingFiles([...uploadingFiles, ...temp])
+            }}>
+              {({ getRootProps, getInputProps }) => (
+                <section>
+                  <FileDropzoneContent {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <UploadIcon color={colorTextLight} />
+                  </FileDropzoneContent>
+                </section>
+              )}
+            </Dropzone>
+            <EmptyHeight height='16px' />
+            {uploadingFiles.map((items, index) => {
+              return <Flex key={index}>
+                <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items}</TextBody2>
+                <TextBody2
+                  style={{ cursor: 'pointer' }}
+                  color={colorCareerDivePink}
+                  onClick={() => {
+                    const temp = JSON.parse(JSON.stringify(uploadingFiles))
+                    temp.splice(temp.indexOf(items), 1)
+                    setUploadingFiles(temp)
+                  }}>삭제</TextBody2>
+              </Flex>
+            })}
+          </VerticalFlex>}
+
         </Card>
       </RequestCardWrapper >
 
