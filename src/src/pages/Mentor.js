@@ -78,8 +78,8 @@ function Mentor() {
                   <Grid item xs={12} >
                     {mentorData &&
                       <HelpCategory
-                        regularTags={[...mentorData.ConsultContents.filter((e) => e.Type === '일반').map((e) => e.Name)]}
-                        premiumTags={[...mentorData.ConsultContents.filter((e) => e.Type === '프리미엄').map((e) => e.Name)]} />}
+                        regularTags={[...mentorData.ConsultContents.filter((e) => e.Type === '커리어 상담').map((e) => e.Name)]}
+                        premiumTags={[...mentorData.ConsultContents.filter((e) => e.Type === '전형 준비').map((e) => e.Name)]} />}
                     <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
                     {/* <RatingAndReview></RatingAndReview> */}
                   </Grid>
