@@ -1,5 +1,5 @@
 import { Divider, Grid, styled } from "@mui/material";
-import ConsultCard from 'component/schedule/ConsultCard.js'
+import ConsultMenteeCard from 'component/schedule/ConsultMenteeCard.js'
 import {
   Flex,
   TextBody2,
@@ -16,6 +16,7 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "API";
+import ConsultMentorCard from "./ConsultMentorCard";
 
 const ScheduleListWrapper = styled(Flex)`
   width: 100%;
@@ -85,12 +86,18 @@ function ConsultList({ consultList }) {
             if (category === '전체' || consult.Status === categoryToStatusConverter[category]) {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  <ConsultCard
+                  <ConsultMenteeCard
+                    consult={consult}
+                    requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
+                    enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                  />
+                  <ConsultMentorCard
                     consult={consult}
                     requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
                     enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
                   />
                 </Grid>
+
               );
             }
 

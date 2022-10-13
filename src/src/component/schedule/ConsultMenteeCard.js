@@ -56,7 +56,7 @@ const ConsultTime = styled(TextSubtitle2)`
   margin-bottom: 10px;
 `
 
-function ConsultCard({ consult, requestFormOnClick, changeOnClick, enterOnClick }) {
+function ConsultMenteeCard({ consult, requestFormOnClick, changeOnClick, enterOnClick }) {
   let categoryIcon;
   if (consult.Approved) {
     categoryIcon = calendarSuccess;
@@ -139,4 +139,4 @@ function ConsultCard({ consult, requestFormOnClick, changeOnClick, enterOnClick 
   );
 }
 
-export default ConsultCard
+export default ConsultMenteeCard
