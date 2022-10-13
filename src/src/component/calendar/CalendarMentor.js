@@ -138,7 +138,7 @@ function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTim
           style={Object.assign({ wordSpacing: '4px' }, calendarSimpleMenuStyle)}
           title={startAMPMHour}
           menuItems={thousrList}
-          onClickProps={initialTime ? (text) => { } : () => { console.log('startAMPMHour', startAMPMHour) }}
+          onClickProps={initialTime ? (text) => { } : () => { }}
           setState={setStartAMPMHour}
         />
         <EmptyWidth width={'4px'} />
@@ -290,7 +290,6 @@ function CalendarMentor() {
     await postConsultScheduleList(temp)
     await postConsultScheduleRule(temp)
     const res = await getConsultSchedule()
-    setAvailableTimes(temp)
   }
 
   // 날짜 선택시, 기존값 초기화
@@ -371,7 +370,6 @@ function CalendarMentor() {
       Number(month.slice(0, -1)),
       Number(localStorage.getItem('UserID'))
     )
-    // getConsultSchedule()
   }
 
   const postConsultScheduleRule = async (availableTimesProps) => {
@@ -398,7 +396,6 @@ function CalendarMentor() {
           )
         })
     )
-    // getConsultSchedule()
   }
 
   const patchConsultScheduleList = async (availableTimesProps) => {
@@ -412,21 +409,18 @@ function CalendarMentor() {
         async (e) => {
           const startTime = `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
           const endTime = `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
-          console.log('e.scheduleId,', e.scheduleId,)
           const res = await API.patchConsultSchedule(
             e.scheduleId,
             startTime,
             endTime,
             Number(localStorage.getItem('UserID')),
-            `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
+            // `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
           )
         })
     )
   }
 
   const patchConsultScheduleRule = async (availableTimesProps) => {
-    console.log('availableTimesProps', availableTimesProps)
-    console.log('patch enter')
     await Promise.all(
       availableTimesProps[selectedDate].filter((e) => {
         if (e.repeatOption === '반복 없음') { // rule만 골라내는 filter
@@ -455,7 +449,6 @@ function CalendarMentor() {
             }
           }
 
-          // console.log('e', e)
           const res = await API.postConsultScheduleRule(
             startTime,
             endTime,
@@ -464,11 +457,9 @@ function CalendarMentor() {
             Number(localStorage.getItem('UserID')),
             `${year}-${(month.slice(0, -1)).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`
           )
-          // console.log('post res', res)
 
         })
     )
-    // getConsultSchedule()
   }
 
 
@@ -576,7 +567,6 @@ function CalendarMentor() {
                 custom_color={colorCareerDiveBlue}
                 style={{ padding: '7px' }}
                 onClick={async () => {
-                  console.log(availableTimes)
                   await patchConsultScheduleList(availableTimes)
                   await patchConsultScheduleRule(availableTimes)
                   await deleteConsultScheduleList(availableTimes)
