@@ -24,7 +24,7 @@ const IntroductionWrapper = styled(Flex)`
   width: 100%;
 `;
 
-const mentoringContents = {
+const consultContents = {
   '커리어 상담': ['직무 이야기', '업계 이야기', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '진로 상담', '사내 문화', '면접 팁', '기타'],
   '전형 준비': ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰']
 }
@@ -39,17 +39,17 @@ const contentGuideObject = {
   '코드 리뷰': `멘토는 작성된 코드를 토대로 피드백을 제공합니다.`
 }
 
-const mentoringCategoryConverter = {
+const consultCategoryConverter = {
   '커리어 상담': 'careerConsult',
   '전형 준비': 'prepare'
 }
 
-function Introduction({ applyInformation }) {
+function Introduction({ mentorConsultContents }) {
   const navigater = useNavigate()
   const params = useParams()
 
-  const [mentoringCategory, setMentoringCategory] = useState('커리어 상담')
-  const [mentoringContent, setMentoringContent] = useState([])
+  const [consultCategory, setConsultCategory] = useState('커리어 상담')
+  const [consultContent, setConsultContent] = useState([])
   const [mentoringDate, setMentoringDate] = useState()
   const [isFilePreOpen, setIsFilePreOpen] = useState()
 
@@ -60,8 +60,8 @@ function Introduction({ applyInformation }) {
     if (reservations !== null) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {
-        reservation['mentoringCategory'] && setMentoringCategory(reservation['mentoringCategory'])
-        reservation['mentoringContent'] && setMentoringContent(reservation['mentoringContent'])
+        reservation['consultCategory'] && setConsultCategory(reservation['consultCategory'])
+        reservation['consultContent'] && setConsultContent(reservation['consultContent'])
         reservation['consultingDate'] && setMentoringDate(new Date(reservation['consultingDate']['year'], reservation['consultingDate']['month'] - 1, reservation['consultingDate']['date']))
         reservation['isFilePreOpen'] && setIsFilePreOpen(reservation['isFilePreOpen'])
       }
@@ -69,9 +69,9 @@ function Introduction({ applyInformation }) {
   }, [])
 
 
-  const addMentoringContent = (contents) => {
-    if (contents.length <= (mentoringCategory === '커리어 상담' ? 3 : 1)) {
-      setMentoringContent(contents)
+  const addConsultContent = (contents) => {
+    if (contents.length <= (consultCategory === '커리어 상담' ? 3 : 1)) {
+      setConsultContent(contents)
     }
   }
 
@@ -92,14 +92,14 @@ function Introduction({ applyInformation }) {
 
         <Flex>
           <CustomToggleButtonGroup
-            value={mentoringCategory}
+            value={consultCategory}
             isExclusive={true}
             valueArray={['커리어 상담', '전형 준비']}
-            selectedColor={mentoringCategory === '전형 준비' ? colorCareerDivePink : null}
-            backgroundColor={mentoringCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
+            selectedColor={consultCategory === '전형 준비' ? colorCareerDivePink : null}
+            backgroundColor={consultCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event, value) => {
-              setMentoringCategory(value)
-              setMentoringContent([])
+              setConsultCategory(value)
+              setConsultContent([])
             }}></CustomToggleButtonGroup>
         </Flex>
         <EmptyHeight height='16px'></EmptyHeight>
@@ -109,27 +109,35 @@ function Introduction({ applyInformation }) {
             상담 내용
           </TextSubtitle1>
           <EmptyWidth width="8px"></EmptyWidth>
-          {mentoringCategory === '커리어 상담' ? <TextBody2 color={colorTextLight}>최대 3개 선택 가능해요</TextBody2> : <TextBody2 color={colorTextLight}>1개만 선택 가능해요</TextBody2>}
+          {consultCategory === '커리어 상담' ? <TextBody2 color={colorTextLight}>최대 3개 선택 가능해요</TextBody2> : <TextBody2 color={colorTextLight}>1개만 선택 가능해요</TextBody2>}
         </Flex>
         <Flex>
           <CustomToggleButtonGroup
-            value={mentoringContent}
+            value={consultContent}
             isExclusive={false}
-            valueArray={mentoringContents[mentoringCategory]}
-            selectedColor={mentoringCategory === '전형 준비' ? colorCareerDivePink : null}
-            backgroundColor={mentoringCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
+            valueArray={[
+              ...mentorConsultContents.filter((e) => {
+                if (consultCategory === '커리어 상담') {
+                  return e.Type === '커리어 상담'
+                } else if (consultCategory === '전형 준비') {
+                  return e.Type === '전형 준비'
+                }
+              }).map((e) => e.Name)
+            ]}
+            selectedColor={consultCategory === '전형 준비' ? colorCareerDivePink : null}
+            backgroundColor={consultCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event, value) => {
-              if (mentoringCategory === '커리어 상담') {
-                addMentoringContent(value)
+              if (consultCategory === '커리어 상담') {
+                addConsultContent(value)
               }
-              else if (mentoringCategory === '전형 준비') {
+              else if (consultCategory === '전형 준비') {
                 if (value.length === 2) {
-                  value.splice(value.indexOf(mentoringContent[0]), 1)
+                  value.splice(value.indexOf(consultContent[0]), 1)
                 }
                 if (value.length === 0) {
                   setContentGuide('')
                 }
-                setMentoringContent(value)
+                setConsultContent(value)
                 if (value in contentGuideObject) {
                   setContentGuide(contentGuideObject[value])
                 }
@@ -138,12 +146,12 @@ function Introduction({ applyInformation }) {
 
             }}></CustomToggleButtonGroup>
         </Flex>
-        {mentoringCategory === '전형 준비' && <TextBody2 color={colorCareerDivePink} style={{ marginTop: '28px' }}>{contentGuide}</TextBody2>}
+        {consultCategory === '전형 준비' && <TextBody2 color={colorCareerDivePink} style={{ marginTop: '28px' }}>{contentGuide}</TextBody2>}
 
         <EmptyHeight height='28px' />
 
 
-        {mentoringCategory === '커리어 상담' && <VerticalFlex>
+        {consultCategory === '커리어 상담' && <VerticalFlex>
           <Flex>
             <TextSubtitle1>
               이력서 사전 검토
@@ -163,21 +171,21 @@ function Introduction({ applyInformation }) {
 
         <CustomButton
           height='52px'
-          disabled={mentoringContent.length <= 0}
+          disabled={consultContent.length <= 0}
           onClick={() => {
             const updatingData = [
-              { name: 'mentoringContent', data: mentoringContent },
-              { name: 'mentoringCategory', data: mentoringCategory },
+              { name: 'consultContent', data: consultContent },
+              { name: 'consultCategory', data: consultCategory },
               { name: 'isFilePreOpen', data: isFilePreOpen },
             ]
-            if (mentoringContent === []) {
+            if (consultContent === []) {
               alert('상담 내용을 선택하세요')
             }
-            else if (mentoringCategory === null) {
+            else if (consultCategory === null) {
               alert('상담 유형을 선택하세요')
             } else {
               updateReservation(params.id, updatingData)
-              navigater(`/mentee/request/form/${mentoringCategoryConverter[mentoringCategory]}/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
+              navigater(`/mentee/request/form/${consultCategoryConverter[consultCategory]}/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
             }
           }}
         >

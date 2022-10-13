@@ -31,7 +31,7 @@ const getDatesOfMonth = (year, month) => {
 
 function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDateObjProp, onClickAvailableDateProps }) {
   const year = 2022;
-  const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : '0월');
+  const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : new Date().getMonth() + 1 + '월');
 
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
   // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
@@ -77,6 +77,7 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
   }, [selectedDate])
 
   useEffect(() => {
+    // setSelectedDate(selectedDateObjProp.getDate())
   }, [selectedDateObjProp])
 
   useEffect(() => {

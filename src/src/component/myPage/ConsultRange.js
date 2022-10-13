@@ -21,7 +21,7 @@ import {
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import API from "API";
 import { CustomTextField } from "util/Custom/CustomTextField";
@@ -64,11 +64,11 @@ const UrlWrapper = styled(TextFieldWrapper)`
 
 
 
-function ConsultRange() {
+function ConsultRange({ mentorData }) {
   const [isEditing, setIsEditing] = useState(false)
   const [introduceText, setIntroduceText] = useState('')
   const [basicConsultContent, setBasicConsultContent] = useState(['직무 이야기', '업계 이야기', '진로 상담', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '사내 문화', '면접 팁'])
-  const [selectedBasicConsultContent, setSelectedBasicConsultContent] = useState([])
+  const [selectedBasicConsultContent, setSelectedBasicConsultContent] = useState()
   const [premiumConsultContent, setPremiumConsultContent] = useState(['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰'])
   const consultRangeInfos = {
     '면접 대비': '멘티의 경력, 스펙 그리고 자소서를 토대로 한 예상 면접 질문을 제공합니다.',
@@ -79,7 +79,7 @@ function ConsultRange() {
     'CV/CL 첨삭': '멘티의 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.',
     '코드 리뷰': '멘티가 작성한 코드를 토대로 피드백을 제공합니다.'
   }
-  const [selectedPremiumConsultContent, setSelectedPremiumConsultContent] = useState([])
+  const [selectedPremiumConsultContent, setSelectedPremiumConsultContent] = useState()
   const [selectedPremiumTab, setSelectedPremiumTab] = useState(premiumConsultContent[0])
 
   const cancelEditing = () => {
@@ -104,6 +104,47 @@ function ConsultRange() {
     }
   }
 
+  useEffect(() => {
+    let tempBasicTagList = []
+    let tempPremiumTagList = []
+    mentorData.ConsultContents.forEach(element => {
+      if (element.Type === '커리어 상담') {
+        tempBasicTagList.push(element.Name)
+      } else {
+        tempPremiumTagList.push(element.Name)
+      }
+    });
+    setSelectedBasicConsultContent(tempBasicTagList)
+    setSelectedPremiumConsultContent(tempPremiumTagList)
+
+  }, [])
+
+  useEffect(() => {
+    if (selectedBasicConsultContent !== undefined && selectedPremiumConsultContent !== undefined) {
+      const consultContentList = [
+        ...selectedBasicConsultContent.map((e) => {
+          return {
+            Name: e,
+            Type: '커리어 상담'
+          }
+        }),
+        ...selectedPremiumConsultContent.map((e) => {
+          return {
+            Name: e,
+            Type: '전형 준비'
+          }
+        })
+      ]
+
+      if (consultContentList.length > 0) {
+        API.postAccountConsultContent(consultContentList, localStorage.getItem('UserID'))
+      }
+    }
+
+  }, [selectedBasicConsultContent, selectedPremiumConsultContent])
+
+
+
   return (
     <MenteeIntroduceWrapper>
       <Card
@@ -118,7 +159,7 @@ function ConsultRange() {
         <TextSubtitle2 color={colorCareerDiveBlue}>커리어 상담</TextSubtitle2>
         <EmptyHeight height={'14px'} />
         <Flex>
-          {basicConsultContent.map((e, index) => {
+          {selectedBasicConsultContent && basicConsultContent.map((e, index) => {
             return <Flex key={index}>
               <TagLarge
                 style={{ cursor: 'pointer' }}
@@ -126,9 +167,13 @@ function ConsultRange() {
                 background_color={selectedBasicConsultContent.includes(e) ? colorBackgroundCareerDiveBlue : null}
                 onClick={() => {
                   if (selectedBasicConsultContent.includes(e)) {
-                    let temp = selectedBasicConsultContent
+                    let temp = [...selectedBasicConsultContent]
                     temp.splice(temp.indexOf(e), 1)
-                    setSelectedBasicConsultContent([...temp]) // 그냥 temp를 하면 갱신되지 않음, 주소값이 같아서 그런듯
+                    if (temp.length <= 0 && selectedPremiumConsultContent <= 0) {
+                      alert('최소 하나의 상담 영역은 선택하여야 합니다')
+                    } else {
+                      setSelectedBasicConsultContent([...temp]) // 그냥 temp를 하면 갱신되지 않음, 주소값이 같아서 그런듯
+                    }
                   } else {
                     setSelectedBasicConsultContent([...selectedBasicConsultContent, e])
                   }
@@ -146,7 +191,7 @@ function ConsultRange() {
         <TextSubtitle2 color={colorCareerDivePink}>전형 준비</TextSubtitle2>
         <EmptyHeight height={'14px'} />
         <Flex>
-          {premiumConsultContent.map((e, index) => {
+          {selectedPremiumConsultContent && premiumConsultContent.map((e, index) => {
             return <Flex key={index}>
               <TagLarge
                 style={{ cursor: 'pointer' }}
@@ -154,9 +199,13 @@ function ConsultRange() {
                 background_color={selectedPremiumConsultContent.includes(e) ? colorBackgroundCareerDivePink : null}
                 onClick={() => {
                   if (selectedPremiumConsultContent.includes(e)) {
-                    let temp = selectedPremiumConsultContent
+                    let temp = [...selectedPremiumConsultContent]
                     temp.splice(temp.indexOf(e), 1)
-                    setSelectedPremiumConsultContent([...temp]) // 그냥 temp를 하면 갱신되지 않음, 주소값이 같아서 그런듯
+                    if (temp.length <= 0 && selectedBasicConsultContent <= 0) {
+                      alert('최소 하나의 상담 영역은 선택하여야 합니다')
+                    } else {
+                      setSelectedPremiumConsultContent([...temp]) // 그냥 temp를 하면 갱신되지 않음, 주소값이 같아서 그런듯
+                    }
                   } else {
                     setSelectedPremiumConsultContent([...selectedPremiumConsultContent, e])
                   }

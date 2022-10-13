@@ -1,5 +1,5 @@
 import { Divider, Grid, styled } from "@mui/material";
-import ScheduleCard from 'component/schedule/ScheduleCard.js'
+import ConsultMenteeCard from 'component/schedule/ConsultMenteeCard.js'
 import {
   Flex,
   TextBody2,
@@ -11,11 +11,12 @@ import {
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
-import circleCalendarIcon from '../../assets/icon/circleCalendar.svg'
 import ChevronRight from '@mui/icons-material/ChevronRight';
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import API from "API";
+import ConsultMentorCard from "./ConsultMentorCard";
 
 const ScheduleListWrapper = styled(Flex)`
   width: 100%;
@@ -27,22 +28,28 @@ const ScheduleListWrapper = styled(Flex)`
 // `;
 
 
-function ScheduleList() {
-  const calendarIcon = circleCalendarIcon;
-  const testProfileIamge = testMentorImage;
+function ConsultList({ consultList }) {
+
+  // const [consultList, setConsultList] = useState([])
+  // useEffect(async () => {
+  //   const res = await API.getConsultMenteeList(localStorage.getItem('UserID'), 'created')
+  //   if (res.status === 200) {
+  //     setConsultList(res.data)
+  //     console.log('consultList', res.data)
+  //   }
+  // }, [])
+
   const navigater = useNavigate();
+  const location = useLocation();
 
-  const schedules = [
-    { category: '예약 성공', date: '2022년 2월 18일', time: '오후 12시 20분', name: '다슬기', company: '(주)다파다', position: '루나' },
-    { category: '예약 성공', date: '2022년 2월 5일', time: '오전 10시 40분', name: '고디', company: '(주)더퍼더', position: '루나' },
-    { category: '예약 성공', date: '2022년 2월 3일', time: '오후 13시 40분', name: '은하수', company: '(주)삼성전자', position: '루나' },
-    { category: '예약 대기', date: '2022년 1월 24일', time: '오후 12시 00분', name: 'RAM', company: '(주)SK하이닉스', position: '루나' },
-    { category: '예약 대기', date: '2022년 1월 21일', time: '오전 11시 40분', name: '롤케익', company: '(주)삼립', position: '루나' },
-    { category: '상담 완료', date: '2022년 1월 27일', time: '오후 18시 40분', name: '위즈원', company: '(주)CJ Ent.', position: '루나' },
-    { category: '예약 실패', date: '2022년 1월 15일', time: '오후 15시 30분', name: '영박진', company: '(주)JYP', position: '루나' },
-    { category: '상담 완료', date: '2022년 1월 2일', time: '오전 12시 40분', name: '고디', company: '(주)다파다', position: '루나' },
-  ]
-
+  // 생성된(created), 대기(pending), 승인(approved), 완료(done)
+  const categoryToStatusConverter = {
+    '전체': 'created',
+    '예약 성공': 'approved',
+    '예약 대기': 'pending',
+    '예약 실패': 'done',
+    '상담 완료': 'done'
+  }
   const categories = ['전체', '예약 성공', '예약 대기', '예약 실패', '상담 완료']
   const [category, setCategory] = useState('전체');
   return (
@@ -76,12 +83,24 @@ function ScheduleList() {
         </Flex>
         <Divider />
         <Grid container spacing={'30px'} marginTop={0}>
-          {schedules.map((schedule, index) => {
-            if (category === '전체' || schedule.category === category) {
+          {consultList.map((consult, index) => {
+            if (category === '전체' || consult.Status === categoryToStatusConverter[category]) {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  <ScheduleCard schedule={schedule} requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}></ScheduleCard>
+                  {location.pathname.includes('mentor') ?
+                    <ConsultMentorCard
+                      consult={consult}
+                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
+                      enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                    /> :
+                    <ConsultMenteeCard
+                      consult={consult}
+                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
+                      enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                    />
+                  }
                 </Grid>
+
               );
             }
 
@@ -93,4 +112,4 @@ function ScheduleList() {
   );
 }
 
-export default ScheduleList;
+export default ConsultList;

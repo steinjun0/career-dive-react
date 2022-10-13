@@ -50,7 +50,7 @@ const mentorIntroducePlaceholder = '작성된 소개가 없습니다. 멘티에�
 
 
 
-function MentorIntroduce() {
+function MentorIntroduce({ mentorData }) {
   const [isEditing, setIsEditing] = useState(false)
   const [introduceText, setIntroduceText] = useState('')
   const [tagList, setTagList] = useState([]);
@@ -91,21 +91,14 @@ function MentorIntroduce() {
     return await API.postAccountTag(convertedTagList, localStorage.getItem('UserID'))
   }
 
-  useEffect(() => {
-    API.getAccountMentor(localStorage.getItem('UserID')).then(async (res) => {
-      if (res.status === 200) {
-        let tags = await getMentorTag(res.data.Tags)
-        setTagList(typeof tags === 'object' ? tags : [])
-        setIntroduceText(res.data.Introduction)
+  useEffect(async () => {
+    let tags = await getMentorTag(mentorData.Tags)
+    setTagList(typeof tags === 'object' ? tags : [])
+    setIntroduceText(mentorData.Introduction)
 
-        if (res.data.Introduction === '') {
-          setIsEditing(true)
-        }
-      }
-    })
-
-
-
+    if (mentorData.Introduction === '') {
+      setIsEditing(true)
+    }
   }, [])
 
   useEffect(() => {

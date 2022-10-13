@@ -82,7 +82,9 @@ function Login() {
                 window.localStorage.setItem('UserID', loginResponse.data['UserID'])
                 window.localStorage.setItem('AccessToken', loginResponse.data['AccessToken'])
                 window.localStorage.setItem('RefreshToken', loginResponse.data['RefreshToken'])
+                window.localStorage.setItem('SendbirdToken', loginResponse.data['SendbirdToken'])
                 window.localStorage.setItem('IsMentor', loginResponse.data['IsMentor'])
+                window.localStorage.setItem('Nickname', loginResponse.data['Nickname'])
                 window.localStorage.setItem('isAutoLogin', isAutoLogin)
                 navigate('/')
             } else {

@@ -58,7 +58,7 @@ function HelpCategory({ regularTags = [], premiumTags = [] }) {
             </Flex>
           )}
           {premiumTags && premiumTags.map((tag, index) =>
-            <Flex key={index}>
+            <Flex key={index} style={{ marginBottom: '8px' }}>
               <TagMedium
                 color={colorCareerDivePink}
                 background_color={colorBackgroundCareerDivePink}

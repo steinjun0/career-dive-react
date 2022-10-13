@@ -107,9 +107,9 @@ const maxLength = 2000;
 function Request() {
   const params = useParams()
   const navigate = useNavigate()
-  const mentoringCategory = '전형 준비'
+  const consultCategory = '전형 준비'
 
-  const [mentoringContents, setMentoringContents] = useState([])
+  const [consultContents, setConsultContents] = useState([])
   const [uploadingFiles, setUploadingFiles] = useState([])
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()
@@ -127,19 +127,21 @@ function Request() {
   useEffect(() => {
     try {
       const reservation = JSON.parse(localStorage.getItem('reservations'))[params.id]
-      setMentoringContents(reservation['mentoringContent'])
+      setConsultContents(reservation['consultContent'])
       setConsultingDate(reservation['consultingDate'])
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
       setScheduleId(reservation['scheduleId'])
       setApplymentContent(reservation['applymentContent'])
 
-      if (reservation['mentoringCategory'] === '전형 준비') {
-        if (reservation['mentoringContent'][0] in upperGuideObject) {
-          setUpperGuide(upperGuideObject[reservation['mentoringContent'][0]])
+      setRequestText(reservation['applymentContent'])
+
+      if (reservation['consultCategory'] === '전형 준비') {
+        if (reservation['consultContent'][0] in upperGuideObject) {
+          setUpperGuide(upperGuideObject[reservation['consultContent'][0]])
         }
-        if (reservation['mentoringContent'][0] in belowGuideObject) {
-          setBelowGuide(belowGuideObject[reservation['mentoringContent'][0]])
+        if (reservation['consultContent'][0] in belowGuideObject) {
+          setBelowGuide(belowGuideObject[reservation['consultContent'][0]])
         }
       }
     } catch (error) {
@@ -158,15 +160,15 @@ function Request() {
           titleHead={
             <Flex>
               <EmptyWidth width='12px' />
-              <TextSubtitle1 color={colorCareerDiveBlue}>{getConsultingRangeInKorean(consultingStartTime, consultingTime)}</TextSubtitle1>
+              <TextSubtitle1 color={colorCareerDivePink}>{getConsultingRangeInKorean(consultingStartTime, consultingTime)}</TextSubtitle1>
             </Flex>}
           titleBottom={
             <VerticalFlex>
               <EmptyHeight height='16px' />
               <Flex>
-                <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
+                <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
                 <EmptyWidth width='8px' />
-                {mentoringContents.map((value, index) => {
+                {consultContents.map((value, index) => {
                   return (
                     <Flex key={index}>
                       <TagLarge color={colorTextLight}
@@ -272,22 +274,43 @@ function Request() {
       </RequestCardWrapper >
 
       <ApplyButton
-        onClick={() => {
-          const startTimeDate = new Date(`${consultingDate['year']}-${consultingDate['month']}-${consultingDate['date']} ${consultingStartTime}`)
-          const endTimeDate = new Date(startTimeDate.getTime() + consultingTime * 60000)
-          API.postConsult({
-            requestContent: requestText,
-            startTime: `${startTimeDate.getHours().toString().padStart(2, '0')}:${startTimeDate.getMinutes().toString().padStart(2, '0')}`,
-            endTime: `${endTimeDate.getHours().toString().padStart(2, '0')}:${endTimeDate.getMinutes().toString().padStart(2, '0')}`,
-            menteeId: +localStorage.getItem('UserID'),
-            mentorId: +params.id,
-            type: 'premium',
-            scheduleId: scheduleId
-            // TODO calendar 구조 변경하기
-            // onClick과 같은 함수는 범용 props를 받도록 설정하기(적어도 object로)
-            // 특정 type 만 받도록 하면 다 수정해야한다.
-          })
-          navigate('/mentee/request/finish')
+        onClick={async () => {
+          const reservations = JSON.parse(localStorage.getItem(`reservations`))
+          let initialDate = undefined
+          if (reservations !== null) {
+            const reservation = reservations[params.id]
+
+            const consultingStartTimeDate = new Date(`2022-01-02 ${reservation['consultingStartTime']}`);
+            const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+            const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+
+            const res = await API.postConsult(
+              {
+                consultContentList: [...reservation['consultContent'].map((e) => {
+                  return {
+                    Name: e,
+                    Type: reservation['consultCategory']
+                  }
+                })],
+                menteeId: +localStorage.getItem("UserID"),
+                mentorId: +params.id,
+                preReview: reservation['isFilePreOpen'] === '희망' ? true : false,
+                requestContent: requestText,
+                scheduleId: reservation['scheduleId'],
+                startTime: reservation['consultingStartTime'],
+                endTime: consultingEndTime,
+                type: reservation['consultCategory']
+              }
+            )
+            if (res.status === 200) {
+              navigate('/mentee/request/finish')
+            } else {
+              alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')
+            }
+          } else {
+            alert('누락된 정보가 있습니다. 다시 시도해주세요')
+            navigate(`/mentee/request/${params.id}`)
+          }
         }}>
         <TextHeading6>
           다음

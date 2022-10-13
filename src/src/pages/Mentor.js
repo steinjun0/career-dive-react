@@ -35,10 +35,8 @@ function Mentor() {
 
   const params = useParams();
 
-  const [mentorData, setMentorData] = useState({});
+  const [mentorData, setMentorData] = useState();
   const [nickName, setNickName] = useState('');
-  const [consultContents, setConsultContents] = useState({})
-
 
 
   useEffect(() => {
@@ -54,24 +52,10 @@ function Mentor() {
       }
     })
 
-    API.getAccountConsultContent('일반').then((res) => {
-      if (res.stauts === 200) {
-        console.log(res.data)
-        setConsultContents(Object.assign(consultContents, { regular: res.data }))
-      }
-    })
-
-    API.getAccountConsultContent('프리미엄').then((res) => {
-      if (res.stauts === 200) {
-        console.log(res.data)
-        setConsultContents(Object.assign(consultContents, { premium: res.data }))
-      }
-    })
-
   }, [])
 
   useEffect(() => {
-    console.log('mentorData', mentorData)
+    // console.log('mentorData', mentorData)
   }, [mentorData])
 
 
@@ -81,18 +65,21 @@ function Mentor() {
         <MaxWidthDiv>
           <MetorProfileBanner>
 
-            <MentorProfile name={nickName} discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`} />
+            <MentorProfile name={nickName} discription={`${mentorData && mentorData.CompName} ${mentorData && mentorData.DivisIsPub ? `| ${mentorData && mentorData.DivisInComp}` : ''} | ${mentorData && mentorData.JobInComp}`} />
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
-          {mentorData.Nickname}
+          {mentorData && mentorData.Nickname}
 
           <MaxWidthDiv>
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>
                 <Grid container item xs={12} md={6}>
                   <Grid item xs={12} >
-                    <HelpCategory ></HelpCategory>
+                    {mentorData &&
+                      <HelpCategory
+                        regularTags={[...mentorData.ConsultContents.filter((e) => e.Type === '커리어 상담').map((e) => e.Name)]}
+                        premiumTags={[...mentorData.ConsultContents.filter((e) => e.Type === '전형 준비').map((e) => e.Name)]} />}
                     <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
                     {/* <RatingAndReview></RatingAndReview> */}
                   </Grid>

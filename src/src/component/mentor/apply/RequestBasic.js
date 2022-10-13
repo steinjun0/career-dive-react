@@ -23,6 +23,9 @@ import { CustomButton } from "util/Custom/CustomButton";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
+import UploadIcon from 'assets/icon/UploadIcon'
+import Dropzone from "react-dropzone";
+import API from "API";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -33,6 +36,14 @@ const ApplyButton = styled(CustomButton)`
   width: 378px;
   margin-top: 30px;
   margin-left: auto;
+`;
+
+const FileDropzoneContent = styled(Flex)`
+  background-color: ${colorBackgroundGrayLight};
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: 60px;
 `;
 
 const getCategoryColor = (category) => {
@@ -60,20 +71,34 @@ const CategoryTag = styled(TagLarge)`
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
 
-const getConsultingRangeInKorean = (consultingStartTime, consultingTime) =>
-  `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(addMinute(consultingStartTime, consultingTime))} ${addMinute(consultingStartTime, consultingTime)}`
+const getConsultingRangeInKorean = (consultingStartTime, consultingTime) => {
+  const consultingStartTimeDate = new Date(`2022-01-02 ${consultingStartTime}`);
+  if (!isNaN(consultingStartTimeDate.getTime())) {
+    const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+    const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+    return `${consultingStartTime}~${consultingEndTime}`
+    // return `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(consultingEndTime)} ${consultingEndTime}`
+  }
+  else {
+    return ''
+  }
+}
 
 const maxLength = 600;
 
 function Request() {
   const navigate = useNavigate()
 
-  const mentoringCategory = '커리어 상담'
-  const [mentoringContents, setMentoringContents] = useState([])
+  const consultCategory = '커리어 상담'
+  const [consultContents, setConsultContents] = useState([])
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()
   const [consultingTime, setConsultingTime] = useState(20)
   const [applymentContent, setApplymentContent] = useState('')
+
+  const [isFilePreOpen, setIsFilePreOpen] = useState('')
+  const [uploadingFiles, setUploadingFiles] = useState([])
+
 
   const [requestText, setRequestText] = useState('');
 
@@ -82,11 +107,16 @@ function Request() {
   useEffect(() => {
     try {
       const reservation = JSON.parse(localStorage.getItem('reservations'))[params.id]
-      setMentoringContents(reservation['mentoringContent'])
+      setConsultContents(reservation['consultContent'])
       setConsultingDate(reservation['consultingDate'])
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
       setApplymentContent(reservation['applymentContent'])
+
+      setRequestText(reservation['applymentContent'])
+
+      setIsFilePreOpen(reservation['isFilePreOpen'])
+
     } catch (error) {
       console.log(error)
       alert('누락된 상담 내용 정보가 있습니다.')
@@ -109,9 +139,9 @@ function Request() {
             <VerticalFlex>
               <EmptyHeight height='16px' />
               <Flex>
-                <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
+                <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
                 <EmptyWidth width='8px' />
-                {mentoringContents && mentoringContents.map((value, index) => {
+                {consultContents && consultContents.map((value, index) => {
                   return (
                     <Flex key={index}>
                       <TagLarge color={colorTextLight}
@@ -158,19 +188,101 @@ function Request() {
             <TextCaption>{requestText.length}/{maxLength}</TextCaption>
           </Flex>
           <EmptyHeight height='16px' />
+
+
+          {isFilePreOpen === '희망' && <VerticalFlex>
+            <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
+            <TextBody2 color={colorCareerDiveBlue}>
+              안내문구
+            </TextBody2>
+            <EmptyHeight height='8px' />
+            {/* TODO: upload 파일 취소 버튼 필요 */}
+            <Dropzone onDrop={acceptedFiles => {
+              if (uploadingFiles.length + acceptedFiles.length > 2) {
+                alert('업로드 파일은 최대 2개입니다.')
+                return
+              }
+              const temp = []
+              acceptedFiles.forEach(file => {
+                temp.push(file.path)
+              })
+              setUploadingFiles([...uploadingFiles, ...temp])
+            }}>
+              {({ getRootProps, getInputProps }) => (
+                <section>
+                  <FileDropzoneContent {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <UploadIcon color={colorTextLight} />
+                  </FileDropzoneContent>
+                </section>
+              )}
+            </Dropzone>
+            <EmptyHeight height='16px' />
+            {uploadingFiles.map((items, index) => {
+              return <Flex key={index}>
+                <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items}</TextBody2>
+                <TextBody2
+                  style={{ cursor: 'pointer' }}
+                  color={colorCareerDivePink}
+                  onClick={() => {
+                    const temp = JSON.parse(JSON.stringify(uploadingFiles))
+                    temp.splice(temp.indexOf(items), 1)
+                    setUploadingFiles(temp)
+                  }}>삭제</TextBody2>
+              </Flex>
+            })}
+          </VerticalFlex>}
+
         </Card>
       </RequestCardWrapper >
-
       <ApplyButton
-        onClick={() => {
-          navigate('/mentee/request/finish')
+        onClick={async () => {
+          const reservations = JSON.parse(localStorage.getItem(`reservations`))
+          let initialDate = undefined
+          if (reservations !== null) {
+            const reservation = reservations[params.id]
+
+            const consultingStartTimeDate = new Date(`2022-01-02 ${reservation['consultingStartTime']}`);
+            const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+            const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+
+            const consultRes = await API.postConsult(
+              {
+                consultContentList: [...reservation['consultContent'].map((e) => {
+                  return {
+                    Name: e,
+                    Type: reservation['consultCategory']
+                  }
+                })],
+                menteeId: +localStorage.getItem("UserID"),
+                mentorId: +params.id,
+                preReview: reservation['isFilePreOpen'] === '희망' ? true : false,
+                requestContent: requestText,
+                scheduleId: reservation['scheduleId'],
+                startTime: reservation['consultingStartTime'],
+                endTime: consultingEndTime,
+                type: reservation['consultCategory']
+              }
+            )
+            if (consultRes.status === 200) {
+              navigate('/mentee/request/finish')
+            } else {
+              alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')
+            }
+          } else {
+            alert('누락된 정보가 있습니다. 다시 시도해주세요')
+            navigate(`/mentee/request/${params.id}`)
+          }
+
+
+
         }}>
         <TextHeading6>
           다음
         </TextHeading6>
       </ApplyButton>
 
-    </VerticalFlex>
+    </VerticalFlex >
 
 
 

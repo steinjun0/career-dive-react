@@ -16,7 +16,7 @@ import MentoringApplyViewerMentor from './pages/Mentor/MentoringApplyViewer'
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
-import Schedule from "./pages/Schedule";
+import SessionList from "./pages/ConsultList";
 import MyPage from "./pages/MyPage";
 import MentorHome from './pages/Mentor/Home'
 import { colorCareerDiveBlue, VerticalFlex } from "util/styledComponent";
@@ -31,6 +31,7 @@ import MentorMyPage from "./pages/Mentor/MyPage";
 import CareerInfoChange from "component/myPage/\bCareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
+import Search from 'pages/Search'
 
 
 const theme = createTheme({
@@ -70,7 +71,7 @@ ReactDOM.render(
           <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />
           {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}
           <Route path="/mentee/sessionList/form/:id" element={<MentoringApplyViewer />} />
-          <Route path="/mentee/sessionList" element={<Schedule />} />
+          <Route path="/mentee/sessionList" element={<SessionList />} />
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentee/mypage/account/change" element={<MyPage />} />
           <Route path="/mentee/mypage" element={<Navigate replace to="/mentee/mypage/profile" />} />
@@ -89,7 +90,9 @@ ReactDOM.render(
           {/* TODO: 멘토가 진입하는 멘티 요청서 화면 */}
 
           <Route path="/sendbird" element={<Sendbird />} />
-          <Route path="/session" element={<Session />} />
+          <Route path="/session/:id" element={<Session />} />
+          <Route path="/search" element={<Search />} />
+
 
         </Routes>
       </VerticalFlex>
