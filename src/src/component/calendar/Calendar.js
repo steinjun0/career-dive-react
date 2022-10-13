@@ -252,12 +252,21 @@ function Calendar({ setIsFinishSet }) {
 
   const onClickconsultingStartTime = (event, consultingStartTime) => {
     setConsultingStartTime(consultingStartTime)
-
+    let schedulIdTemp = -1;
     Array(...availableAMTimes, ...availablePMTimes).map((e) => {
       if (e.time === consultingStartTime) {
         setScheduleId(e.scheduleId)
+        schedulIdTemp = e.scheduleId
       }
     })
+
+    const updatingData = [
+      { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
+      { name: 'consultingTime', data: consultingTime },
+      { name: 'consultingStartTime', data: consultingStartTime },
+      { name: 'scheduleId', data: schedulIdTemp }
+    ]
+    updateReservation(params.id, updatingData)
   }
 
 
@@ -443,13 +452,7 @@ function Calendar({ setIsFinishSet }) {
             <CustomButton
               height='52px'
               onClick={() => {
-                const updatingData = [
-                  { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
-                  { name: 'consultingTime', data: consultingTime },
-                  { name: 'consultingStartTime', data: consultingStartTime },
-                  { name: 'scheduleId', data: scheduleId }
-                ]
-                updateReservation(params.id, updatingData)
+
                 navigater(`/mentee/request/${params.id}`)
               }}>
               신청
