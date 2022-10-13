@@ -88,7 +88,7 @@ const maxLength = 600;
 function Request() {
   const navigate = useNavigate()
 
-  const mentoringCategory = '커리어 상담'
+  const consultCategory = '커리어 상담'
   const [consultContents, setConsultContents] = useState([])
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()
@@ -135,7 +135,7 @@ function Request() {
             <VerticalFlex>
               <EmptyHeight height='16px' />
               <Flex>
-                <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
+                <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
                 <EmptyWidth width='8px' />
                 {consultContents && consultContents.map((value, index) => {
                   return (
@@ -239,7 +239,14 @@ function Request() {
           if (reservations !== null) {
             const reservation = reservations[params.id]
             await API.postConsult(
-              { consultContentList: reservation['consultContent'] }
+              {
+                consultContentList: [...reservation['consultContent'].map((e) => {
+                  return {
+                    Name: e,
+                    Type: reservation['consultCategory'] === "커리어 상담" ? 'general' : 'premium'
+                  }
+                })]
+              }
             )
             navigate('/mentee/request/finish')
 
@@ -252,7 +259,7 @@ function Request() {
         </TextHeading6>
       </ApplyButton>
 
-    </VerticalFlex>
+    </VerticalFlex >
 
 
 

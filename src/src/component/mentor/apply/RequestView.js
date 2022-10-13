@@ -66,7 +66,7 @@ const CategoryTag = styled(TagLarge)`
 `
 
 function RequestView() {
-  const mentoringCategory = '커리어 상담'
+  const consultCategory = '커리어 상담'
   const consultContents = ['이직 준비', '면접 팁', '업계 이야기']
   return (
     <RequestCardWrapper>
@@ -81,7 +81,7 @@ function RequestView() {
           <VerticalFlex>
             <EmptyHeight height='16px' />
             <Flex>
-              <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
+              <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
               <EmptyWidth width='8px' />
               {consultContents.map((value, index) => {
                 return (

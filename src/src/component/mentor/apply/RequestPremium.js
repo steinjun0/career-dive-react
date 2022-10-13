@@ -107,7 +107,7 @@ const maxLength = 2000;
 function Request() {
   const params = useParams()
   const navigate = useNavigate()
-  const mentoringCategory = '전형 준비'
+  const consultCategory = '전형 준비'
 
   const [consultContents, setConsultContents] = useState([])
   const [uploadingFiles, setUploadingFiles] = useState([])
@@ -134,7 +134,7 @@ function Request() {
       setScheduleId(reservation['scheduleId'])
       setApplymentContent(reservation['applymentContent'])
 
-      if (reservation['mentoringCategory'] === '전형 준비') {
+      if (reservation['consultCategory'] === '전형 준비') {
         if (reservation['consultContent'][0] in upperGuideObject) {
           setUpperGuide(upperGuideObject[reservation['consultContent'][0]])
         }
@@ -164,7 +164,7 @@ function Request() {
             <VerticalFlex>
               <EmptyHeight height='16px' />
               <Flex>
-                <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
+                <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
                 <EmptyWidth width='8px' />
                 {consultContents.map((value, index) => {
                   return (
