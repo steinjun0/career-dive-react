@@ -14,7 +14,7 @@ import testMentorImage from "../../assets/img/testMentorImage.png";
 import ChevronRight from '@mui/icons-material/ChevronRight';
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import API from "API";
 import ConsultMentorCard from "./ConsultMentorCard";
 
@@ -40,6 +40,7 @@ function ConsultList({ consultList }) {
   // }, [])
 
   const navigater = useNavigate();
+  const location = useLocation();
 
   // 생성된(created), 대기(pending), 승인(approved), 완료(done)
   const categoryToStatusConverter = {
@@ -86,16 +87,18 @@ function ConsultList({ consultList }) {
             if (category === '전체' || consult.Status === categoryToStatusConverter[category]) {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  <ConsultMenteeCard
-                    consult={consult}
-                    requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
-                    enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
-                  />
-                  <ConsultMentorCard
-                    consult={consult}
-                    requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
-                    enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
-                  />
+                  {location.pathname.includes('mentor') ?
+                    <ConsultMentorCard
+                      consult={consult}
+                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
+                      enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                    /> :
+                    <ConsultMenteeCard
+                      consult={consult}
+                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
+                      enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                    />
+                  }
                 </Grid>
 
               );
