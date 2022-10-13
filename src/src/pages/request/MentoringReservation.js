@@ -38,12 +38,11 @@ const CardsWrapper2 = styled(Flex)`
 
 function MentoringReservation() {
   const params = useParams();
-  const [mentorData, setMentorData] = useState({});
+  const [mentorData, setMentorData] = useState();
   const [nickName, setNickName] = useState('');
 
   const [isFinishSet, setIsFinishSet] = useState(false)
   useEffect(() => {
-    // console.log(isFinishSet)
   }, [isFinishSet])
 
   useEffect(() => {
@@ -66,7 +65,7 @@ function MentoringReservation() {
       <FullWidthWrapper>
         <MaxWidthDiv>
           <MetorProfileBanner>
-            <MentorProfile name={nickName} discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`} />
+            {mentorData && <MentorProfile name={nickName} discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`} />}
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground >
@@ -79,8 +78,7 @@ function MentoringReservation() {
             {
               isFinishSet &&
               <CardsWrapper2>
-                <SelectContent >
-                </SelectContent>
+                {mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />}
               </CardsWrapper2>
             }
 
