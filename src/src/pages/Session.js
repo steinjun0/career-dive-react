@@ -40,14 +40,17 @@ function Session() {
 
 
   useEffect(async () => {
-    const res = await API.getConsult(params.id)
-    if (res.status === 200) {
-      if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
-        setCalleeId(res.data.MentorID)
-      } else {
-        setCalleeId(res.data.MenteeID)
+
+    await API.getConsult(params.id).then((res) => {
+      if (res.status === 200) {
+        if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
+          setCalleeId(res.data.MentorID)
+        } else {
+          setCalleeId(res.data.MenteeID)
+        }
       }
-    }
+    })
+
 
     // params.id
     API.Sendbird.initSendbird()
