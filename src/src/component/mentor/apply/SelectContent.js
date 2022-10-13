@@ -44,7 +44,7 @@ const mentoringCategoryConverter = {
   '전형 준비': 'prepare'
 }
 
-function Introduction({ applyInformation }) {
+function Introduction({ mentorConsultContents }) {
   const navigater = useNavigate()
   const params = useParams()
 
@@ -115,7 +115,15 @@ function Introduction({ applyInformation }) {
           <CustomToggleButtonGroup
             value={mentoringContent}
             isExclusive={false}
-            valueArray={mentoringContents[mentoringCategory]}
+            valueArray={[
+              ...mentorConsultContents.filter((e) => {
+                if (mentoringCategory === '커리어 상담') {
+                  return e.Type === '커리어 상담'
+                } else if (mentoringCategory === '전형 준비') {
+                  return e.Type === '전형 준비'
+                }
+              }).map((e) => e.Name)
+            ]}
             selectedColor={mentoringCategory === '전형 준비' ? colorCareerDivePink : null}
             backgroundColor={mentoringCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event, value) => {
