@@ -1,5 +1,7 @@
 import { styled } from "@mui/material";
+import API from "API";
 import MentorCard from "component/mentor/MentorCard";
+import { useEffect, useState } from "react";
 import { RowAlignCenterFlex } from "util/styledComponent";
 import FamousMentorCard from "./FamousMentorCard";
 
@@ -31,6 +33,15 @@ const SellAll = styled("span")`
 `;
 
 function JobCategoryGroup() {
+
+  const [mentorList, setMentorList] = useState()
+  useEffect(() => {
+    API.getAccountMentorList().then((res) => {
+      if (res.status === 200) {
+        setMentorList(res.data.Results)
+      }
+    })
+  }, [])
   return (
     <FamousMentorGroupWrapper>
       <TopWrapper>
@@ -39,36 +50,20 @@ function JobCategoryGroup() {
       </TopWrapper>
 
       <FamousMentorCardsWrapper>
-        <MentorCard
-          company={"LF"}
-          department={"서비스 기획자"}
-          job={"UX 리서처"}
-          name={"Sarah"}
-          inJob={"현직자"}
-          duration={"기간"}
-          rating={4.5}
-          userId={1}
-          isShowRating={false}
-          isShowTag={true} />
-        <MentorCard
-          company={"넥스트 유니콘"}
-          department={"앱 개발팀"}
-          job={"데이터 사이언티스트"}
-          name={"Soo"}
-          inJob={"현직자"}
-          duration={"기간"}
-          rating={4.5}
-          userId={1} />
-        <MentorCard
-          company={"커리어다이브"}
-          department={"디자이너"}
-          job={"매드로봇"}
-          name={"Sarah"}
-          inJob={"현직자"}
-          duration={"기간"}
-          rating={4.5}
-          userId={1} />
-        <MentorCard />
+        {mentorList && mentorList.map((mentorData, index) => {
+          return <MentorCard
+            key={index}
+            company={mentorData.CompName}
+            department={mentorData.DivisInComp}
+            job={mentorData.JobInComp}
+            name={"Sarah"}
+            inJob={mentorData.InService ? "현직자" : "경력자"}
+            duration={"기간"}
+            rating={4.5}
+            userId={mentorData.UserID}
+            isShowRating={false}
+            isShowTag={true} />
+        })}
       </FamousMentorCardsWrapper>
     </FamousMentorGroupWrapper>
   );
