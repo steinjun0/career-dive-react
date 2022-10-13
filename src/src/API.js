@@ -178,6 +178,12 @@ export default {
     return accountRes
   },
 
+  async getAccountMentorList() {
+    const mentorListRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/mentor/list`)
+    return mentorListRes
+  },
+
+
   async postAccount(email, password, nickname) {
     const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
     return res
@@ -235,6 +241,27 @@ export default {
   async postAccountConsultContent(consultContents, mentorId) {
     const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/consultContent`, { ConsultContents: consultContents, MentorID: +mentorId })
     return scheduleRes
+  },
+
+  async postConsult(
+    { consultContentList,
+      menteeId, mentorId,
+      preReview,
+      requestContent,
+      scheduleId,
+      startTime, endTime }) {
+    await this.postAxios(
+      `${CAREER_DIVE_API_URL}/account/consultContent`,
+      {
+        ConsultContentList: consultContentList,
+        MenteeId: +menteeId,
+        MentorId: +mentorId,
+        PreReview: preReview,
+        RequestContent: requestContent,
+        ScheduleId: +scheduleId,
+        StartTime: startTime,
+        EndTime: endTime
+      })
   },
 
   async postAccountTag(tags, mentorId) {
