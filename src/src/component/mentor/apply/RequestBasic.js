@@ -76,7 +76,8 @@ const getConsultingRangeInKorean = (consultingStartTime, consultingTime) => {
   if (!isNaN(consultingStartTimeDate.getTime())) {
     const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
     const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
-    return `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(consultingEndTime)} ${consultingEndTime}`
+    return `${consultingStartTime}~${consultingEndTime}`
+    // return `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(consultingEndTime)} ${consultingEndTime}`
   }
   else {
     return ''
@@ -111,6 +112,9 @@ function Request() {
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
       setApplymentContent(reservation['applymentContent'])
+
+      setRequestText(reservation['applymentContent'])
+
       setIsFilePreOpen(reservation['isFilePreOpen'])
 
     } catch (error) {
@@ -231,26 +235,45 @@ function Request() {
 
         </Card>
       </RequestCardWrapper >
-
       <ApplyButton
         onClick={async () => {
           const reservations = JSON.parse(localStorage.getItem(`reservations`))
           let initialDate = undefined
           if (reservations !== null) {
             const reservation = reservations[params.id]
-            await API.postConsult(
+
+            const consultingStartTimeDate = new Date(`2022-01-02 ${reservation['consultingStartTime']}`);
+            const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+            const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+
+            const consultRes = await API.postConsult(
               {
                 consultContentList: [...reservation['consultContent'].map((e) => {
                   return {
                     Name: e,
-                    Type: reservation['consultCategory'] === "커리어 상담" ? 'general' : 'premium'
+                    Type: reservation['consultCategory']
                   }
-                })]
+                })],
+                menteeId: +localStorage.getItem("UserID"),
+                mentorId: +params.id,
+                preReview: reservation['isFilePreOpen'] === '희망' ? true : false,
+                requestContent: requestText,
+                scheduleId: reservation['scheduleId'],
+                startTime: reservation['consultingStartTime'],
+                endTime: consultingEndTime,
+                type: reservation['consultCategory']
               }
             )
-            navigate('/mentee/request/finish')
-
+            if (consultRes.status === 200) {
+              navigate('/mentee/request/finish')
+            } else {
+              alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')
+            }
+          } else {
+            alert('누락된 정보가 있습니다. 다시 시도해주세요')
+            navigate(`/mentee/request/${params.id}`)
           }
+
 
 
         }}>

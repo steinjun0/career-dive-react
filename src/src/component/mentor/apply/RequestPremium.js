@@ -134,6 +134,8 @@ function Request() {
       setScheduleId(reservation['scheduleId'])
       setApplymentContent(reservation['applymentContent'])
 
+      setRequestText(reservation['applymentContent'])
+
       if (reservation['consultCategory'] === '전형 준비') {
         if (reservation['consultContent'][0] in upperGuideObject) {
           setUpperGuide(upperGuideObject[reservation['consultContent'][0]])
@@ -272,22 +274,43 @@ function Request() {
       </RequestCardWrapper >
 
       <ApplyButton
-        onClick={() => {
-          const startTimeDate = new Date(`${consultingDate['year']}-${consultingDate['month']}-${consultingDate['date']} ${consultingStartTime}`)
-          const endTimeDate = new Date(startTimeDate.getTime() + consultingTime * 60000)
-          API.postConsult({
-            requestContent: requestText,
-            startTime: `${startTimeDate.getHours().toString().padStart(2, '0')}:${startTimeDate.getMinutes().toString().padStart(2, '0')}`,
-            endTime: `${endTimeDate.getHours().toString().padStart(2, '0')}:${endTimeDate.getMinutes().toString().padStart(2, '0')}`,
-            menteeId: +localStorage.getItem('UserID'),
-            mentorId: +params.id,
-            type: 'premium',
-            scheduleId: scheduleId
-            // TODO calendar 구조 변경하기
-            // onClick과 같은 함수는 범용 props를 받도록 설정하기(적어도 object로)
-            // 특정 type 만 받도록 하면 다 수정해야한다.
-          })
-          navigate('/mentee/request/finish')
+        onClick={async () => {
+          const reservations = JSON.parse(localStorage.getItem(`reservations`))
+          let initialDate = undefined
+          if (reservations !== null) {
+            const reservation = reservations[params.id]
+
+            const consultingStartTimeDate = new Date(`2022-01-02 ${reservation['consultingStartTime']}`);
+            const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+            const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+
+            const res = await API.postConsult(
+              {
+                consultContentList: [...reservation['consultContent'].map((e) => {
+                  return {
+                    Name: e,
+                    Type: reservation['consultCategory']
+                  }
+                })],
+                menteeId: +localStorage.getItem("UserID"),
+                mentorId: +params.id,
+                preReview: reservation['isFilePreOpen'] === '희망' ? true : false,
+                requestContent: requestText,
+                scheduleId: reservation['scheduleId'],
+                startTime: reservation['consultingStartTime'],
+                endTime: consultingEndTime,
+                type: reservation['consultCategory']
+              }
+            )
+            if (res.status === 200) {
+              navigate('/mentee/request/finish')
+            } else {
+              alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')
+            }
+          } else {
+            alert('누락된 정보가 있습니다. 다시 시도해주세요')
+            navigate(`/mentee/request/${params.id}`)
+          }
         }}>
         <TextHeading6>
           다음

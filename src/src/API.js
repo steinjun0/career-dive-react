@@ -249,9 +249,10 @@ export default {
       preReview,
       requestContent,
       scheduleId,
-      startTime, endTime }) {
-    await this.postAxios(
-      `${CAREER_DIVE_API_URL}/account/consultContent`,
+      startTime, endTime,
+      type }) {
+    const consultRes = await this.postAxios(
+      `${CAREER_DIVE_API_URL}/consult`,
       {
         ConsultContentList: consultContentList,
         MenteeId: +menteeId,
@@ -260,26 +261,17 @@ export default {
         RequestContent: requestContent,
         ScheduleId: +scheduleId,
         StartTime: startTime,
-        EndTime: endTime
+        EndTime: endTime,
+        Type: type,
+        Status: "created",
       })
+
+    return consultRes
   },
 
   async postAccountTag(tags, mentorId) {
     const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/tag`, { Tags: tags, MentorID: +mentorId })
     return scheduleRes
-  },
-
-  async postConsult({ startTime, endTime, menteeId, mentorId, requestContent, type, scheduleId, preReview }) {
-    console.log({ startTime, endTime, menteeId, mentorId, requestContent, type, scheduleId, preReview })
-    const res = await this.postAxios(`${CAREER_DIVE_API_URL}/consult`, {
-      StartTime: startTime, EndTime: endTime,
-      MenteeId: menteeId, MentorId: mentorId,
-      RequestContent: requestContent,
-      ScheduleID: scheduleId,
-      PreReview: preReview,
-      Type: type
-    })
-    return res
   },
 
   async patchAccount(userData) {
