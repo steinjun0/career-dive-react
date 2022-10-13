@@ -25,6 +25,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 import UploadIcon from 'assets/icon/UploadIcon'
 import Dropzone from "react-dropzone";
+import API from "API";
 
 const RequestCardWrapper = styled(Flex)`
   margin-top: 30px;
@@ -88,7 +89,7 @@ function Request() {
   const navigate = useNavigate()
 
   const mentoringCategory = '커리어 상담'
-  const [mentoringContents, setMentoringContents] = useState([])
+  const [consultContents, setConsultContents] = useState([])
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()
   const [consultingTime, setConsultingTime] = useState(20)
@@ -105,7 +106,7 @@ function Request() {
   useEffect(() => {
     try {
       const reservation = JSON.parse(localStorage.getItem('reservations'))[params.id]
-      setMentoringContents(reservation['mentoringContent'])
+      setConsultContents(reservation['consultContent'])
       setConsultingDate(reservation['consultingDate'])
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
@@ -136,7 +137,7 @@ function Request() {
               <Flex>
                 <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
                 <EmptyWidth width='8px' />
-                {mentoringContents && mentoringContents.map((value, index) => {
+                {consultContents && consultContents.map((value, index) => {
                   return (
                     <Flex key={index}>
                       <TagLarge color={colorTextLight}
@@ -232,8 +233,19 @@ function Request() {
       </RequestCardWrapper >
 
       <ApplyButton
-        onClick={() => {
-          navigate('/mentee/request/finish')
+        onClick={async () => {
+          const reservations = JSON.parse(localStorage.getItem(`reservations`))
+          let initialDate = undefined
+          if (reservations !== null) {
+            const reservation = reservations[params.id]
+            await API.postConsult(
+              { consultContentList: reservation['consultContent'] }
+            )
+            navigate('/mentee/request/finish')
+
+          }
+
+
         }}>
         <TextHeading6>
           다음

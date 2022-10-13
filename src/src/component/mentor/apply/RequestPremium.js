@@ -109,7 +109,7 @@ function Request() {
   const navigate = useNavigate()
   const mentoringCategory = '전형 준비'
 
-  const [mentoringContents, setMentoringContents] = useState([])
+  const [consultContents, setConsultContents] = useState([])
   const [uploadingFiles, setUploadingFiles] = useState([])
   const [consultingDate, setConsultingDate] = useState({})
   const [consultingStartTime, setConsultingStartTime] = useState()
@@ -127,7 +127,7 @@ function Request() {
   useEffect(() => {
     try {
       const reservation = JSON.parse(localStorage.getItem('reservations'))[params.id]
-      setMentoringContents(reservation['mentoringContent'])
+      setConsultContents(reservation['consultContent'])
       setConsultingDate(reservation['consultingDate'])
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
@@ -135,11 +135,11 @@ function Request() {
       setApplymentContent(reservation['applymentContent'])
 
       if (reservation['mentoringCategory'] === '전형 준비') {
-        if (reservation['mentoringContent'][0] in upperGuideObject) {
-          setUpperGuide(upperGuideObject[reservation['mentoringContent'][0]])
+        if (reservation['consultContent'][0] in upperGuideObject) {
+          setUpperGuide(upperGuideObject[reservation['consultContent'][0]])
         }
-        if (reservation['mentoringContent'][0] in belowGuideObject) {
-          setBelowGuide(belowGuideObject[reservation['mentoringContent'][0]])
+        if (reservation['consultContent'][0] in belowGuideObject) {
+          setBelowGuide(belowGuideObject[reservation['consultContent'][0]])
         }
       }
     } catch (error) {
@@ -166,7 +166,7 @@ function Request() {
               <Flex>
                 <CategoryTag category={mentoringCategory}><TextBody2>{mentoringCategory}</TextBody2></CategoryTag>
                 <EmptyWidth width='8px' />
-                {mentoringContents.map((value, index) => {
+                {consultContents.map((value, index) => {
                   return (
                     <Flex key={index}>
                       <TagLarge color={colorTextLight}

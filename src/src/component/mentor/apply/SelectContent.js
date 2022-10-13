@@ -24,7 +24,7 @@ const IntroductionWrapper = styled(Flex)`
   width: 100%;
 `;
 
-const mentoringContents = {
+const consultContents = {
   '커리어 상담': ['직무 이야기', '업계 이야기', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '진로 상담', '사내 문화', '면접 팁', '기타'],
   '전형 준비': ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰']
 }
@@ -49,7 +49,7 @@ function Introduction({ mentorConsultContents }) {
   const params = useParams()
 
   const [mentoringCategory, setMentoringCategory] = useState('커리어 상담')
-  const [mentoringContent, setMentoringContent] = useState([])
+  const [consultContent, setConsultContent] = useState([])
   const [mentoringDate, setMentoringDate] = useState()
   const [isFilePreOpen, setIsFilePreOpen] = useState()
 
@@ -61,7 +61,7 @@ function Introduction({ mentorConsultContents }) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {
         reservation['mentoringCategory'] && setMentoringCategory(reservation['mentoringCategory'])
-        reservation['mentoringContent'] && setMentoringContent(reservation['mentoringContent'])
+        reservation['consultContent'] && setConsultContent(reservation['consultContent'])
         reservation['consultingDate'] && setMentoringDate(new Date(reservation['consultingDate']['year'], reservation['consultingDate']['month'] - 1, reservation['consultingDate']['date']))
         reservation['isFilePreOpen'] && setIsFilePreOpen(reservation['isFilePreOpen'])
       }
@@ -69,9 +69,9 @@ function Introduction({ mentorConsultContents }) {
   }, [])
 
 
-  const addMentoringContent = (contents) => {
+  const addConsultContent = (contents) => {
     if (contents.length <= (mentoringCategory === '커리어 상담' ? 3 : 1)) {
-      setMentoringContent(contents)
+      setConsultContent(contents)
     }
   }
 
@@ -99,7 +99,7 @@ function Introduction({ mentorConsultContents }) {
             backgroundColor={mentoringCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event, value) => {
               setMentoringCategory(value)
-              setMentoringContent([])
+              setConsultContent([])
             }}></CustomToggleButtonGroup>
         </Flex>
         <EmptyHeight height='16px'></EmptyHeight>
@@ -113,7 +113,7 @@ function Introduction({ mentorConsultContents }) {
         </Flex>
         <Flex>
           <CustomToggleButtonGroup
-            value={mentoringContent}
+            value={consultContent}
             isExclusive={false}
             valueArray={[
               ...mentorConsultContents.filter((e) => {
@@ -128,16 +128,16 @@ function Introduction({ mentorConsultContents }) {
             backgroundColor={mentoringCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event, value) => {
               if (mentoringCategory === '커리어 상담') {
-                addMentoringContent(value)
+                addConsultContent(value)
               }
               else if (mentoringCategory === '전형 준비') {
                 if (value.length === 2) {
-                  value.splice(value.indexOf(mentoringContent[0]), 1)
+                  value.splice(value.indexOf(consultContent[0]), 1)
                 }
                 if (value.length === 0) {
                   setContentGuide('')
                 }
-                setMentoringContent(value)
+                setConsultContent(value)
                 if (value in contentGuideObject) {
                   setContentGuide(contentGuideObject[value])
                 }
@@ -171,14 +171,14 @@ function Introduction({ mentorConsultContents }) {
 
         <CustomButton
           height='52px'
-          disabled={mentoringContent.length <= 0}
+          disabled={consultContent.length <= 0}
           onClick={() => {
             const updatingData = [
-              { name: 'mentoringContent', data: mentoringContent },
+              { name: 'consultContent', data: consultContent },
               { name: 'mentoringCategory', data: mentoringCategory },
               { name: 'isFilePreOpen', data: isFilePreOpen },
             ]
-            if (mentoringContent === []) {
+            if (consultContent === []) {
               alert('상담 내용을 선택하세요')
             }
             else if (mentoringCategory === null) {
