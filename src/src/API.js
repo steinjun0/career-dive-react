@@ -141,11 +141,6 @@ export default {
     return loginRes
   },
 
-  async getConsultSchedule(year, month, mentorId) {
-    const scheduleRes = await this.getAxiosWithParams(`${CAREER_DIVE_API_URL}/consult/schedule`, { 'Year': year, 'Month': month, 'MentorID': +mentorId })
-    return scheduleRes
-  },
-
   async getAccount(id) {
     const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/${id}`)
     return accountRes
@@ -156,10 +151,26 @@ export default {
     return accountMentornRes
   },
 
+  async getAccountMentee(id) {
+    const accountMenteeRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/mentee/${id}`)
+    return accountMenteeRes
+  },
+
   async getAccountConsultContent(type) {
     const contentRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/consultContent/list?type=${type}`)
     return contentRes
   },
+
+  async getConsult(id) {
+    const consultRes = await this.getAxios(`${CAREER_DIVE_API_URL}/consult/${id}`)
+    return consultRes
+  },
+
+  async getConsultSchedule(year, month, mentorId) {
+    const scheduleRes = await this.getAxiosWithParams(`${CAREER_DIVE_API_URL}/consult/schedule`, { 'Year': year, 'Month': month, 'MentorID': +mentorId })
+    return scheduleRes
+  },
+
 
   async getConsultMenteeList(id, status) {
     // 생성된(created), 대기(pending), 승인(approved), 완료(done)
@@ -177,6 +188,7 @@ export default {
     const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/consult/${id}`)
     return accountRes
   },
+
 
   async getAccountMentorList() {
     const mentorListRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/mentor/list`)
@@ -282,6 +294,11 @@ export default {
   async patchAccountMentor(mentorData) {
     const mentorRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/mentor`, mentorData)
     return mentorRes
+  },
+
+  async patchAccountMentee({ introduction, link, userId }) {
+    const menteeRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/mentee/${userId}`, { Introduction: introduction, Link: link, UserID: +userId })
+    return menteeRes
   },
 
   async patchUser(userData) {
