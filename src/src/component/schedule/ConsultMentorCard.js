@@ -103,7 +103,13 @@ function ConsultMentorCard({ consult, requestFormOnClick, changeOnClick, enterOn
           <Flex>
             {consult.ConsultContentList.slice(0, 3).map((e, i) => {
               if (e.Type === '전형 준비') return <TagLarge key={i} color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}>{e.Name}</TagLarge>
-              else return <TagLarge key={i} color={colorCareerDiveBlue} background_color={colorBackgroundCareerDiveBlue}>{e.Name}</TagLarge>
+              else return <TagLarge
+                key={i}
+                style={{ marginRight: 8 }}
+                color={colorCareerDiveBlue}
+                background_color={colorBackgroundCareerDiveBlue}>
+                {e.Name}
+              </TagLarge>
             })}
           </Flex>
 
