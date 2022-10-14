@@ -90,12 +90,12 @@ function ConsultList({ consultList }) {
                   {location.pathname.includes('mentor') ?
                     <ConsultMentorCard
                       consult={consult}
-                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
+                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
                       enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
                     /> :
                     <ConsultMenteeCard
                       consult={consult}
-                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
+                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
                       enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
                     />
                   }

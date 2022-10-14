@@ -21,6 +21,7 @@ import {
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
+import { useState } from "react";
 
 const RequestCardWrapper = styled(Flex)`
   // margin-top: 30px;
@@ -65,9 +66,10 @@ const CategoryTag = styled(TagLarge)`
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
 
-function RequestView() {
+function RequestView({ requestContent, menteeIntroduce, urlLink }) {
   const consultCategory = '커리어 상담'
   const consultContents = ['이직 준비', '면접 팁', '업계 이야기']
+
   return (
     <RequestCardWrapper>
       <Card
@@ -103,25 +105,15 @@ function RequestView() {
         <EmptyHeight height='16px' />
         <TextSubtitle1>내 소개</TextSubtitle1>
         <EmptyHeight height='16px' />
-        <GrayBackgroundText>
-          마케터가 되고 싶은 경희대학교 시각디자인학과 졸업예정자 김인종입니다.<br />
-          인하우스 디자이너 혹은 대학원 진학을 희망하고 있습니다.
+        <GrayBackgroundText style={{ whiteSpace: 'pre' }}>
+          {menteeIntroduce}
         </GrayBackgroundText>
 
         <EmptyHeight height='16px' />
         <TextSubtitle1>희망 상담 내용</TextSubtitle1>
         <EmptyHeight height='16px' />
-        <GrayBackgroundText>
-          안녕하세요, 저는 대학원생 장서진이라고 합니다.<br />
-          우선 저는 곧 졸업을 앞두고 다음의 고민과 질문이 있어 상담을 요청드립니다.<br />
-          1) 이런 저런 점이 고민이 됩니다. 저는 지금까지 이런 점들을 해왔고, 이런 분야에 관심이 있습니다.<br />
-          2) 이런 저런 점이 고민이 됩니다. 저는 지금까지 이런 점들을 해왔고, 이런 분야에 관심이 있습니다.<br />
-          그런데 교수님이나 남들은 이렇다고 합니다. 어떻게 생각하시는지 궁금합니다.<br />
-          3) 이런 저런 점이 고민이 됩니다. 저는 지금까지 이런 점들을 해왔고, 이런 분야에 관심이 있습니다.<br /><br />
-          이력서는 제 프로필의 첨부파일을 참고해 주시면 좋을 것 같습니다!<br />
-          이력서는 제 프로필의 첨부파일을 참고해 주시면 좋을 것 같습니다!<br />
-          이력서는 제 프로필의 첨부파일을 참고해 주시면 좋을 것 같습니다!<br /><br />
-          정말 감사합니다:)
+        <GrayBackgroundText style={{ whiteSpace: 'pre' }}>
+          {requestContent}
         </GrayBackgroundText>
 
         <EmptyHeight height='16px' />
@@ -136,7 +128,7 @@ function RequestView() {
 
         <TextSubtitle1>URL</TextSubtitle1>
         <EmptyHeight height='16px' />
-        <UnderlineText>https://artisd.studio/</UnderlineText>
+        <UnderlineText>{urlLink}</UnderlineText>
         <EmptyHeight height='16px' />
 
 

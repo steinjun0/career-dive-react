@@ -12,6 +12,7 @@ import MentorProfile from 'component/mentor/Profile'
 import RequestView from "component/mentor/apply/RequestView";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import API from "API";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -28,6 +29,26 @@ const CardsWrapper = styled(Flex)`
 
 
 function MentoringReservation() {
+  const params = useParams()
+
+  const [menteeIntroduce, setMenteeIntroduce] = useState('')
+  const [requestContent, setRequestContent] = useState('')
+  const [urlLink, setUrlLink] = useState('')
+
+
+  useEffect(async () => {
+    const consultRes = await API.getConsult(params.id)
+    if (consultRes.status === 200) {
+      setRequestContent(consultRes.data.RequestContent)
+
+      const menteeRes = await API.getAccountMentee(consultRes.data.MenteeID)
+      if (menteeRes.status === 200) {
+        setMenteeIntroduce(menteeRes.data.Introduction)
+        setUrlLink(menteeRes.data.Link)
+      }
+    }
+  }, [])
+
 
   return (
     <div>
@@ -41,7 +62,10 @@ function MentoringReservation() {
           <CenterWidthWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <RequestView />
+                <RequestView
+                  menteeIntroduce={menteeIntroduce}
+                  requestContent={requestContent}
+                  urlLink={urlLink} />
 
               </Grid>
             </Grid>
