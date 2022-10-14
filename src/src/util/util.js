@@ -103,9 +103,16 @@ export function isMentorUrl() {
   temp = temp.slice(firstSlice + 2)
   const secondSlice = temp.indexOf('/')
   temp = temp.slice(secondSlice + 1)
-  if (temp.indexOf('mentor') == 0) {
-    return true
-  } else {
+
+  const ignoreList = ['mentorCard']
+  let isIgnored = false
+  ignoreList.map((e) => {
+    isIgnored = temp.indexOf(e) === 0
+  })
+
+  if (isIgnored || temp.indexOf('mentor') !== 0) {
     return false
+  } else {
+    return true
   }
 }
