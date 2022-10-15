@@ -281,6 +281,11 @@ export default {
     return consultRes
   },
 
+  async postConsultFile(id, file) {
+    const consultFileRes = await this.postAxiosFormData(`${CAREER_DIVE_API_URL}/consult/${id}/file`, file)
+    return consultFileRes
+  },
+
   async postAccountTag(tags, mentorId) {
     const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/tag`, { Tags: tags, MentorID: +mentorId })
     return scheduleRes
