@@ -149,7 +149,7 @@ function Request() {
       const consultRes = await API.postConsult(postConsultObject)
 
       if (consultRes.status === 200) {
-        if (isFilePreOpen === '희망') {
+        if (isFilePreOpen === '희망' && uploadingFiles.length > 0) {
           const consultId = consultRes.data.ID
           let formData = new FormData()
           uploadingFiles.forEach((e) => formData.append('file', e))

@@ -115,8 +115,6 @@ function Request() {
   const [consultingStartTime, setConsultingStartTime] = useState()
   const [consultingTime, setConsultingTime] = useState(20)
   const [scheduleId, setScheduleId] = useState(0)
-  const [applymentContent, setApplymentContent] = useState('')
-
   const [requestText, setRequestText] = useState('');
 
   const [upperGuide, setUpperGuide] = useState('')
@@ -132,9 +130,9 @@ function Request() {
       setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
       setScheduleId(reservation['scheduleId'])
-      setApplymentContent(reservation['applymentContent'])
+      setRequestText(reservation['requestText'])
 
-      setRequestText(reservation['applymentContent'])
+      setRequestText(reservation['requestText'])
 
       if (reservation['consultCategory'] === '전형 준비') {
         if (reservation['consultContent'][0] in upperGuideObject) {
@@ -150,6 +148,59 @@ function Request() {
     }
 
   }, [])
+
+  async function onClickApplyButton() {
+    const reservations = JSON.parse(localStorage.getItem(`reservations`))
+    let initialDate = undefined
+    if (reservations !== null) {
+      const reservation = reservations[params.id]
+
+      const consultingStartTimeDate = new Date(`2022-01-02 ${reservation['consultingStartTime']}`);
+      const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+      const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+
+
+      const consultRes = await API.postConsult(
+        {
+          consultContentList: [...reservation['consultContent'].map((e) => {
+            return {
+              Name: e,
+              Type: reservation['consultCategory']
+            }
+          })],
+          menteeId: +localStorage.getItem("UserID"),
+          mentorId: +params.id,
+          preReview: reservation['isFilePreOpen'] === '희망' ? true : false,
+          requestContent: requestText,
+          scheduleId: reservation['scheduleId'],
+          startTime: reservation['consultingStartTime'],
+          endTime: consultingEndTime,
+          type: reservation['consultCategory']
+        }
+      )
+      if (consultRes.status === 200) {
+
+        if (uploadingFiles.length > 0) {
+          const consultId = consultRes.data.ID
+          let formData = new FormData()
+          uploadingFiles.forEach((e) => formData.append('file', e))
+          const consultFileRes = await API.postConsultFile(consultId, formData)
+
+          if (consultFileRes.status !== 200) {
+            alert('네트워크 오류로 파일 업로드에 실패했습니다. 다시 시도해주세요')
+          }
+        }
+
+        navigate('/mentee/request/finish')
+      } else {
+        alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')
+      }
+    } else {
+      alert('누락된 정보가 있습니다. 다시 시도해주세요')
+      navigate(`/mentee/request/${params.id}`)
+    }
+
+  }
 
   return (
     // TODO: 디자인에 맞게 수정하기(덜어내기)
@@ -196,7 +247,7 @@ function Request() {
           </TextBody2>}
           <EmptyHeight height='16px' />
           <CustomTextArea
-            defaultValue={applymentContent}
+            defaultValue={requestText}
             onFocus={(event) => {
               event.target.placeholder = ''
             }}
@@ -205,7 +256,7 @@ function Request() {
             }}
             onChange={(event) => {
               const updatingData = [
-                { name: 'applymentContent', data: event.target.value },
+                { name: 'requestText', data: event.target.value },
               ]
               setRequestText(event.target.value)
               updateReservation(params.id, updatingData)
@@ -235,7 +286,7 @@ function Request() {
             }
             const temp = []
             acceptedFiles.forEach(file => {
-              temp.push(file.path)
+              temp.push(file)
             })
             setUploadingFiles([...uploadingFiles, ...temp])
           }}>
@@ -251,7 +302,7 @@ function Request() {
           <EmptyHeight height='16px' />
           {uploadingFiles.map((items, index) => {
             return <Flex key={index}>
-              <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items}</TextBody2>
+              <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items.path}</TextBody2>
               <TextBody2
                 style={{ cursor: 'pointer' }}
                 color={colorCareerDivePink}
@@ -262,56 +313,12 @@ function Request() {
                 }}>삭제</TextBody2>
             </Flex>
           })}
-          {/* <Flex>
-            <Flex style={{ width: '320px' }}>
-              <CustomTextField1 fullWidth={'320px'} placeholder={'링크'}></CustomTextField1>
-            </Flex>
-            <EmptyWidth width={'16px'} />
-            <CustomButton style={{ padding: '12px 28px' }}><TextSubtitle2>추가</TextSubtitle2></CustomButton>
-          </Flex> */}
 
         </Card>
       </RequestCardWrapper >
 
       <ApplyButton
-        onClick={async () => {
-          const reservations = JSON.parse(localStorage.getItem(`reservations`))
-          let initialDate = undefined
-          if (reservations !== null) {
-            const reservation = reservations[params.id]
-
-            const consultingStartTimeDate = new Date(`2022-01-02 ${reservation['consultingStartTime']}`);
-            const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
-            const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
-
-            const res = await API.postConsult(
-              {
-                consultContentList: [...reservation['consultContent'].map((e) => {
-                  return {
-                    Name: e,
-                    Type: reservation['consultCategory']
-                  }
-                })],
-                menteeId: +localStorage.getItem("UserID"),
-                mentorId: +params.id,
-                preReview: reservation['isFilePreOpen'] === '희망' ? true : false,
-                requestContent: requestText,
-                scheduleId: reservation['scheduleId'],
-                startTime: reservation['consultingStartTime'],
-                endTime: consultingEndTime,
-                type: reservation['consultCategory']
-              }
-            )
-            if (res.status === 200) {
-              navigate('/mentee/request/finish')
-            } else {
-              alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')
-            }
-          } else {
-            alert('누락된 정보가 있습니다. 다시 시도해주세요')
-            navigate(`/mentee/request/${params.id}`)
-          }
-        }}>
+        onClick={onClickApplyButton}>
         <TextHeading6>
           다음
         </TextHeading6>
