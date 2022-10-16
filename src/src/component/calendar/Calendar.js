@@ -317,11 +317,13 @@ function Calendar({ setIsFinishSet }) {
       new Date().getMonth() + 1,
       params.id)
     setOriginData(res.data.DayTimes)
-    setAvailableDates(res.data.DayTimes.map((e) => e.Day))
-    let scheduleIdsTemp = {}
-    res.data.DayTimes.map((e) => {
-      Object.assign(scheduleIdsTemp, {})
-    })
+    if (res.data.DayTimes !== null) {
+      setAvailableDates(res.data.DayTimes.map((e) => e.Day))
+    }
+    // let scheduleIdsTemp = {}
+    // res.data.DayTimes.map((e) => {
+    //   Object.assign(scheduleIdsTemp, {})
+    // })
 
     setIsApplyPage(location.pathname.includes('request'))
     setDataFromLocalStorage(res.data.DayTimes)
