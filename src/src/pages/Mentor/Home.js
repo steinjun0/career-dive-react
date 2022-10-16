@@ -11,9 +11,9 @@ import {
   TextEllipsisContainer
 } from "util/styledComponent";
 
-import OnComingShedule from "component/schedule/OnComingSchedule";
-import ConsultList from "component/schedule/ConsultList";
-import ConsultingRequest from "component/schedule/ConsultingRequest"
+import OnComingShedule from "component/consult/OnComingSchedule";
+import ConsultList from "component/consult/ConsultList";
+import ConsultingRequest from "component/consult/ConsultingRequest"
 import { Card } from "util/Card";
 import { ChevronRight } from "@material-ui/icons";
 import CalendarMentor from "component/calendar/CalendarMentor";

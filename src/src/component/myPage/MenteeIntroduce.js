@@ -17,7 +17,7 @@ import {
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import API from "API";
 
@@ -60,24 +60,28 @@ const UrlWrapper = styled(TextFieldWrapper)`
 
 function MenteeIntroduce() {
   const [isEditing, setIsEditing] = useState(false)
-  const [introduceText, setIntroduceText] = useState('')
+  const [introduceText, setIntroduceText] = useState()
+  const [urlLink, setUrlLink] = useState()
   const [uploadingFiles, setUploadingFiles] = useState([])
+
+  useEffect(async () => {
+    const menteeRes = await API.getAccountMentee(localStorage.getItem('UserID'))
+    if (menteeRes.status === 200) {
+      setIntroduceText(menteeRes.data.Introduction)
+      setUrlLink(menteeRes.data.Link)
+    }
+  }, [])
+
 
   const cancelEditing = () => {
     setIsEditing(false)
   }
 
   const saveEditing = async () => {
-    const validResponse = await API.patchAccount({
-      AgreeAdb: true,
-      AgreeNoti: true,
-      "BirthDate": "string",
-      "Email": "email@careerdive.com",
-      "Name": "string",
-      "Nickname": "string",
-      "Password": "p@ssw0rd",
-      "Phone": "string",
-      "Sex": true
+    const validResponse = await API.patchAccountMentee({
+      introduction: introduceText,
+      link: urlLink,
+      userId: localStorage.getItem('UserID')
     });
     if (validResponse.status === 200) {
       setIsEditing(false)
@@ -119,7 +123,7 @@ function MenteeIntroduce() {
                 <EmptyWidth width='16px' />
                 <CustomButton
                   width={'82px'}
-                  onClick={() => { saveEditing(true) }}
+                  onClick={() => { saveEditing() }}
                 >저장</CustomButton>
               </Flex>
             }
@@ -127,10 +131,10 @@ function MenteeIntroduce() {
         }>
         <TextFieldWrapper>
           {!isEditing ?
-            <TextBody2 style={{ whiteSpace: 'pre' }} color={colorTextLight}>
+            introduceText !== undefined && <TextBody2 style={{ whiteSpace: 'pre' }} color={colorTextLight}>
               {introduceText}
             </TextBody2> :
-            <TextField
+            introduceText !== undefined && <TextField
               id="outlined-textarea"
               value={introduceText}
               placeholder="1. 학교·직장&#13;&#10;2. 경력·활동&#13;&#10;3. 어학·자격증&#13;&#10;4. 취업·이직 준비에 관한 고민 등"
@@ -140,6 +144,7 @@ function MenteeIntroduce() {
               minRows={4}
               maxRows={8}
               fullWidth={true}
+              defaultValue={introduceText}
               onChange={(e) => {
                 setIntroduceText(e.target.value)
               }}
@@ -185,14 +190,18 @@ function MenteeIntroduce() {
         </Dropzone>
         <Subtitle>URL 링크</Subtitle>
         <UrlWrapper>
-          <TextField
+          {urlLink !== undefined && <TextField
             id="outlined-textarea"
             placeholder="자신을 소개하는 url을 작성해보세요"
             variant="filled"
             InputProps={{ disableUnderline: true, readOnly: !isEditing, style: { backgroundColor: colorBackgroundGrayLight, borderRadius: 8, } }}
             rows={1}
             fullWidth={true}
-          />
+            defaultValue={urlLink}
+            onChange={(e) => {
+              setUrlLink(e.target.value)
+            }}
+          />}
         </UrlWrapper>
 
       </Card>

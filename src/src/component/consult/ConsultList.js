@@ -1,5 +1,5 @@
 import { Divider, Grid, styled } from "@mui/material";
-import ConsultMenteeCard from 'component/schedule/ConsultMenteeCard.js'
+import ConsultMenteeCard from 'component/consult/ConsultMenteeCard.js'
 import {
   Flex,
   TextBody2,
@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "API";
 import ConsultMentorCard from "./ConsultMentorCard";
+import { onEnterSession } from "component/consult/consult"
 
 const ScheduleListWrapper = styled(Flex)`
   width: 100%;
@@ -90,13 +91,31 @@ function ConsultList({ consultList }) {
                   {location.pathname.includes('mentor') ?
                     <ConsultMentorCard
                       consult={consult}
-                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
-                      enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                      requestFormOnClick={() => {
+                        navigater(`/mentee/sessionList/form/${consult.ID}`)
+                      }}
+                      enterOnClick={() => {
+                        onEnterSession({
+                          navigater,
+                          date: consult.Date,
+                          startTime: consult.StartTime,
+                          endTime: consult.EndTime,
+                          consultId: consult.ID
+                        })
+                      }}
                     /> :
                     <ConsultMenteeCard
                       consult={consult}
-                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/1`) }}
-                      enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
+                      enterOnClick={() => {
+                        onEnterSession({
+                          navigater,
+                          date: consult.Date,
+                          startTime: consult.StartTime,
+                          endTime: consult.EndTime,
+                          consultId: consult.ID
+                        })
+                      }}
                     />
                   }
                 </Grid>
