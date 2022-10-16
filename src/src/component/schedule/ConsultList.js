@@ -97,10 +97,14 @@ function ConsultList({ consultList }) {
                         const startTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.StartTime)
                         const endTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.EndTime)
                         const nowTime = new Date().getTime()
-                        if (nowTime - startTime > 0 && endTime - nowTime > 0) {
+                        if (nowTime - startTime <= 0) {
+                          alert('상담이 시작되지 않았습니다')
                           navigater(`/session/${consult.ID}`)
-                        } else {
-                          alert('상담시간이 아닙니다')
+                        } else if (endTime - nowTime <= 0) {
+                          alert('상담 시간이 지났습니다')
+                          navigater(`/session/${consult.ID}`)
+                        }
+                        else {
                           navigater(`/session/${consult.ID}`)
                         }
                       }}
@@ -112,10 +116,14 @@ function ConsultList({ consultList }) {
                         const startTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.StartTime)
                         const endTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.EndTime)
                         const nowTime = new Date().getTime()
-                        if (nowTime - startTime > 0 && endTime - nowTime > 0) {
+                        if (nowTime - startTime <= 0) {
+                          alert('상담이 시작되지 않았습니다')
                           navigater(`/session/${consult.ID}`)
-                        } else {
-                          alert('상담시간이 아닙니다')
+                        } else if (endTime - nowTime <= 0) {
+                          alert('상담 시간이 지났습니다')
+                          navigater(`/session/${consult.ID}`)
+                        }
+                        else {
                           navigater(`/session/${consult.ID}`)
                         }
                       }}
