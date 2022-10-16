@@ -7,8 +7,8 @@ import {
   Flex
 } from "util/styledComponent";
 
-import OnComingShedule from "component/schedule/OnComingSchedule";
-import ConsultList from "component/schedule/ConsultList";
+import OnComingShedule from "component/consult/OnComingSchedule";
+import ConsultList from "component/consult/ConsultList";
 import { useEffect, useState } from "react";
 import API from "API";
 
@@ -36,10 +36,10 @@ function Schedule() {
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={12}>
-                <OnComingShedule></OnComingShedule>
+                {consultList && <OnComingShedule consultList={consultList}></OnComingShedule>}
               </Grid>
               <Grid item xs={12}>
-                <ConsultList consultList={consultList}></ConsultList>
+                {consultList && <ConsultList consultList={consultList}></ConsultList>}
               </Grid>
             </Grid>
           </CardsWrapper>

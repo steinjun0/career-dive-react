@@ -8,8 +8,8 @@ import {
 
 } from "util/styledComponent";
 
-import OnComingShedule from "component/schedule/OnComingSchedule";
-import ScheduleList from "component/schedule/ConsultList";
+import OnComingShedule from "component/consult/OnComingSchedule";
+import ScheduleList from "component/consult/ConsultList";
 import CalendarMentor from "component/calendar/CalendarMentor";
 
 const CardsWrapper = styled(Flex)`

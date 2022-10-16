@@ -1,5 +1,5 @@
 import { Divider, Grid, styled } from "@mui/material";
-import ConsultMenteeCard from 'component/schedule/ConsultMenteeCard.js'
+import ConsultMenteeCard from 'component/consult/ConsultMenteeCard.js'
 import {
   Flex,
   TextBody2,
@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "API";
 import ConsultMentorCard from "./ConsultMentorCard";
+import { onEnterSession } from "component/consult/consult"
 
 const ScheduleListWrapper = styled(Flex)`
   width: 100%;
@@ -94,38 +95,26 @@ function ConsultList({ consultList }) {
                         navigater(`/mentee/sessionList/form/${consult.ID}`)
                       }}
                       enterOnClick={() => {
-                        const startTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.StartTime)
-                        const endTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.EndTime)
-                        const nowTime = new Date().getTime()
-                        if (nowTime - startTime <= 0) {
-                          alert('상담이 시작되지 않았습니다')
-                          navigater(`/session/${consult.ID}`)
-                        } else if (endTime - nowTime <= 0) {
-                          alert('상담 시간이 지났습니다')
-                          navigater(`/session/${consult.ID}`)
-                        }
-                        else {
-                          navigater(`/session/${consult.ID}`)
-                        }
+                        onEnterSession({
+                          navigater,
+                          date: consult.Date,
+                          startTime: consult.StartTime,
+                          endTime: consult.EndTime,
+                          consultId: consult.ID
+                        })
                       }}
                     /> :
                     <ConsultMenteeCard
                       consult={consult}
                       requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
                       enterOnClick={() => {
-                        const startTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.StartTime)
-                        const endTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.EndTime)
-                        const nowTime = new Date().getTime()
-                        if (nowTime - startTime <= 0) {
-                          alert('상담이 시작되지 않았습니다')
-                          navigater(`/session/${consult.ID}`)
-                        } else if (endTime - nowTime <= 0) {
-                          alert('상담 시간이 지났습니다')
-                          navigater(`/session/${consult.ID}`)
-                        }
-                        else {
-                          navigater(`/session/${consult.ID}`)
-                        }
+                        onEnterSession({
+                          navigater,
+                          date: consult.Date,
+                          startTime: consult.StartTime,
+                          endTime: consult.EndTime,
+                          consultId: consult.ID
+                        })
                       }}
                     />
                   }

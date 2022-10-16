@@ -19,9 +19,6 @@ import API from "API"
 import { usePrompt } from "util/usePromprt";
 
 
-const APP_ID = '825BA0D4-461A-4AA3-9A79-D2DD587356A2'
-const ACCESS_TOKENS = { test1: 'c06fcab96416a74e41416559426b251676a817ef', test2: '13f0bfb48a1df6372ea0fe8b72cde9a01e2d1373' }
-
 const ProfileImg = styled(CircleImg)`
   width: 120px;
   height: 120px;
@@ -32,11 +29,9 @@ function Session() {
   const params = useParams()
   // (window.RTCPeerConnection) ? alert('supported') : alert('not supported')
 
-  let USER_ID = ''
-  // Sendbird.init(APP_ID, USER_ID, ACCESS_TOKEN)
-
   const [calleeId, setCalleeId] = useState('')
   const [call, setCall] = useState('no call')
+  const [consultData, setConsultData] = useState()
 
 
   useEffect(async () => {
@@ -48,6 +43,7 @@ function Session() {
         } else {
           setCalleeId(res.data.MenteeID)
         }
+        setConsultData(res.data)
       }
     })
 
@@ -66,11 +62,6 @@ function Session() {
 
   return (
     <GrayBackground>
-
-      <CustomButton onClick={() => {
-        API.Sendbird.connectWebSocket()
-      }}>1</CustomButton>
-
       <CustomButton onClick={() => {
         API.Sendbird.makeACall(calleeId, setCall)
       }}>2</CustomButton>
@@ -113,8 +104,8 @@ function Session() {
 
         <ReflexElement className="right-pane" >
           <div style={{ padding: 24 }}>
-            <RequestView style={{ width: '100%', padding: 24 }}>
-            </RequestView>
+            {consultData && <RequestView requestContent={consultData.RequestContent} style={{ width: '100%', padding: 24 }}>
+            </RequestView>}
           </div>
         </ReflexElement>
 
@@ -129,7 +120,7 @@ function Session() {
               <TextCaption style={{ fontWeight: '400' }}>
                 남은 시간
               </TextCaption>
-              <TextHeading4> 20:00</TextHeading4>
+              <TextHeading4>20:00</TextHeading4>
             </VerticalFlex>
             <Flex>
               <Button>mic</Button>

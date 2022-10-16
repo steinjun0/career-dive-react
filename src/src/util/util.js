@@ -24,9 +24,20 @@ export const addMinute = (beforeDate, addingMin) => {
   return afterDate
 }
 
+export const getMinuteString = (date) => {
+  console.log('date', date)
+  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+}
+
 export const getAMOrPM = (hourAndMin) => {
   try {
-    return Number(hourAndMin.slice(0, 2)) < 12 ? '오전' : '오후'
+    if (Number(hourAndMin.slice(0, 2)) < 12) {
+      return '오전'
+    } else if (Number(hourAndMin.slice(0, 2)) == 12) {
+      return '낮'
+    } else {
+      return '오후'
+    }
   } catch (error) {
     return ''
   }
