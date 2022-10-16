@@ -91,7 +91,7 @@ function ConsultMentorCard({ consult, requestFormOnClick, changeOnClick, enterOn
 
           <Flex>
             <TextBody2>
-              {new Date(consult.Date).getFullYear()}년 {new Date(consult.Date).getMonth()}월 {new Date(consult.Date).getDate()}일({getDayInKorean(new Date(consult.Date))})
+              {new Date(consult.Date).getFullYear()}년 {new Date(consult.Date).getMonth() + 1}월 {new Date(consult.Date).getDate()}일({getDayInKorean(new Date(consult.Date))})
             </TextBody2>
           </Flex>
           <TextHeading6>

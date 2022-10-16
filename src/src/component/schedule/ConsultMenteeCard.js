@@ -94,7 +94,7 @@ function ConsultMenteeCard({ consult, requestFormOnClick, changeOnClick, enterOn
 
           <Flex>
             <ConsultDate>
-              {new Date(consult.Date).getFullYear()}년 {new Date(consult.Date).getMonth()}월 {new Date(consult.Date).getDate()}일
+              {new Date(consult.Date).getFullYear()}년 {new Date(consult.Date).getMonth() + 1}월 {new Date(consult.Date).getDate()}일
             </ConsultDate>
             <ConsultTime>
               {consult.StartTime}

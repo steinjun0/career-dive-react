@@ -90,13 +90,35 @@ function ConsultList({ consultList }) {
                   {location.pathname.includes('mentor') ?
                     <ConsultMentorCard
                       consult={consult}
-                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
-                      enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                      requestFormOnClick={() => {
+                        navigater(`/mentee/sessionList/form/${consult.ID}`)
+                      }}
+                      enterOnClick={() => {
+                        const startTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.StartTime)
+                        const endTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.EndTime)
+                        const nowTime = new Date().getTime()
+                        if (nowTime - startTime > 0 && endTime - nowTime > 0) {
+                          navigater(`/session/${consult.ID}`)
+                        } else {
+                          alert('상담시간이 아닙니다')
+                          navigater(`/session/${consult.ID}`)
+                        }
+                      }}
                     /> :
                     <ConsultMenteeCard
                       consult={consult}
                       requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
-                      enterOnClick={() => { navigater(`/session/${consult.ID}`) }}
+                      enterOnClick={() => {
+                        const startTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.StartTime)
+                        const endTime = new Date(consult.Date.slice(0, consult.Date.indexOf('T')) + ' ' + consult.EndTime)
+                        const nowTime = new Date().getTime()
+                        if (nowTime - startTime > 0 && endTime - nowTime > 0) {
+                          navigater(`/session/${consult.ID}`)
+                        } else {
+                          alert('상담시간이 아닙니다')
+                          navigater(`/session/${consult.ID}`)
+                        }
+                      }}
                     />
                   }
                 </Grid>
