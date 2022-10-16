@@ -61,7 +61,7 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <ScrollToTop />
       <Gnb />
-      <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 214px)' }}>
+      <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 220px)' }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
