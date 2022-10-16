@@ -17,6 +17,72 @@ export const colorSuccess = "#B4CE16";
 
 
 // text
+export const TextHeading1 = styled(`h1`)`
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 64px;
+  margin: 0;
+  color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
+`;
+
+export const TextHeading2 = styled(`h2`)`
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 48px;
+  margin: 0;
+  color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
+`;
+
+export const TextHeading3 = styled(`h3`)`
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 44px;
+  margin: 0;
+  color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
+`;
+
+export const TextHeading4 = styled(`h4`)`
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 32px;
+  margin: 0;
+  color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
+`;
+
+export const TextHeading5 = styled(`h5`)`
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 36px;
+  margin: 0;
+  color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
+`;
+
+export const TextHeading6 = styled(`h6`)`
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
+  margin: 0;
+  color: ${props => props.color};
+  text-overflow: inherit;
+  white-space: inherit;
+  overflow: inherit;
+`;
+
 export const TextBody1 = styled(`span`)`
   font-size: 16px;
   line-height: 24px;
@@ -57,27 +123,6 @@ export const TextSubtitle2 = styled(`span`)`
   overflow: inherit;
 `;
 
-export const TextHeading6 = styled(`h6`)`
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 32px;
-  margin: 0;
-  color: ${props => props.color};
-  text-overflow: inherit;
-  white-space: inherit;
-  overflow: inherit;
-`;
-
-export const TextHeading4 = styled(`h4`)`
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 32px;
-  margin: 0;
-  color: ${props => props.color};
-  text-overflow: inherit;
-  white-space: inherit;
-  overflow: inherit;
-`;
 
 export const TextButton = styled(`span`)`
   font-size: 14px;
