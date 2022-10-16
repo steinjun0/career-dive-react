@@ -7,7 +7,8 @@ import {
   TextSubtitle2,
   TextBody2,
   EmptyHeight,
-  LinkNoDeco
+  LinkNoDeco,
+  colorBackgroundGrayMedium
 } from "util/styledComponent";
 import { Card } from "util/Card";
 
@@ -40,7 +41,7 @@ function UserProfile() {
         </SubtitleWarpper>
 
         <EmptyHeight height={'20px'}></EmptyHeight>
-        <Divider></Divider>
+        <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
 
         <SubtitleWarpper>
           <CustomTextSubtitle2>이메일</CustomTextSubtitle2>

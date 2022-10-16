@@ -9,7 +9,8 @@ import {
   colorBackgroundGrayLight,
   EmptyWidth,
   colorCareerDiveBlue,
-  TextSubtitle2
+  TextSubtitle2,
+  colorBackgroundGrayMedium
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
@@ -56,7 +57,7 @@ function UserProfile() {
         </TextFieldWrapper>
 
         <EmptyHeight height={'20px'}></EmptyHeight>
-        <Divider></Divider>
+        <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
         <EmptyHeight height={'20px'}></EmptyHeight>
 
         <TextHeading6>이메일 변경</TextHeading6>
@@ -82,7 +83,7 @@ function UserProfile() {
 
 
         <EmptyHeight height={'20px'}></EmptyHeight>
-        <Divider></Divider>
+        <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
         <EmptyHeight height={'20px'}></EmptyHeight>
 
         <TextHeading6>휴대전화 변경</TextHeading6>

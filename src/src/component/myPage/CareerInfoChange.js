@@ -10,7 +10,8 @@ import {
   EmptyWidth,
   colorCareerDiveBlue,
   TextSubtitle2,
-  VerticalFlex
+  VerticalFlex,
+  colorBackgroundGrayMedium
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
@@ -78,7 +79,7 @@ function CareerInfoChange() {
           <CustomButton height={'48px'} onClick={() => { navigate('/mentor/register') }}>재직 재인증</CustomButton>
         </VerticalFlex>
         <EmptyHeight height={'28px'} />
-        <Divider></Divider>
+        <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
         <EmptyHeight height={'28px'} />
         <VerticalFlex>
           <TextSubtitle2>직무</TextSubtitle2>

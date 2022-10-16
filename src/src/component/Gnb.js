@@ -1,5 +1,5 @@
 import { Divider, styled } from "@mui/material";
-import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth } from 'util/styledComponent';
+import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth, colorBackgroundGrayMedium } from 'util/styledComponent';
 
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -295,7 +295,7 @@ function Gnb() {
                 <LinkNoDeco to={`${'mentor'}/mypage/review`}>
                   <TextSubtitle2>대금 수령</TextSubtitle2>
                 </LinkNoDeco>
-                <Divider></Divider>
+                <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
                 <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
                 <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
                   onClick={onClickLogout}>로그아웃</TextBody2>
@@ -315,7 +315,7 @@ function Gnb() {
                 <LinkNoDeco to={`${'mentee'}/mypage/payment`}>
                   <TextSubtitle2>결제 관리</TextSubtitle2>
                 </LinkNoDeco>
-                <Divider></Divider>
+                <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
                 <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
                 <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
                   onClick={onClickLogout}>로그아웃</TextBody2>

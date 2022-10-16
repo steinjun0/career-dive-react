@@ -219,7 +219,7 @@ function SignUp1stInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData })
                     약관
                 </TermsButton>
             </SubButtonsWrapper>
-            <Divider style={{ marginBottom: '12px' }}></Divider>
+            <Divider style={{ marginBottom: '12px', color: colorBackgroundGrayMedium }}></Divider>
             <SubButtonsWrapper>
                 <RowAlignCenterFlex>
                     <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} onClick={checkAll} />

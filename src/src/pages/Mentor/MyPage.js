@@ -20,7 +20,7 @@ import { useLocation, useParams } from "react-router-dom";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import CareerInfo from "component/myPage/CareerInfo";
 import MentorIntroduce from "component/myPage/MentorIntroduce";
-import CareerInfoChange from "component/myPage/\bCareerInfoChange";
+import CareerInfoChange from "component/myPage/CareerInfoChange";
 import { isMentorUrl } from "util/util";
 import ConsultRange from "component/myPage/ConsultRange";
 import { useEffect, useState } from "react";

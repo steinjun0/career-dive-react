@@ -28,7 +28,7 @@ import Session from "./pages/Session";
 import MentorCalendar from "pages/Mentor/Calendar";
 import MentorRegister from "pages/MentorRegister";
 import MentorMyPage from "./pages/Mentor/MyPage";
-import CareerInfoChange from "component/myPage/\bCareerInfoChange";
+import CareerInfoChange from "component/myPage/CareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
 import Search from 'pages/Search'

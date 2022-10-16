@@ -18,6 +18,7 @@ import {
   colorBackgroundCareerDiveBlue,
   colorBackgroundCareerDivePink,
   TextSubtitle1,
+  colorBackgroundGrayMedium,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { CustomButton } from "util/Custom/CustomButton";
@@ -251,7 +252,7 @@ function ConsultRange({ mentorData }) {
               }
             })}
           </Flex>
-          <Divider />
+          <Divider style={{ color: colorBackgroundGrayMedium }} />
           <EmptyHeight height={'36px'} />
           <TextBody2>
             {consultRangeInfos[selectedPremiumTab]}
