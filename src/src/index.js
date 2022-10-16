@@ -32,6 +32,7 @@ import CareerInfoChange from "component/myPage/\bCareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
 import Search from 'pages/Search'
+import Review from "pages/Review";
 
 
 const theme = createTheme({
@@ -92,6 +93,8 @@ ReactDOM.render(
           <Route path="/sendbird" element={<Sendbird />} />
           <Route path="/session/:id" element={<Session />} />
           <Route path="/search" element={<Search />} />
+
+          <Route path="/review" element={<Review />} />
 
 
         </Routes>
