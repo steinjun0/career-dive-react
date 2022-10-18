@@ -84,7 +84,7 @@ function MyPage() {
                   params.subPage === 'account' &&
                   <div>
                     <AccountInfo />
-                    <ReceiveAgreement />
+                    {/* <ReceiveAgreement /> */}
                   </div>
                 }
                 {

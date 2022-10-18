@@ -108,13 +108,16 @@ function ConsultRange({ mentorData }) {
   useEffect(() => {
     let tempBasicTagList = []
     let tempPremiumTagList = []
-    mentorData.ConsultContents.forEach(element => {
-      if (element.Type === '커리어 상담') {
-        tempBasicTagList.push(element.Name)
-      } else {
-        tempPremiumTagList.push(element.Name)
-      }
-    });
+    if (mentorData.ConsultContents) {
+      mentorData.ConsultContents.forEach(element => {
+        if (element.Type === '커리어 상담') {
+          tempBasicTagList.push(element.Name)
+        } else {
+          tempPremiumTagList.push(element.Name)
+        }
+      });
+    }
+
     setSelectedBasicConsultContent(tempBasicTagList)
     setSelectedPremiumConsultContent(tempPremiumTagList)
 
