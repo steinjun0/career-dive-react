@@ -66,6 +66,8 @@ function Introduction({ mentorConsultContents }) {
         reservation['isFilePreOpen'] && setIsFilePreOpen(reservation['isFilePreOpen'])
       }
     }
+    const element = document.getElementById("category");
+    element.scrollIntoView({ behavior: 'smooth' });
   }, [])
 
 
@@ -86,7 +88,7 @@ function Introduction({ mentorConsultContents }) {
                 (${mentoringDate && getDayInKorean(mentoringDate)})`}
       >
         <EmptyHeight height='16px'></EmptyHeight>
-        <TextSubtitle1>
+        <TextSubtitle1 id='category'>
           상담 유형
         </TextSubtitle1>
 
@@ -115,7 +117,7 @@ function Introduction({ mentorConsultContents }) {
           <CustomToggleButtonGroup
             value={consultContent}
             isExclusive={false}
-            valueArray={[
+            valueArray={mentorConsultContents ? [
               ...mentorConsultContents.filter((e) => {
                 if (consultCategory === '커리어 상담') {
                   return e.Type === '커리어 상담'
@@ -123,7 +125,7 @@ function Introduction({ mentorConsultContents }) {
                   return e.Type === '전형 준비'
                 }
               }).map((e) => e.Name)
-            ]}
+            ] : []}
             selectedColor={consultCategory === '전형 준비' ? colorCareerDivePink : null}
             backgroundColor={consultCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event, value) => {

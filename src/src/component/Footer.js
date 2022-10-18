@@ -89,7 +89,7 @@ function Footer() {
   const { pathname } = useLocation();
 
   return (
-    <Flex >
+    <Flex id='footer'>
       {!footerDisableUrl.includes(pathname) && <FooterFullWidthWrapper>
         <FooterTop>
           <FooterWrapper>
