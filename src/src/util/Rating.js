@@ -12,9 +12,10 @@ const RatingScore = styled('span')`
     // margin-right: 24px;
 `;
 
-function CustomRating({ value = 0, size = '16px' }) {
+function CustomRating({ value = 0, size = '16px', readOnly = true, setValue = null }) {
     return (<RowAlignCenterFlex>
-        <Rating name="read-only" value={value} readOnly
+        <Rating name="read-only" value={value}
+            readOnly={readOnly}
             getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
             precision={0.5}
             icon={<FavoriteIcon fontSize="inherit" />}
@@ -23,9 +24,10 @@ function CustomRating({ value = 0, size = '16px' }) {
                 fontSize: size,
                 color: colorCareerDivePink
             }}
+            onChange={(event, newValue) => {
+                setValue(newValue);
+            }}
         />
-        <EmptyWidth width={'6px'} />
-        <TextCaption color={colorCareerDivePink}>{value}</TextCaption>
     </RowAlignCenterFlex>);
 }
 export default CustomRating;

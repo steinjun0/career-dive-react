@@ -5,6 +5,7 @@ import {
   RowAlignCenterFlex,
   VerticalFlex,
   Flex,
+  colorBackgroundGrayMedium,
 } from "./styledComponent";
 
 const CardWrapper = styled(VerticalFlex)`
@@ -21,7 +22,7 @@ const CardWrapper = styled(VerticalFlex)`
 const TitleWrapper = styled(VerticalFlex)`
   font-size: 20px;
   font-weight: 700;
-  ${props => props.no_divider == 'true' ? '' : 'border-bottom: 1px solid #CFD6E0;'}
+  ${props => props.no_divider == 'true' ? '' : `border-bottom: 1px solid ${colorBackgroundGrayMedium};`}
   ${props => props.no_divider == 'true' ? '' : 'padding-bottom: 16px;'}
   
 `;

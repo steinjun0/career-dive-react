@@ -7,6 +7,7 @@ import {
   EmptyHeight,
   LinkNoDeco,
   TextBody1,
+  colorBackgroundGrayMedium,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 
@@ -82,7 +83,7 @@ function ConsultList({ consultList }) {
             }
           })}
         </Flex>
-        <Divider />
+        <Divider style={{ color: colorBackgroundGrayMedium }} />
         <Grid container spacing={'30px'} marginTop={0}>
           {consultList.map((consult, index) => {
             if (category === '전체' || consult.Status === categoryToStatusConverter[category]) {

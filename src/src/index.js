@@ -28,10 +28,11 @@ import Session from "./pages/Session";
 import MentorCalendar from "pages/Mentor/Calendar";
 import MentorRegister from "pages/MentorRegister";
 import MentorMyPage from "./pages/Mentor/MyPage";
-import CareerInfoChange from "component/myPage/\bCareerInfoChange";
+import CareerInfoChange from "component/myPage/CareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
 import Search from 'pages/Search'
+import Review from "pages/Review";
 
 
 const theme = createTheme({
@@ -60,7 +61,7 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <ScrollToTop />
       <Gnb />
-      <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 214px)' }}>
+      <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 220px)' }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -92,6 +93,8 @@ ReactDOM.render(
           <Route path="/sendbird" element={<Sendbird />} />
           <Route path="/session/:id" element={<Session />} />
           <Route path="/search" element={<Search />} />
+
+          <Route path="/review" element={<Review />} />
 
 
         </Routes>
