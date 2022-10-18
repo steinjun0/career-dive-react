@@ -85,7 +85,7 @@ function ConsultList({ consultList }) {
         </Flex>
         <Divider style={{ color: colorBackgroundGrayMedium }} />
         <Grid container spacing={'30px'} marginTop={0}>
-          {consultList.map((consult, index) => {
+          {consultList && consultList.map((consult, index) => {
             if (category === '전체' || consult.Status === categoryToStatusConverter[category]) {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
