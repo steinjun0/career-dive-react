@@ -56,7 +56,7 @@ function JobCategoryGroup() {
             company={mentorData.CompName}
             department={mentorData.DivisInComp}
             job={mentorData.JobInComp}
-            name={"Sarah"}
+            name={mentorData.Nickname}
             inJob={mentorData.InService ? "현직자" : "경력자"}
             duration={"기간"}
             rating={4.5}
