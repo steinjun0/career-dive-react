@@ -371,11 +371,25 @@ function Calendar({ setIsFinishSet }) {
     // setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
 
+  useEffect(() => {
+    if (consultingStartTime === null) {
+
+      const updatingData = [
+        { name: 'consultingDate', data: undefined },
+        { name: 'consultingTime', data: undefined },
+        { name: 'consultingStartTime', data: undefined },
+        { name: 'scheduleId', data: undefined }
+      ]
+
+      updateReservation(params.id, updatingData)
+
+    }
+  }, [consultingStartTime])
+
   return (
     <CalendarWrapper>
       <Card title={'상담 가능 일정'} min_width={'400px'}>
         <CalendarContentWrapper>
-
           <CalendarUpper
             availableDates={availableDates}
             selectedDateObjProp={selectedDateObj}
