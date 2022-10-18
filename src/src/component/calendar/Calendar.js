@@ -387,8 +387,6 @@ function Calendar({ setIsFinishSet }) {
               onMonthChange(month)
             }
             } />
-
-
           <TimeSelectWrapper
             is_show={(selectedDate != 0).toString()}
             height={100}
@@ -411,8 +409,8 @@ function Calendar({ setIsFinishSet }) {
             </TimeButtonWrapper>
           </TimeSelectWrapper>
 
-          <TimeSelectWrapper
-            is_show={(selectedDate != 0).toString()}
+          {<TimeSelectWrapper
+            is_show={(consultingStartTime != null && selectedDate != 0).toString()}
             height={consultingStartTime == 0 ? 0 : 76}
           >
             <DateTitle>
@@ -421,8 +419,7 @@ function Calendar({ setIsFinishSet }) {
             <EmptyHeight height='16px' />
             <TextSubtitle1 color={colorCareerDiveBlue}>
               {
-
-                consultingStartTime === 0 ? '' : `${consultingStartTime}` +
+                (consultingStartTime === 0 || consultingStartTime === null) ? '' : `${consultingStartTime}` +
                   '~' +
                   `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getHours()
                     }`.padStart(2, '0') +
@@ -432,7 +429,8 @@ function Calendar({ setIsFinishSet }) {
 
 
             </TextSubtitle1>
-          </TimeSelectWrapper>
+          </TimeSelectWrapper>}
+
           <TimeSelectWrapper
             is_show={(consultingTime != 0).toString()}
             height={getTimeSelectWrapperHeight(amLines, pmLines, isApplyPage)}
