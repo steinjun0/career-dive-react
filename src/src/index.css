@@ -18,3 +18,10 @@ code {
   min-width: 1194px;
   scroll-behavior: smooth;
 }
+
+.reflex-container>.reflex-splitter {
+  background-color: #E6E6E6 !important;
+  border: none !important;
+  width: 6px !important;
+  height: 100px !important;
+}
