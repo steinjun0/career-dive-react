@@ -67,8 +67,7 @@ const repeatOptionConverter = {
 }
 
 function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTime, setIsAdding, setIsEditing, style }) {
-  const housrList = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-  const thousrList = ['밤 12', '오전 01', '오전 02', '오전 03', '오전 04', '오전 05', '오전 06', '오전 07', '오전 08', '오전 09', '오전 10', '오전 11', '오전 12',
+  const hoursList = ['밤 12', '오전 01', '오전 02', '오전 03', '오전 04', '오전 05', '오전 06', '오전 07', '오전 08', '오전 09', '오전 10', '오전 11', '오전 12',
     '오후 01', '오후 02', '오후 03', '오후 04', '오후 05', '오후 06', '오후 07', '오후 08', '오후 09', '오후 10', '오후 11']
   const minsList = ['00', '30']
 
@@ -137,7 +136,7 @@ function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTim
         <SimpleMenu
           style={Object.assign({ wordSpacing: '4px' }, calendarSimpleMenuStyle)}
           title={startAMPMHour}
-          menuItems={thousrList}
+          menuItems={hoursList}
           onClickProps={initialTime ? (text) => { } : () => { }}
           setState={setStartAMPMHour}
         />
@@ -157,7 +156,7 @@ function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTim
         <SimpleMenu
           style={Object.assign({ wordSpacing: '4px' }, calendarSimpleMenuStyle)}
           title={endAMPMHour}
-          menuItems={thousrList}
+          menuItems={hoursList.slice(hoursList.indexOf(startAMPMHour) + (startMin == '00' ? 0 : 1))}
           onClickProps={initialTime ? (text) => { } : () => { }}
           setState={setEndAMPMHour}
         />
