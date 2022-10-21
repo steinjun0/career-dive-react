@@ -16,7 +16,7 @@ import {
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { addMinute, isMentorUrl, updateReservation, usePrevious } from "util/util";
+import { addMinute, isMentorUrl, removeReservation, updateReservation, usePrevious } from "util/util";
 import CalendarUpper from "component/calendar/CalendarUpper";
 import API from 'API';
 
@@ -127,16 +127,13 @@ function Calendar({ setIsFinishSet }) {
   const [consultingStartTime, setConsultingStartTime] = useState(0);
   const [scheduleId, setScheduleId] = useState();
 
-  const reservations = JSON.parse(localStorage.getItem(`reservations`))
-  let initialDate = undefined
-  if (reservations !== null) {
-    const reservation = reservations[params.id]
-    if (reservation !== undefined && 'consultingDate' in reservation) {
-      initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
-    }
+  const reservation = getDataFromLocalStorage();
+  let initialDate
+  if (reservation) {
+    initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
   }
 
-  const [selectedDateObj, setSelectedDateObj] = useState(initialDate);
+  const [selectedDateObj, setSelectedDateObj] = useState();
 
 
   const getTimeSelectWrapperHeight = (amLines, pmLines, isHidingButton) => {
@@ -278,11 +275,27 @@ function Calendar({ setIsFinishSet }) {
     }
   }, [consultingTime])
 
-  const setDataFromLocalStorage = (originData) => {
+  function getDataFromLocalStorage() {
     const reservations = JSON.parse(localStorage.getItem(`reservations`))
     if (reservations !== null) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {
+        return reservation
+      }
+    }
+    return false
+  }
+
+  const setDataFromLocalStorage = (originData) => {
+    const reservation = getDataFromLocalStorage();
+    if (reservation) {
+      let initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
+      console.log('initialDate - new Date()', initialDate - new Date())
+      if (initialDate - new Date() <= 0) {
+        // 과거 날짜가 localStorage에 저장되어 있을 때
+        removeReservation(params.id)
+        return
+      } else {
         if ('consultingDate' in reservation) {
           setMonth(reservation['consultingDate'].month + '월')
           setSelectedDate(reservation['consultingDate'].date)
@@ -302,13 +315,11 @@ function Calendar({ setIsFinishSet }) {
         if ('scheduleId' in reservation) {
           setScheduleId(reservation['scheduleId'])
         }
-      } else {
-        setMonth((new Date().getMonth() + 1) + '월')
       }
     } else {
       setMonth((new Date().getMonth() + 1) + '월')
-    }
 
+    }
   }
 
   useEffect(async () => {
@@ -320,16 +331,13 @@ function Calendar({ setIsFinishSet }) {
     if (res.data.DayTimes !== null) {
       setAvailableDates(res.data.DayTimes.map((e) => e.Day))
     }
-    // let scheduleIdsTemp = {}
-    // res.data.DayTimes.map((e) => {
-    //   Object.assign(scheduleIdsTemp, {})
-    // })
 
     setIsApplyPage(location.pathname.includes('request'))
     setDataFromLocalStorage(res.data.DayTimes)
   }, [])
 
   const onMonthChange = async (month) => {
+    console.log('onMonthChange')
     const res = await API.getConsultSchedule(
       year,
       month.slice(0, month.length - 1),
@@ -342,7 +350,6 @@ function Calendar({ setIsFinishSet }) {
         setOriginData(res.data.DayTimes)
         setAvailableDates(res.data.DayTimes.map((e) => e.Day))
       }
-
     }
   }
 
@@ -367,8 +374,6 @@ function Calendar({ setIsFinishSet }) {
 
 
   useEffect(() => {
-    // setSelectedDate(selectedDateObj.getDate())
-    // setMonth((selectedDateObj.getMonth() + 1) + '월')
   }, [selectedDateObj])
 
   useEffect(() => {

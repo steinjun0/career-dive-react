@@ -33,6 +33,7 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
   const year = 2022;
   const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : new Date().getMonth() + 1 + '월');
 
+
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
   // const [selectedDate, setSelectedDate] = useState(availableDates.length !== 0 ? availableDates[0] : 0);
   const [selectedDate, setSelectedDate] = useState(selectedDateObjProp ? selectedDateObjProp.getDate() : 0);
@@ -43,8 +44,6 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
     setSelectedDate(date);
     onClickAvailableDateProps(date)
   }
-
-
 
   const prevMonth = usePrevious(month);
 
@@ -64,20 +63,20 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
   }, [month])
 
 
+  // useEffect(() => {
+  //   try {
+  //     const selectedDateObj = new Date(year, selectedDate == 0 ? month.slice(0, -1) : month.slice(0, -1) - 1, selectedDate)
+  //     if (selectedDateObj instanceof Date) {
+  //       onDateChange(selectedDateObj)
+  //     }
+  //   } catch (error) {
+
+  //   }
+
+  // }, [selectedDate])
+
   useEffect(() => {
-    try {
-      const selectedDateObj = new Date(year, selectedDate == 0 ? month.slice(0, -1) : month.slice(0, -1) - 1, selectedDate)
-      if (selectedDateObj instanceof Date) {
-        onDateChange(selectedDateObj)
-      }
-    } catch (error) {
-
-    }
-
-  }, [selectedDate])
-
-  useEffect(() => {
-    // setSelectedDate(selectedDateObjProp.getDate())
+    selectedDateObjProp && selectedDateObjProp.getDate && setSelectedDate(selectedDateObjProp.getDate())
   }, [selectedDateObjProp])
 
   useEffect(() => {
