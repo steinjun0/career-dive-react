@@ -172,10 +172,10 @@ function Calendar({ setIsFinishSet }) {
     setAvailablePMTimes([])
   }
 
-  const updateAvailableTimes = (consultingTime, selectedDate, originData) => {
+  const updateAvailableTimes = (consultingTime, selectedDate, dayTimes) => {
     function getAvailableTimes(consultingTime, selectedDate) {
       let tempAvailableTimes = []
-      originData.forEach((element) => {
+      dayTimes.forEach((element) => {
         if (element.Day === selectedDate) {
           for (const schedule of element.StartEnds) {
             let termCount = 0
@@ -243,7 +243,7 @@ function Calendar({ setIsFinishSet }) {
     }
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
-    updateAvailableTimes(newConsultingTime, selectedDate, originData)
+    updateAvailableTimes(newConsultingTime, selectedDate, originData.DayTimes)
 
   };
 
@@ -307,7 +307,7 @@ function Calendar({ setIsFinishSet }) {
           setConsultingTime(reservation['consultingTime'])
         }
         if ('consultingTime' in reservation && 'consultingDate' in reservation) {
-          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date, originData)
+          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date, originData.DayTimes)
         }
         if ('consultingStartTime' in reservation) {
           setConsultingStartTime(reservation['consultingStartTime'])
@@ -318,6 +318,18 @@ function Calendar({ setIsFinishSet }) {
       }
     } else {
       setMonth((new Date().getMonth() + 1) + '월')
+      const today = new Date().getDate()
+      if (originData.DayTimes !== null) {
+        console.log('originData.DayTimes', originData)
+        for (let i = 0; i < originData.DayTimes.length; i++) {
+          if (originData.DayTimes[i].Day >= today) {
+            setSelectedDate(originData.DayTimes[i].Day)
+            setSelectedDateObj(new Date(`${originData['Year']}-${originData['Month']}-${originData.DayTimes[i].Day}`))
+            break
+          }
+        }
+      }
+
 
     }
   }
@@ -327,13 +339,13 @@ function Calendar({ setIsFinishSet }) {
       year,
       new Date().getMonth() + 1,
       params.id)
-    setOriginData(res.data.DayTimes)
+    setOriginData(res.data)
     if (res.data.DayTimes !== null) {
       setAvailableDates(res.data.DayTimes.map((e) => e.Day))
     }
 
     setIsApplyPage(location.pathname.includes('request'))
-    setDataFromLocalStorage(res.data.DayTimes)
+    setDataFromLocalStorage(res.data)
   }, [])
 
   const onMonthChange = async (month) => {
@@ -347,7 +359,7 @@ function Calendar({ setIsFinishSet }) {
         setOriginData([])
         setAvailableDates([])
       } else {
-        setOriginData(res.data.DayTimes)
+        setOriginData(res.data)
         setAvailableDates(res.data.DayTimes.map((e) => e.Day))
       }
     }
@@ -372,9 +384,6 @@ function Calendar({ setIsFinishSet }) {
     }
   }, [scheduleId])
 
-
-  useEffect(() => {
-  }, [selectedDateObj])
 
   useEffect(() => {
     if (consultingStartTime === null) {
@@ -440,10 +449,9 @@ function Calendar({ setIsFinishSet }) {
               {
                 (consultingStartTime === 0 || consultingStartTime === null) ? '' : `${consultingStartTime}` +
                   '~' +
-                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getHours()
-                    }`.padStart(2, '0') +
+                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getHours()}`.padStart(2, '0') +
                   ':' +
-                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getMinutes()} `.padStart(2, '0')
+                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getMinutes()}`.padStart(2, '0')
               }
 
 
