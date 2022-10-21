@@ -82,6 +82,16 @@ export const updateReservation = (id, updateDataArray) => {
   localStorage.setItem(`reservations`, JSON.stringify(reservations))
 }
 
+export const removeReservation = (id) => {
+  try {
+    let removedReservations = JSON.parse(localStorage.getItem(`reservations`))
+    removedReservations[id] = undefined
+    localStorage.setItem('reservations', JSON.stringify(removedReservations))
+  } catch (e) {
+    return console.log(`remove reservation fail. id: ${id}`, e)
+  }
+}
+
 export function usePrevious(value) {
   const ref = useRef();
   useEffect(() => {

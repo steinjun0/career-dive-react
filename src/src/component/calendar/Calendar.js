@@ -16,7 +16,7 @@ import {
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { addMinute, isMentorUrl, updateReservation, usePrevious } from "util/util";
+import { addMinute, isMentorUrl, removeReservation, updateReservation, usePrevious } from "util/util";
 import CalendarUpper from "component/calendar/CalendarUpper";
 import API from 'API';
 
@@ -127,16 +127,13 @@ function Calendar({ setIsFinishSet }) {
   const [consultingStartTime, setConsultingStartTime] = useState(0);
   const [scheduleId, setScheduleId] = useState();
 
-  const reservations = JSON.parse(localStorage.getItem(`reservations`))
-  let initialDate = undefined
-  if (reservations !== null) {
-    const reservation = reservations[params.id]
-    if (reservation !== undefined && 'consultingDate' in reservation) {
-      initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
-    }
+  const reservation = getDataFromLocalStorage();
+  let initialDate
+  if (reservation) {
+    initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
   }
 
-  const [selectedDateObj, setSelectedDateObj] = useState(initialDate);
+  const [selectedDateObj, setSelectedDateObj] = useState();
 
 
   const getTimeSelectWrapperHeight = (amLines, pmLines, isHidingButton) => {
@@ -175,10 +172,10 @@ function Calendar({ setIsFinishSet }) {
     setAvailablePMTimes([])
   }
 
-  const updateAvailableTimes = (consultingTime, selectedDate, originData) => {
+  const updateAvailableTimes = (consultingTime, selectedDate, dayTimes) => {
     function getAvailableTimes(consultingTime, selectedDate) {
       let tempAvailableTimes = []
-      originData.forEach((element) => {
+      dayTimes.forEach((element) => {
         if (element.Day === selectedDate) {
           for (const schedule of element.StartEnds) {
             let termCount = 0
@@ -246,7 +243,7 @@ function Calendar({ setIsFinishSet }) {
     }
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
-    updateAvailableTimes(newConsultingTime, selectedDate, originData)
+    updateAvailableTimes(newConsultingTime, selectedDate, originData.DayTimes)
 
   };
 
@@ -278,11 +275,27 @@ function Calendar({ setIsFinishSet }) {
     }
   }, [consultingTime])
 
-  const setDataFromLocalStorage = (originData) => {
+  function getDataFromLocalStorage() {
     const reservations = JSON.parse(localStorage.getItem(`reservations`))
     if (reservations !== null) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {
+        return reservation
+      }
+    }
+    return false
+  }
+
+  const setDataFromLocalStorage = (originData) => {
+    const reservation = getDataFromLocalStorage();
+    if (reservation) {
+      let initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
+      console.log('initialDate - new Date()', initialDate - new Date())
+      if (initialDate - new Date() <= 0) {
+        // 과거 날짜가 localStorage에 저장되어 있을 때
+        removeReservation(params.id)
+        return
+      } else {
         if ('consultingDate' in reservation) {
           setMonth(reservation['consultingDate'].month + '월')
           setSelectedDate(reservation['consultingDate'].date)
@@ -294,7 +307,7 @@ function Calendar({ setIsFinishSet }) {
           setConsultingTime(reservation['consultingTime'])
         }
         if ('consultingTime' in reservation && 'consultingDate' in reservation) {
-          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date, originData)
+          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date, originData.DayTimes)
         }
         if ('consultingStartTime' in reservation) {
           setConsultingStartTime(reservation['consultingStartTime'])
@@ -302,13 +315,23 @@ function Calendar({ setIsFinishSet }) {
         if ('scheduleId' in reservation) {
           setScheduleId(reservation['scheduleId'])
         }
-      } else {
-        setMonth((new Date().getMonth() + 1) + '월')
       }
     } else {
       setMonth((new Date().getMonth() + 1) + '월')
-    }
+      const today = new Date().getDate()
+      if (originData.DayTimes !== null) {
+        console.log('originData.DayTimes', originData)
+        for (let i = 0; i < originData.DayTimes.length; i++) {
+          if (originData.DayTimes[i].Day >= today) {
+            setSelectedDate(originData.DayTimes[i].Day)
+            setSelectedDateObj(new Date(`${originData['Year']}-${originData['Month']}-${originData.DayTimes[i].Day}`))
+            break
+          }
+        }
+      }
 
+
+    }
   }
 
   useEffect(async () => {
@@ -316,20 +339,17 @@ function Calendar({ setIsFinishSet }) {
       year,
       new Date().getMonth() + 1,
       params.id)
-    setOriginData(res.data.DayTimes)
+    setOriginData(res.data)
     if (res.data.DayTimes !== null) {
       setAvailableDates(res.data.DayTimes.map((e) => e.Day))
     }
-    // let scheduleIdsTemp = {}
-    // res.data.DayTimes.map((e) => {
-    //   Object.assign(scheduleIdsTemp, {})
-    // })
 
     setIsApplyPage(location.pathname.includes('request'))
-    setDataFromLocalStorage(res.data.DayTimes)
+    setDataFromLocalStorage(res.data)
   }, [])
 
   const onMonthChange = async (month) => {
+    console.log('onMonthChange')
     const res = await API.getConsultSchedule(
       year,
       month.slice(0, month.length - 1),
@@ -339,10 +359,9 @@ function Calendar({ setIsFinishSet }) {
         setOriginData([])
         setAvailableDates([])
       } else {
-        setOriginData(res.data.DayTimes)
+        setOriginData(res.data)
         setAvailableDates(res.data.DayTimes.map((e) => e.Day))
       }
-
     }
   }
 
@@ -365,11 +384,6 @@ function Calendar({ setIsFinishSet }) {
     }
   }, [scheduleId])
 
-
-  useEffect(() => {
-    // setSelectedDate(selectedDateObj.getDate())
-    // setMonth((selectedDateObj.getMonth() + 1) + '월')
-  }, [selectedDateObj])
 
   useEffect(() => {
     if (consultingStartTime === null) {
@@ -435,10 +449,9 @@ function Calendar({ setIsFinishSet }) {
               {
                 (consultingStartTime === 0 || consultingStartTime === null) ? '' : `${consultingStartTime}` +
                   '~' +
-                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getHours()
-                    }`.padStart(2, '0') +
+                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getHours()}`.padStart(2, '0') +
                   ':' +
-                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getMinutes()} `.padStart(2, '0')
+                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getMinutes()}`.padStart(2, '0')
               }
 
 

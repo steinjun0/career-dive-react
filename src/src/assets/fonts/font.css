@@ -13,6 +13,8 @@
   몇몇 정보가 빠져있을 것으로 예상되지만,
   필수적이지 않을 것으로 생각된다
 */
+
+/* Spoqa Han Sans Neo */
 @font-face {
   font-family: "Spoqa Han Sans Neo";
   font-display: fallback;
@@ -45,6 +47,42 @@
   font-family: "Spoqa Han Sans Neo";
   font-display: fallback;
   src: url("./SpoqaHanSansNeo/SpoqaHanSansNeo-Bold.otf") format("opentype");
+  font-weight: 700;
+}
+
+/* Noto Sans KR */
+@font-face {
+  font-family: "Noto Sans KR";
+  font-display: fallback;
+  src: url("./NotoSansKR/NotoSansKR-Thin.otf") format("opentype");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "Noto Sans KR";
+  font-display: fallback;
+  src: url("./SpoqaHanSansNeo/SpoqaHanSansNeo-Light.otf") format("opentype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Noto Sans KR";
+  font-display: fallback;
+  src: url("./NotoSansKR/NotoSansKR-Light.otf") format("opentype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans KR";
+  font-display: fallback;
+  src: url("./NotoSansKR/NotoSansKR-Medium.otf") format("opentype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Noto Sans KR";
+  font-display: fallback;
+  src: url("./NotoSansKR/NotoSansKR-Bold.otf") format("opentype");
   font-weight: 700;
 }
 

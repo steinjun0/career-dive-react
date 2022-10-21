@@ -116,8 +116,6 @@ function MyPage() {
                       <Grid item xs={6}>
                         <CareerInfo />
                       </Grid>
-
-
                     </Grid>
                     {mentorData && <MentorIntroduce mentorData={mentorData} />}
                     {mentorData && <ConsultRange mentorData={mentorData} />}

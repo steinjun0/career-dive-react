@@ -361,7 +361,7 @@ export default {
 
     connectWebSocket() {
       // Websocket Connection
-      SendBirdCall.connectWebSocket()
+      return SendBirdCall.connectWebSocket()
         .then(/* connect succeeded */)
         .catch(/* connect failed */);
     },
@@ -386,12 +386,12 @@ export default {
     makeACall(calleeId, setCall) {
       const dialParams = {
         userId: `${calleeId}`,
-        isVideoCall: false,
+        isVideoCall: true,
         callOption: {
-          localMediaView: document.getElementById('1'),
-          remoteMediaView: document.getElementById('2'),
+          localMediaView: document.getElementById('local_video_element_id'),
+          remoteMediaView: document.getElementById('remote_video_element_id'),
           audioEnabled: true,
-          videoEnabled: false
+          videoEnabled: true
         }
       };
 
@@ -403,6 +403,8 @@ export default {
         }
         else {
           console.log('dial succeeded')
+          call.stopVideo();
+          call.muteMicrophone();
         }
         // dial succeeded
       });
@@ -413,6 +415,8 @@ export default {
 
       call.onConnected = (call) => {
         console.log('onConnected!')
+        call.stopVideo();
+        call.muteMicrophone();
       };
 
       call.onEnded = (call) => {
@@ -439,6 +443,9 @@ export default {
 
           call.onConnected = (call) => {
             console.log('onConnected!')
+            call.stopVideo();
+            call.muteMicrophone();
+            console.log('mutemute!')
           };
 
           call.onEnded = (call) => {
@@ -454,9 +461,10 @@ export default {
           };
 
           const acceptParams = {
+            isVideoCall: true,
             callOption: {
-              localMediaView: document.getElementById('1'),
-              remoteMediaView: document.getElementById('2'),
+              localMediaView: document.getElementById('local_video_element_id'),
+              remoteMediaView: document.getElementById('remote_video_element_id'),
               audioEnabled: true,
               videoEnabled: true
             }
