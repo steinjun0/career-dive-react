@@ -50,7 +50,7 @@ function JobCategoryGroup() {
       </TopWrapper>
 
       <FamousMentorCardsWrapper>
-        {mentorList && mentorList.map((mentorData, index) => {
+        {mentorList && mentorList.slice(0, 4).map((mentorData, index) => {
           return <MentorCard
             key={index}
             company={mentorData.CompName}
