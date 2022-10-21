@@ -48,10 +48,10 @@ function MentorHome() {
         <MaxWidthDiv>
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={6}>
-                <OnComingShedule></OnComingShedule>
+              <Grid item xs={12}>
+                <OnComingShedule consultList={consultList}></OnComingShedule>
               </Grid>
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <Card
                   style={{ boxSizing: 'border-box', maxWidth: '100%' }}
                   no_divider={'true'}
@@ -72,10 +72,8 @@ function MentorHome() {
                       )
                     }
                   })}
-
                 </Card>
-
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <ConsultingRequest></ConsultingRequest>
               </Grid>
