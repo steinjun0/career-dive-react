@@ -20,7 +20,7 @@ import PhoneIcon from "assets/icon/PhoneIcon";
 import calendarSuccess from 'assets/icon/schedule/calendarSuccess.svg'
 import calendarWait from 'assets/icon/schedule/calendarWait.svg'
 import calendarCancel from 'assets/icon/schedule/calendarCancel.svg'
-import { getAMOrPM } from "util/util";
+import { getAMOrPM, getDayInKorean } from "util/util";
 
 
 const ConsultCardWrapper = styled(Flex)`
@@ -95,7 +95,7 @@ function ConsultMenteeCard({ consult, requestFormOnClick, changeOnClick, enterOn
 
           <Flex>
             <ConsultDate>
-              {new Date(consult.Date).getFullYear().toString().slice(2)}.{new Date(consult.Date).getMonth() + 1}.{new Date(consult.Date).getDate()}
+              {new Date(consult.Date).getFullYear().toString().slice(2)}.{new Date(consult.Date).getMonth() + 1}.{new Date(consult.Date).getDate()}.({getDayInKorean(new Date(consult.Date))})
             </ConsultDate>
             <ConsultTime>
               {getAMOrPM(consult.StartTime)} {consult.StartTime}
