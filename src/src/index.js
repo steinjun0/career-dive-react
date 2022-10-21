@@ -19,7 +19,7 @@ import Footer from "./component/Footer";
 import SessionList from "./pages/ConsultList";
 import MyPage from "./pages/MyPage";
 import MentorHome from './pages/Mentor/Home'
-import { colorCareerDiveBlue, VerticalFlex } from "util/styledComponent";
+import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MentorSchedule from "pages/Mentor/Schedule";
@@ -61,6 +61,7 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <ScrollToTop />
       <Gnb />
+      <EmptyHeight height={'80px'} />
       <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 220px)' }}>
         <Routes>
           <Route path="/" element={<Home />} />

@@ -131,6 +131,10 @@ function Calendar({ setIsFinishSet }) {
   let initialDate
   if (reservation) {
     initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
+    if (isNaN(initialDate)) {
+      removeReservation(params.id)
+    }
+
   }
 
   const [selectedDateObj, setSelectedDateObj] = useState();
@@ -290,7 +294,6 @@ function Calendar({ setIsFinishSet }) {
     const reservation = getDataFromLocalStorage();
     if (reservation) {
       let initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
-      console.log('initialDate - new Date()', initialDate - new Date())
       if (initialDate - new Date() <= 0) {
         // 과거 날짜가 localStorage에 저장되어 있을 때
         removeReservation(params.id)

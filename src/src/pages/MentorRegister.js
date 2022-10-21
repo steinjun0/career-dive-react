@@ -21,7 +21,8 @@ import {
     EmptyWidth,
     colorBackgroundCareerDiveBlue,
     colorTextDisabled,
-    colorBackgroundGrayDark
+    colorBackgroundGrayDark,
+    colorCareerDivePink
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
 import { CustomTextField } from 'util/Custom/CustomTextField.js';
@@ -401,11 +402,21 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
             <EmptyHeight height={'30px'} />
 
             <Dropzone onDrop={acceptedFiles => {
+                console.log('acceptedFiles', acceptedFiles)
                 if (acceptedFiles.length > 1) {
                     alert('업로드 파일이 2개 이상입니다.')
                     return
                 }
-                setUploadingFile(acceptedFiles[0])
+                for (let i = 0; i < acceptedFiles.length; i++) {
+                    let extension = acceptedFiles[i].name.split('.').pop()
+                    if (extension !== 'pdf') {
+                        alert('pdf 만 업로드 가능합니다')
+                        return
+                    }
+                }
+
+                console.log(acceptedFiles[0])
+                setUploadingFile(acceptedFiles)
             }}>
                 {({ getRootProps, getInputProps }) => (
                     <section>
@@ -416,12 +427,29 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
                     </section>
                 )}
             </Dropzone>
-            {uploadingFile.name}
+            {uploadingFile && uploadingFile.map((items, index) => {
+                console.log('uploadingFile', uploadingFile)
+                return <Flex key={index}>
+                    <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items.path}</TextBody2>
+                    <TextBody2
+                        style={{ cursor: 'pointer' }}
+                        color={colorCareerDivePink}
+                        onClick={() => {
+                            const temp = JSON.parse(JSON.stringify(uploadingFile))
+                            temp.splice(temp.indexOf(items), 1)
+                            setUploadingFile(temp)
+                        }}>삭제</TextBody2>
+                </Flex>
+            })}
 
             <EmptyHeight height={'30px'} />
             <ButtonWrapper>
                 <CustomButton
                     onClick={() => {
+                        if (uploadingFile.length !== 1) {
+                            alert('파일을 업로드 해주세요')
+                            return
+                        }
                         onClickAuthRequest();
                         setSignUpStep(signUpStep + 1)
                     }}

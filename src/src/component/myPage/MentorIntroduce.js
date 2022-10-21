@@ -1,8 +1,5 @@
 import { Divider, styled } from "@mui/material";
 import TextField from '@mui/material/TextField';
-import Dropzone from 'react-dropzone'
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import {
   TextSubtitle2,

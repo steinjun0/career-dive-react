@@ -49,7 +49,7 @@ function MentorHome() {
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={6}>
-                <OnComingShedule></OnComingShedule>
+                <OnComingShedule consultList={consultList}></OnComingShedule>
               </Grid>
               <Grid item xs={6}>
                 <Card
@@ -72,9 +72,7 @@ function MentorHome() {
                       )
                     }
                   })}
-
                 </Card>
-
               </Grid>
               <Grid item xs={12}>
                 <ConsultingRequest></ConsultingRequest>

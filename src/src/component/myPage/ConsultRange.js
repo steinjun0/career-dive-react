@@ -1,8 +1,4 @@
 import { Divider, styled } from "@mui/material";
-import TextField from '@mui/material/TextField';
-import Dropzone from 'react-dropzone'
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import {
   TextSubtitle2,
@@ -33,22 +29,6 @@ const MenteeIntroduceWrapper = styled(Flex)`
   // width: 100%;
 `;
 
-const Subtitle = styled(TextSubtitle2)`
-  margin-top: 20px;
-  color: ${colorCareerDiveBlue};
-  margin-bottom: 20px;
-`;
-
-
-const DropzoneWrapper = styled(Flex)`
-  justify-content: center;
-  align-items: center;
-  background-color: ${colorBackgroundGrayLight};
-  color: ${colorTextLight};
-  width: 100%;
-  height: 100px;
-  border-radius: 8px;
-`;
 
 export const TextFieldWrapper = styled(Flex)`
   margin-top: 20px;
