@@ -130,11 +130,14 @@ function Calendar({ setIsFinishSet }) {
   const reservation = getDataFromLocalStorage();
   let initialDate
   if (reservation) {
-    initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
-    if (isNaN(initialDate)) {
+    if (reservation['consultingDate'] && reservation['consultingStartTime']) {
+      initialDate = new Date(`${reservation['consultingDate'].year}-${reservation['consultingDate'].month}-${reservation['consultingDate'].date} ${reservation['consultingStartTime']}`)
+      if (isNaN(initialDate)) {
+        removeReservation(params.id)
+      }
+    } else {
       removeReservation(params.id)
     }
-
   }
 
   const [selectedDateObj, setSelectedDateObj] = useState();
