@@ -15,7 +15,8 @@ import { isMentorUrl } from "util/util";
 
 
 const GnbFullWidthWrapper = styled("nav")`
-      position: relative;
+      position: fixed;
+      min-width: 1194px;
       display:flex;
       flex-direction: row;
       justify-content: center;
