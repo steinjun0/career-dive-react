@@ -31,30 +31,33 @@ const ScheduleListWrapper = styled(Flex)`
 // `;
 
 
-function ConsultList({ consultList }) {
-
-  // const [consultList, setConsultList] = useState([])
-  // useEffect(async () => {
-  //   const res = await API.getConsultMenteeList(localStorage.getItem('UserID'), 'created')
-  //   if (res.status === 200) {
-  //     setConsultList(res.data)
-  //     console.log('consultList', res.data)
-  //   }
-  // }, [])
+function ConsultList({ consultList, onCategoryChange = () => { } }) {
 
   const navigater = useNavigate();
   const location = useLocation();
 
   // 생성된(created), 대기(pending), 승인(approved), 완료(done)
-  const categoryToStatusConverter = {
-    '전체': 'created',
+  const categoryStatusConverter = {
+    '전체': '',
     '예약 성공': 'approved',
-    '예약 대기': 'pending',
-    '예약 실패': 'done',
-    '상담 완료': 'done'
+    '예약 대기': 'created',
+    '예약 실패': 'rejected',
+    '예약 취소': 'canceled',
+    '상담 완료': 'done',
+    '': '전체',
+    'approved': '예약 성공',
+    'created': '예약 대기',
+    'rejected': '예약 실패',
+    'canceled': '예약 취소',
+    'done': '상담 완료'
   }
   const categories = ['전체', '예약 성공', '예약 대기', '예약 실패', '상담 완료']
   const [category, setCategory] = useState('전체');
+
+  useEffect(() => {
+    onCategoryChange(categoryStatusConverter[category])
+  }, [category])
+
   return (
     <ScheduleListWrapper>
       <Card no_divider={'true'} title={<LinkNoDeco to={'/mentor/schedule'}>내 상담 내역</LinkNoDeco>}
@@ -88,7 +91,7 @@ function ConsultList({ consultList }) {
           <Divider style={{ color: colorBackgroundGrayMedium }} />
           <Grid container spacing={'30px'} marginTop={0}>
             {consultList && consultList.map((consult, index) => {
-              if (category === '전체' || consult.Status === categoryToStatusConverter[category]) {
+              if (category === '전체' || consult.Status === categoryStatusConverter[category]) {
                 return (
                   <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
                     {location.pathname.includes('mentor') ?

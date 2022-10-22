@@ -35,10 +35,9 @@ function MentorHome() {
 
   const [consultList, setConsultList] = useState([])
   useEffect(async () => {
-    const res = await API.getConsultMentorList(localStorage.getItem('UserID'), 'created')
+    const res = await API.getConsultMentorList(localStorage.getItem('UserID'), '')
     if (res.status === 200) {
       setConsultList(res.data)
-      console.log('consultList', res.data)
     }
   }, [])
 
@@ -78,7 +77,15 @@ function MentorHome() {
                 <ConsultingRequest></ConsultingRequest>
               </Grid>
               <Grid item xs={12}>
-                <ConsultList consultList={consultList}></ConsultList>
+                <ConsultList
+                  consultList={consultList}
+                  onCategoryChange={(category) => {
+                    API.getConsultMenteeList(localStorage.getItem('UserID'), category).then((res) => {
+                      if (res.status === 200) {
+                        setConsultList(res.data)
+                      }
+                    })
+                  }}></ConsultList>
               </Grid>
             </Grid>
           </CardsWrapper>
