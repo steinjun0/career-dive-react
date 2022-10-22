@@ -106,7 +106,7 @@ function ConsultingRequest() {
 
                   <CustomIconButton
                     Icon={CircleDecline}
-                    text='상담 취소'
+                    text='상담 거절'
                     width='110px'
                     hover_color={colorCareerDivePink}
                     text_color={'#fff'}
