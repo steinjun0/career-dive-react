@@ -52,7 +52,7 @@ function HelpCategory({ regularTags = [], premiumTags = [] }) {
                 color={colorCareerDiveBlue}
                 background_color={colorBackgroundCareerDiveBlue}
               >
-                <TextBody2>{tag}</TextBody2>
+                <TextButton>{tag}</TextButton>
               </TagMedium>
               <EmptyWidth width='8px'></EmptyWidth>
             </Flex>
