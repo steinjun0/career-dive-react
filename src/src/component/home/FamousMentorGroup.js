@@ -60,6 +60,7 @@ function JobCategoryGroup() {
             inJob={mentorData.InService ? "현직자" : "경력자"}
             duration={"기간"}
             rating={4.5}
+            tags={mentorData.TagList.slice(0, 3)}
             userId={mentorData.UserID}
             isShowRating={false}
             isShowTag={true} />
