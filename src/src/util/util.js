@@ -24,8 +24,19 @@ export const addMinute = (beforeDate, addingMin) => {
   return afterDate
 }
 
+export const createDateFromHourMin = (date, startTime, endTime) => {
+  let startDate = new Date(date)
+  let endDate = new Date(date)
+
+  let startHour = +startTime.slice(0, startTime.indexOf(':'))
+  let startMin = +startTime.slice(startTime.indexOf(':') + 1)
+
+  let endHour = +endTime.slice(0, endTime.indexOf(':'))
+  let endMin = +endTime.slice(endTime.indexOf(':') + 1)
+  return [addMinute(startDate, (startHour * 60 + startMin)), addMinute(endDate, (endHour * 60 + endMin))]
+}
+
 export const getMinuteString = (date) => {
-  console.log('date', date)
   return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }
 
