@@ -64,13 +64,13 @@ function Mentor() {
       <FullWidthWrapper>
         <MaxWidthDiv>
           <MetorProfileBanner>
-
-            <MentorProfile name={nickName} discription={`${mentorData && mentorData.CompName} ${mentorData && mentorData.DivisIsPub ? `| ${mentorData && mentorData.DivisInComp}` : ''} | ${mentorData && mentorData.JobInComp}`} />
+            {mentorData && <MentorProfile
+              name={nickName}
+              discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+              id={mentorData.UserID} />}
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
-          {mentorData && mentorData.Nickname}
-
           <MaxWidthDiv>
             <CardsWrapper>
               <Grid container spacing={'30px'} marginTop={0}>
