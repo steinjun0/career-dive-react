@@ -101,7 +101,7 @@ function FavoriteButton({ isFavorite, setIsFavorite }) {
 }
 
 
-function MentorProfile({ name = '', discription = '' }) {
+function MentorProfile({ name = '', discription = '', id = -1 }) {
   const [isFavorite, setIsFavorite] = useState(false)
   const navigater = useNavigate();
   const params = useParams();
@@ -120,7 +120,7 @@ function MentorProfile({ name = '', discription = '' }) {
         <ApplyMentoringButton
           startIcon={<img src={EditCalendarIcon} alt={'calendar'} />}
           disableElevation
-          onClick={() => { navigater(`/mentee/request/${params.id}`) }}
+          onClick={() => { navigater(`/mentee/request/${id}`) }}
         >
           상담 신청
         </ApplyMentoringButton>

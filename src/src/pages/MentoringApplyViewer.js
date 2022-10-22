@@ -31,23 +31,35 @@ const CardsWrapper = styled(Flex)`
 function MentoringReservation() {
   const params = useParams()
 
-  const [menteeIntroduce, setMenteeIntroduce] = useState('')
-  const [requestContent, setRequestContent] = useState('')
-  const [urlLink, setUrlLink] = useState('')
-
+  const [consultData, setConsultData] = useState()
+  const [menteeData, setMenteeData] = useState()
+  const [mentorData, setMentorData] = useState()
 
   useEffect(async () => {
-    const consultRes = await API.getConsult(params.id)
-    if (consultRes.status === 200) {
-      setRequestContent(consultRes.data.RequestContent)
-
-      const menteeRes = await API.getAccountMentee(consultRes.data.MenteeID)
-      if (menteeRes.status === 200) {
-        setMenteeIntroduce(menteeRes.data.Introduction)
-        setUrlLink(menteeRes.data.Link)
+    let menteeId
+    let mentorId
+    await API.getConsult(params.id).then((res) => {
+      if (res.status === 200) {
+        setConsultData(res.data)
+        menteeId = res.data.MenteeID
+        mentorId = res.data.MentorID
       }
-    }
+    })
+
+    API.getAccountMentee(menteeId).then((res) => {
+      if (res.status === 200) {
+        setMenteeData(res.data)
+      }
+    })
+
+    API.getAccountMentor(mentorId).then((res) => {
+      if (res.status === 200) {
+        setMentorData(res.data)
+      }
+    })
+
   }, [])
+
 
 
   return (
@@ -55,17 +67,26 @@ function MentoringReservation() {
       <FullWidthWrapper>
         <MaxWidthDiv>
           <MetorProfileBanner>
-            <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
+            {mentorData && <MentorProfile
+              name={mentorData.Nickname}
+              discription={`${mentorData.CompName} | ${mentorData.DivisIsPub ? mentorData.DivisInComp + ' |' : ''} ${mentorData.Job}`}
+              id={mentorData.UserID} />}
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
           <CenterWidthWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <RequestView
+                {/* <RequestView
                   menteeIntroduce={menteeIntroduce}
                   requestContent={requestContent}
-                  urlLink={urlLink} />
+                  urlLink={urlLink} /> */}
+                {consultData !== undefined &&
+                  <RequestView
+                    consultData={consultData}
+                    menteeIntroduce={menteeData && menteeData.Introduction}
+                    urlLink={menteeData && menteeData.Link}
+                    style={{ width: '100%', padding: 24 }} />}
 
               </Grid>
             </Grid>

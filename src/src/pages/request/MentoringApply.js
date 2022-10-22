@@ -13,6 +13,7 @@ import RequestBasic from "component/mentor/apply/RequestBasic";
 import RequestPremium from "component/mentor/apply/RequestPremium";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import API from "API";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -30,12 +31,24 @@ const CardsWrapper = styled(Flex)`
 
 function MentoringReservation() {
   const params = useParams()
+  const [mentorData, setMentorData] = useState()
+  useEffect(() => {
+    API.getAccountMentor(params.id).then((value) => {
+      if (value.status === 200) {
+        setMentorData(value.data)
+      }
+    })
+  }, [])
+
   return (
     <div>
       <FullWidthWrapper>
         <MaxWidthDiv>
           <MetorProfileBanner>
-            <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
+            {mentorData && <MentorProfile
+              name={mentorData.Nickname}
+              discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+              id={mentorData.UserID} />}
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
