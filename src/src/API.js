@@ -226,7 +226,7 @@ export default {
     return scheduleRes
   },
 
-  async postAccountMentor(inService, job, jobInComp, divisInComp, divisIsPub, compName, tags) {
+  async postAccountMentor(inService, sector, job, jobInComp, divisInComp, divisIsPub, compName, tags) {
     const convertedTags = tags.map((e) => {
       return { Name: e }
     })
@@ -234,6 +234,7 @@ export default {
       {
         Mentor: {
           Inservice: inService,
+          Sector: sector,
           Job: job,
           JobInComp: jobInComp,
           DivisInComp: divisInComp,
