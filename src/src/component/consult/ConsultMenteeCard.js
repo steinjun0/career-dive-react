@@ -98,7 +98,7 @@ function ConsultMenteeCard({ consult, requestFormOnClick, changeOnClick, enterOn
               {new Date(consult.Date).getFullYear().toString().slice(2)}.{new Date(consult.Date).getMonth() + 1}.{new Date(consult.Date).getDate()}.({getDayInKorean(new Date(consult.Date))})
             </ConsultDate>
             <ConsultTime>
-              {getAMOrPM(consult.StartTime)} {consult.StartTime}
+              {getAMOrPM(consult.StartTime)} {+consult.StartTime.slice(0, 2) > 12 ? (+consult.StartTime.slice(0, 2) - 12).toString().padStart(2, '0') : consult.StartTime.slice(0, 2)}:{consult.StartTime.slice(3)}
             </ConsultTime>
           </Flex>
           <Flex>
