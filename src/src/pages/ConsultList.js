@@ -36,10 +36,10 @@ function Schedule() {
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={12}>
-                {consultList && <OnComingShedule consultList={consultList}></OnComingShedule>}
+                <OnComingShedule consultList={consultList}></OnComingShedule>
               </Grid>
               <Grid item xs={12}>
-                {consultList && <ConsultList consultList={consultList}></ConsultList>}
+                <ConsultList consultList={consultList}></ConsultList>
               </Grid>
             </Grid>
           </CardsWrapper>

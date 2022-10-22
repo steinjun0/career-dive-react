@@ -8,6 +8,7 @@ import {
   LinkNoDeco,
   TextBody1,
   colorBackgroundGrayMedium,
+  VerticalFlex,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 
@@ -62,70 +63,73 @@ function ConsultList({ consultList }) {
             <ChevronRight fontSize="medium" />
           </LinkNoDeco>
         }>
-        <EmptyHeight height={'12px'} />
-        <Flex>
-          {categories.map((element, index) => {
-            if (element === category) {
-              return <TextBody1
-                style={{ cursor: 'pointer', paddingBottom: '12px', marginRight: '24px', borderBottom: `3px solid ${colorCareerDiveBlue}` }}
-                color={colorCareerDiveBlue}
-                key={`${index}`}>
-                {element}
-              </TextBody1>;
-            } else {
-              return <TextBody1
-                style={{ cursor: 'pointer', marginRight: '24px' }}
-                is_selected={'false'}
-                key={index}
-                onClick={() => { setCategory(element) }}>
-                {element}
-              </TextBody1>;
-            }
-          })}
-        </Flex>
-        <Divider style={{ color: colorBackgroundGrayMedium }} />
-        <Grid container spacing={'30px'} marginTop={0}>
-          {consultList && consultList.map((consult, index) => {
-            if (category === '전체' || consult.Status === categoryToStatusConverter[category]) {
-              return (
-                <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  {location.pathname.includes('mentor') ?
-                    <ConsultMentorCard
-                      consult={consult}
-                      requestFormOnClick={() => {
-                        navigater(`/mentee/sessionList/form/${consult.ID}`)
-                      }}
-                      enterOnClick={() => {
-                        onEnterSession({
-                          navigater,
-                          date: consult.Date,
-                          startTime: consult.StartTime,
-                          endTime: consult.EndTime,
-                          consultId: consult.ID
-                        })
-                      }}
-                    /> :
-                    <ConsultMenteeCard
-                      consult={consult}
-                      requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
-                      enterOnClick={() => {
-                        onEnterSession({
-                          navigater,
-                          date: consult.Date,
-                          startTime: consult.StartTime,
-                          endTime: consult.EndTime,
-                          consultId: consult.ID
-                        })
-                      }}
-                    />
-                  }
-                </Grid>
+        {consultList && <VerticalFlex>
+          <EmptyHeight height={'12px'} />
+          <Flex>
+            {categories.map((element, index) => {
+              if (element === category) {
+                return <TextBody1
+                  style={{ cursor: 'pointer', paddingBottom: '12px', marginRight: '24px', borderBottom: `3px solid ${colorCareerDiveBlue}` }}
+                  color={colorCareerDiveBlue}
+                  key={`${index}`}>
+                  {element}
+                </TextBody1>;
+              } else {
+                return <TextBody1
+                  style={{ cursor: 'pointer', marginRight: '24px' }}
+                  is_selected={'false'}
+                  key={index}
+                  onClick={() => { setCategory(element) }}>
+                  {element}
+                </TextBody1>;
+              }
+            })}
+          </Flex>
+          <Divider style={{ color: colorBackgroundGrayMedium }} />
+          <Grid container spacing={'30px'} marginTop={0}>
+            {consultList && consultList.map((consult, index) => {
+              if (category === '전체' || consult.Status === categoryToStatusConverter[category]) {
+                return (
+                  <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+                    {location.pathname.includes('mentor') ?
+                      <ConsultMentorCard
+                        consult={consult}
+                        requestFormOnClick={() => {
+                          navigater(`/mentee/sessionList/form/${consult.ID}`)
+                        }}
+                        enterOnClick={() => {
+                          onEnterSession({
+                            navigater,
+                            date: consult.Date,
+                            startTime: consult.StartTime,
+                            endTime: consult.EndTime,
+                            consultId: consult.ID
+                          })
+                        }}
+                      /> :
+                      <ConsultMenteeCard
+                        consult={consult}
+                        requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
+                        enterOnClick={() => {
+                          onEnterSession({
+                            navigater,
+                            date: consult.Date,
+                            startTime: consult.StartTime,
+                            endTime: consult.EndTime,
+                            consultId: consult.ID
+                          })
+                        }}
+                      />
+                    }
+                  </Grid>
 
-              );
-            }
+                );
+              }
 
-          })}
-        </Grid>
+            })}
+          </Grid>
+        </VerticalFlex>}
+
       </Card>
     </ScheduleListWrapper>
 
