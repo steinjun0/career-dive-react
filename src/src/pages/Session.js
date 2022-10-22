@@ -23,6 +23,7 @@ import { CustomButton } from 'util/Custom/CustomButton'
 import { useNavigate, useParams } from "react-router-dom";
 import API from "API"
 import { usePrompt } from "util/usePromprt";
+import { createDateFromHourMin } from "util/util";
 
 
 
@@ -38,27 +39,65 @@ function Session() {
   // (window.RTCPeerConnection) ? alert('supported') : alert('not supported')
 
   let calleeId = -1;
+  let mentorId;
+  let menteeId;
   const [call, setCall] = useState('no call')
   const [consultData, setConsultData] = useState()
-  const [isMentor, setIsMentor] = useState()
   const [isMicOn, setIsMicOn] = useState(false)
   const [isScreenSharing, setIsScreenSharing] = useState(false)
   const [isLocalScreenShowing, setIsLocalScreenShowing] = useState(false)
   const [isRemoteScreenShowing, setIsRemoteScreenShowing] = useState(false)
   const [isScreenShowing, setIsScreenShowing] = useState(false)
 
+  const [menteeData, setMenteeData] = useState()
+  const [mentorData, setMentorData] = useState()
+
+  const [endDate, setEndDate] = useState()
+  const [leftTime, setLeftTime] = useState()
+  const [intervalId, setIntervalId] = useState()
+
 
   useEffect(async () => {
+    let intervalId;
     await API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
         if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
           calleeId = res.data.MentorID
-          setIsMentor(false)
         } else {
           calleeId = res.data.MenteeID
-          setIsMentor(true)
         }
+        menteeId = res.data.MenteeID
+        mentorId = res.data.MentorID
         setConsultData(res.data)
+
+        const [_, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
+        setEndDate(tempEndDate)
+
+        const tempIntervalId = setInterval(() => {
+          setLeftTime(new Date(tempEndDate.getTime() - new Date().getTime()))
+          console.log('tempEndDate.getTime() - new Date().getTime()', tempEndDate.getTime() - new Date().getTime() - 149132473)
+          if (tempEndDate.getTime() - new Date().getTime() - 149132473 <= 0) {
+            clearInterval(tempIntervalId)
+            if (call !== 'no call') API.Sendbird.stopCalling(call)
+            alert('통화가 종료되었습니다')
+            navigater(`/review/${params.id}`)
+          }
+        }, 1000);
+        setIntervalId(tempIntervalId)
+      }
+    })
+
+
+    API.getAccountMentee(menteeId).then((res) => {
+      if (res.status === 200) {
+        setMenteeData(res.data)
+      }
+    })
+
+
+    API.getAccountMentor(mentorId).then((res) => {
+      if (res.status === 200) {
+        setMentorData(res.data)
       }
     })
 
@@ -73,11 +112,13 @@ function Session() {
     })
     API.Sendbird.addEventHandler()
     API.Sendbird.receiveACall(setCall)
-
   }, [])
 
   usePrompt('dd', true, () => {
     if (call !== 'no call') API.Sendbird.stopCalling(call)
+    console.log(intervalId)
+    clearInterval(intervalId)
+    navigater(`/review/${params.id}`)
   })
 
   return (
@@ -100,19 +141,16 @@ function Session() {
       }}>stop video</CustomButton> */}
       <Flex style={{ margin: '16px auto 0 24px', color: colorTextDisabled }}>
         <TextHeading4 style={{ fontFamily: 'Noto Sans KR' }}>커리어다이브</TextHeading4>
-        <Flex>
-          isScreenShowing: {`${isScreenShowing}`}<br></br>
-          isLocalScreenShowing: {`${isLocalScreenShowing}`}<br></br>
-          isRemoteScreenShowing: {`${isRemoteScreenShowing}`}<br></br>
-        </Flex>
       </Flex>
 
       <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 300px)' }}>
         <ReflexElement className="left-pane" >
           <div style={{ padding: 24 }}>
-            {consultData &&
+            {consultData !== undefined &&
               <RequestView
-                requestContent={consultData.RequestContent}
+                consultData={consultData}
+                menteeIntroduce={menteeData && menteeData.Introduction}
+                urlLink={menteeData && menteeData.Link}
                 style={{ width: '100%', padding: 24 }} />}
           </div>
         </ReflexElement>
@@ -133,15 +171,15 @@ function Session() {
               <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center' }}>
                 <ColumnAlignCenterFlex >
                   <ProfileImg src={testMentorImage} alt="profile-image" />
-                  <TextSubtitle1>꿈꾸는디자이너 멘티</TextSubtitle1>
+                  <TextSubtitle1>{menteeData && menteeData.User && menteeData.User.Nickname}</TextSubtitle1>
                 </ColumnAlignCenterFlex>
               </Card>
               <EmptyHeight height={'30px'} />
               <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center' }}>
                 <ColumnAlignCenterFlex>
                   <ProfileImg src={testMentorImage} alt="profile-image" />
-                  <TextSubtitle1>꿈꾸는디자이너 멘토</TextSubtitle1>
-                  <TextBody1>다파다 · 디자인팀 · UI/UX 디자인</TextBody1>
+                  <TextSubtitle1>{mentorData && mentorData.Nickname}</TextSubtitle1>
+                  <TextBody1>{mentorData && mentorData.CompName} · {mentorData && mentorData.DivisInComp} · {mentorData && mentorData.Job}</TextBody1>
                 </ColumnAlignCenterFlex>
               </Card>
             </VerticalFlex>}
@@ -157,7 +195,7 @@ function Session() {
               <TextCaption style={{ fontWeight: '400' }}>
                 남은 시간
               </TextCaption>
-              <TextHeading4>20:00</TextHeading4>
+              <TextHeading4>{leftTime && `${leftTime.getMinutes()}:${leftTime.getSeconds()}`}</TextHeading4>
             </VerticalFlex>
             <Flex>
               <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}
@@ -255,7 +293,7 @@ function Session() {
             </Flex>
             <CustomButton custom_color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}
               onClick={() => {
-                navigater(-1)
+                navigater(`/review/${params.id}`)
               }}
             > 상담 종료 </CustomButton>
           </Flex>

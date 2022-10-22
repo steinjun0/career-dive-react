@@ -324,6 +324,15 @@ export default {
     return patchRes
   },
 
+  async patchConsultReview({ consultId, reviewContent, reviewScore, checkList }) {
+    const reviewRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/${consultId}/review`, {
+      ReviewContent: reviewContent,
+      ReviewScore: reviewScore,
+      ReviewStatisfyBase: checkList,
+    })
+    return reviewRes
+  },
+
   async deleteConsultSchedule(shceduleId) {
     const deleteRes = await this.deleteAxios(`${CAREER_DIVE_API_URL}/consult/schedule/${shceduleId}`)
     return deleteRes

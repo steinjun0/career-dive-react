@@ -17,11 +17,13 @@ import {
   VerticalFlex,
   colorBackgroundCareerDiveBlue,
   colorCareerDivePink,
-  colorBackgroundCareerDivePink
+  colorBackgroundCareerDivePink,
+  UlNoDeco
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { addMinute, createDateFromHourMin, getAMOrPM, getDayInKorean } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
   // margin-top: 30px;
@@ -66,31 +68,55 @@ const CategoryTag = styled(TagLarge)`
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
 
-function RequestView({ requestContent, menteeIntroduce, urlLink }) {
-  const consultCategory = '커리어 상담'
+function RequestView({ consultData, menteeIntroduce, urlLink }) {
   const consultContents = ['이직 준비', '면접 팁', '업계 이야기']
+  const getAMOrPMForDate = (date) => {
+    if (date.getHours() < 12) {
+      return '오전'
+    } else if (date.getHours() == 12) {
+      return '낮'
+    } else {
+      return '오후'
+    }
+  }
+  const getHourMin = (date) => {
+    if (date.getHours() <= 12) {
+      return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+    } else {
+      return `${(+date.getHours() - 12).toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+    }
+  }
+  const [startDate, setStartDate] = useState(new Date(consultData.Date))
+  const [endDate, setEndDate] = useState(new Date(consultData.Date))
+  useEffect(() => {
+    const [tempStartDate, tempEndDate] = createDateFromHourMin(consultData.Date, consultData.StartTime, consultData.EndTime)
+    setStartDate(tempStartDate)
+    setEndDate(tempEndDate)
+  }, [])
+
+
 
   return (
     <RequestCardWrapper>
       <Card
-        title={'2022년 1월 9일(목)'}
+        title={`${new Date(consultData.Date).getFullYear()}년 ${new Date(consultData.Date).getMonth() + 1}월 ${new Date(consultData.Date).getDate()}일(${getDayInKorean(new Date(consultData.Date))})`}
         titleHead={
           <Flex>
             <EmptyWidth width='12px' />
-            <TextSubtitle1 color={colorCareerDiveBlue}>오전 09:00~오전 9:20</TextSubtitle1>
+            <TextSubtitle1 color={colorCareerDiveBlue}>{getAMOrPMForDate(new Date(startDate))} {getHourMin(startDate)}~{getAMOrPMForDate(endDate)} {getHourMin(endDate)}</TextSubtitle1>
           </Flex>}
         titleBottom={
           <VerticalFlex>
             <EmptyHeight height='16px' />
             <Flex>
-              <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
+              <CategoryTag category={consultData.Type}><TextBody2>{consultData.Type}</TextBody2></CategoryTag>
               <EmptyWidth width='8px' />
-              {consultContents.map((value, index) => {
+              {consultData.ConsultContentList.map((value, index) => {
                 return (
                   <Flex key={index}>
                     <TagLarge color={colorTextLight}
                       background_color={colorBackgroundGrayLight}>
-                      <TextBody2>{value}</TextBody2>
+                      <TextBody2>{value.Name}</TextBody2>
                     </TagLarge>
                     <EmptyWidth width='8px'></EmptyWidth>
                   </Flex>
@@ -113,22 +139,22 @@ function RequestView({ requestContent, menteeIntroduce, urlLink }) {
         <TextSubtitle1>희망 상담 내용</TextSubtitle1>
         <EmptyHeight height='16px' />
         <GrayBackgroundText style={{ whiteSpace: 'pre' }}>
-          {requestContent}
+          {consultData.RequestContent}
         </GrayBackgroundText>
 
         <EmptyHeight height='16px' />
         <TextSubtitle1>첨부 파일</TextSubtitle1>
         <EmptyHeight height='16px' />
         <VerticalFlex>
-          <UnderlineText>파일예시.pdf</UnderlineText>
-          <UnderlineText>파일예시2.pdf</UnderlineText>
-          <UnderlineText>파일예시3.pdf</UnderlineText>
+          {consultData.ConsultFileList.map((e) => {
+            return <a style={{ color: 'initial' }} href={e.Url} download={true}><UnderlineText>{e.Name}</UnderlineText></a>
+          })}
         </VerticalFlex>
         <EmptyHeight height='16px' />
 
         <TextSubtitle1>URL</TextSubtitle1>
         <EmptyHeight height='16px' />
-        <UnderlineText>{urlLink}</UnderlineText>
+        <a style={{ color: 'initial' }} href={urlLink} target="_blank"><UnderlineText>{urlLink}</UnderlineText></a>
         <EmptyHeight height='16px' />
 
 

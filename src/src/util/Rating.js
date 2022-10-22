@@ -12,12 +12,12 @@ const RatingScore = styled('span')`
     // margin-right: 24px;
 `;
 
-function CustomRating({ value = 0, size = '16px', readOnly = true, setValue = null }) {
+function CustomRating({ value = 0, size = '16px', readOnly = true, setValue = null, precision = 0.5 }) {
     return (<RowAlignCenterFlex>
         <Rating name="read-only" value={value}
             readOnly={readOnly}
             getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
-            precision={0.5}
+            precision={precision}
             icon={<FavoriteIcon fontSize="inherit" />}
             emptyIcon={<FavoriteIcon fontSize="inherit" style={{ color: '#EDEDED' }} />}
             sx={{

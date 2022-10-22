@@ -27,7 +27,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
 import { CustomTextField } from "util/Custom/CustomTextField";
-import CustomTextField1 from "util/Custom/CustomTextField1";
 import API from "API"
 
 const RequestCardWrapper = styled(Flex)`
