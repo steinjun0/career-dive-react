@@ -363,7 +363,8 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
     const onClickAuthRequest = async () => {
         const accountRes = await API.postAccountMentor(
             mentorInfoState.inService,
-            mentorInfoState.job,
+            mentorInfoState.upperJobCategory,
+            mentorInfoState.lowerJobCategory,
             mentorInfoState.jobInComp,
             mentorInfoState.divisInComp,
             mentorInfoState.divisIsPub,
