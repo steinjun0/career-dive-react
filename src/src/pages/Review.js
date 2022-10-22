@@ -1,22 +1,24 @@
 import { Flex, GrayBackground, TextHeading2, TextHeading5, VerticalFlex, colorCareerDiveBlue, TextHeading3, TextHeading6, EmptyHeight, colorBackgroundGrayMedium, TextBody2, EmptyWidth } from "util/styledComponent";
-import MentorCard from "component/mentor/MentorCard";
 import { useEffect, useState } from "react";
 import API from "API";
 import { Card } from "util/Card";
 import CustomRating from "util/Rating";
 import { Divider } from "@mui/material";
 import { CustomCheckbox } from "util/Custom/CustomCheckbox";
-import { CustomTextField } from "util/Custom/CustomTextField";
-import CustomTextField1 from "util/Custom/CustomTextField1";
-import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
+import { useParams } from "react-router-dom";
+import CustomTextField1 from "util/Custom/CustomTextField1";
 
 function Review() {
-  const [mentorList, setMentorList] = useState()
+  const [constultData, setConsultData] = useState()
+  const [mentorData, setMentorData] = useState()
+
   const [ratingValue, setRatingValue] = useState()
   const [checkListValue, setCheckListValue] = useState([
     false, false, false, false, false
   ])
+  const [reviewText, setReviewText] = useState('')
+
   const [questionList, setQuestionList] = useState([
     '시간을 잘 지켜요',
     '설명이 자세해요',
@@ -24,10 +26,21 @@ function Review() {
     '사전 준비가 철저해요',
     '대화 매너가 좋아요'
   ])
-  useEffect(() => {
-    API.getAccountMentorList().then((res) => {
+  const params = useParams()
+  useEffect(async () => {
+    let mentorId
+    await API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
-        setMentorList(res.data.Results)
+        setConsultData(res.data)
+        console.log('res.data', res.data)
+        mentorId = res.data.MentorID
+      }
+    })
+
+    API.getAccountMentor(mentorId).then((res) => {
+      if (res.status === 200) {
+        setMentorData(res.data)
+        console.log('res.data', res.data)
       }
     })
   }, [])
@@ -44,7 +57,7 @@ function Review() {
           max_width={'582px'}
           title={
             <Flex>
-              <TextHeading5 color={colorCareerDiveBlue}>카카오농사꾼</TextHeading5>
+              <TextHeading5 color={colorCareerDiveBlue}>{mentorData && mentorData.Nickname}</TextHeading5>
               <TextHeading5>님과의 상담 어떠셨나요?</TextHeading5>
             </Flex>
           }
@@ -55,6 +68,7 @@ function Review() {
           <CustomRating
             value={ratingValue}
             setValue={setRatingValue}
+            precision={1}
             size="51px"
             readOnly={false} />
           <EmptyHeight height={'28px'} />
@@ -85,12 +99,28 @@ function Review() {
 
           <CustomTextField1
             placeholder={'상담 경험을 작성해 주세요!(선택)'}
+            onChange={(e) => {
+              setReviewText(e.target.value)
+            }}
             minRows={10}
             style={{ minHeight: 140 }}
           />
           <EmptyHeight height={'28px'} />
 
-          <CustomButton height={'48px'}>
+          <CustomButton height={'48px'}
+            onClick={() => {
+              const data = {
+                consultId: params.id,
+                reviewContent: reviewText,
+                reviewScore: ratingValue,
+                checkList: checkListValue
+                  .map(
+                    (e, i) => e && questionList[i])
+                  .filter((e) => e !== false && e)
+              }
+              API.patchConsultReview(data)
+            }}
+          >
             완료
           </CustomButton>
         </Card>

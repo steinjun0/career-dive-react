@@ -95,7 +95,7 @@ ReactDOM.render(
           <Route path="/session/:id" element={<Session />} />
           <Route path="/search" element={<Search />} />
 
-          <Route path="/review" element={<Review />} />
+          <Route path="/review/:id" element={<Review />} />
 
 
         </Routes>
