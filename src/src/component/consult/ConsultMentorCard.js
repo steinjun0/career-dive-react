@@ -95,7 +95,7 @@ function ConsultMentorCard({ consult, requestFormOnClick, changeOnClick, enterOn
             </TextBody2>
           </Flex>
           <TextHeading6>
-            {getAMOrPM(consult.StartTime)} {consult.StartTime.slice(0, consult.StartTime.indexOf(':'))}시 {consult.StartTime.slice(consult.StartTime.indexOf(':') + 1)}분
+            {getAMOrPM(consult.StartTime)} {+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) > 12 ? (consult.StartTime.slice(0, consult.StartTime.indexOf(':')) - 12).toString().padStart(2, '0') : consult.StartTime.slice(0, consult.StartTime.indexOf(':'))}시 {consult.StartTime.slice(consult.StartTime.indexOf(':') + 1)}분
           </TextHeading6>
 
           <EmptyHeight height={'10px'} />

@@ -363,7 +363,8 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
     const onClickAuthRequest = async () => {
         const accountRes = await API.postAccountMentor(
             mentorInfoState.inService,
-            mentorInfoState.job,
+            mentorInfoState.upperJobCategory,
+            mentorInfoState.lowerJobCategory,
             mentorInfoState.jobInComp,
             mentorInfoState.divisInComp,
             mentorInfoState.divisIsPub,
@@ -373,10 +374,11 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
         if (accountRes.status === 200) {
             alert('멘토 정보 등록 되었습니다')
             let formData = new FormData()
-            formData.append('file', uploadingFile)
+            formData.append('file', uploadingFile[0])
             const fileRes = await API.postAccountMentorFile(localStorage.getItem('UserID'), formData)
             if (fileRes.status === 200) {
                 alert('자격득실확인서 등록 되었습니다')
+                localStorage.setItem('IsMentor', true)
             } else {
                 alert('자격득실확인서 등록 실패')
             }

@@ -70,7 +70,7 @@ function OnComingShedule({ consultList }) {
             <ScheduleWrapper key={index} style={{ marginTop: '20px' }}>
 
               <ScheduleDateAndTime>
-                <TextBody2>{new Date(consult.Date).getFullYear()}년 {new Date(consult.Date).getMonth() + 1}월 {new Date(consult.Date).getDate()}일</TextBody2>
+                <TextBody2>{new Date(consult.Date).getFullYear().toString().slice(2)}.{new Date(consult.Date).getMonth() + 1}.{new Date(consult.Date).getDate()}({getDayInKorean(new Date(consult.Date))})</TextBody2>
                 <TextSubtitle1>
                   {+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) <= 12
                     ?
