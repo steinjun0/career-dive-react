@@ -377,6 +377,7 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
             const fileRes = await API.postAccountMentorFile(localStorage.getItem('UserID'), formData)
             if (fileRes.status === 200) {
                 alert('자격득실확인서 등록 되었습니다')
+                localStorage.setItem('IsMentor', true)
             } else {
                 alert('자격득실확인서 등록 실패')
             }
