@@ -21,10 +21,9 @@ const CardsWrapper = styled(Flex)`
 function Schedule() {
   const [consultList, setConsultList] = useState([])
   useEffect(async () => {
-    const res = await API.getConsultMenteeList(localStorage.getItem('UserID'), 'created')
+    const res = await API.getConsultMenteeList(localStorage.getItem('UserID'), '')
     if (res.status === 200) {
       setConsultList(res.data)
-      console.log('consultList', res.data)
     }
   }, [])
 
@@ -39,7 +38,15 @@ function Schedule() {
                 <OnComingShedule consultList={consultList}></OnComingShedule>
               </Grid>
               <Grid item xs={12}>
-                <ConsultList consultList={consultList}></ConsultList>
+                <ConsultList
+                  consultList={consultList}
+                  onCategoryChange={(category) => {
+                    API.getConsultMenteeList(localStorage.getItem('UserID'), category).then((res) => {
+                      if (res.status === 200) {
+                        setConsultList(res.data)
+                      }
+                    })
+                  }}></ConsultList>
               </Grid>
             </Grid>
           </CardsWrapper>

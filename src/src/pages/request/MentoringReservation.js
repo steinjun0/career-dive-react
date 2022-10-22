@@ -65,7 +65,12 @@ function MentoringReservation() {
       <FullWidthWrapper>
         <MaxWidthDiv>
           <MetorProfileBanner>
-            {mentorData && <MentorProfile name={nickName} discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`} />}
+            {mentorData &&
+              <MentorProfile
+                name={nickName}
+                discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+                id={mentorData.UserID}
+              />}
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground >

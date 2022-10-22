@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from './pages/SignUp';
-import Mentor from "./pages/Mentor";
+import Mentor from "./pages/MentorCard";
 import MentoringReservation from './pages/request/MentoringReservation'
 import MentoringApply from './pages/request/MentoringApply'
 import MentoringApplyViewer from './pages/MentoringApplyViewer'
@@ -16,7 +16,7 @@ import MentoringApplyViewerMentor from './pages/Mentor/MentoringApplyViewer'
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
-import SessionList from "./pages/ConsultList";
+import SessionList from "./pages/Consult";
 import MyPage from "./pages/MyPage";
 import MentorHome from './pages/Mentor/Home'
 import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledComponent";
@@ -88,7 +88,7 @@ ReactDOM.render(
           <Route path="/mentor/schedule" element={<MentorSchedule />} />
           <Route path="/mentor/calendar" element={<MentorCalendar />} />
 
-          <Route path="/mentor/sessionList/form/:id" element={<MentoringApplyViewerMentor />} />
+          {/* <Route path="/mentor/sessionList/form/:id" element={<MentoringApplyViewerMentor />} /> */}
           {/* TODO: 멘토가 진입하는 멘티 요청서 화면 */}
 
           <Route path="/sendbird" element={<Sendbird />} />
