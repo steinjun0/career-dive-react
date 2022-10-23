@@ -146,8 +146,8 @@ function RequestView({ consultData, menteeIntroduce, urlLink }) {
         <TextSubtitle1>첨부 파일</TextSubtitle1>
         <EmptyHeight height='16px' />
         <VerticalFlex>
-          {consultData.ConsultFileList.map((e) => {
-            return <a style={{ color: 'initial' }} href={e.Url} download={true}><UnderlineText>{e.Name}</UnderlineText></a>
+          {consultData.ConsultFileList.map((e, i) => {
+            return <a key={i} style={{ color: 'initial' }} href={e.Url} download={true}><UnderlineText>{e.Name}</UnderlineText></a>
           })}
         </VerticalFlex>
         <EmptyHeight height='16px' />

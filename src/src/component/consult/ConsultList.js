@@ -60,12 +60,13 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
 
   return (
     <ScheduleListWrapper>
-      <Card no_divider={'true'} title={<LinkNoDeco to={'/mentor/schedule'}>내 상담 내역</LinkNoDeco>}
-        titleHead={
-          <LinkNoDeco to={'/mentor/schedule'}>
-            <ChevronRight fontSize="medium" />
-          </LinkNoDeco>
-        }>
+      <Card no_divider={'true'} title={'내 상담 내역'}
+      // titleHead={
+      //   <LinkNoDeco to={'/mentor/schedule'}>
+      //     <ChevronRight fontSize="medium" />
+      //   </LinkNoDeco>
+      // }
+      >
         {consultList && <VerticalFlex>
           <EmptyHeight height={'12px'} />
           <Flex>
@@ -98,7 +99,7 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
                       <ConsultMentorCard
                         consult={consult}
                         requestFormOnClick={() => {
-                          navigater(`/mentee/sessionList/form/${consult.ID}`)
+                          navigater(`/mentee/schedule/form/${consult.ID}`)
                         }}
                         enterOnClick={() => {
                           onEnterSession({
@@ -112,7 +113,7 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
                       /> :
                       <ConsultMenteeCard
                         consult={consult}
-                        requestFormOnClick={() => { navigater(`/mentee/sessionList/form/${consult.ID}`) }}
+                        requestFormOnClick={() => { navigater(`/mentee/schedule/form/${consult.ID}`) }}
                         enterOnClick={() => {
                           onEnterSession({
                             navigater,
@@ -134,7 +135,7 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
         </VerticalFlex>}
 
       </Card>
-    </ScheduleListWrapper>
+    </ScheduleListWrapper >
 
   );
 }

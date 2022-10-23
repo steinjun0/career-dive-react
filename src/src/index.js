@@ -16,7 +16,7 @@ import MentoringApplyViewerMentor from './pages/Mentor/MentoringApplyViewer'
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
-import SessionList from "./pages/Consult";
+import SessionList from "./pages/Schedule";
 import MyPage from "./pages/MyPage";
 import MentorHome from './pages/Mentor/Home'
 import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledComponent";
@@ -72,8 +72,8 @@ ReactDOM.render(
           <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
           <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />
           {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}
-          <Route path="/mentee/sessionList/form/:id" element={<MentoringApplyViewer />} />
-          <Route path="/mentee/sessionList" element={<SessionList />} />
+          <Route path="/mentee/schedule/form/:id" element={<MentoringApplyViewer />} />
+          <Route path="/mentee/schedule" element={<SessionList />} />
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentee/mypage/account/change" element={<MyPage />} />
           <Route path="/mentee/mypage" element={<Navigate replace to="/mentee/mypage/profile" />} />
