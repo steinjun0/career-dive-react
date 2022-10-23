@@ -34,10 +34,14 @@ const dummyData = ['매드로봇님이 상담을 요청하였습니다.',
 function MentorHome() {
 
   const [consultList, setConsultList] = useState([])
+  const [reservationList, setReservationList] = useState([])
+  const [onComingList, setOnComingList] = useState([])
   useEffect(async () => {
     const res = await API.getConsultMentorList(localStorage.getItem('UserID'), '')
     if (res.status === 200) {
       setConsultList(res.data)
+      setReservationList(res.data.filter((e) => e.Status === 'created'))
+      setOnComingList(res.data.filter((e) => e.Status === 'approved'))
     }
   }, [])
 
@@ -48,7 +52,7 @@ function MentorHome() {
           <CardsWrapper>
             <Grid container spacing={'30px'} marginTop={0}>
               <Grid item xs={6}>
-                <OnComingShedule consultList={consultList}></OnComingShedule>
+                <OnComingShedule consultList={onComingList}></OnComingShedule>
               </Grid>
               <Grid item xs={6}>
                 <Card
@@ -74,7 +78,7 @@ function MentorHome() {
                 </Card>
               </Grid>
               <Grid item xs={12}>
-                <ConsultingRequest></ConsultingRequest>
+                <ConsultingRequest reservationList={reservationList}></ConsultingRequest>
               </Grid>
               <Grid item xs={12}>
                 <ConsultList
