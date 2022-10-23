@@ -59,17 +59,18 @@ const ConsultTime = styled(TextSubtitle2)`
 
 function ConsultMenteeCard({ consult, requestFormOnClick, changeOnClick, enterOnClick }) {
   let categoryIcon;
-  if (consult.Approved) {
+  if (consult.Status === 'approved') {
     categoryIcon = calendarSuccess;
-  } else if (consult.Status == 'pending') {
+  } else if (consult.Status === 'created') {
     categoryIcon = calendarWait;
-  } else if (consult.Status == 'done') {
+  } else if (consult.Status === 'rejected' || consult.Status === 'canceled') {
     categoryIcon = calendarCancel;
-  } else if (consult.Status == 'done') {
+  } else if (consult.Status === 'done') {
     categoryIcon = calendarSuccess;
   } else {
     categoryIcon = calendarSuccess;
   }
+
   return (
     <ConsultCardWrapper>
       <ConsultCardLeft>

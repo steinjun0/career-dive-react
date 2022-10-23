@@ -226,6 +226,8 @@ export default {
     return scheduleRes
   },
 
+
+
   async postAccountMentor(inService, sector, job, jobInComp, divisInComp, divisIsPub, compName, tags) {
     const convertedTags = tags.map((e) => {
       return { Name: e }
@@ -331,6 +333,23 @@ export default {
       ReviewStatisfyBase: checkList,
     })
     return reviewRes
+  },
+
+  async patchConsultApprove(consultId) {
+    const consultRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/${consultId}/approve`)
+    return consultRes
+  },
+  async patchConsultReject(consultId) {
+    const consultRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/${consultId}/reject`)
+    return consultRes
+  },
+  async patchConsultCancel(consultId) {
+    const consultRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/${consultId}/cancel`, { Reason: '' })
+    return consultRes
+  },
+  async patchConsultDone(consultId) {
+    const consultRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/${consultId}/done`)
+    return consultRes
   },
 
   async deleteConsultSchedule(shceduleId) {

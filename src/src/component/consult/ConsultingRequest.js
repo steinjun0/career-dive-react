@@ -25,6 +25,9 @@ import CircleDecline from "assets/icon/CircleDecline";
 import CircleAccept from "assets/icon/CircleAccept";
 import CalendarCancel from "assets/icon/schedule/CalendarCancel";
 import CalendarSuccess from "assets/icon/schedule/CalendarSuccess";
+import { addMinute, getAMOrPM, getDayInKorean, getMinuteString } from "util/util";
+import { useNavigate } from "react-router-dom";
+import API from "API";
 
 const ScheduleCardWrapper = styled(Flex)`
   width: 100%;
@@ -63,30 +66,31 @@ const Buttons = styled(RowAlignCenterFlex)`
 
 const testImage = testMentorImage;
 
-function ConsultingRequest() {
-  const schedules = [
-    { date: '2022년 1월 18일', time: '오후 12시 20분', name: '다슬기', company: '(주)다파다' },
-    { date: '2022년 2월 5일', time: '오전 10시 40분', name: '고디', company: '(주)다파다' },
-  ]
+function ConsultingRequest({ reservationList }) {
+  const navigater = useNavigate();
 
   return (
     <ScheduleCardWrapper>
       <Card no_divider={'true'} title={'상담 요청'}>
         <SchedulesWrapper>
 
-          {schedules.map((schedule, index) => {
+          {reservationList && reservationList.map((consult, index) => {
             return (
-              <ScheduleWrapper key={index} style={{ marginBottom: index == schedules.length - 1 ? 8 : 20 }}>
+              <ScheduleWrapper key={index} style={{ marginBottom: index == reservationList.length - 1 ? 8 : 20 }}>
 
                 <ScheduleDateAndTime>
-                  <TextBody2>{schedule.date}</TextBody2>
-                  <TextSubtitle1>{schedule.time}</TextSubtitle1>
+                  <TextBody2>{new Date(consult.Date).getFullYear().toString().slice(2)}.{new Date(consult.Date).getMonth() + 1}.{new Date(consult.Date).getDate()}({getDayInKorean(new Date(consult.Date))})</TextBody2>
+                  <TextSubtitle1>{+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) <= 12
+                    ?
+                    `${getAMOrPM(consult.StartTime)} ${getMinuteString(new Date('2022-01-01 ' + consult.StartTime))}`
+                    :
+                    `${getAMOrPM(consult.StartTime)} ${getMinuteString(addMinute(new Date('2022-01-01 ' + consult.StartTime), -720))}`}</TextSubtitle1>
                 </ScheduleDateAndTime>
 
                 <ProfileWrapper>
                   <ProfileImg src={testImage}></ProfileImg>
                   <VerticalFlex>
-                    <TextSubtitle2>{schedule.name} 멘토</TextSubtitle2>
+                    <TextSubtitle2>{consult.Nickname} 멘티</TextSubtitle2>
                     {/* <TextBody2>{schedule.company}</TextBody2> */}
                   </VerticalFlex>
                 </ProfileWrapper>
@@ -98,7 +102,9 @@ function ConsultingRequest() {
                     width='92px'
                     hover_color={colorCareerDiveBlue}
                     text_color={'#fff'}
-                    onClick={() => { }}
+                    onClick={() => {
+                      navigater(`/mentee/schedule/form/${consult.ID}`)
+                    }}
                   >
                     {/* TODO: params id 맞춰주기 */}
                   </CustomIconButton>
@@ -112,6 +118,12 @@ function ConsultingRequest() {
                     text_color={'#fff'}
                     default_color={colorCareerDivePink}
                     default_text_color={'#fff'}
+                    onClick={() => {
+                      API.patchConsultReject(consult.ID).then(() => {
+                        alert('상담을 거절했습니다')
+                        window.location.reload()
+                      })
+                    }}
                   ></CustomIconButton>
                   <EmptyWidth width='12px'></EmptyWidth>
 
@@ -122,7 +134,13 @@ function ConsultingRequest() {
                     hover_color={colorSuccess}
                     text_color={'#fff'}
                     default_color={colorSuccess}
-                    default_text_color={'#fff'}></CustomIconButton>
+                    default_text_color={'#fff'}
+                    onClick={() => {
+                      API.patchConsultApprove(consult.ID).then(() => {
+                        alert('상담을 수락했습니다')
+                        window.location.reload()
+                      })
+                    }}></CustomIconButton>
                   {/* <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
                   <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton> */}
                 </Buttons>
