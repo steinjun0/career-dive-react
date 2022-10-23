@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 import API from "API";
 import MentorCard from "component/mentor/MentorCard";
 import { useEffect, useState } from "react";
-import { RowAlignCenterFlex } from "util/styledComponent";
+import { EmptyWidth, Flex, RowAlignCenterFlex } from "util/styledComponent";
 import FamousMentorCard from "./FamousMentorCard";
 
 const FamousMentorGroupWrapper = styled(RowAlignCenterFlex)`
@@ -11,7 +11,7 @@ const FamousMentorGroupWrapper = styled(RowAlignCenterFlex)`
 `;
 
 const FamousMentorCardsWrapper = styled(RowAlignCenterFlex)`
-  justify-content: space-between;
+  justify-content: start;
   width: 100%;
 `;
 
@@ -51,19 +51,21 @@ function JobCategoryGroup() {
 
       <FamousMentorCardsWrapper>
         {mentorList && mentorList.slice(0, 4).map((mentorData, index) => {
-          return <MentorCard
-            key={index}
-            company={mentorData.CompName}
-            department={mentorData.DivisInComp}
-            job={mentorData.JobInComp}
-            name={mentorData.Nickname}
-            inJob={mentorData.InService ? "현직자" : "경력자"}
-            duration={"기간"}
-            rating={4.5}
-            tags={mentorData.TagList.slice(0, 3)}
-            userId={mentorData.UserID}
-            isShowRating={false}
-            isShowTag={true} />
+          return <Flex key={index}>
+            <MentorCard
+              company={mentorData.CompName}
+              department={mentorData.DivisInComp}
+              job={mentorData.JobInComp}
+              name={mentorData.Nickname}
+              inJob={mentorData.InService ? "현직자" : "경력자"}
+              duration={"기간"}
+              rating={4.5}
+              tags={mentorData.TagList.slice(0, 3)}
+              userId={mentorData.UserID}
+              isShowRating={false}
+              isShowTag={true} />
+            <EmptyWidth width={'30px'} />
+          </Flex>
         })}
       </FamousMentorCardsWrapper>
     </FamousMentorGroupWrapper>
