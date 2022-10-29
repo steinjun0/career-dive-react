@@ -84,7 +84,7 @@ function MentorHome() {
                 <ConsultList
                   consultList={consultList}
                   onCategoryChange={(category) => {
-                    API.getConsultMenteeList(localStorage.getItem('UserID'), category).then((res) => {
+                    API.getConsultMentorList(localStorage.getItem('UserID'), category).then((res) => {
                       if (res.status === 200) {
                         setConsultList(res.data)
                       }
