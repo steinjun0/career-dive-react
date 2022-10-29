@@ -114,7 +114,7 @@ function MyPage() {
                         <UserProfile />
                       </Grid>
                       <Grid item xs={6}>
-                        <CareerInfo />
+                        <CareerInfo mentorData={mentorData} />
                       </Grid>
                     </Grid>
                     {mentorData && <MentorIntroduce mentorData={mentorData} />}
