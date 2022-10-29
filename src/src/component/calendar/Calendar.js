@@ -182,25 +182,22 @@ function Calendar({ setIsFinishSet }) {
     setAvailablePMTimes([])
   }
 
-  const updateAvailableTimes = (consultingTime, selectedDate, dayTimes) => {
+  const updateAvailableTimes = (consultingTime, consultingDate, dayTimes) => {
 
-    function getAvailableTimes(consultingTime, selectedDate) {
+    function getAvailableTimes(consultingTime) {
       let tempAvailableTimes = []
-      console.log(dayTimes)
       dayTimes.forEach((element) => {
-        if (element.Day === selectedDate) {
+        if (element.Day === consultingDate.getDate()) {
           // 시작 시간 순서대로 정렬
           element.StartEnds.sort((a, b) => +a.StartTime.slice(0, 2) - +b.StartTime.slice(0, 2))
           for (const schedule of element.StartEnds) {
             let termCount = 0
 
             const now = new Date()
-            const nowYear = now.getFullYear()
-            const nowMonth = now.getMonth() + 1
-            const nowDate = now.getDate()
+            const startDate = new Date(`${consultingDate.getFullYear()}/${consultingDate.getMonth() + 1}/${consultingDate.getDate()} ${schedule.StartTime}`);
+            const endDate = new Date(`${consultingDate.getFullYear()}/${consultingDate.getMonth() + 1}/${consultingDate.getDate()} ${schedule.EndTime}`);
 
-            const startDate = new Date(`${nowYear}/${nowMonth}/${nowDate} ${schedule.StartTime}`);
-            const endDate = new Date(`${nowYear}/${nowMonth}/${nowDate} ${schedule.EndTime}`);
+
             while (endDate > addMinute(startDate, termCount * 30 + consultingTime)) {
               const caculatedTime = addMinute(startDate, termCount * 30);
               if (caculatedTime.getTime() - now.getTime() < 0) {
@@ -219,7 +216,7 @@ function Calendar({ setIsFinishSet }) {
       return tempAvailableTimes
     }
 
-    const availableTimes = getAvailableTimes(consultingTime, selectedDate)
+    const availableTimes = getAvailableTimes(consultingTime)
 
     let tempavailableAMTimes = []
     let tempavailablePMTimes = []
@@ -267,7 +264,7 @@ function Calendar({ setIsFinishSet }) {
     }
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
-    updateAvailableTimes(newConsultingTime, selectedDate, originData.DayTimes)
+    updateAvailableTimes(newConsultingTime, new Date(year, month.slice(0, -1) - 1, selectedDate), originData.DayTimes)
 
   };
 
@@ -330,7 +327,7 @@ function Calendar({ setIsFinishSet }) {
           setConsultingTime(reservation['consultingTime'])
         }
         if ('consultingTime' in reservation && 'consultingDate' in reservation) {
-          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date, originData.DayTimes)
+          updateAvailableTimes(reservation['consultingTime'], new Date(reservation['consultingDate'].year, reservation['consultingDate'].month - 1, reservation['consultingDate'].date), originData.DayTimes)
         }
         if ('consultingStartTime' in reservation) {
           setConsultingStartTime(reservation['consultingStartTime'])
