@@ -24,7 +24,7 @@ function MentorCard({
   department = "부서명",
   job = "직무",
   inJob = "현직자",
-  duration = "기간",
+  duration = "",
   name = "이름",
   rating = 4.5,
   userId = 0,
@@ -59,7 +59,7 @@ function MentorCard({
             background_color={colorBackgroundCareerDiveBlue}
             style={{ fontWeight: '500', padding: '4px 8px', boxSizing: 'border-box' }}>
 
-            {inJob} · {duration}
+            {inJob} {duration !== '' ? `· ${duration}년` : ''}
           </TagMedium>
           <EmptyHeight height={'24px'} />
           {isShowRating && <CustomRating value={rating}></CustomRating>}
