@@ -312,13 +312,13 @@ function CalendarMentor() {
             e.StartEnds.map((i) => {
               let startHour = i.StartTime.slice(0, i.StartTime.indexOf(':'))
               let startAMPM = startHour <= 12 ? '오전' : '오후'
-              startHour = startHour <= 12 ? startHour : startHour - 12
-              let startMin = i.StartTime.slice(i.StartTime.indexOf(':') + 1)
+              startHour = (startHour <= 12 ? startHour : startHour - 12).toString().padStart(2, '0')
+              let startMin = (i.StartTime.slice(i.StartTime.indexOf(':') + 1)).toString().padStart(2, '0')
 
               let endHour = i.EndTime.slice(0, i.EndTime.indexOf(':'))
               let endAMPM = endHour <= 12 ? '오전' : '오후'
-              endHour = endHour <= 12 ? endHour : endHour - 12
-              let endMin = i.EndTime.slice(i.EndTime.indexOf(':') + 1)
+              endHour = (endHour <= 12 ? endHour : endHour - 12).toString().padStart(2, '0')
+              let endMin = (i.EndTime.slice(i.EndTime.indexOf(':') + 1)).toString().padStart(2, '0')
 
               let repeatOption = ruleTypeConverter[i.RuleType]
 
@@ -582,7 +582,7 @@ function CalendarMentor() {
 
           </Flex>
 
-          {!isEditing && availableTimes[selectedDate] && availableTimes[selectedDate].map((e, index) => {
+          {!isEditing && availableTimes[selectedDate] && availableTimes[selectedDate].sort((a, b) => +a.startHour + (a.startAMPM === '오전' ? 0 : 12) - +b.startHour - (b.startAMPM === '오전' ? 0 : 12)).map((e, index) => {
             let startAMPM = e.startAMPM
             let startHour = e.startHour
             let startMin = e.startMin

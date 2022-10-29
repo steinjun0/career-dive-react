@@ -24,7 +24,9 @@ function MentoringRequestFinish() {
       </TextBody2>
       <EmptyHeight height={'30px'} />
       <CustomButton
-        onClick={() => { navigate('/mentor') }}
+        onClick={() => {
+          navigate('/mentee/schedule')
+        }}
         height="50px"
         style={{ fontSize: '16px', fontWeight: 700 }}>
         완료

@@ -94,9 +94,10 @@ function OnComingShedule({ consultList }) {
                   width='92px'
                   hover_color={colorCareerDiveBlue}
                   text_color={'#fff'}
-                  onClick={() => { }}
+                  onClick={() => {
+                    navigater(`/mentee/schedule/form/${consult.ID}`)
+                  }}
                 >
-                  {/* TODO: params id 맞춰주기 */}
                 </CustomIconButton>
                 <EmptyWidth width='12px'></EmptyWidth>
 

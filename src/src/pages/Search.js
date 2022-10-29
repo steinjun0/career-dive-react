@@ -30,9 +30,10 @@ function Search() {
                 company={mentorData.CompName}
                 department={mentorData.DivisInComp}
                 job={mentorData.JobInComp}
-                name={"Sarah"}
+                name={mentorData.Nickname}
+                tags={mentorData.TagList}
                 inJob={mentorData.InService ? "현직자" : "경력자"}
-                duration={"기간"}
+                duration={mentorData.TotEmpMonths}
                 rating={4.5}
                 userId={mentorData.UserID}
                 isShowRating={false}

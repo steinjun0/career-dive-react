@@ -36,6 +36,22 @@ export const createDateFromHourMin = (date, startTime, endTime) => {
   return [addMinute(startDate, (startHour * 60 + startMin)), addMinute(endDate, (endHour * 60 + endMin))]
 }
 
+export const getKoreanTimeString = (date) => {
+  let amOrPmString = ''
+  let hour = date.getHours()
+  let min = date.getMinutes()
+  if (hour < 12) {
+    amOrPmString = '오전'
+  } else if (hour == 12) {
+    amOrPmString = '낮'
+  } else {
+    amOrPmString = '오후'
+    hour = hour - 12
+  }
+
+  return `${amOrPmString} ${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`
+}
+
 export const getMinuteString = (date) => {
   return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }

@@ -16,7 +16,7 @@ import {
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { addMinute, isMentorUrl, removeReservation, updateReservation, usePrevious } from "util/util";
+import { addMinute, getAMOrPM, getKoreanTimeString, isMentorUrl, removeReservation, updateReservation, usePrevious } from "util/util";
 import CalendarUpper from "component/calendar/CalendarUpper";
 import API from 'API';
 
@@ -117,6 +117,7 @@ function Calendar({ setIsFinishSet }) {
 
   const [selectedDate, setSelectedDate] = useState(0);
 
+
   const [availableAMTimes, setAvailableAMTimes] = useState([]);
   const [availablePMTimes, setAvailablePMTimes] = useState([]);
 
@@ -125,6 +126,8 @@ function Calendar({ setIsFinishSet }) {
 
   const [consultingTime, setConsultingTime] = useState(-1);
   const [consultingStartTime, setConsultingStartTime] = useState(0);
+  const [consultingStartDate, setConsultingStartDate] = useState();
+  const [consultingEndDate, setConsultingEndDate] = useState();
   const [scheduleId, setScheduleId] = useState();
 
   const reservation = getDataFromLocalStorage();
@@ -179,17 +182,28 @@ function Calendar({ setIsFinishSet }) {
     setAvailablePMTimes([])
   }
 
-  const updateAvailableTimes = (consultingTime, selectedDate, dayTimes) => {
-    function getAvailableTimes(consultingTime, selectedDate) {
+  const updateAvailableTimes = (consultingTime, consultingDate, dayTimes) => {
+
+    function getAvailableTimes(consultingTime) {
       let tempAvailableTimes = []
       dayTimes.forEach((element) => {
-        if (element.Day === selectedDate) {
+        if (element.Day === consultingDate.getDate()) {
+          // 시작 시간 순서대로 정렬
+          element.StartEnds.sort((a, b) => +a.StartTime.slice(0, 2) - +b.StartTime.slice(0, 2))
           for (const schedule of element.StartEnds) {
             let termCount = 0
-            const startDate = new Date(`2021/01/01 ${schedule.StartTime}`);
-            const endDate = new Date(`2021/01/01 ${schedule.EndTime}`);
+
+            const now = new Date()
+            const startDate = new Date(`${consultingDate.getFullYear()}/${consultingDate.getMonth() + 1}/${consultingDate.getDate()} ${schedule.StartTime}`);
+            const endDate = new Date(`${consultingDate.getFullYear()}/${consultingDate.getMonth() + 1}/${consultingDate.getDate()} ${schedule.EndTime}`);
+
+
             while (endDate > addMinute(startDate, termCount * 30 + consultingTime)) {
               const caculatedTime = addMinute(startDate, termCount * 30);
+              if (caculatedTime.getTime() - now.getTime() < 0) {
+                termCount += 1
+                continue
+              }
               const tempAvailableTime = `${caculatedTime.getHours()}`.padStart(2, '0') +
                 ":" +
                 `${caculatedTime.getMinutes()}`.padStart(2, '0')
@@ -202,7 +216,7 @@ function Calendar({ setIsFinishSet }) {
       return tempAvailableTimes
     }
 
-    const availableTimes = getAvailableTimes(consultingTime, selectedDate)
+    const availableTimes = getAvailableTimes(consultingTime)
 
     let tempavailableAMTimes = []
     let tempavailablePMTimes = []
@@ -210,7 +224,11 @@ function Calendar({ setIsFinishSet }) {
       if (Number(element.time.slice(0, 2)) < 12) {
         tempavailableAMTimes.push(element)
       } else {
-        tempavailablePMTimes.push(element)
+        tempavailablePMTimes.push(
+          {
+            time: `${(element.time.slice(0, 2) - 12).toString().padStart(2, '0')}:${element.time.slice(3)}`,
+            scheduleId: element.scheduleId
+          })
       }
     })
 
@@ -232,14 +250,14 @@ function Calendar({ setIsFinishSet }) {
     }
     else {
       // cardwidth로 나누는건 반응형 도입 이후
-      setAmLines(1 + parseInt((tempavailableAMTimes.length) / 5))
+      setAmLines(Math.ceil((tempavailableAMTimes.length) / 5))
     }
 
     if (tempavailablePMTimes.length === 0) {
       setPmLines(0)
     }
     else {
-      setPmLines(1 + parseInt((tempavailablePMTimes.length) / 5))
+      setPmLines(Math.ceil((tempavailablePMTimes.length) / 5))
     }
   }
 
@@ -250,7 +268,7 @@ function Calendar({ setIsFinishSet }) {
     }
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
-    updateAvailableTimes(newConsultingTime, selectedDate, originData.DayTimes)
+    updateAvailableTimes(newConsultingTime, new Date(year, month.slice(0, -1) - 1, selectedDate), originData.DayTimes)
 
   };
 
@@ -313,7 +331,7 @@ function Calendar({ setIsFinishSet }) {
           setConsultingTime(reservation['consultingTime'])
         }
         if ('consultingTime' in reservation && 'consultingDate' in reservation) {
-          updateAvailableTimes(reservation['consultingTime'], reservation['consultingDate'].date, originData.DayTimes)
+          updateAvailableTimes(reservation['consultingTime'], new Date(reservation['consultingDate'].year, reservation['consultingDate'].month - 1, reservation['consultingDate'].date), originData.DayTimes)
         }
         if ('consultingStartTime' in reservation) {
           setConsultingStartTime(reservation['consultingStartTime'])
@@ -326,7 +344,6 @@ function Calendar({ setIsFinishSet }) {
       setMonth((new Date().getMonth() + 1) + '월')
       const today = new Date().getDate()
       if (originData.DayTimes !== null) {
-        console.log('originData.DayTimes', originData)
         for (let i = 0; i < originData.DayTimes.length; i++) {
           if (originData.DayTimes[i].Day >= today) {
             setSelectedDate(originData.DayTimes[i].Day)
@@ -403,7 +420,17 @@ function Calendar({ setIsFinishSet }) {
 
       updateReservation(params.id, updatingData)
 
+
     }
+    if (consultingStartTime !== 0) {
+      try {
+        setConsultingStartDate(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`))
+        setConsultingEndDate(addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime))
+      } catch (e) { console.log('consultingStartTime useEffect', e) }
+    }
+
+
+
   }, [consultingStartTime])
 
   return (
@@ -451,17 +478,9 @@ function Calendar({ setIsFinishSet }) {
               상담 진행 시간
             </DateTitle>
             <EmptyHeight height='16px' />
-            <TextSubtitle1 color={colorCareerDiveBlue}>
-              {
-                (consultingStartTime === 0 || consultingStartTime === null) ? '' : `${consultingStartTime}` +
-                  '~' +
-                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getHours()}`.padStart(2, '0') +
-                  ':' +
-                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getMinutes()}`.padStart(2, '0')
-              }
-
-
-            </TextSubtitle1>
+            {consultingStartDate && consultingEndDate && <TextSubtitle1 color={colorCareerDiveBlue}>
+              {getKoreanTimeString(consultingStartDate)} ~ {getKoreanTimeString(consultingEndDate)}
+            </TextSubtitle1>}
           </TimeSelectWrapper>}
 
           <TimeSelectWrapper

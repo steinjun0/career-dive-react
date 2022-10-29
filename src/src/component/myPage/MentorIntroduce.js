@@ -67,7 +67,6 @@ function MentorIntroduce({ mentorData }) {
       }
     });
     const tagRes = await postMentorTag()
-    console.log(tagRes)
     if (validResponse.status === 200 && tagRes.status === 200) {
       setIsEditing(false)
       return
@@ -75,6 +74,9 @@ function MentorIntroduce({ mentorData }) {
   }
 
   const getMentorTag = async (apiTags) => {
+    if (apiTags === null) {
+      return []
+    }
     let newTagList = apiTags.map((e) => {
       return e.Name
     })
