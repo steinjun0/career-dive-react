@@ -37,7 +37,6 @@ export const createDateFromHourMin = (date, startTime, endTime) => {
 }
 
 export const getKoreanTimeString = (date) => {
-  console.log('date', date)
   let amOrPmString = ''
   let hour = date.getHours()
   let min = date.getMinutes()
