@@ -186,10 +186,20 @@ function Calendar({ setIsFinishSet }) {
         if (element.Day === selectedDate) {
           for (const schedule of element.StartEnds) {
             let termCount = 0
-            const startDate = new Date(`2021/01/01 ${schedule.StartTime}`);
-            const endDate = new Date(`2021/01/01 ${schedule.EndTime}`);
+
+            const now = new Date()
+            const nowYear = now.getFullYear()
+            const nowMonth = now.getMonth() + 1
+            const nowDate = now.getDate()
+
+            const startDate = new Date(`${nowYear}/${nowMonth}/${nowDate} ${schedule.StartTime}`);
+            const endDate = new Date(`${nowYear}/${nowMonth}/${nowDate} ${schedule.EndTime}`);
             while (endDate > addMinute(startDate, termCount * 30 + consultingTime)) {
               const caculatedTime = addMinute(startDate, termCount * 30);
+              if (caculatedTime.getTime() - now.getTime() < 0) {
+                termCount += 1
+                continue
+              }
               const tempAvailableTime = `${caculatedTime.getHours()}`.padStart(2, '0') +
                 ":" +
                 `${caculatedTime.getMinutes()}`.padStart(2, '0')
@@ -326,7 +336,6 @@ function Calendar({ setIsFinishSet }) {
       setMonth((new Date().getMonth() + 1) + '월')
       const today = new Date().getDate()
       if (originData.DayTimes !== null) {
-        console.log('originData.DayTimes', originData)
         for (let i = 0; i < originData.DayTimes.length; i++) {
           if (originData.DayTimes[i].Day >= today) {
             setSelectedDate(originData.DayTimes[i].Day)
