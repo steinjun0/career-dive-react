@@ -16,7 +16,7 @@ import {
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { addMinute, isMentorUrl, removeReservation, updateReservation, usePrevious } from "util/util";
+import { addMinute, getAMOrPM, getKoreanTimeString, isMentorUrl, removeReservation, updateReservation, usePrevious } from "util/util";
 import CalendarUpper from "component/calendar/CalendarUpper";
 import API from 'API';
 
@@ -117,6 +117,7 @@ function Calendar({ setIsFinishSet }) {
 
   const [selectedDate, setSelectedDate] = useState(0);
 
+
   const [availableAMTimes, setAvailableAMTimes] = useState([]);
   const [availablePMTimes, setAvailablePMTimes] = useState([]);
 
@@ -125,6 +126,8 @@ function Calendar({ setIsFinishSet }) {
 
   const [consultingTime, setConsultingTime] = useState(-1);
   const [consultingStartTime, setConsultingStartTime] = useState(0);
+  const [consultingStartDate, setConsultingStartDate] = useState();
+  const [consultingEndDate, setConsultingEndDate] = useState();
   const [scheduleId, setScheduleId] = useState();
 
   const reservation = getDataFromLocalStorage();
@@ -416,7 +419,17 @@ function Calendar({ setIsFinishSet }) {
 
       updateReservation(params.id, updatingData)
 
+
     }
+    if (consultingStartTime !== 0) {
+      try {
+        setConsultingStartDate(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`))
+        setConsultingEndDate(addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime))
+      } catch (e) { console.log('consultingStartTime useEffect', e) }
+    }
+
+
+
   }, [consultingStartTime])
 
   return (
@@ -464,17 +477,9 @@ function Calendar({ setIsFinishSet }) {
               상담 진행 시간
             </DateTitle>
             <EmptyHeight height='16px' />
-            <TextSubtitle1 color={colorCareerDiveBlue}>
-              {
-                (consultingStartTime === 0 || consultingStartTime === null) ? '' : `${consultingStartTime}` +
-                  '~' +
-                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getHours()}`.padStart(2, '0') +
-                  ':' +
-                  `${addMinute(new Date(`${year}-${month.slice(0, -1)}-${selectedDate} ${consultingStartTime}`), consultingTime).getMinutes()}`.padStart(2, '0')
-              }
-
-
-            </TextSubtitle1>
+            {consultingStartDate && consultingEndDate && <TextSubtitle1 color={colorCareerDiveBlue}>
+              {getKoreanTimeString(consultingStartDate)} ~ {getKoreanTimeString(consultingEndDate)}
+            </TextSubtitle1>}
           </TimeSelectWrapper>}
 
           <TimeSelectWrapper
