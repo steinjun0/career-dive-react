@@ -582,7 +582,7 @@ function CalendarMentor() {
 
           </Flex>
 
-          {!isEditing && availableTimes[selectedDate] && availableTimes[selectedDate].map((e, index) => {
+          {!isEditing && availableTimes[selectedDate] && availableTimes[selectedDate].sort((a, b) => +a.startHour + (a.startAMPM === '오전' ? 0 : 12) - +b.startHour - (b.startAMPM === '오전' ? 0 : 12)).map((e, index) => {
             let startAMPM = e.startAMPM
             let startHour = e.startHour
             let startMin = e.startMin
