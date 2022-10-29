@@ -180,10 +180,14 @@ function Calendar({ setIsFinishSet }) {
   }
 
   const updateAvailableTimes = (consultingTime, selectedDate, dayTimes) => {
+
     function getAvailableTimes(consultingTime, selectedDate) {
       let tempAvailableTimes = []
+      console.log(dayTimes)
       dayTimes.forEach((element) => {
         if (element.Day === selectedDate) {
+          // 시작 시간 순서대로 정렬
+          element.StartEnds.sort((a, b) => +a.StartTime.slice(0, 2) - +b.StartTime.slice(0, 2))
           for (const schedule of element.StartEnds) {
             let termCount = 0
 
