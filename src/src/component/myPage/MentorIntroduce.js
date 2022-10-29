@@ -74,6 +74,9 @@ function MentorIntroduce({ mentorData }) {
   }
 
   const getMentorTag = async (apiTags) => {
+    if (apiTags === null) {
+      return []
+    }
     let newTagList = apiTags.map((e) => {
       return e.Name
     })
