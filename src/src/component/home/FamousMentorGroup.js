@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 import API from "API";
 import MentorCard from "component/mentor/MentorCard";
 import { useEffect, useState } from "react";
-import { EmptyWidth, Flex, RowAlignCenterFlex } from "util/styledComponent";
+import { EmptyWidth, Flex, LinkNoDeco, RowAlignCenterFlex } from "util/styledComponent";
 import FamousMentorCard from "./FamousMentorCard";
 
 const FamousMentorGroupWrapper = styled(RowAlignCenterFlex)`
@@ -46,7 +46,8 @@ function JobCategoryGroup() {
     <FamousMentorGroupWrapper>
       <TopWrapper>
         <Title>추천 인기 멘토</Title>
-        <SellAll>전체보기</SellAll>
+        <LinkNoDeco to={'/search'}><SellAll>전체보기</SellAll></LinkNoDeco>
+
       </TopWrapper>
 
       <FamousMentorCardsWrapper>
