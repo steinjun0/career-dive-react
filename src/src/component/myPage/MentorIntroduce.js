@@ -67,7 +67,6 @@ function MentorIntroduce({ mentorData }) {
       }
     });
     const tagRes = await postMentorTag()
-    console.log(tagRes)
     if (validResponse.status === 200 && tagRes.status === 200) {
       setIsEditing(false)
       return
