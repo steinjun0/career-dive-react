@@ -232,14 +232,14 @@ function Calendar({ setIsFinishSet }) {
     }
     else {
       // cardwidth로 나누는건 반응형 도입 이후
-      setAmLines(1 + parseInt((tempavailableAMTimes.length) / 5))
+      setAmLines(Math.ceil((tempavailableAMTimes.length) / 5))
     }
 
     if (tempavailablePMTimes.length === 0) {
       setPmLines(0)
     }
     else {
-      setPmLines(1 + parseInt((tempavailablePMTimes.length) / 5))
+      setPmLines(Math.ceil((tempavailablePMTimes.length) / 5))
     }
   }
 
