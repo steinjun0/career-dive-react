@@ -91,11 +91,15 @@ function ConsultMentorCard({ consult, requestFormOnClick, changeOnClick, enterOn
 
           <Flex>
             <TextBody2>
-              {new Date(consult.Date).getFullYear()}년 {new Date(consult.Date).getMonth() + 1}월 {new Date(consult.Date).getDate()}일({getDayInKorean(new Date(consult.Date))})
+              {new Date(consult.Date).getFullYear().toString().slice(2)}.{new Date(consult.Date).getMonth() + 1}.{new Date(consult.Date).getDate()}({getDayInKorean(new Date(consult.Date))})
             </TextBody2>
           </Flex>
           <TextHeading6>
-            {getAMOrPM(consult.StartTime)} {+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) > 12 ? (consult.StartTime.slice(0, consult.StartTime.indexOf(':')) - 12).toString().padStart(2, '0') : consult.StartTime.slice(0, consult.StartTime.indexOf(':'))}시 {consult.StartTime.slice(consult.StartTime.indexOf(':') + 1)}분
+            {getAMOrPM(consult.StartTime)}&nbsp;
+            {+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) > 12 ?
+              (consult.StartTime.slice(0, consult.StartTime.indexOf(':')) - 12).toString().padStart(2, '0') :
+              consult.StartTime.slice(0, consult.StartTime.indexOf(':'))}:
+            {consult.StartTime.slice(consult.StartTime.indexOf(':') + 1)}
           </TextHeading6>
 
           <EmptyHeight height={'10px'} />
