@@ -292,7 +292,7 @@ function SignUp3rdNickName({ signUpStep, setSignUpStep, signUpData, setSignUpDat
                 window.localStorage.setItem('IsMentor', accountCreateResponse.data['IsMentor'])
                 window.localStorage.setItem('isAutoLogin', true)
                 alert('회원가입이 완료되었습니다!')
-                navigate('/')
+                navigate('/mentee/mypage/profile')
 
             } else {
                 alert(accountCreateResponse.error.response.data.error) // 이렇게 복잡해야하는가?

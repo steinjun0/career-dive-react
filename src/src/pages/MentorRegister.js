@@ -483,7 +483,7 @@ function Finish() {
 
             <ButtonWrapper>
                 <CustomButton
-                    onClick={() => { navigate('/mentor') }}
+                    onClick={() => { navigate('/mentor/mypage/profile') }}
                     height="50px">
                     완료
                 </CustomButton>
