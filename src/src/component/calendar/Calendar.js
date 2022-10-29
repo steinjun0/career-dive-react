@@ -224,7 +224,11 @@ function Calendar({ setIsFinishSet }) {
       if (Number(element.time.slice(0, 2)) < 12) {
         tempavailableAMTimes.push(element)
       } else {
-        tempavailablePMTimes.push(element)
+        tempavailablePMTimes.push(
+          {
+            time: `${(element.time.slice(0, 2) - 12).toString().padStart(2, '0')}:${element.time.slice(3)}`,
+            scheduleId: element.scheduleId
+          })
       }
     })
 
