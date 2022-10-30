@@ -221,15 +221,7 @@ function Calendar({ setIsFinishSet }) {
     let tempavailableAMTimes = []
     let tempavailablePMTimes = []
     availableTimes.forEach((element) => {
-      if (Number(element.time.slice(0, 2)) < 12) {
-        tempavailableAMTimes.push(element)
-      } else {
-        tempavailablePMTimes.push(
-          {
-            time: `${(element.time.slice(0, 2) - 12).toString().padStart(2, '0')}:${element.time.slice(3)}`,
-            scheduleId: element.scheduleId
-          })
-      }
+      tempavailableAMTimes.push(element)
     })
 
     setAvailableAMTimes(tempavailableAMTimes)
@@ -272,7 +264,7 @@ function Calendar({ setIsFinishSet }) {
 
   };
 
-  const onClickconsultingStartTime = (event, consultingStartTime) => {
+  const onClickconsultingStartTime = (event, consultingStartTime, isPm) => {
     setConsultingStartTime(consultingStartTime)
     let schedulIdTemp = -1;
     Array(...availableAMTimes, ...availablePMTimes).map((e) => {
@@ -281,6 +273,7 @@ function Calendar({ setIsFinishSet }) {
         schedulIdTemp = e.scheduleId
       }
     })
+
 
     const updatingData = [
       { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
@@ -490,14 +483,14 @@ function Calendar({ setIsFinishSet }) {
             <SelectionConsultingStartTime
               title={'오전'}
               consultingStartTime={consultingStartTime}
-              onClickconsultingStartTime={onClickconsultingStartTime}
+              onClickconsultingStartTime={(event, consultingStartTime) => { onClickconsultingStartTime(event, consultingStartTime, false) }}
               timeArray={availableAMTimes}
             />
 
             <SelectionConsultingStartTime
               title={'오후'}
               consultingStartTime={consultingStartTime}
-              onClickconsultingStartTime={onClickconsultingStartTime}
+              onClickconsultingStartTime={(event, consultingStartTime) => { onClickconsultingStartTime(event, consultingStartTime, true) }}
               timeArray={availablePMTimes}
             />
             <EmptyHeight height='28px'></EmptyHeight>
