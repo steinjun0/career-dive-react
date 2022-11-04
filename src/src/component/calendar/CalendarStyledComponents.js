@@ -47,7 +47,7 @@ export const DateBoxNoPointer = styled(RowAlignCenterFlex)`
   color: ${colorTextLight};
 `;
 
-export const DateDisableBox = styled(RowAlignCenterFlex)`
+export const DisableDateBox = styled(RowAlignCenterFlex)`
   justify-content: center;
   width: 32px;
   height: 32px;

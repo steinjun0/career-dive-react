@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { usePrevious } from "util/util";
-import { AvailableDateBox, CalendarContentWrapper, DateBox, DateDisableBox, DateWrapper, DayBox, DayWrapper, SelectedDateBox, WeekBox, YearMonthMenu, YearMonthMenuWrapper } from "./CalendarStyledComponents";
+import { AvailableDateBox, CalendarContentWrapper, DateBox, DisableDateBox, DateWrapper, DayBox, DayWrapper, SelectedDateBox, WeekBox, YearMonthMenu, YearMonthMenuWrapper } from "./CalendarStyledComponents";
 
 
 
@@ -102,10 +102,10 @@ function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp
               // date === 0 -> 없는 날짜
               if (date === 0) return <DateBox key={`${weekIndex}${dateIndex}`}></DateBox>
               else {
-                if (date === selectedDate) {
+                if (+month.slice(0, -1) >= (new Date().getMonth() + 1) && date === selectedDate) {
                   return <SelectedDateBox key={`${weekIndex}${dateIndex}`}>{date}</SelectedDateBox>
-                } else if (+month.slice(0, -1) <= (new Date().getMonth() + 1) && date < new Date().getDate()) {
-                  return <DateDisableBox key={`${weekIndex}${dateIndex}`}>{date}</DateDisableBox>
+                } else if (+month.slice(0, -1) < (new Date().getMonth() + 1) || (+month.slice(0, -1) == (new Date().getMonth() + 1) && date < new Date().getDate())) {
+                  return <DisableDateBox key={`${weekIndex}${dateIndex}`}>{date}</DisableDateBox>
                 } else if (availableDates.includes(date)) {
                   return <AvailableDateBox onClick={() => { onClickDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>
                 } else {
