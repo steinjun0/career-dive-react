@@ -221,7 +221,11 @@ function Calendar({ setIsFinishSet }) {
     let tempavailableAMTimes = []
     let tempavailablePMTimes = []
     availableTimes.forEach((element) => {
-      tempavailableAMTimes.push(element)
+      if (Number(element.time.slice(0, 2)) < 12) {
+        tempavailableAMTimes.push(element)
+      } else {
+        tempavailablePMTimes.push(element)
+      }
     })
 
     setAvailableAMTimes(tempavailableAMTimes)
@@ -251,6 +255,7 @@ function Calendar({ setIsFinishSet }) {
     else {
       setPmLines(Math.ceil((tempavailablePMTimes.length) / 5))
     }
+
   }
 
   const onClickConsultingTime = (event, newConsultingTime) => {
@@ -365,7 +370,6 @@ function Calendar({ setIsFinishSet }) {
   }, [])
 
   const onMonthChange = async (month) => {
-    console.log('onMonthChange')
     const res = await API.getConsultSchedule(
       year,
       month.slice(0, month.length - 1),
@@ -462,7 +466,6 @@ function Calendar({ setIsFinishSet }) {
               </TimeButton>
             </TimeButtonWrapper>
           </TimeSelectWrapper>
-
           {<TimeSelectWrapper
             is_show={(consultingStartTime != null && selectedDate != 0).toString()}
             height={consultingStartTime == 0 ? 0 : 76}
