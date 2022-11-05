@@ -1,5 +1,6 @@
 import {
   colorBackgroundCareerDivePink,
+  colorCareerDiveBlue,
   colorCareerDivePink,
   colorTextLight,
   EmptyHeight,
@@ -9,19 +10,20 @@ import {
   TextBody2,
   TextHeading6,
   TextSubtitle1,
+  TextSubtitle2,
   VerticalFlex,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { styled } from "@mui/material";
-import { getDayInKorean, updateReservation } from "util/util";
+import { formatMoney, getDayInKorean, updateReservation } from "util/util";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
 import { useEffect, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButton } from "util/Custom/CutomToggleButton";
 
-const IntroductionWrapper = styled(Flex)`
-  width: 100%;
+const IntroductionWrapper = styled(VerticalFlex)`
+  width: 534px;
 `;
 
 const consultContents = {
@@ -44,10 +46,20 @@ const consultCategoryConverter = {
   '전형 준비': 'prepare'
 }
 
+const priceTable = {
+  '20-커리어 상담-비희망': [13900, 9000],
+  '40-커리어 상담-비희망': [24900, 16100],
+  '20-커리어 상담-희망': [25400, 16500],
+  '40-커리어 상담-희망': [39900, 25900],
+  '20-전형 준비-희망': [40900, 26500],
+  '40-전형 준비-희망': [53900, 35000],
+}
+
 function Introduction({ mentorConsultContents }) {
   const navigater = useNavigate()
   const params = useParams()
 
+  const [consultingTime, setConsultingTime] = useState()
   const [consultCategory, setConsultCategory] = useState('커리어 상담')
   const [consultContent, setConsultContent] = useState([])
   const [mentoringDate, setMentoringDate] = useState()
@@ -60,6 +72,8 @@ function Introduction({ mentorConsultContents }) {
     if (reservations !== null) {
       const reservation = reservations[params.id]
       if (reservation !== undefined) {
+        console.log(reservation)
+        reservation['consultingTime'] && setConsultingTime(reservation['consultingTime'])
         reservation['consultCategory'] && setConsultCategory(reservation['consultCategory'])
         reservation['consultContent'] && setConsultContent(reservation['consultContent'])
         reservation['consultingDate'] && setMentoringDate(new Date(reservation['consultingDate']['year'], reservation['consultingDate']['month'] - 1, reservation['consultingDate']['date']))
@@ -86,6 +100,7 @@ function Introduction({ mentorConsultContents }) {
                 ${mentoringDate && mentoringDate.getMonth() + 1}월
                 ${mentoringDate && mentoringDate.getDate()}일
                 (${mentoringDate && getDayInKorean(mentoringDate)})`}
+        max_width={'582px'}
       >
         <EmptyHeight height='16px'></EmptyHeight>
         <TextSubtitle1 id='category'>
@@ -101,6 +116,9 @@ function Introduction({ mentorConsultContents }) {
             backgroundColor={consultCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event, value) => {
               setConsultCategory(value)
+              if (value === '전형 준비') {
+                setIsFilePreOpen('희망')
+              }
               setConsultContent([])
             }}></CustomToggleButtonGroup>
         </Flex>
@@ -168,12 +186,39 @@ function Introduction({ mentorConsultContents }) {
             onChange={(event, value) => {
               setIsFilePreOpen(value);
             }}></CustomToggleButtonGroup>
-          <EmptyHeight height='28px' />
         </VerticalFlex>}
+      </Card>
+
+      <EmptyHeight height={'30px'} />
+
+      {(consultContent.length > 0 && (consultCategory === '커리어 상담' ? ![undefined, null].includes(isFilePreOpen) : true)) && <Card
+        title='결제 금액'
+        no_divider='true'>
+        <EmptyHeight height={'8px'} />
+
+        <TextBody2 color={colorTextLight}>
+          {consultingTime}분, {consultCategory}{consultCategory === '커리어 상담' && `, 이력서 사전 검토 ${isFilePreOpen}`}
+        </TextBody2>
+        <EmptyHeight height={'8px'} />
+        <Flex>
+          <TextSubtitle1 color={colorCareerDivePink} style={{ textDecorationLine: 'line-through' }}>
+            {formatMoney(priceTable[`${consultingTime}-${consultCategory}-${isFilePreOpen}`][0], 0)}원
+          </TextSubtitle1>
+          <EmptyWidth width='8px' />
+          <TextSubtitle2 color={colorCareerDivePink}>
+            CBT 35% 할인
+          </TextSubtitle2>
+        </Flex>
+        <EmptyHeight height={'8px'} />
+        <TextHeading6>
+          {formatMoney(priceTable[`${consultingTime}-${consultCategory}-${isFilePreOpen}`][1], 0)}원
+        </TextHeading6>
+
+        <EmptyHeight height={'30px'} />
 
         <CustomButton
-          height='52px'
-          disabled={consultContent.length <= 0}
+          height='48px'
+          disabled={consultContent.length <= 0 || isFilePreOpen == undefined}
           onClick={() => {
             const updatingData = [
               { name: 'consultContent', data: consultContent },
@@ -191,12 +236,11 @@ function Introduction({ mentorConsultContents }) {
             }
           }}
         >
-
-          <TextHeading6>
+          <TextSubtitle1>
             다음
-          </TextHeading6>
+          </TextSubtitle1>
         </CustomButton>
-      </Card>
+      </Card>}
     </IntroductionWrapper >
 
   );

@@ -17,7 +17,7 @@ import API from "API";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
 `;
 
@@ -74,20 +74,16 @@ function MentoringReservation() {
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground >
-          <CenterWidthWrapper>
-            <CardsWrapper >
-              <MentorCalendar setIsFinishSet={setIsFinishSet}>
-              </MentorCalendar>
-            </CardsWrapper>
-
-            {
-              isFinishSet &&
-              <CardsWrapper2>
-                {mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />}
-              </CardsWrapper2>
-            }
-
-          </CenterWidthWrapper>
+          <CardsWrapper >
+            <MentorCalendar setIsFinishSet={setIsFinishSet}>
+            </MentorCalendar>
+          </CardsWrapper>
+          {
+            isFinishSet &&
+            <CardsWrapper2>
+              {mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />}
+            </CardsWrapper2>
+          }
         </GrayBackground>
       </FullWidthWrapper>
     </div>

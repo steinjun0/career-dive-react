@@ -21,7 +21,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
-  margin-top: 30px;
   margin-bottom: 154px;
 `;
 

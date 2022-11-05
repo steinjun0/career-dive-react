@@ -25,7 +25,7 @@ import calendarSuccess from 'assets/icon/schedule/calendarSuccess.svg'
 import calendarWait from 'assets/icon/schedule/calendarWait.svg'
 import calendarCancel from 'assets/icon/schedule/calendarCancel.svg'
 import { getAMOrPM, getDayInKorean } from "util/util";
-import { TagLarge } from "util/Custom/CustomTag";
+import { TagLarge, TagMedium } from "util/Custom/CustomTag";
 
 
 const ConsultCardWrapper = styled(Flex)`
@@ -50,6 +50,7 @@ const ConsultCardLeft = styled(Flex)`
 
 const ConsultCardRight = styled(VerticalFlex)`
   padding: 24px;
+  padding-right: 16px;
   align-items: start;
 `;
 
@@ -106,14 +107,20 @@ function ConsultMentorCard({ consult, requestFormOnClick, changeOnClick, enterOn
 
           <Flex>
             {consult.ConsultContentList.slice(0, 3).map((e, i) => {
-              if (e.Type === '전형 준비') return <TagLarge key={i} color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}>{e.Name}</TagLarge>
-              else return <TagLarge
+              if (e.Type === '전형 준비') return <TagMedium
                 key={i}
-                style={{ marginRight: 8 }}
+                style={{ marginRight: 8, padding: '0 8px', fontSize: '14px' }}
+                color={colorCareerDivePink}
+                background_color={colorBackgroundCareerDivePink}>
+                {e.Name}
+              </TagMedium>
+              else return <TagMedium
+                key={i}
+                style={{ marginRight: 8, padding: '0 8px', fontSize: '14px' }}
                 color={colorCareerDiveBlue}
                 background_color={colorBackgroundCareerDiveBlue}>
                 {e.Name}
-              </TagLarge>
+              </TagMedium>
             })}
           </Flex>
 

@@ -129,7 +129,7 @@ function MenteeIntroduce() {
         }>
         <TextFieldWrapper>
           {introduceText !== undefined && !isEditing ?
-            <TextBody2 style={{ whiteSpace: 'pre' }} color={colorTextLight}>
+            <TextBody2 style={{ whiteSpace: 'pre-wrap' }} color={colorTextLight}>
               {introduceText}
             </TextBody2> :
             <TextField

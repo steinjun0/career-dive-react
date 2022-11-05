@@ -5,6 +5,7 @@ import {
   VerticalFlex,
   RowAlignCenterFlex,
   TextHeading4,
+  TextBody1,
 } from "util/styledComponent";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate } from "react-router-dom";
@@ -19,15 +20,15 @@ function MentoringRequestFinish() {
         </TextHeading4>
       </RowAlignCenterFlex>
       <EmptyHeight height='16px' />
-      <TextBody2 style={{ fontSize: '20px' }}>
-        멘토가 24시간 내에 상담 수락 여부를 결정할 거예요. 알림톡을 통해 알려드릴게요!
-      </TextBody2>
+      <TextBody1 style={{ fontSize: '20px' }}>
+        멘토가 24시간 내에 상담 수락 여부를 결정할 거예요. 카카오 알림톡을 통해 알려드릴게요!
+      </TextBody1>
       <EmptyHeight height={'30px'} />
       <CustomButton
         onClick={() => {
           navigate('/mentee/schedule')
         }}
-        height="50px"
+        height="48px"
         style={{ fontSize: '16px', fontWeight: 700 }}>
         완료
       </CustomButton>

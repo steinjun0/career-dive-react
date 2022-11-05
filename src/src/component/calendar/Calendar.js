@@ -10,7 +10,8 @@ import {
   Flex,
   colorBackgroundGrayLight,
   EmptyHeight,
-  TextSubtitle1
+  TextSubtitle1,
+  colorBackgroundCareerDiveBlue
 } from "util/styledComponent";
 
 import { CustomButton } from "util/Custom/CustomButton";
@@ -60,12 +61,12 @@ const TimeButton = styled(ToggleButton)`
  &.Mui-selected {
   color: ${colorCareerDiveBlue};
   border: 1px ${colorCareerDiveBlue} solid !important;
-  background-color: rgba(105, 140, 255, 0.2);
+  background-color: ${colorBackgroundCareerDiveBlue};
  }
  &.Mui-selected:hover {
   color: ${colorCareerDiveBlue};
   border: 1px ${colorCareerDiveBlue} solid !important;
-  background-color: rgba(105, 140, 255, 0.3);
+  background-color: ${colorBackgroundCareerDiveBlue};
  }
 `
 
@@ -266,6 +267,7 @@ function Calendar({ setIsFinishSet }) {
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
     updateAvailableTimes(newConsultingTime, new Date(year, month.slice(0, -1) - 1, selectedDate), originData.DayTimes)
+    setIsFinishSet && setIsFinishSet(false)
 
   };
 
@@ -278,15 +280,19 @@ function Calendar({ setIsFinishSet }) {
         schedulIdTemp = e.scheduleId
       }
     })
+    if (consultingStartTime !== 0 && consultingStartTime !== null) {
+      const updatingData = [
+        { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
+        { name: 'consultingTime', data: consultingTime },
+        { name: 'consultingStartTime', data: consultingStartTime },
+        { name: 'scheduleId', data: schedulIdTemp },
+      ]
+      setIsFinishSet && setIsFinishSet(true)
+      updateReservation(params.id, updatingData)
 
-
-    const updatingData = [
-      { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
-      { name: 'consultingTime', data: consultingTime },
-      { name: 'consultingStartTime', data: consultingStartTime },
-      { name: 'scheduleId', data: schedulIdTemp }
-    ]
-    updateReservation(params.id, updatingData)
+    } else {
+      setIsFinishSet && setIsFinishSet(false)
+    }
   }
 
 
@@ -336,6 +342,7 @@ function Calendar({ setIsFinishSet }) {
         }
         if ('scheduleId' in reservation) {
           setScheduleId(reservation['scheduleId'])
+          setIsFinishSet && setIsFinishSet(true)
         }
       }
     } else {
@@ -382,27 +389,15 @@ function Calendar({ setIsFinishSet }) {
         setOriginData(res.data)
         setAvailableDates(res.data.DayTimes.map((e) => e.Day))
       }
+
+      setSelectedDate(null);
+      setConsultingTime(0);
+      setConsultingStartTime(0);
+      setAvailableAMTimes([])
+      setAvailablePMTimes([])
     }
   }
 
-  useEffect(() => {
-    if (consultingStartTime == null) {
-      setConsultingStartTime(0);
-    }
-    if (consultingStartTime !== 0) {
-      const updatingData = [
-        { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
-        { name: 'consultingTime', data: consultingTime },
-        { name: 'consultingStartTime', data: consultingStartTime },
-        { name: 'scheduleId', data: scheduleId },
-      ]
-      setIsFinishSet && setIsFinishSet(true)
-      updateReservation(params.id, updatingData)
-
-    } else {
-      setIsFinishSet && setIsFinishSet(false)
-    }
-  }, [scheduleId])
 
 
   useEffect(() => {
@@ -498,12 +493,14 @@ function Calendar({ setIsFinishSet }) {
             />
             <EmptyHeight height='28px'></EmptyHeight>
             <CustomButton
-              height='52px'
+              height='48px'
               onClick={() => {
 
                 navigater(`/mentee/request/${params.id}`)
               }}>
-              신청
+              <TextSubtitle1>
+                신청
+              </TextSubtitle1>
             </CustomButton>
           </TimeSelectWrapper>
 

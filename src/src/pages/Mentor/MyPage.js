@@ -27,7 +27,6 @@ import { useEffect, useState } from "react";
 import API from "API";
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
-  margin-top: 30px;
   margin-bottom: 154px;
 `;
 
