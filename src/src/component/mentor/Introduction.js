@@ -31,7 +31,7 @@ function Introduction({ introductionText = '' }) {
     <IntroductionWrapper >
       <Card no_divider={'true'} title={'멘토 소개'}>
         <VerticalFlex>
-          <HtmlWrapper dangerouslySetInnerHTML={{ __html: introductionText }}></HtmlWrapper>
+          <HtmlWrapper style={{ whiteSpace: 'wrap' }} dangerouslySetInnerHTML={{ __html: introductionText }}></HtmlWrapper>
         </VerticalFlex>
       </Card>
     </IntroductionWrapper>

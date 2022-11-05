@@ -153,7 +153,7 @@ function MentorIntroduce({ mentorData }) {
         <Subtitle style={{ margin: '20px 0 0 0' }}>작성하신 정보는 멘토 프로필에 노출됩니다.</Subtitle>
         <TextFieldWrapper>
           {!isEditing ?
-            <TextBody2 style={{ whiteSpace: 'pre' }} color={colorTextLight}>
+            <TextBody2 style={{ whiteSpace: 'pre-wrap' }} color={colorTextLight}>
               {introduceText}
             </TextBody2> :
             <TextField

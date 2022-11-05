@@ -131,14 +131,14 @@ function RequestView({ consultData, menteeIntroduce, urlLink }) {
         <EmptyHeight height='16px' />
         <TextSubtitle1>내 소개</TextSubtitle1>
         <EmptyHeight height='16px' />
-        <GrayBackgroundText style={{ whiteSpace: 'pre' }}>
+        <GrayBackgroundText style={{ whiteSpace: 'pre-wrap' }}>
           {menteeIntroduce}
         </GrayBackgroundText>
 
         <EmptyHeight height='16px' />
         <TextSubtitle1>희망 상담 내용</TextSubtitle1>
         <EmptyHeight height='16px' />
-        <GrayBackgroundText style={{ whiteSpace: 'pre' }}>
+        <GrayBackgroundText style={{ whiteSpace: 'pre-wrap' }}>
           {consultData.RequestContent}
         </GrayBackgroundText>
 
