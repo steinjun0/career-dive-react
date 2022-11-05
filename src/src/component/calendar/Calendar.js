@@ -10,7 +10,8 @@ import {
   Flex,
   colorBackgroundGrayLight,
   EmptyHeight,
-  TextSubtitle1
+  TextSubtitle1,
+  colorBackgroundCareerDiveBlue
 } from "util/styledComponent";
 
 import { CustomButton } from "util/Custom/CustomButton";
@@ -60,12 +61,12 @@ const TimeButton = styled(ToggleButton)`
  &.Mui-selected {
   color: ${colorCareerDiveBlue};
   border: 1px ${colorCareerDiveBlue} solid !important;
-  background-color: rgba(105, 140, 255, 0.2);
+  background-color: ${colorBackgroundCareerDiveBlue};
  }
  &.Mui-selected:hover {
   color: ${colorCareerDiveBlue};
   border: 1px ${colorCareerDiveBlue} solid !important;
-  background-color: rgba(105, 140, 255, 0.3);
+  background-color: ${colorBackgroundCareerDiveBlue};
  }
 `
 
