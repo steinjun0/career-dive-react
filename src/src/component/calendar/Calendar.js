@@ -492,12 +492,14 @@ function Calendar({ setIsFinishSet }) {
             />
             <EmptyHeight height='28px'></EmptyHeight>
             <CustomButton
-              height='52px'
+              height='48px'
               onClick={() => {
 
                 navigater(`/mentee/request/${params.id}`)
               }}>
-              신청
+              <TextSubtitle1>
+                신청
+              </TextSubtitle1>
             </CustomButton>
           </TimeSelectWrapper>
 
