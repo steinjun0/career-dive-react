@@ -25,7 +25,7 @@ import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addMinute, getAMOrPM, getDayInKorean, updateReservation } from "util/util";
+import { addMinute, getAMOrPM, getDayInKorean, getKoreanTimeString, updateReservation } from "util/util";
 import { CustomTextField } from "util/Custom/CustomTextField";
 import API from "API"
 
@@ -82,8 +82,7 @@ const getConsultingRangeInKorean = (consultingStartTime, consultingTime) => {
   const consultingStartTimeDate = new Date(`2022-01-02 ${consultingStartTime}`);
   if (!isNaN(consultingStartTimeDate.getTime())) {
     const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
-    const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
-    return `${getAMOrPM(consultingStartTime)} ${consultingStartTime}~${getAMOrPM(consultingEndTime)} ${consultingEndTime}`
+    return `${getKoreanTimeString(consultingStartTimeDate)} ~ ${getKoreanTimeString(consultingEndTimeDate)}`
   }
   else {
     return ''
@@ -266,7 +265,7 @@ function Request() {
             minRows={5}
           />
           <Flex style={{ justifyContent: 'end', marginTop: '4px' }}>
-            <TextCaption>{requestText.length}/{maxLength}</TextCaption>
+            <TextCaption>{requestText ? requestText.length : 0}/{maxLength}</TextCaption>
           </Flex>
 
           <EmptyHeight height='16px' />
