@@ -382,6 +382,12 @@ function Calendar({ setIsFinishSet }) {
         setOriginData(res.data)
         setAvailableDates(res.data.DayTimes.map((e) => e.Day))
       }
+
+      setSelectedDate(null);
+      setConsultingTime(0);
+      setConsultingStartTime(0);
+      setAvailableAMTimes([])
+      setAvailablePMTimes([])
     }
   }
 
