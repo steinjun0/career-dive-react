@@ -266,6 +266,7 @@ function Calendar({ setIsFinishSet }) {
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
     updateAvailableTimes(newConsultingTime, new Date(year, month.slice(0, -1) - 1, selectedDate), originData.DayTimes)
+    setIsFinishSet(false)
 
   };
 
@@ -278,15 +279,19 @@ function Calendar({ setIsFinishSet }) {
         schedulIdTemp = e.scheduleId
       }
     })
+    if (consultingStartTime !== 0 && consultingStartTime !== null) {
+      const updatingData = [
+        { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
+        { name: 'consultingTime', data: consultingTime },
+        { name: 'consultingStartTime', data: consultingStartTime },
+        { name: 'scheduleId', data: schedulIdTemp },
+      ]
+      setIsFinishSet && setIsFinishSet(true)
+      updateReservation(params.id, updatingData)
 
-
-    const updatingData = [
-      { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
-      { name: 'consultingTime', data: consultingTime },
-      { name: 'consultingStartTime', data: consultingStartTime },
-      { name: 'scheduleId', data: schedulIdTemp }
-    ]
-    updateReservation(params.id, updatingData)
+    } else {
+      setIsFinishSet && setIsFinishSet(false)
+    }
   }
 
 
@@ -336,6 +341,7 @@ function Calendar({ setIsFinishSet }) {
         }
         if ('scheduleId' in reservation) {
           setScheduleId(reservation['scheduleId'])
+          setIsFinishSet(true)
         }
       }
     } else {
@@ -391,24 +397,6 @@ function Calendar({ setIsFinishSet }) {
     }
   }
 
-  useEffect(() => {
-    if (consultingStartTime == null) {
-      setConsultingStartTime(0);
-    }
-    if (consultingStartTime !== 0) {
-      const updatingData = [
-        { name: 'consultingDate', data: { year, month: Number(month.slice(0, -1)), date: selectedDate } },
-        { name: 'consultingTime', data: consultingTime },
-        { name: 'consultingStartTime', data: consultingStartTime },
-        { name: 'scheduleId', data: scheduleId },
-      ]
-      setIsFinishSet && setIsFinishSet(true)
-      updateReservation(params.id, updatingData)
-
-    } else {
-      setIsFinishSet && setIsFinishSet(false)
-    }
-  }, [scheduleId])
 
 
   useEffect(() => {
