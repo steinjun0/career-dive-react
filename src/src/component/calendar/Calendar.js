@@ -266,7 +266,7 @@ function Calendar({ setIsFinishSet }) {
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
     updateAvailableTimes(newConsultingTime, new Date(year, month.slice(0, -1) - 1, selectedDate), originData.DayTimes)
-    setIsFinishSet(false)
+    setIsFinishSet && setIsFinishSet(false)
 
   };
 
@@ -341,7 +341,7 @@ function Calendar({ setIsFinishSet }) {
         }
         if ('scheduleId' in reservation) {
           setScheduleId(reservation['scheduleId'])
-          setIsFinishSet(true)
+          setIsFinishSet && setIsFinishSet(true)
         }
       }
     } else {
