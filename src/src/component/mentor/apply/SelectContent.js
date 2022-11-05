@@ -192,9 +192,9 @@ function Introduction({ mentorConsultContents }) {
           }}
         >
 
-          <TextHeading6>
+          <TextSubtitle1>
             다음
-          </TextHeading6>
+          </TextSubtitle1>
         </CustomButton>
       </Card>
     </IntroductionWrapper >
