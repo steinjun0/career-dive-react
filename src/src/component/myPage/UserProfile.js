@@ -79,7 +79,7 @@ function UserProfile() {
   return (
     <UserProfileCardWrapper>
       <Card
-        title={'멘토 프로필'}
+        title={`${JSON.parse(localStorage.getItem('IsMentorMode')) ? '멘토' : '멘티'} 프로필`}
         titleTail={
           !isEditing ?
             <Flex>

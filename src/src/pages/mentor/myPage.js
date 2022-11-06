@@ -93,7 +93,7 @@ function MyPage() {
                   isHidingSideNavigation() &&
                   <div>
                     <SideNavigationWrapper>
-                      <LinkNoDeco to={`/${localStorage.getItem('IsMentorMode') ? 'mentor/mypage/profile' : 'mentee/mypage/account'}`}>
+                      <LinkNoDeco to={`/${JSON.parse(localStorage.getItem('IsMentorMode')) ? 'mentor/mypage/profile' : 'mentee/mypage/account'}`}>
                         <MoveBackButtonWrapper>
                           <ChevronLeftIcon />
                         </MoveBackButtonWrapper>

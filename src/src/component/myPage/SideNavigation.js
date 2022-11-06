@@ -57,7 +57,7 @@ function SideNavigation() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('IsMentorMode')) {
+    if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
       setNavigationList(mentorNavigationList)
       setMapRouteSubPage(mentorMapRouteSubPage)
     } else {
