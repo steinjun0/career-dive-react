@@ -163,22 +163,22 @@ export function checkUrlInclude(string) {
   return temp.slice(0, 9).includes(string)
 }
 
-export function isMentorUrl() {
-  let temp = window.location.href
-  const firstSlice = temp.indexOf('//')
-  temp = temp.slice(firstSlice + 2)
-  const secondSlice = temp.indexOf('/')
-  temp = temp.slice(secondSlice + 1)
+// export function isMentorUrl() {
+//   let temp = window.location.href
+//   const firstSlice = temp.indexOf('//')
+//   temp = temp.slice(firstSlice + 2)
+//   const secondSlice = temp.indexOf('/')
+//   temp = temp.slice(secondSlice + 1)
 
-  const ignoreList = ['mentor']
-  let isIgnored = false
-  ignoreList.map((e) => {
-    isIgnored = temp.indexOf(e) === 0
-  })
+//   const ignoreList = ['mentor']
+//   let isIgnored = false
+//   ignoreList.map((e) => {
+//     isIgnored = temp.indexOf(e) === 0
+//   })
 
-  if (isIgnored || temp.indexOf('mentor') !== 0) {
-    return false
-  } else {
-    return true
-  }
-}
+//   if (isIgnored || temp.indexOf('mentor') !== 0) {
+//     return false
+//   } else {
+//     return true
+//   }
+// }

@@ -11,7 +11,6 @@ import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import API from "API";
-import { isMentorUrl } from "util/util";
 
 
 const GnbFullWidthWrapper = styled("nav")`
@@ -134,6 +133,7 @@ function Gnb() {
   }
   const [isLogin, setIsLogin] = useState(false)
   const [isMentor, setIsMentor] = useState(false)
+  const [isMentorMode, setIsMentorMode] = useState(false)
   const [isHideProfileMenu, setIsHideProfileMenu] = useState(true)
   const isMouseOnProfileMenuRef = useRef(false);
 
@@ -141,9 +141,9 @@ function Gnb() {
   useEffect(async () => {
     const AccessToken = localStorage.getItem('AccessToken')
     setIsMentor(JSON.parse(localStorage.getItem('IsMentor')))
+    setIsMentorMode(JSON.parse(localStorage.getItem('IsMentorMode')))
 
     if (AccessToken !== null) {
-      // TODO: token확인 후 로그인 여부 확인.
       const validResponse = await API.postAccountValid(AccessToken);
       if (validResponse.status === 200) {
         setIsLogin(true)
@@ -166,29 +166,18 @@ function Gnb() {
     setIsLogin(false)
   }, [location])
 
-
-  // useEffect(async () => {
-  //   const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
-  //   if (isAutoLoginLocalStorage === true) {
-  //     const loginResponse = await API.postAccountLogin(email, password);
-  //   }
-  // }, [])
-
-
-
-
   return (
     <GnbFullWidthWrapper>
       <GnbWrapper>
 
         <LeftTopGnb>
-          <LinkNoDeco to={isMentorUrl() ? '/mentor' : '/'}>
-            {isMentorUrl() ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
+          <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
+            {isMentorMode ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
 
           </LinkNoDeco>
         </LeftTopGnb>
 
-        {isLogin && isMentorUrl() && <CenterGnb>
+        {isLogin && isMentorMode && <CenterGnb>
           <CenterMenu>
             <LinkNoDeco to={`/mentor`}>
               <GnbLi present_link={isPresentUrl(`/mentor`).toString()}>상담</GnbLi>
@@ -203,7 +192,7 @@ function Gnb() {
             </LinkNoDeco>
           </CenterMenu>
         </CenterGnb>}
-        {isLogin && !isMentorUrl() && <CenterGnb>
+        {isLogin && !isMentorMode && <CenterGnb>
           <CenterMenu>
             <LinkNoDeco to={`/mentee/schedule`}>
               <GnbLi present_link={isPresentUrl(`/mentee/schedule`).toString()}>내 상담</GnbLi>
@@ -229,20 +218,26 @@ function Gnb() {
         }
 
         {isLogin && <RightTopGnb>
-          {isMentorUrl() && <LinkNoDeco to={'/'}>
+          {isMentorMode && <LinkNoDeco to={'/'}>
             <CustomButton
               width={'83px'}
               height={'43px'}
               style={{ marginRight: 24 }}
               background_color={colorBackgroundGrayLight}
               custom_color={colorCareerDiveBlue}
+              onClick={
+                () => {
+                  setIsMentorMode(false)
+                  localStorage.setItem('IsMentorMode', false)
+                }
+              }
             >
               <TextSubtitle2>
                 멘티 모드
               </TextSubtitle2>
             </CustomButton>
           </LinkNoDeco>}
-          {!isMentorUrl() && !isMentor && <LinkNoDeco to={'/mentor/register'}>
+          {!isMentorMode && !isMentor && <LinkNoDeco to={'/mentor/register'}>
             <CustomButton
               width={'83px'}
               height={'48px'}
@@ -255,14 +250,21 @@ function Gnb() {
               </TextSubtitle2>
             </CustomButton>
           </LinkNoDeco>}
-          {!isMentorUrl() && isMentor && <LinkNoDeco to={'/mentor'}>
+          {!isMentorMode && isMentor && <LinkNoDeco to={'/mentor'}>
             <CustomButton
               width={'83px'}
               height={'48px'}
               padding={'12px 14px'}
               style={{ marginRight: 24, }}
               background_color={colorBackgroundGrayLight}
-              custom_color={colorCareerDiveBlue}>
+              custom_color={colorCareerDiveBlue}
+              onClick={
+                () => {
+                  setIsMentorMode(true)
+                  localStorage.setItem('IsMentorMode', true)
+                }
+              }
+            >
               <TextSubtitle2>
                 멘토 모드
               </TextSubtitle2>
@@ -283,8 +285,8 @@ function Gnb() {
                 setIsHideProfileMenu(!isMouseOnProfileMenuRef.current)
               }, 300);
             }}>
-            <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigator(`${isMentorUrl() ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
-            {isMentorUrl() ?
+            <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigator(`${isMentorMode ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
+            {isMentorMode ?
               <ProfileMenu is_hide={String(isHideProfileMenu)}>
                 <LinkNoDeco to={`${'mentor'}/mypage/profile`}>
                   <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>멘토 프로필</TextSubtitle2>
