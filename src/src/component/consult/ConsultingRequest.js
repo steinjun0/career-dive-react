@@ -103,7 +103,7 @@ function ConsultingRequest({ reservationList }) {
                     hover_color={colorCareerDiveBlue}
                     text_color={'#fff'}
                     onClick={() => {
-                      navigater(`/mentee/schedule/form/${consult.ID}`)
+                      navigater(`/mentee/schedule/${consult.ID}`)
                     }}
                   >
                     {/* TODO: params id 맞춰주기 */}

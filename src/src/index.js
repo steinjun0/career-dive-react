@@ -5,29 +5,29 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
+import Home from "./pages/mentee/home";
+import Login from "./pages/login";
 import SignUp from './pages/SignUp';
-import Mentor from "./pages/MentorCard";
+import Mentor from "./pages/mentor/id";
 import MentoringReservation from './pages/request/MentoringReservation'
 import MentoringApply from './pages/request/MentoringApply'
-import MentoringApplyViewer from './pages/MentoringApplyViewer'
-import MentoringApplyViewerMentor from './pages/Mentor/MentoringApplyViewer'
+import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer'
+import MentoringApplyViewerMentor from './pages/mentor/MentoringApplyViewer'
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
-import SessionList from "./pages/Schedule";
-import MyPage from "./pages/MyPage";
-import MentorHome from './pages/Mentor/Home'
+import SessionList from "./pages/mentee/schedule/schedule";
+import MyPage from "./pages/mentee/myPage";
+import MentorHome from './pages/mentor/home'
 import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MentorSchedule from "pages/Mentor/Schedule";
+import MentorSchedule from "pages/mentor/Schedule";
 import Sendbird from "pages/Sendbird";
 import Session from "./pages/Session";
-import MentorCalendar from "pages/Mentor/Calendar";
-import MentorRegister from "pages/MentorRegister";
-import MentorMyPage from "./pages/Mentor/MyPage";
+import MentorCalendar from "pages/mentor/Calendar";
+import MentorRegister from "pages/mentor/register";
+import MentorMyPage from "./pages/mentor/myPage";
 import CareerInfoChange from "component/myPage/CareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
@@ -67,12 +67,12 @@ ReactDOM.render(
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/mentorCard/:id" element={<Mentor />} />
+          <Route path="/mentor/:id" element={<Mentor />} />
           <Route path="/mentee/request/:id" element={<MentoringReservation />} />
           <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
           <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />
           {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}
-          <Route path="/mentee/schedule/form/:id" element={<MentoringApplyViewer />} />
+          <Route path="/mentee/schedule/:id" element={<MentoringApplyViewer />} />
           <Route path="/mentee/schedule" element={<SessionList />} />
           <Route path="/mentee/mypage/:subPage" element={<MyPage />} />
           <Route path="/mentee/mypage/account/change" element={<MyPage />} />

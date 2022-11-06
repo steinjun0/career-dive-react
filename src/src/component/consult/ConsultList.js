@@ -99,7 +99,7 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
                       <ConsultMentorCard
                         consult={consult}
                         requestFormOnClick={() => {
-                          navigater(`/mentee/schedule/form/${consult.ID}`)
+                          navigater(`/mentee/schedule/${consult.ID}`)
                         }}
                         enterOnClick={() => {
                           onEnterSession({
@@ -113,7 +113,7 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
                       /> :
                       <ConsultMenteeCard
                         consult={consult}
-                        requestFormOnClick={() => { navigater(`/mentee/schedule/form/${consult.ID}`) }}
+                        requestFormOnClick={() => { navigater(`/mentee/schedule/${consult.ID}`) }}
                         enterOnClick={() => {
                           onEnterSession({
                             navigater,

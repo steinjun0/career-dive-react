@@ -170,7 +170,7 @@ export function isMentorUrl() {
   const secondSlice = temp.indexOf('/')
   temp = temp.slice(secondSlice + 1)
 
-  const ignoreList = ['mentorCard']
+  const ignoreList = ['mentor']
   let isIgnored = false
   ignoreList.map((e) => {
     isIgnored = temp.indexOf(e) === 0
