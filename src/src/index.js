@@ -31,7 +31,7 @@ import MentorMyPage from "./pages/mentor/myPage";
 import CareerInfoChange from "component/myPage/CareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
-import Search from 'pages/Search'
+import Search from 'pages/search'
 import Review from "pages/review/id";
 
 
