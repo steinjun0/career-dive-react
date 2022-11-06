@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 
 import Home from "./pages/mentee/home";
 import Login from "./pages/login";
-import SignUp from './pages/SignUp';
+import SignUp from './pages/signup';
 import Mentor from "./pages/mentor/id";
 import MentoringReservation from './pages/request/MentoringReservation'
 import MentoringApply from './pages/request/MentoringApply'
@@ -24,7 +24,7 @@ import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledCompo
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MentorSchedule from "pages/mentor/Schedule";
 import Sendbird from "pages/Sendbird";
-import Session from "./pages/Session";
+import Session from "./pages/session/id";
 import MentorCalendar from "pages/mentor/Calendar";
 import MentorRegister from "pages/mentor/register";
 import MentorMyPage from "./pages/mentor/myPage";
@@ -32,7 +32,7 @@ import CareerInfoChange from "component/myPage/CareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
 import Search from 'pages/Search'
-import Review from "pages/Review";
+import Review from "pages/review/id";
 
 
 const theme = createTheme({

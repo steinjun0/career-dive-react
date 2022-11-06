@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import RequestView from "../component/mentor/apply/RequestView";
-import { Card } from "../util/Card";
-import { CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex, colorBackgroundGrayLight, EmptyWidth, colorCareerDivePink, colorBackgroundCareerDivePink, colorTextDisabled } from "../util/styledComponent";
+import RequestView from "../../component/mentor/apply/RequestView";
+import { Card } from "../../util/Card";
+import { CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex, colorBackgroundGrayLight, EmptyWidth, colorCareerDivePink, colorBackgroundCareerDivePink, colorTextDisabled } from "../../util/styledComponent";
 import testMentorImage from "assets/img/testMentorImage.png";
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
 import MicOffOutlinedIcon from '@mui/icons-material/MicOffOutlined';
