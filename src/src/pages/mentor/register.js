@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import API from '../API.js'
+import API from '../../API.js'
 import { Grid, styled } from "@mui/material";
 
 import {

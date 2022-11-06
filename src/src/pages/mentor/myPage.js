@@ -21,7 +21,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import CareerInfo from "component/myPage/CareerInfo";
 import MentorIntroduce from "component/myPage/MentorIntroduce";
 import CareerInfoChange from "component/myPage/CareerInfoChange";
-import { isMentorUrl } from "util/util";
 import ConsultRange from "component/myPage/ConsultRange";
 import { useEffect, useState } from "react";
 import API from "API";
@@ -94,7 +93,7 @@ function MyPage() {
                   isHidingSideNavigation() &&
                   <div>
                     <SideNavigationWrapper>
-                      <LinkNoDeco to={`/${isMentorUrl() ? 'mentor/mypage/profile' : 'mentee/mypage/account'}`}>
+                      <LinkNoDeco to={`/${JSON.parse(localStorage.getItem('IsMentorMode')) ? 'mentor/mypage/profile' : 'mentee/mypage/account'}`}>
                         <MoveBackButtonWrapper>
                           <ChevronLeftIcon />
                         </MoveBackButtonWrapper>

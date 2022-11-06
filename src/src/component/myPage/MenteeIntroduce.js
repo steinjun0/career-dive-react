@@ -69,6 +69,9 @@ function MenteeIntroduce() {
     if (menteeRes.status === 200) {
       setIntroduceText(menteeRes.data.Introduction)
       setUrlLink(menteeRes.data.Link)
+      if (menteeRes.data.Introduction === '') {
+        setIsEditing(true)
+      }
     }
   }, [])
 
@@ -165,8 +168,9 @@ function MenteeIntroduce() {
               }}>삭제</TextBody2>
           </Flex>;
         })}
+        {uploadingFiles.length === 0 && <TextBody2 color={colorTextLight}>업로드된 파일이 없습니다</TextBody2>}
         <EmptyHeight height='20px'></EmptyHeight>
-        <Dropzone onDrop={acceptedFiles => {
+        {isEditing && <Dropzone onDrop={acceptedFiles => {
           if (uploadingFiles.length + acceptedFiles.length > 2) {
             alert('업로드 파일이 3개 이상입니다.')
             return
@@ -185,7 +189,7 @@ function MenteeIntroduce() {
               </DropzoneWrapper>
             </section>
           )}
-        </Dropzone>
+        </Dropzone>}
         <Subtitle>URL 링크</Subtitle>
         <UrlWrapper>
           {urlLink !== undefined &&
@@ -203,7 +207,7 @@ function MenteeIntroduce() {
               }}
             /> :
             <TextBody2 color={colorTextLight}>
-              {urlLink}
+              {urlLink === '' ? '설정한 URL이 없습니다' : urlLink}
             </TextBody2>
           }
         </UrlWrapper>

@@ -33,7 +33,7 @@ function MentorCard({
   isShowTag = false
 }) {
   return (
-    <LinkNoDeco to={"/mentorCard/" + userId}>
+    <LinkNoDeco to={"/mentor/" + userId}>
       <Card
         title={
           <Flex>

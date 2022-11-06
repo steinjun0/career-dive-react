@@ -7,7 +7,6 @@ import {
   UlNoDeco,
 } from "util/styledComponent";
 import { Card } from "util/Card";
-import { isMentorUrl } from "util/util";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -58,7 +57,7 @@ function SideNavigation() {
   };
 
   useEffect(() => {
-    if (isMentorUrl()) {
+    if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
       setNavigationList(mentorNavigationList)
       setMapRouteSubPage(mentorMapRouteSubPage)
     } else {

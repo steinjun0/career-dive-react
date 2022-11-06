@@ -83,14 +83,15 @@ const SpeechBubbleIcon = styled('img')`
   margin-right: 6px;
 `;
 
-const footerDisableUrl = ['/login', '/signup', '/mentor/register']
+const footerDisableUrl = ['/login', '/signup', '/mentor/register', '/session']
+
 
 function Footer() {
   const { pathname } = useLocation();
 
   return (
     <Flex id='footer'>
-      {!footerDisableUrl.includes(pathname) && <FooterFullWidthWrapper>
+      {!footerDisableUrl.map((e) => pathname.includes(e)).includes(true) && <FooterFullWidthWrapper>
         <FooterTop>
           <FooterWrapper>
             <ColumnSet>

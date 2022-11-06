@@ -128,34 +128,47 @@ function RequestView({ consultData, menteeIntroduce, urlLink }) {
 
         <EmptyHeight height='16px' />
         <TextHeading6>요청서</TextHeading6>
-        <EmptyHeight height='16px' />
-        <TextSubtitle1>내 소개</TextSubtitle1>
-        <EmptyHeight height='16px' />
-        <GrayBackgroundText style={{ whiteSpace: 'pre-wrap' }}>
-          {menteeIntroduce}
-        </GrayBackgroundText>
 
-        <EmptyHeight height='16px' />
-        <TextSubtitle1>희망 상담 내용</TextSubtitle1>
-        <EmptyHeight height='16px' />
-        <GrayBackgroundText style={{ whiteSpace: 'pre-wrap' }}>
-          {consultData.RequestContent}
-        </GrayBackgroundText>
+        {menteeIntroduce !== '' && <VerticalFlex>
+          <EmptyHeight height='16px' />
+          <TextSubtitle1>내 소개</TextSubtitle1>
+          <EmptyHeight height='16px' />
+          <GrayBackgroundText style={{ whiteSpace: 'pre-wrap' }}>
+            {menteeIntroduce}
+          </GrayBackgroundText>
+        </VerticalFlex>}
 
-        <EmptyHeight height='16px' />
-        <TextSubtitle1>첨부 파일</TextSubtitle1>
-        <EmptyHeight height='16px' />
-        <VerticalFlex>
-          {consultData.ConsultFileList.map((e, i) => {
-            return <a key={i} style={{ color: 'initial' }} href={e.Url} download={true}><UnderlineText>{e.Name}</UnderlineText></a>
-          })}
-        </VerticalFlex>
-        <EmptyHeight height='16px' />
 
-        <TextSubtitle1>URL</TextSubtitle1>
-        <EmptyHeight height='16px' />
-        <a style={{ color: 'initial' }} href={urlLink} target="_blank"><UnderlineText>{urlLink}</UnderlineText></a>
-        <EmptyHeight height='16px' />
+        {consultData.RequestContent !== '' && <VerticalFlex>
+          <EmptyHeight height='16px' />
+          <TextSubtitle1>희망 상담 내용</TextSubtitle1>
+          <EmptyHeight height='16px' />
+          <GrayBackgroundText style={{ whiteSpace: 'pre-wrap' }}>
+            {consultData.RequestContent}
+          </GrayBackgroundText>
+        </VerticalFlex>}
+
+
+        {consultData.ConsultFileList.length >= 1 && <VerticalFlex>
+          <EmptyHeight height='16px' />
+          <TextSubtitle1>첨부 파일</TextSubtitle1>
+          <EmptyHeight height='16px' />
+          <VerticalFlex>
+            {consultData.ConsultFileList.map((e, i) => {
+              return <a key={i} style={{ color: 'initial' }} href={e.Url} download={true}><UnderlineText>{e.Name}</UnderlineText></a>
+            })}
+          </VerticalFlex>
+        </VerticalFlex>}
+
+
+        {urlLink !== '' && <VerticalFlex>
+          <EmptyHeight height='16px' />
+          <TextSubtitle1>URL</TextSubtitle1>
+          <EmptyHeight height='16px' />
+          <a style={{ color: 'initial' }} href={urlLink} target="_blank"><UnderlineText>{urlLink}</UnderlineText></a>
+          <EmptyHeight height='16px' />
+        </VerticalFlex>}
+
 
 
       </Card>

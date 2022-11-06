@@ -17,7 +17,7 @@ import {
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
-import { addMinute, getAMOrPM, getKoreanTimeString, isMentorUrl, removeReservation, updateReservation, usePrevious } from "util/util";
+import { addMinute, getAMOrPM, getKoreanTimeString, removeReservation, updateReservation, usePrevious } from "util/util";
 import CalendarUpper from "component/calendar/CalendarUpper";
 import API from 'API';
 
