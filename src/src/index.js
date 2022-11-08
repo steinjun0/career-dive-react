@@ -16,7 +16,7 @@ import MentoringApplyViewerMentor from './pages/mentor/MentoringApplyViewer'
 
 import Gnb from "./component/Gnb";
 import Footer from "./component/Footer";
-import SessionList from "./pages/mentee/schedule/schedule";
+import SessionList from "./pages/mentee/schedule";
 import MyPage from "./pages/mentee/myPage";
 import MentorHome from './pages/mentor/home'
 import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledComponent";
