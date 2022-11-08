@@ -22,7 +22,7 @@ import {
   TextButton
 } from "util/styledComponent";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TagLarge, TagMedium, TagSmall } from "util/Custom/CustomTag";
 
 const MentorProfileWrapper = styled(RowAlignCenterFlex)`
@@ -110,6 +110,7 @@ function MentorProfile({ name = '', discription = '', id = -1 }) {
   const [isFavorite, setIsFavorite] = useState(false)
   const navigater = useNavigate();
   const params = useParams();
+  const location = useLocation();
   return (
     <MentorProfileWrapper>
       <MentorProfileImg src={testMentorImage} alt="profile-image" />
@@ -122,13 +123,14 @@ function MentorProfile({ name = '', discription = '', id = -1 }) {
       </ProfileTexts>
       <Buttons>
         <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
-        <EmptyWidth width='12px'></EmptyWidth>
-        <ApplyMentoringButton
-          disableElevation
-          onClick={() => { navigater(`/mentee/request/${id}`) }}
-        >
-          상담 신청
-        </ApplyMentoringButton>
+        {!location.pathname.includes('mentee/request/form') &&
+          <ApplyMentoringButton
+            disableElevation
+            style={{ marginLeft: 12 }}
+            onClick={() => { navigater(`/mentee/request/${id}`) }}
+          >
+            상담 신청
+          </ApplyMentoringButton>}
       </Buttons>
     </MentorProfileWrapper>
   );
