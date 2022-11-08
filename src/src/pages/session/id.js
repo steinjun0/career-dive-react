@@ -58,7 +58,6 @@ function Session() {
 
 
   useEffect(async () => {
-    let intervalId;
     await API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
         if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
@@ -73,17 +72,17 @@ function Session() {
         const [_, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
         setEndDate(tempEndDate)
 
-        const tempIntervalId = setInterval(() => {
-          setLeftTime(new Date(tempEndDate.getTime() - new Date().getTime()))
-          console.log('tempEndDate.getTime() - new Date().getTime()', tempEndDate.getTime() - new Date().getTime() - 149132473)
-          if (tempEndDate.getTime() - new Date().getTime() - 149132473 <= 0) {
-            clearInterval(tempIntervalId)
-            if (call !== 'no call') API.Sendbird.stopCalling(call)
-            alert('통화가 종료되었습니다')
-            navigater(`/review/${params.id}`)
-          }
-        }, 1000);
-        setIntervalId(tempIntervalId)
+        // const tempIntervalId = setInterval(() => {
+        //   setLeftTime(new Date(tempEndDate.getTime() - new Date().getTime()))
+        //   console.log('tempEndDate.getTime() - new Date().getTime()', tempEndDate.getTime() - new Date().getTime() - 149132473)
+        //   if (tempEndDate.getTime() - new Date().getTime() - 149132473 <= 0) {
+        //     clearInterval(tempIntervalId)
+        //     if (call !== 'no call') API.Sendbird.stopCalling(call)
+        //     alert('통화가 종료되었습니다')
+        //     navigater(`/review/${params.id}`)
+        //   }
+        // }, 1000);
+        // setIntervalId(tempIntervalId)
       }
     })
 
@@ -115,10 +114,12 @@ function Session() {
   }, [])
 
   usePrompt('dd', true, () => {
-    if (call !== 'no call') API.Sendbird.stopCalling(call)
-    console.log(intervalId)
-    clearInterval(intervalId)
-    navigater(`/review/${params.id}`)
+    if (call !== 'no call') {
+      API.Sendbird.stopCalling(call)
+    }
+    if (intervalId !== undefined) {
+      clearInterval(intervalId)
+    }
   })
 
   return (
