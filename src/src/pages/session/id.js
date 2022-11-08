@@ -144,7 +144,7 @@ function Session() {
         <TextHeading4 style={{ fontFamily: 'Noto Sans KR' }}>커리어다이브</TextHeading4>
       </Flex>
 
-      <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 300px)' }}>
+      <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 190px)' }}>
         <ReflexElement className="left-pane" >
           <div style={{ padding: 24 }}>
             {consultData !== undefined &&
@@ -190,7 +190,7 @@ function Session() {
       <EmptyHeight height={'30px'} />
 
       <Flex style={{ width: '100%', padding: '0 24px 0 24px', boxSizing: 'border-box' }}>
-        <Card no_divider={'true'} >
+        <Card no_divider={'true'} style={{ padding: '16px 24px' }}>
           <Flex style={{ justifyContent: 'space-between', width: '100%' }}>
             <VerticalFlex>
               <TextCaption style={{ fontWeight: '400' }}>
