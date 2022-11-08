@@ -21,10 +21,10 @@ function Search() {
 
   return (
     <VerticalFlex>
-      <GrayBackground>
-        <Flex>
+      <GrayBackground style={{}}>
+        <Flex style={{ maxWidth: 1194 + 30, marginRight: -30, flexWrap: 'wrap', marginBottom: 60 }}>
           {mentorList && [...mentorList].map((mentorData, index) => {
-            return <Flex style={{ margin: 15 }}>
+            return <Flex style={{ marginTop: 30, marginRight: 30 }}>
               <MentorCard
                 key={index}
                 company={mentorData.CompName}
@@ -39,10 +39,11 @@ function Search() {
                 isShowRating={false}
                 isShowTag={true} />
             </Flex>
-
           }
           )}
+
         </Flex>
+
 
         {/* <MentorCard
           company={"LF"}
