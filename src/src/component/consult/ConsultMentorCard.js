@@ -50,7 +50,7 @@ const ConsultCardLeft = styled(Flex)`
 
 const ConsultCardRight = styled(VerticalFlex)`
   padding: 24px;
-  padding-right: 16px;
+  padding-right: 0px;
   align-items: start;
 `;
 
