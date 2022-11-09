@@ -41,6 +41,11 @@ function Session() {
   let calleeId = -1;
   let mentorId;
   let menteeId;
+  const [amIMentor, setAmIMentor] = useState(false);
+  const [isMentorIn, setIsMentorIn] = useState(false);
+  const [isMenteeIn, setIsMenteeIn] = useState(false);
+
+
   const [call, setCall] = useState('no call')
   const [consultData, setConsultData] = useState()
   const [isMicOn, setIsMicOn] = useState(false)
@@ -48,6 +53,7 @@ function Session() {
   const [isLocalScreenShowing, setIsLocalScreenShowing] = useState(false)
   const [isRemoteScreenShowing, setIsRemoteScreenShowing] = useState(false)
   const [isScreenShowing, setIsScreenShowing] = useState(false)
+
 
   const [menteeData, setMenteeData] = useState()
   const [mentorData, setMentorData] = useState()
@@ -58,7 +64,15 @@ function Session() {
 
 
   useEffect(async () => {
-    await API.getConsult(params.id).then((res) => {
+    console.log(JSON.parse(localStorage.getItem('IsMentorMode')))
+    if (JSON.parse(localStorage.getItem('IsMentorMode')) === true) {
+      setAmIMentor(true)
+      setIsMentorIn(true)
+    } else {
+      setIsMenteeIn(true)
+    }
+
+    let consultRes = await API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
         if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
           calleeId = res.data.MentorID
@@ -69,23 +83,46 @@ function Session() {
         mentorId = res.data.MentorID
         setConsultData(res.data)
 
-        const [_, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
+        const [tempStartDate, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
         setEndDate(tempEndDate)
 
-        // const tempIntervalId = setInterval(() => {
-        //   setLeftTime(new Date(tempEndDate.getTime() - new Date().getTime()))
-        //   console.log('tempEndDate.getTime() - new Date().getTime()', tempEndDate.getTime() - new Date().getTime() - 149132473)
-        //   if (tempEndDate.getTime() - new Date().getTime() - 149132473 <= 0) {
-        //     clearInterval(tempIntervalId)
-        //     if (call !== 'no call') API.Sendbird.stopCalling(call)
-        //     alert('통화가 종료되었습니다')
-        //     navigater(`/review/${params.id}`)
-        //   }
-        // }, 1000);
-        // setIntervalId(tempIntervalId)
+        const tempIntervalId = setInterval(() => {
+          const tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
+          const tempPassTime = new Date(new Date().getTime() - tempStartDate.getTime())
+          setLeftTime(tempLeftTime)
+          // 1분후
+          if (tempPassTime.getMinutes() === 1 && tempPassTime.getSeconds() === 0 && (!isMentorIn || !isMenteeIn)) {
+            let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
+            if (amIMentor) {
+              tempLatenessParams.mentorLateness = false
+            } else {
+              tempLatenessParams.menteeLateness = false
+            }
+            API.postConsultLateness(tempLatenessParams)
+          } else if (tempPassTime.getMinutes() === 5 && tempPassTime.getSeconds() === 59 && (!isMentorIn || !isMenteeIn)) {
+            // 5분59초 후
+            let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
+            if (amIMentor) {
+              tempNoshowParams.mentorNoshow = false
+            } else {
+              tempNoshowParams.menteeNoshow = false
+            }
+            API.postConsultNoshow(tempNoshowParams)
+          } else if (tempEndDate <= new Date()) {
+            console.log('통화가 종료되었습니다')
+            // API.patchConsultDone(res.data.ID)
+            console.log('call', call)
+            API.postCallDone(call._callId)
+            // clearInterval(tempIntervalId)
+            // if (call !== 'no call') API.Sendbird.stopCalling(call)
+            // alert('통화가 종료되었습니다')
+            // navigater(`/review/${params.id}`)
+          }
+        }, 1000);
+        setIntervalId(tempIntervalId)
       }
+      return res
     })
-
 
     API.getAccountMentee(menteeId).then((res) => {
       if (res.status === 200) {
@@ -105,12 +142,34 @@ function Session() {
     await API.Sendbird.checkAuth(+localStorage.getItem("UserID"), localStorage.getItem("SendbirdToken"))
     API.Sendbird.connectWebSocket().then(() => {
       setTimeout(() => {
-        API.Sendbird.makeACall(calleeId, setCall)
+        API.Sendbird.makeACall(
+          calleeId,
+          ({ call: callProps }) => {
+            setCall(_ => callProps)
+            console.log('setCall(callProps)', callProps)
+            API.postCallNews(
+              {
+                calleeId: calleeId,
+                callerId: +localStorage.getItem("UserID"),
+                consultId: consultRes.data.ID,
+                callId: callProps._callId
+              }
+            )
+          })
       }, 1000)
 
     })
     API.Sendbird.addEventHandler()
-    API.Sendbird.receiveACall(setCall)
+    API.Sendbird.receiveACall(({ callProps }) => {
+      setCall(_ => callProps)
+      if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+        setIsMenteeIn(true)
+      }
+      else {
+        setIsMentorIn(true)
+      }
+      API.postCallStart(callProps._callId)
+    })
   }, [])
 
   usePrompt('dd', true, () => {
@@ -144,7 +203,7 @@ function Session() {
         <TextHeading4 style={{ fontFamily: 'Noto Sans KR' }}>커리어다이브</TextHeading4>
       </Flex>
 
-      <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 300px)' }}>
+      <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 190px)' }}>
         <ReflexElement className="left-pane" >
           <div style={{ padding: 24 }}>
             {consultData !== undefined &&
@@ -169,20 +228,19 @@ function Session() {
 
           {!isScreenShowing && !isLocalScreenShowing && !isRemoteScreenShowing &&
             <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 24, height: '90%', justifyContent: 'space-between' }}>
-              <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center' }}>
+              {isMenteeIn && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginBottom: '15px' }}>
                 <ColumnAlignCenterFlex >
                   <ProfileImg src={testMentorImage} alt="profile-image" />
                   <TextSubtitle1>{menteeData && menteeData.User && menteeData.User.Nickname}</TextSubtitle1>
                 </ColumnAlignCenterFlex>
-              </Card>
-              <EmptyHeight height={'30px'} />
-              <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center' }}>
+              </Card>}
+              {isMentorIn && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginTop: '15px' }}>
                 <ColumnAlignCenterFlex>
                   <ProfileImg src={testMentorImage} alt="profile-image" />
                   <TextSubtitle1>{mentorData && mentorData.Nickname}</TextSubtitle1>
                   <TextBody1>{mentorData && mentorData.CompName} · {mentorData && mentorData.DivisInComp} · {mentorData && mentorData.Job}</TextBody1>
                 </ColumnAlignCenterFlex>
-              </Card>
+              </Card>}
             </VerticalFlex>}
         </ReflexElement>
       </ReflexContainer>
@@ -190,13 +248,13 @@ function Session() {
       <EmptyHeight height={'30px'} />
 
       <Flex style={{ width: '100%', padding: '0 24px 0 24px', boxSizing: 'border-box' }}>
-        <Card no_divider={'true'} >
+        <Card no_divider={'true'} style={{ padding: '16px 24px' }}>
           <Flex style={{ justifyContent: 'space-between', width: '100%' }}>
             <VerticalFlex>
               <TextCaption style={{ fontWeight: '400' }}>
                 남은 시간
               </TextCaption>
-              <TextHeading4>{leftTime && `${leftTime.getMinutes()}:${leftTime.getSeconds()}`}</TextHeading4>
+              <TextHeading4>{leftTime && `${leftTime.getMinutes().toString().padStart(2, '0')}:${leftTime.getSeconds().toString().padStart(2, '0')}`}</TextHeading4>
             </VerticalFlex>
             <Flex>
               <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}
@@ -239,7 +297,6 @@ function Session() {
                       call.stopVideo();
                       call.stopScreenShare();
                       setIsScreenSharing(false)
-
                       setIsScreenShowing(false)
                       setIsLocalScreenShowing(false)
                       setIsRemoteScreenShowing(false)
@@ -247,7 +304,6 @@ function Session() {
                       const res = await call.startScreenShare();
                       call.startVideo();
                       setIsScreenSharing(true)
-
                       setIsScreenShowing(true)
                       setIsLocalScreenShowing(true)
                       setIsRemoteScreenShowing(false)

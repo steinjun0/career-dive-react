@@ -28,12 +28,22 @@ export const createDateFromHourMin = (date, startTime, endTime) => {
   let startDate = new Date(date)
   let endDate = new Date(date)
 
+  startDate.setHours(0)
+  endDate.setHours(0)
   let startHour = +startTime.slice(0, startTime.indexOf(':'))
   let startMin = +startTime.slice(startTime.indexOf(':') + 1)
 
   let endHour = +endTime.slice(0, endTime.indexOf(':'))
   let endMin = +endTime.slice(endTime.indexOf(':') + 1)
   return [addMinute(startDate, (startHour * 60 + startMin)), addMinute(endDate, (endHour * 60 + endMin))]
+}
+
+export const getDateString = (date) => {
+  let year = date.getFullYear().toString().slice(2)
+  let month = (date.getMonth() + 1).toString().padStart(2, '0')
+  let dateStr = date.getDate().toString().padStart(2, '0')
+
+  return `${year}.${month}.${dateStr} (${getDayInKorean(date)})`
 }
 
 export const getKoreanTimeString = (date) => {

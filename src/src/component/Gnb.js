@@ -124,8 +124,11 @@ const onClickLogout = () => {
   // navigate('/')
 }
 
+const gnbDisableUrl = ['/session']
+
 function Gnb() {
   const location = useLocation().pathname;
+
   const navigator = useNavigate();
 
   const isPresentUrl = (url) => {
@@ -167,172 +170,178 @@ function Gnb() {
   }, [location])
 
   return (
-    <GnbFullWidthWrapper>
-      <GnbWrapper>
+    <div>
+      {
+        !gnbDisableUrl.map((e) => location.includes(e)).includes(true) ? <GnbFullWidthWrapper>
+          <GnbWrapper>
 
-        <LeftTopGnb>
-          <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
-            {isMentorMode ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
+            <LeftTopGnb>
+              <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
+                {isMentorMode ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
 
-          </LinkNoDeco>
-        </LeftTopGnb>
+              </LinkNoDeco>
+            </LeftTopGnb>
 
-        {isLogin && isMentorMode && <CenterGnb>
-          <CenterMenu>
-            <LinkNoDeco to={`/mentor`}>
-              <GnbLi present_link={isPresentUrl(`/mentor`).toString()}>상담</GnbLi>
-            </LinkNoDeco>
-            <EmptyWidth width={'32px'} />
-            <LinkNoDeco to={`/mentor/calendar`}>
-              <GnbLi present_link={isPresentUrl(`/mentor/calendar`).toString()}>일정 등록</GnbLi>
-            </LinkNoDeco>
-            <EmptyWidth width={'32px'} />
-            <LinkNoDeco to={`/mentor`}>
-              <GnbLi>실적</GnbLi>
-            </LinkNoDeco>
-          </CenterMenu>
-        </CenterGnb>}
-        {isLogin && !isMentorMode && <CenterGnb>
-          <CenterMenu>
-            <LinkNoDeco to={`/mentee/schedule`}>
-              <GnbLi present_link={isPresentUrl(`/mentee/schedule`).toString()}>내 상담</GnbLi>
-            </LinkNoDeco>
-            <EmptyWidth width={'32px'} />
-            <LinkNoDeco to={`/mentee/schedule`}>
-              <GnbLi>찜한 멘토</GnbLi>
-            </LinkNoDeco>
-            <EmptyWidth width={'32px'} />
-            <LinkNoDeco to={`/mentee/schedule`}>
-              <GnbLi>상담 후기</GnbLi>
-            </LinkNoDeco>
-
-          </CenterMenu>
-        </CenterGnb>}
-
-        {!isLogin &&
-          <RightTopGnb>
-            <LinkNoDeco to={'/login'}>
-              <CustomButton height={'48px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
-            </LinkNoDeco>
-          </RightTopGnb>
-        }
-
-        {isLogin && <RightTopGnb>
-          {isMentorMode && <LinkNoDeco to={'/'}>
-            <CustomButton
-              width={'83px'}
-              height={'43px'}
-              style={{ marginRight: 24 }}
-              background_color={colorBackgroundGrayLight}
-              custom_color={colorCareerDiveBlue}
-              onClick={
-                () => {
-                  setIsMentorMode(false)
-                  localStorage.setItem('IsMentorMode', false)
-                }
-              }
-            >
-              <TextSubtitle2>
-                멘티 모드
-              </TextSubtitle2>
-            </CustomButton>
-          </LinkNoDeco>}
-          {!isMentorMode && !isMentor && <LinkNoDeco to={'/mentor/register'}>
-            <CustomButton
-              width={'83px'}
-              height={'48px'}
-              padding={'12px 14px'}
-              style={{ marginRight: 24, }}
-              background_color={colorBackgroundGrayLight}
-              custom_color={colorCareerDiveBlue}>
-              <TextSubtitle2>
-                멘토 되기
-              </TextSubtitle2>
-            </CustomButton>
-          </LinkNoDeco>}
-          {!isMentorMode && isMentor && <LinkNoDeco to={'/mentor'}>
-            <CustomButton
-              width={'83px'}
-              height={'48px'}
-              padding={'12px 14px'}
-              style={{ marginRight: 24, }}
-              background_color={colorBackgroundGrayLight}
-              custom_color={colorCareerDiveBlue}
-              onClick={
-                () => {
-                  setIsMentorMode(true)
-                  localStorage.setItem('IsMentorMode', true)
-                }
-              }
-            >
-              <TextSubtitle2>
-                멘토 모드
-              </TextSubtitle2>
-            </CustomButton>
-          </LinkNoDeco>}
-
-
-          <NotificationsNoneIcon style={{ marginRight: 24 }} />
-          <Flex
-            style={{ position: 'relative' }}
-            onMouseEnter={() => {
-              isMouseOnProfileMenuRef.current = true
-              setIsHideProfileMenu(false)
-            }}
-            onMouseLeave={() => {
-              isMouseOnProfileMenuRef.current = false
-              setTimeout(() => {
-                setIsHideProfileMenu(!isMouseOnProfileMenuRef.current)
-              }, 300);
-            }}>
-            <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigator(`${isMentorMode ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
-            {isMentorMode ?
-              <ProfileMenu is_hide={String(isHideProfileMenu)}>
-                <LinkNoDeco to={`${'mentor'}/mypage/profile`}>
-                  <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>멘토 프로필</TextSubtitle2>
+            {isLogin && isMentorMode && <CenterGnb>
+              <CenterMenu>
+                <LinkNoDeco to={`/mentor`}>
+                  <GnbLi present_link={isPresentUrl(`/mentor`).toString()}>상담</GnbLi>
+                </LinkNoDeco>
+                <EmptyWidth width={'32px'} />
+                <LinkNoDeco to={`/mentor/calendar`}>
+                  <GnbLi present_link={isPresentUrl(`/mentor/calendar`).toString()}>일정 등록</GnbLi>
+                </LinkNoDeco>
+                <EmptyWidth width={'32px'} />
+                <LinkNoDeco to={`/mentor`}>
+                  <GnbLi>실적</GnbLi>
+                </LinkNoDeco>
+              </CenterMenu>
+            </CenterGnb>}
+            {isLogin && !isMentorMode && <CenterGnb>
+              <CenterMenu>
+                <LinkNoDeco to={`/mentee/schedule`}>
+                  <GnbLi present_link={isPresentUrl(`/mentee/schedule`).toString()}>내 상담</GnbLi>
+                </LinkNoDeco>
+                <EmptyWidth width={'32px'} />
+                <LinkNoDeco to={`/mentee/schedule`}>
+                  <GnbLi>찜한 멘토</GnbLi>
+                </LinkNoDeco>
+                <EmptyWidth width={'32px'} />
+                <LinkNoDeco to={`/mentee/schedule`}>
+                  <GnbLi>상담 후기</GnbLi>
                 </LinkNoDeco>
 
-                <LinkNoDeco to={`${'mentor'}/mypage/account`}>
-                  <TextSubtitle2>계정</TextSubtitle2>
-                </LinkNoDeco>
-                <LinkNoDeco to={`${'mentor'}/mypage/review`}>
-                  <TextSubtitle2>대금 수령</TextSubtitle2>
-                </LinkNoDeco>
-                <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
-                <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
-                <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
-                  onClick={onClickLogout}>로그아웃</TextBody2>
-              </ProfileMenu>
-              :
-              <ProfileMenu is_hide={String(isHideProfileMenu)}>
-                <LinkNoDeco to={`${'mentee'}/mypage/profile`}>
-                  <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
-                </LinkNoDeco>
+              </CenterMenu>
+            </CenterGnb>}
 
-                <LinkNoDeco to={`${'mentee'}/mypage/account`}>
-                  <TextSubtitle2>계정</TextSubtitle2>
+            {!isLogin &&
+              <RightTopGnb>
+                <LinkNoDeco to={'/login'}>
+                  <CustomButton height={'48px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
                 </LinkNoDeco>
-                <LinkNoDeco to={`${'mentee'}/mypage/review`}>
-                  <TextSubtitle2>리뷰</TextSubtitle2>
-                </LinkNoDeco>
-                <LinkNoDeco to={`${'mentee'}/mypage/payment`}>
-                  <TextSubtitle2>결제 관리</TextSubtitle2>
-                </LinkNoDeco>
-                <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
-                <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
-                <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
-                  onClick={onClickLogout}>로그아웃</TextBody2>
-              </ProfileMenu>
+              </RightTopGnb>
             }
 
-          </Flex>
+            {isLogin && <RightTopGnb>
+              {isMentorMode && <LinkNoDeco to={'/'}>
+                <CustomButton
+                  width={'83px'}
+                  height={'43px'}
+                  style={{ marginRight: 24 }}
+                  background_color={colorBackgroundGrayLight}
+                  custom_color={colorCareerDiveBlue}
+                  onClick={
+                    () => {
+                      setIsMentorMode(false)
+                      localStorage.setItem('IsMentorMode', false)
+                    }
+                  }
+                >
+                  <TextSubtitle2>
+                    멘티 모드
+                  </TextSubtitle2>
+                </CustomButton>
+              </LinkNoDeco>}
+              {!isMentorMode && !isMentor && <LinkNoDeco to={'/mentor/register'}>
+                <CustomButton
+                  width={'83px'}
+                  height={'48px'}
+                  padding={'12px 14px'}
+                  style={{ marginRight: 24, }}
+                  background_color={colorBackgroundGrayLight}
+                  custom_color={colorCareerDiveBlue}>
+                  <TextSubtitle2>
+                    멘토 되기
+                  </TextSubtitle2>
+                </CustomButton>
+              </LinkNoDeco>}
+              {!isMentorMode && isMentor && <LinkNoDeco to={'/mentor'}>
+                <CustomButton
+                  width={'83px'}
+                  height={'48px'}
+                  padding={'12px 14px'}
+                  style={{ marginRight: 24, }}
+                  background_color={colorBackgroundGrayLight}
+                  custom_color={colorCareerDiveBlue}
+                  onClick={
+                    () => {
+                      setIsMentorMode(true)
+                      localStorage.setItem('IsMentorMode', true)
+                    }
+                  }
+                >
+                  <TextSubtitle2>
+                    멘토 모드
+                  </TextSubtitle2>
+                </CustomButton>
+              </LinkNoDeco>}
 
 
-        </RightTopGnb>}
+              <NotificationsNoneIcon style={{ marginRight: 24 }} />
+              <Flex
+                style={{ position: 'relative' }}
+                onMouseEnter={() => {
+                  isMouseOnProfileMenuRef.current = true
+                  setIsHideProfileMenu(false)
+                }}
+                onMouseLeave={() => {
+                  isMouseOnProfileMenuRef.current = false
+                  setTimeout(() => {
+                    setIsHideProfileMenu(!isMouseOnProfileMenuRef.current)
+                  }, 300);
+                }}>
+                <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigator(`${isMentorMode ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
+                {isMentorMode ?
+                  <ProfileMenu is_hide={String(isHideProfileMenu)}>
+                    <LinkNoDeco to={`${'mentor'}/mypage/profile`}>
+                      <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>멘토 프로필</TextSubtitle2>
+                    </LinkNoDeco>
+
+                    <LinkNoDeco to={`${'mentor'}/mypage/account`}>
+                      <TextSubtitle2>계정</TextSubtitle2>
+                    </LinkNoDeco>
+                    <LinkNoDeco to={`${'mentor'}/mypage/review`}>
+                      <TextSubtitle2>대금 수령</TextSubtitle2>
+                    </LinkNoDeco>
+                    <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
+                    <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
+                    <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
+                      onClick={onClickLogout}>로그아웃</TextBody2>
+                  </ProfileMenu>
+                  :
+                  <ProfileMenu is_hide={String(isHideProfileMenu)}>
+                    <LinkNoDeco to={`${'mentee'}/mypage/profile`}>
+                      <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
+                    </LinkNoDeco>
+
+                    <LinkNoDeco to={`${'mentee'}/mypage/account`}>
+                      <TextSubtitle2>계정</TextSubtitle2>
+                    </LinkNoDeco>
+                    <LinkNoDeco to={`${'mentee'}/mypage/review`}>
+                      <TextSubtitle2>리뷰</TextSubtitle2>
+                    </LinkNoDeco>
+                    <LinkNoDeco to={`${'mentee'}/mypage/payment`}>
+                      <TextSubtitle2>결제 관리</TextSubtitle2>
+                    </LinkNoDeco>
+                    <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
+                    <TextBody2 style={{ overflow: 'initial', }}>도움말</TextBody2>
+                    <TextBody2 style={{ overflow: 'initial', marginBottom: 24, cursor: 'pointer' }}
+                      onClick={onClickLogout}>로그아웃</TextBody2>
+                  </ProfileMenu>
+                }
+
+              </Flex>
 
 
-      </GnbWrapper>
-    </GnbFullWidthWrapper>
+            </RightTopGnb>}
+
+
+          </GnbWrapper>
+        </GnbFullWidthWrapper> :
+          <div style={{ marginTop: -80 }}></div>
+      }
+    </div>
+
   );
 }
 
