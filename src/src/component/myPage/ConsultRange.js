@@ -134,11 +134,11 @@ function ConsultRange({ mentorData }) {
       <Card
         title={
           <VerticalFlex>
-            상담 가능 영역
+            상담 가능 유형
           </VerticalFlex>
         }>
         <EmptyHeight height={'20px'} />
-        <TextSubtitle2>멘티에게 제공할 수 있는 상담 영역을 선택해주세요!</TextSubtitle2>
+        <TextSubtitle2>멘티에게 제공할 수 있는 상담 유형을 선택해주세요!</TextSubtitle2>
         <EmptyHeight height={'20px'} />
         <TextSubtitle2 color={colorCareerDiveBlue}>커리어 상담</TextSubtitle2>
         <EmptyHeight height={'14px'} />
@@ -154,7 +154,7 @@ function ConsultRange({ mentorData }) {
                     let temp = [...selectedBasicConsultContent]
                     temp.splice(temp.indexOf(e), 1)
                     if (temp.length <= 0 && selectedPremiumConsultContent <= 0) {
-                      alert('최소 하나의 상담 영역은 선택하여야 합니다')
+                      alert('최소 하나의 상담 유형은 선택하여야 합니다')
                     } else {
                       setSelectedBasicConsultContent([...temp]) // 그냥 temp를 하면 갱신되지 않음, 주소값이 같아서 그런듯
                     }
@@ -186,7 +186,7 @@ function ConsultRange({ mentorData }) {
                     let temp = [...selectedPremiumConsultContent]
                     temp.splice(temp.indexOf(e), 1)
                     if (temp.length <= 0 && selectedBasicConsultContent <= 0) {
-                      alert('최소 하나의 상담 영역은 선택하여야 합니다')
+                      alert('최소 하나의 상담 유형은 선택하여야 합니다')
                     } else {
                       setSelectedPremiumConsultContent([...temp]) // 그냥 temp를 하면 갱신되지 않음, 주소값이 같아서 그런듯
                     }
