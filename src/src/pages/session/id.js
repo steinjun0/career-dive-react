@@ -72,7 +72,7 @@ function Session() {
       setIsMenteeIn(true)
     }
 
-    await API.getConsult(params.id).then((res) => {
+    let consultRes = await API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
         if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
           calleeId = res.data.MentorID
@@ -83,23 +83,46 @@ function Session() {
         mentorId = res.data.MentorID
         setConsultData(res.data)
 
-        const [_, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
+        const [tempStartDate, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
         setEndDate(tempEndDate)
 
         const tempIntervalId = setInterval(() => {
-          setLeftTime(new Date(tempEndDate.getTime() - new Date().getTime()))
-          // console.log('tempEndDate.getTime() - new Date().getTime()', tempEndDate.getTime() - new Date().getTime() - 149132473)
-          // if (tempEndDate.getTime() - new Date().getTime() - 149132473 <= 0) {
-          //   clearInterval(tempIntervalId)
-          //   if (call !== 'no call') API.Sendbird.stopCalling(call)
-          //   alert('통화가 종료되었습니다')
-          //   navigater(`/review/${params.id}`)
-          // }
+          const tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
+          const tempPassTime = new Date(new Date().getTime() - tempStartDate.getTime())
+          setLeftTime(tempLeftTime)
+          // 1분후
+          if (tempPassTime.getMinutes() === 1 && tempPassTime.getSeconds() === 0 && (!isMentorIn || !isMenteeIn)) {
+            let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
+            if (amIMentor) {
+              tempLatenessParams.mentorLateness = false
+            } else {
+              tempLatenessParams.menteeLateness = false
+            }
+            API.postConsultLateness(tempLatenessParams)
+          } else if (tempPassTime.getMinutes() === 5 && tempPassTime.getSeconds() === 59 && (!isMentorIn || !isMenteeIn)) {
+            // 5분59초 후
+            let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
+            if (amIMentor) {
+              tempNoshowParams.mentorNoshow = false
+            } else {
+              tempNoshowParams.menteeNoshow = false
+            }
+            API.postConsultNoshow(tempNoshowParams)
+          } else if (tempEndDate <= new Date()) {
+            console.log('통화가 종료되었습니다')
+            // API.patchConsultDone(res.data.ID)
+            console.log('call', call)
+            API.postCallDone(call._callId)
+            // clearInterval(tempIntervalId)
+            // if (call !== 'no call') API.Sendbird.stopCalling(call)
+            // alert('통화가 종료되었습니다')
+            // navigater(`/review/${params.id}`)
+          }
         }, 1000);
         setIntervalId(tempIntervalId)
       }
+      return res
     })
-
 
     API.getAccountMentee(menteeId).then((res) => {
       if (res.status === 200) {
@@ -121,21 +144,31 @@ function Session() {
       setTimeout(() => {
         API.Sendbird.makeACall(
           calleeId,
-          ({ call }) => {
-            setCall(call)
+          ({ call: callProps }) => {
+            setCall(_ => callProps)
+            console.log('setCall(callProps)', callProps)
+            API.postCallNews(
+              {
+                calleeId: calleeId,
+                callerId: +localStorage.getItem("UserID"),
+                consultId: consultRes.data.ID,
+                callId: callProps._callId
+              }
+            )
           })
       }, 1000)
 
     })
     API.Sendbird.addEventHandler()
-    API.Sendbird.receiveACall(({ call }) => {
-      setCall(call)
+    API.Sendbird.receiveACall(({ callProps }) => {
+      setCall(_ => callProps)
       if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
         setIsMenteeIn(true)
       }
       else {
         setIsMentorIn(true)
       }
+      API.postCallStart(callProps._callId)
     })
   }, [])
 
@@ -221,7 +254,7 @@ function Session() {
               <TextCaption style={{ fontWeight: '400' }}>
                 남은 시간
               </TextCaption>
-              <TextHeading4>{leftTime && `${leftTime.getMinutes()}:${leftTime.getSeconds()}`}</TextHeading4>
+              <TextHeading4>{leftTime && `${leftTime.getMinutes().toString().padStart(2, '0')}:${leftTime.getSeconds().toString().padStart(2, '0')}`}</TextHeading4>
             </VerticalFlex>
             <Flex>
               <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}

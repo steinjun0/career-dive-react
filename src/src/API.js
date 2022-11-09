@@ -294,6 +294,33 @@ export default {
     return scheduleRes
   },
 
+
+  async postCallNews({ calleeId, callerId, consultId, callId }) {
+    const callNewRes = await this.postAxios(`${CAREER_DIVE_API_URL}/call/news`, { CalleeID: calleeId, CallerID: callerId, ConsultID: consultId, call_id: callId })
+    return callNewRes
+  },
+
+  async postCallStart(callId) {
+    const callStartRes = await this.postAxios(`${CAREER_DIVE_API_URL}/call/${callId}/start`)
+    return callStartRes
+  },
+
+  async postCallDone(callId) {
+    const callDoneRes = await this.postAxios(`${CAREER_DIVE_API_URL}/call/${callId}/done`)
+    return callDoneRes
+  },
+
+  async postConsultLateness({ consultId, menteeLateness, mentorLateness }) {
+    const consultLateRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/lateness`, { ConsultID: consultId, MenteeLateness: menteeLateness, MentorLateness: mentorLateness })
+    return consultLateRes
+  },
+
+  async postConsultNoshow({ consultId, menteeNoshow, mentorNoshow }) {
+    const consultNoshowRes = await this.postAxios(`${CAREER_DIVE_API_URL}/consult/noshow`, { ConsultID: consultId, MenteeNoshow: menteeNoshow, MentorNoshow: mentorNoshow })
+    return consultNoshowRes
+  },
+
+
   async patchAccount(userData) {
     const userRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/account/update`, userData)
     return userRes
@@ -432,6 +459,7 @@ export default {
         }
         else {
           console.log('dial succeeded')
+          onMakeACall({ call })
           call.stopVideo();
           call.muteMicrophone();
         }
@@ -459,7 +487,8 @@ export default {
       call.onRemoteVideoSettingsChanged = (call) => {
         console.log('onRemoteVideoSettingsChanged!')
       };
-      onMakeACall({ call })
+
+
       return call
     },
 
