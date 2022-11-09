@@ -36,6 +36,14 @@ export const createDateFromHourMin = (date, startTime, endTime) => {
   return [addMinute(startDate, (startHour * 60 + startMin)), addMinute(endDate, (endHour * 60 + endMin))]
 }
 
+export const getDateString = (date) => {
+  let year = date.getFullYear().toString().slice(2)
+  let month = (date.getMonth() + 1).toString().padStart(2, '0')
+  let dateStr = date.getDate().toString().padStart(2, '0')
+
+  return `${year}.${month}.${dateStr} (${getDayInKorean(date)})`
+}
+
 export const getKoreanTimeString = (date) => {
   let amOrPmString = ''
   let hour = date.getHours()
