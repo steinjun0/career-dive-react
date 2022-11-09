@@ -412,7 +412,7 @@ export default {
       });
     },
 
-    makeACall(calleeId, setCall) {
+    makeACall(calleeId, onMakeACall) {
       const dialParams = {
         userId: `${calleeId}`,
         isVideoCall: true,
@@ -459,11 +459,11 @@ export default {
       call.onRemoteVideoSettingsChanged = (call) => {
         console.log('onRemoteVideoSettingsChanged!')
       };
-      setCall(call)
+      onMakeACall({ call })
       return call
     },
 
-    receiveACall(setCall) {
+    receiveACall(onReceiveACall) {
       SendBirdCall.addListener(2, {
         onRinging: (call) => {
           call.onEstablished = (call) => {
@@ -500,7 +500,7 @@ export default {
           };
 
           call.accept(acceptParams);
-          setCall(call)
+          onReceiveACall({ call })
         }
       });
     },

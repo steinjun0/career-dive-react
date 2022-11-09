@@ -28,6 +28,8 @@ export const createDateFromHourMin = (date, startTime, endTime) => {
   let startDate = new Date(date)
   let endDate = new Date(date)
 
+  startDate.setHours(0)
+  endDate.setHours(0)
   let startHour = +startTime.slice(0, startTime.indexOf(':'))
   let startMin = +startTime.slice(startTime.indexOf(':') + 1)
 

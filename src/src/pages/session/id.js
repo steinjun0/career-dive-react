@@ -41,6 +41,11 @@ function Session() {
   let calleeId = -1;
   let mentorId;
   let menteeId;
+  const [amIMentor, setAmIMentor] = useState(false);
+  const [isMentorIn, setIsMentorIn] = useState(false);
+  const [isMenteeIn, setIsMenteeIn] = useState(false);
+
+
   const [call, setCall] = useState('no call')
   const [consultData, setConsultData] = useState()
   const [isMicOn, setIsMicOn] = useState(false)
@@ -48,6 +53,7 @@ function Session() {
   const [isLocalScreenShowing, setIsLocalScreenShowing] = useState(false)
   const [isRemoteScreenShowing, setIsRemoteScreenShowing] = useState(false)
   const [isScreenShowing, setIsScreenShowing] = useState(false)
+
 
   const [menteeData, setMenteeData] = useState()
   const [mentorData, setMentorData] = useState()
@@ -58,6 +64,14 @@ function Session() {
 
 
   useEffect(async () => {
+    console.log(JSON.parse(localStorage.getItem('IsMentorMode')))
+    if (JSON.parse(localStorage.getItem('IsMentorMode')) === true) {
+      setAmIMentor(true)
+      setIsMentorIn(true)
+    } else {
+      setIsMenteeIn(true)
+    }
+
     await API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
         if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
@@ -72,17 +86,17 @@ function Session() {
         const [_, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
         setEndDate(tempEndDate)
 
-        // const tempIntervalId = setInterval(() => {
-        //   setLeftTime(new Date(tempEndDate.getTime() - new Date().getTime()))
-        //   console.log('tempEndDate.getTime() - new Date().getTime()', tempEndDate.getTime() - new Date().getTime() - 149132473)
-        //   if (tempEndDate.getTime() - new Date().getTime() - 149132473 <= 0) {
-        //     clearInterval(tempIntervalId)
-        //     if (call !== 'no call') API.Sendbird.stopCalling(call)
-        //     alert('통화가 종료되었습니다')
-        //     navigater(`/review/${params.id}`)
-        //   }
-        // }, 1000);
-        // setIntervalId(tempIntervalId)
+        const tempIntervalId = setInterval(() => {
+          setLeftTime(new Date(tempEndDate.getTime() - new Date().getTime()))
+          // console.log('tempEndDate.getTime() - new Date().getTime()', tempEndDate.getTime() - new Date().getTime() - 149132473)
+          // if (tempEndDate.getTime() - new Date().getTime() - 149132473 <= 0) {
+          //   clearInterval(tempIntervalId)
+          //   if (call !== 'no call') API.Sendbird.stopCalling(call)
+          //   alert('통화가 종료되었습니다')
+          //   navigater(`/review/${params.id}`)
+          // }
+        }, 1000);
+        setIntervalId(tempIntervalId)
       }
     })
 
@@ -105,12 +119,24 @@ function Session() {
     await API.Sendbird.checkAuth(+localStorage.getItem("UserID"), localStorage.getItem("SendbirdToken"))
     API.Sendbird.connectWebSocket().then(() => {
       setTimeout(() => {
-        API.Sendbird.makeACall(calleeId, setCall)
+        API.Sendbird.makeACall(
+          calleeId,
+          ({ call }) => {
+            setCall(call)
+          })
       }, 1000)
 
     })
     API.Sendbird.addEventHandler()
-    API.Sendbird.receiveACall(setCall)
+    API.Sendbird.receiveACall(({ call }) => {
+      setCall(call)
+      if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+        setIsMenteeIn(true)
+      }
+      else {
+        setIsMentorIn(true)
+      }
+    })
   }, [])
 
   usePrompt('dd', true, () => {
@@ -169,20 +195,19 @@ function Session() {
 
           {!isScreenShowing && !isLocalScreenShowing && !isRemoteScreenShowing &&
             <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 24, height: '90%', justifyContent: 'space-between' }}>
-              <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center' }}>
+              {isMenteeIn && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginBottom: '15px' }}>
                 <ColumnAlignCenterFlex >
                   <ProfileImg src={testMentorImage} alt="profile-image" />
                   <TextSubtitle1>{menteeData && menteeData.User && menteeData.User.Nickname}</TextSubtitle1>
                 </ColumnAlignCenterFlex>
-              </Card>
-              <EmptyHeight height={'30px'} />
-              <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center' }}>
+              </Card>}
+              {isMentorIn && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginTop: '15px' }}>
                 <ColumnAlignCenterFlex>
                   <ProfileImg src={testMentorImage} alt="profile-image" />
                   <TextSubtitle1>{mentorData && mentorData.Nickname}</TextSubtitle1>
                   <TextBody1>{mentorData && mentorData.CompName} · {mentorData && mentorData.DivisInComp} · {mentorData && mentorData.Job}</TextBody1>
                 </ColumnAlignCenterFlex>
-              </Card>
+              </Card>}
             </VerticalFlex>}
         </ReflexElement>
       </ReflexContainer>
@@ -239,7 +264,6 @@ function Session() {
                       call.stopVideo();
                       call.stopScreenShare();
                       setIsScreenSharing(false)
-
                       setIsScreenShowing(false)
                       setIsLocalScreenShowing(false)
                       setIsRemoteScreenShowing(false)
@@ -247,7 +271,6 @@ function Session() {
                       const res = await call.startScreenShare();
                       call.startVideo();
                       setIsScreenSharing(true)
-
                       setIsScreenShowing(true)
                       setIsLocalScreenShowing(true)
                       setIsRemoteScreenShowing(false)
