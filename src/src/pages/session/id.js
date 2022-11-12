@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import RequestView from "../../component/mentor/apply/RequestView";
 import { Card } from "../../util/Card";
-import { CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex, colorBackgroundGrayLight, EmptyWidth, colorCareerDivePink, colorBackgroundCareerDivePink, colorTextDisabled } from "../../util/styledComponent";
+import { colorTextLight, CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex, colorBackgroundGrayLight, EmptyWidth, colorCareerDivePink, colorBackgroundCareerDivePink, colorTextDisabled, colorBackgroundGrayDark, colorBackgroundGrayMedium, TextSubtitle2, colorBackgroundCareerDiveBlue } from "../../util/styledComponent";
 import testMentorImage from "assets/img/testMentorImage.png";
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
 import MicOffOutlinedIcon from '@mui/icons-material/MicOffOutlined';
 import ScreenShareOutlinedIcon from '@mui/icons-material/ScreenShareOutlined';
 import StopScreenShareOutlinedIcon from '@mui/icons-material/StopScreenShareOutlined';
+
+import ScreenCheckIcon from "assets/icon/screenCheck.svg";
+import OppositeScreenIcon from "assets/icon/oppositeScreen.svg";
+import OppositeScreenOpacityIcon from "assets/icon/oppositeScreenOpacity.svg";
+import MyScreenIcon from "assets/icon/myScreen.svg";
+import MyScreenOpacityIcon from "assets/icon/myScreenOpacity.svg";
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
@@ -53,6 +60,7 @@ function Session() {
   const [isLocalScreenShowing, setIsLocalScreenShowing] = useState(false)
   const [isRemoteScreenShowing, setIsRemoteScreenShowing] = useState(false)
   const [isScreenShowing, setIsScreenShowing] = useState(false)
+  const [isSelectingMonitor, setIsSelectingMonitor] = useState(false)
 
 
   const [menteeData, setMenteeData] = useState()
@@ -250,14 +258,14 @@ function Session() {
       <Flex style={{ width: '100%', padding: '0 24px 0 24px', boxSizing: 'border-box' }}>
         <Card no_divider={'true'} style={{ padding: '16px 24px' }}>
           <Flex style={{ justifyContent: 'space-between', width: '100%' }}>
-            <VerticalFlex>
+            <VerticalFlex style={{ alignItems: 'center' }}>
               <TextCaption style={{ fontWeight: '400' }}>
                 남은 시간
               </TextCaption>
               <TextHeading4>{leftTime && `${leftTime.getMinutes().toString().padStart(2, '0')}:${leftTime.getSeconds().toString().padStart(2, '0')}`}</TextHeading4>
             </VerticalFlex>
-            <Flex>
-              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}
+            <Flex style={{ alignItems: 'center' }}>
+              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '40px', height: '40px', padding: 0 }}
                 onClick={() => {
                   if (isMicOn) {
                     call.muteMicrophone();
@@ -266,10 +274,9 @@ function Session() {
                   }
                   setIsMicOn(!isMicOn)
                 }}>
-                {isMicOn ? <MicNoneOutlinedIcon /> : <MicOffOutlinedIcon />}
+                {isMicOn ? <MicNoneOutlinedIcon fontSize="small" /> : <MicOffOutlinedIcon fontSize="small" />}
               </Button>
-              <EmptyWidth width={'16px'} />
-              {/* <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}
+              {/* <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '40px', height: '40px', padding: 0 }}
                 onClick={async () => {
                   if (isMentor) {
                     try {
@@ -290,7 +297,7 @@ function Session() {
                 {isScreenSharing ? <ScreenShareOutlinedIcon /> : <StopScreenShareOutlinedIcon />}
               </Button> */}
               <EmptyWidth width={'16px'} />
-              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}
+              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '40px', height: '40px', padding: 0 }}
                 onClick={async () => {
                   try {
                     if (isScreenSharing) {
@@ -312,39 +319,72 @@ function Session() {
                     alert('통화가 연결되지 않았습니다! 상대방이 들어오지 않았다면 기다려주세요.')
                   }
                 }}>
-                내 화면 공유하기(토글)
+                {isScreenSharing ? <ScreenShareOutlinedIcon fontSize="small" /> : <StopScreenShareOutlinedIcon fontSize="small" />}
               </Button>
               <EmptyWidth width={'16px'} />
-              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}
-                onClick={async () => {
-                  setIsScreenShowing(true)
-                  setIsLocalScreenShowing(true)
-                  setIsRemoteScreenShowing(false)
-                }}>
-                내 화면 보기
-              </Button>
-              <EmptyWidth width={'16px'} />
-              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}
-                onClick={async () => {
-                  setIsScreenShowing(true)
-                  setIsLocalScreenShowing(false)
-                  setIsRemoteScreenShowing(true)
-                }}>
-                상대방 화면 보기
-              </Button>
-              <EmptyWidth width={'16px'} />
-              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}
-                onClick={async () => {
-                  setIsScreenShowing(false)
-                  setIsLocalScreenShowing(false)
-                  setIsRemoteScreenShowing(false)
-                }}>
-                기본 화면 보기
-              </Button>
-              <EmptyWidth width={'16px'} />
-              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '48px', padding: 0 }}>
+              <Flex style={{ maxWidth: isSelectingMonitor ? 446 : 115, overflow: 'hidden', borderRadius: 24, transition: 'all ease-in 0.25s' }}>
+                <Flex style={{ alignItems: 'center', minWidth: 446, backgroundColor: colorBackgroundGrayLight, borderRadius: '24px' }}>
+                  <Button style={{
+                    backgroundColor: isSelectingMonitor ? colorBackgroundGrayMedium : colorBackgroundGrayLight,
+                    borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px'
+                  }}
+                    onClick={async () => {
+                      setIsSelectingMonitor(!isSelectingMonitor)
+                    }}>
+                    <img src={ScreenCheckIcon} alt={'screenCheck'} width='20px' />
+                    <EmptyWidth width={'8px'} />
+                    <TextSubtitle1 color={colorBackgroundGrayDark}>
+                      화면 선택
+                    </TextSubtitle1>
+                  </Button>
+                  <EmptyWidth width={'8px'} />
+                  <Button style={{ backgroundColor: isRemoteScreenShowing ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px' }}
+                    onClick={async () => {
+                      setIsScreenShowing(true)
+                      setIsLocalScreenShowing(false)
+                      setIsRemoteScreenShowing(true)
+                    }}>
+                    <img src={OppositeScreenIcon} alt={'oppositeScreen'} width='20px' />
+                    <EmptyWidth width={'8px'} />
+                    <TextSubtitle2 color={colorTextLight}>
+                      상대 화면
+                    </TextSubtitle2>
+                  </Button>
+
+                  <EmptyWidth width={'8px'} />
+                  <Button style={{ backgroundColor: isLocalScreenShowing ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px' }}
+                    onClick={async () => {
+                      setIsScreenShowing(true)
+                      setIsLocalScreenShowing(true)
+                      setIsRemoteScreenShowing(false)
+                    }}>
+                    <img src={MyScreenIcon} alt={'oppositeScreen'} width='20px' />
+                    <EmptyWidth width={'8px'} />
+                    <TextSubtitle2 color={colorTextLight}>
+                      내 화면
+                    </TextSubtitle2>
+                  </Button>
+                  <EmptyWidth width={'8px'} />
+                  <Button style={{ backgroundColor: !isScreenShowing ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px' }}
+                    onClick={async () => {
+                      setIsScreenShowing(false)
+                      setIsLocalScreenShowing(false)
+                      setIsRemoteScreenShowing(false)
+                    }}>
+                    <RestartAltIcon fontSize="small" />
+                    <EmptyWidth width={'8px'} />
+                    <TextSubtitle2 color={colorTextLight}>
+                      기본 화면
+                    </TextSubtitle2>
+                  </Button>
+                </Flex>
+              </Flex>
+
+
+              {/* <EmptyWidth width={'16px'} />
+              <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px' }}>
                 <MoreVertIcon />
-              </Button>
+              </Button> */}
 
 
             </Flex>
@@ -355,7 +395,7 @@ function Session() {
             > 상담 종료 </CustomButton>
           </Flex>
         </Card>
-      </Flex>
+      </Flex >
       <EmptyHeight height={'30px'} />
 
 
