@@ -210,7 +210,7 @@ function Introduction({ mentorConsultContents }) {
           </TextSubtitle2>
         </Flex>
         <EmptyHeight height={'8px'} />
-        <TextHeading6>
+        <TextHeading6 style={{ marginLeft: 'auto' }}>
           {formatMoney(priceTable[`${consultingTime}-${consultCategory}-${isFilePreOpen}`][1], 0)}원
         </TextHeading6>
 
