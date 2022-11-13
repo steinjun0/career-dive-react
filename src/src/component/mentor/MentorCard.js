@@ -42,6 +42,7 @@ function MentorCard({
         }
         no_divider="true"
         min_width="228px"
+        max_width="228px"
       >
         <EmptyHeight height={'6px'} />
         <TextBody2>{department}</TextBody2>
@@ -63,17 +64,19 @@ function MentorCard({
           </TagMedium>
           <EmptyHeight height={'24px'} />
           {isShowRating && <CustomRating value={rating}></CustomRating>}
-          {isShowTag &&
-            <Flex>
+          {isShowTag && tags.length !== 0 ?
+            <Flex style={{ justifyContent: 'center', maxWidth: '100%' }}>
               {tags.map((e, i) =>
                 <TextBody2
                   key={i}
-                  style={{ marginRight: i !== (tags.length - 1) && '8px' }}
+                  style={{ marginRight: i !== (tags.length - 1) && '8px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
                   line_height={'18px'}
                   color={colorTextLight}>
                   #{e}
                 </TextBody2>)}
             </Flex>
+            :
+            <EmptyHeight height="18px" />
           }
           <EmptyHeight height={'12px'} />
         </VerticalFlex>
