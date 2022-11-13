@@ -33,11 +33,11 @@ const consultContents = {
 
 const contentGuideObject = {
   '면접 대비': `경력, 스펙 그리고 자소서를 토대로 한 예상 면접 질문을 제공합니다.`,
-  '자소서 구성': `${localStorage.getItem('UserID')}님의 경력과 스펙을 토대로 자기소개서 구성을 도와줍니다.`,
-  '자소서 첨삭': `${localStorage.getItem('UserID')}님이 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.`,
-  '포트폴리오 첨삭': `${localStorage.getItem('UserID')}님이 작성한 초안을 토대로 구성 및 내용 등에 관한 피드백을 제공합니다. `,
-  '이력서 첨삭': ``,
-  'CV/CL 첨삭': `${localStorage.getItem('UserID')}님이 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.`,
+  '자소서 구성': `${localStorage.getItem('Nickname')}님의 경력과 스펙을 토대로 자기소개서 구성을 도와줍니다.`,
+  '자소서 첨삭': `${localStorage.getItem('Nickname')}님이 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공합니다.`,
+  '포트폴리오 첨삭': `${localStorage.getItem('Nickname')}님이 작성한 초안을 토대로 구성 및 내용 등에 관한 피드백을 제공합니다. `,
+  '이력서 첨삭': `멘티 이력서의 구성, 내용 그리고 단어 표현 등에 관한 구체적인 조언을 제공해요.`,
+  'CV/CL 첨삭': `멘티 CV/CL의 구성, 내용 그리고 단어 표현 등에 관한 구체적인 조언을 제공해요.`,
   '코드 리뷰': `멘토는 작성된 코드를 토대로 피드백을 제공합니다.`
 }
 
@@ -210,7 +210,7 @@ function Introduction({ mentorConsultContents }) {
           </TextSubtitle2>
         </Flex>
         <EmptyHeight height={'8px'} />
-        <TextHeading6>
+        <TextHeading6 style={{ marginLeft: 'auto' }}>
           {formatMoney(priceTable[`${consultingTime}-${consultCategory}-${isFilePreOpen}`][1], 0)}원
         </TextHeading6>
 

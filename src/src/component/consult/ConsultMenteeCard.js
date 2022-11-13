@@ -84,7 +84,7 @@ function ConsultMenteeCard({ consult, requestFormOnClick, changeOnClick, enterOn
         <VerticalFlex>
           <Flex style={{ marginBottom: '4px' }}>
             <TextSubtitle2>
-              {consult.Job}
+              {consult.JobInComp}
             </TextSubtitle2>
             <TextBody2 style={{ margin: '0 4px' }}>
               ·

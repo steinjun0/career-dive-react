@@ -155,7 +155,7 @@ function RequestView({ consultData, menteeIntroduce, urlLink }) {
           <EmptyHeight height='16px' />
           <VerticalFlex>
             {consultData.ConsultFileList.map((e, i) => {
-              return <a key={i} style={{ color: 'initial' }} href={e.Url} download={true}><UnderlineText>{e.Name}</UnderlineText></a>
+              return <a key={i} style={{ color: 'initial' }} href={e.Url} target="_blank" download={true}><UnderlineText>{e.Name}</UnderlineText></a>
             })}
           </VerticalFlex>
         </VerticalFlex>}

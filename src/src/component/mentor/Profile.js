@@ -121,17 +121,17 @@ function MentorProfile({ name = '', discription = '', id = -1 }) {
         <EmptyHeight height='8px'></EmptyHeight>
         <TagMedium style={{ padding: '0 8px' }} color={colorCareerDiveBlue} background_color={colorBackgroundCareerDiveBlue}><TextButton>현직자</TextButton></TagMedium>
       </ProfileTexts>
-      <Buttons>
+      {!JSON.parse(localStorage.getItem("IsMentorMode")) && <Buttons>
         <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
-        {!location.pathname.includes('mentee/request/form') &&
-          <ApplyMentoringButton
-            disableElevation
-            style={{ marginLeft: 12 }}
-            onClick={() => { navigater(`/mentee/request/${id}`) }}
-          >
-            상담 신청
-          </ApplyMentoringButton>}
-      </Buttons>
+
+        {!location.pathname.includes('mentee/request/form') && <ApplyMentoringButton
+          disableElevation
+          style={{ marginLeft: 12 }}
+          onClick={() => { navigater(`/mentee/request/${id}`) }}
+        >
+          상담 신청
+        </ApplyMentoringButton>}
+      </Buttons>}
     </MentorProfileWrapper>
   );
 }

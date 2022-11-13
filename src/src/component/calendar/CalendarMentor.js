@@ -236,21 +236,21 @@ function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTim
       />}
 
       {isShowDeleteDropDown && <Flex style={{ position: 'relative' }}>
-        <VerticalFlex style={{ position: 'absolute', top: '24px', left: '-40px', width: '70px', padding: '8px', backgroundColor: 'gray' }}>
+        <VerticalFlex style={{ position: 'absolute', top: '24px', left: '-40px', width: '140px', padding: '8px', backgroundColor: 'white', border: '1px solid #eee', borderRadius: '8px' }}>
           <Flex style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => closeDeleteDropDown()}>X</Flex>
           <Flex
             style={{ cursor: 'pointer' }}
             onClick={() => {
               onRemoveRule()
               setIsShow(false)
-            }}>규칙 삭제</Flex>
+            }}>이후 모든 일정 삭제</Flex>
           <EmptyHeight height="8px" />
           <Flex
             style={{ cursor: 'pointer' }}
             onClick={() => {
               onRemoveNotRule()
               setIsShow(false)
-            }}>일자 삭제</Flex>
+            }}>이 일정만 삭제</Flex>
         </VerticalFlex>
       </Flex>
       }

@@ -129,7 +129,7 @@ const gnbDisableUrl = ['/session']
 function Gnb() {
   const location = useLocation().pathname;
 
-  const navigator = useNavigate();
+  const navigater = useNavigate();
 
   const isPresentUrl = (url) => {
     return url === location
@@ -223,7 +223,7 @@ function Gnb() {
             }
 
             {isLogin && <RightTopGnb>
-              {isMentorMode && <LinkNoDeco to={'/'}>
+              {isMentorMode &&
                 <CustomButton
                   width={'83px'}
                   height={'43px'}
@@ -234,6 +234,7 @@ function Gnb() {
                     () => {
                       setIsMentorMode(false)
                       localStorage.setItem('IsMentorMode', false)
+                      navigater('/')
                     }
                   }
                 >
@@ -241,7 +242,7 @@ function Gnb() {
                     멘티 모드
                   </TextSubtitle2>
                 </CustomButton>
-              </LinkNoDeco>}
+              }
               {!isMentorMode && !isMentor && <LinkNoDeco to={'/mentor/register'}>
                 <CustomButton
                   width={'83px'}
@@ -255,7 +256,7 @@ function Gnb() {
                   </TextSubtitle2>
                 </CustomButton>
               </LinkNoDeco>}
-              {!isMentorMode && isMentor && <LinkNoDeco to={'/mentor'}>
+              {!isMentorMode && isMentor &&
                 <CustomButton
                   width={'83px'}
                   height={'48px'}
@@ -267,6 +268,7 @@ function Gnb() {
                     () => {
                       setIsMentorMode(true)
                       localStorage.setItem('IsMentorMode', true)
+                      navigater('/mentor')
                     }
                   }
                 >
@@ -274,7 +276,7 @@ function Gnb() {
                     멘토 모드
                   </TextSubtitle2>
                 </CustomButton>
-              </LinkNoDeco>}
+              }
 
 
               <NotificationsNoneIcon style={{ marginRight: 24 }} />
@@ -290,7 +292,7 @@ function Gnb() {
                     setIsHideProfileMenu(!isMouseOnProfileMenuRef.current)
                   }, 300);
                 }}>
-                <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigator(`${isMentorMode ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
+                <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigater(`${isMentorMode ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
                 {isMentorMode ?
                   <ProfileMenu is_hide={String(isHideProfileMenu)}>
                     <LinkNoDeco to={`${'mentor'}/mypage/profile`}>

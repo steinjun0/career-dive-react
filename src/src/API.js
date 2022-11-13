@@ -295,8 +295,8 @@ export default {
   },
 
 
-  async postCallNews({ calleeId, callerId, consultId, callId }) {
-    const callNewRes = await this.postAxios(`${CAREER_DIVE_API_URL}/call/news`, { CalleeID: calleeId, CallerID: callerId, ConsultID: consultId, call_id: callId })
+  async postCallNew({ calleeId, callerId, consultId, callId }) {
+    const callNewRes = await this.postAxios(`${CAREER_DIVE_API_URL}/call/new`, { CalleeID: calleeId, CallerID: callerId, ConsultID: consultId, call_id: callId })
     return callNewRes
   },
 
@@ -407,6 +407,7 @@ export default {
         if (error) {
           // auth failed
           console.log('auth fail')
+          alert('통화 연결에 실패하였습니다. 새로고침해 주세요. (계속 안된다면 로그아웃 후 다시 로그인해 주세요)')
         } else {
           // auth succeeded
           console.log('auth success')
@@ -439,7 +440,7 @@ export default {
       });
     },
 
-    makeACall(calleeId, onMakeACall) {
+    makeACall(calleeId, onMakeACall, onConnected, onEnded) {
       const dialParams = {
         userId: `${calleeId}`,
         isVideoCall: true,
@@ -472,12 +473,14 @@ export default {
 
       call.onConnected = (call) => {
         console.log('onConnected!')
+        onConnected();
         call.stopVideo();
         call.muteMicrophone();
       };
 
       call.onEnded = (call) => {
         console.log('onEnded!')
+        onEnded()
       };
 
       call.onRemoteAudioSettingsChanged = (call) => {
@@ -492,7 +495,7 @@ export default {
       return call
     },
 
-    receiveACall(onReceiveACall) {
+    receiveACall(onReceiveACall, onEnded) {
       SendBirdCall.addListener(2, {
         onRinging: (call) => {
           call.onEstablished = (call) => {
@@ -503,11 +506,14 @@ export default {
             console.log('onConnected!')
             call.stopVideo();
             call.muteMicrophone();
+            console.log('onreceive call', call)
+            onReceiveACall({ call })
             console.log('mutemute!')
           };
 
           call.onEnded = (call) => {
             console.log('onEnded!')
+            onEnded()
           };
 
           call.onRemoteAudioSettingsChanged = (call) => {
@@ -529,7 +535,6 @@ export default {
           };
 
           call.accept(acceptParams);
-          onReceiveACall({ call })
         }
       });
     },
