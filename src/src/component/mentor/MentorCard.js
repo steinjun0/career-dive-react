@@ -66,7 +66,7 @@ function MentorCard({
           {isShowRating && <CustomRating value={rating}></CustomRating>}
           {isShowTag && tags.length !== 0 ?
             <Flex style={{ justifyContent: 'center', maxWidth: '100%' }}>
-              {tags.map((e, i) =>
+              {tags.slice(0, 3).map((e, i) =>
                 <TextBody2
                   key={i}
                   style={{ marginRight: i !== (tags.length - 1) && '8px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
