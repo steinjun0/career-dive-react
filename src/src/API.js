@@ -295,8 +295,8 @@ export default {
   },
 
 
-  async postCallNews({ calleeId, callerId, consultId, callId }) {
-    const callNewRes = await this.postAxios(`${CAREER_DIVE_API_URL}/call/news`, { CalleeID: calleeId, CallerID: callerId, ConsultID: consultId, call_id: callId })
+  async postCallNew({ calleeId, callerId, consultId, callId }) {
+    const callNewRes = await this.postAxios(`${CAREER_DIVE_API_URL}/call/new`, { CalleeID: calleeId, CallerID: callerId, ConsultID: consultId, call_id: callId })
     return callNewRes
   },
 
@@ -439,7 +439,7 @@ export default {
       });
     },
 
-    makeACall(calleeId, onMakeACall) {
+    makeACall(calleeId, onMakeACall, onConnected, onEnded) {
       const dialParams = {
         userId: `${calleeId}`,
         isVideoCall: true,
@@ -472,12 +472,14 @@ export default {
 
       call.onConnected = (call) => {
         console.log('onConnected!')
+        onConnected();
         call.stopVideo();
         call.muteMicrophone();
       };
 
       call.onEnded = (call) => {
         console.log('onEnded!')
+        onEnded()
       };
 
       call.onRemoteAudioSettingsChanged = (call) => {
@@ -492,7 +494,7 @@ export default {
       return call
     },
 
-    receiveACall(onReceiveACall) {
+    receiveACall(onReceiveACall, onEnded) {
       SendBirdCall.addListener(2, {
         onRinging: (call) => {
           call.onEstablished = (call) => {
@@ -503,13 +505,14 @@ export default {
             console.log('onConnected!')
             call.stopVideo();
             call.muteMicrophone();
-            console.log('onreceive call',call)
+            console.log('onreceive call', call)
             onReceiveACall({ call })
             console.log('mutemute!')
           };
 
           call.onEnded = (call) => {
             console.log('onEnded!')
+            onEnded()
           };
 
           call.onRemoteAudioSettingsChanged = (call) => {
