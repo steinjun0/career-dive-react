@@ -407,6 +407,7 @@ export default {
         if (error) {
           // auth failed
           console.log('auth fail')
+          alert('통화 연결에 실패하였습니다. 새로고침해 주세요. (계속 안된다면 로그아웃 후 다시 로그인해 주세요)')
         } else {
           // auth succeeded
           console.log('auth success')
