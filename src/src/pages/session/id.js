@@ -155,6 +155,12 @@ function Session() {
           ({ call: callProps }) => {
             setCall(_ => callProps)
             console.log('setCall(callProps)', callProps)
+            if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+              setIsMenteeIn(true)
+            }
+            else {
+              setIsMentorIn(true)
+            }
             API.postCallNews(
               {
                 calleeId: calleeId,
@@ -168,8 +174,9 @@ function Session() {
 
     })
     API.Sendbird.addEventHandler()
-    API.Sendbird.receiveACall(({ callProps }) => {
+    API.Sendbird.receiveACall(({ call: callProps }) => {
       setCall(_ => callProps)
+      console.log('setCall(callProps)2', callProps)
       if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
         setIsMenteeIn(true)
       }
@@ -181,7 +188,7 @@ function Session() {
   }, [])
 
   usePrompt('dd', true, () => {
-    if (call !== 'no call') {
+    if (call !== 'no call' && call !== undefined) {
       API.Sendbird.stopCalling(call)
     }
     if (intervalId !== undefined) {
@@ -316,7 +323,18 @@ function Session() {
                       setIsRemoteScreenShowing(false)
                     }
                   } catch (error) {
-                    alert('통화가 연결되지 않았습니다! 상대방이 들어오지 않았다면 기다려주세요.')
+                    console.log('error',error.code, error)
+                    if(error.code === 1800628){
+                      alert('화면 공유를 취소했거나, 권한을 주지 않았습니다.') 
+                    }else if(error.code === 1800621){
+                      alert('통화가 아직 연결되지 않았습니다. 몇 초 뒤에 다시 시도하거나, 새로고침 해주세요') 
+                    }else if(error.toString() === "The browser doesn't support screen share."){
+                      alert('브라우저가 화면 공유를 지원하지 않습니다.') 
+                    }
+                    else{
+                      alert('통화가 연결되지 않았습니다! 상대방이 들어오지 않았다면 기다려주세요.')
+                    }
+                    
                   }
                 }}>
                 {isScreenSharing ? <ScreenShareOutlinedIcon fontSize="small" /> : <StopScreenShareOutlinedIcon fontSize="small" />}

@@ -503,6 +503,8 @@ export default {
             console.log('onConnected!')
             call.stopVideo();
             call.muteMicrophone();
+            console.log('onreceive call',call)
+            onReceiveACall({ call })
             console.log('mutemute!')
           };
 
@@ -529,7 +531,6 @@ export default {
           };
 
           call.accept(acceptParams);
-          onReceiveACall({ call })
         }
       });
     },
