@@ -8,7 +8,12 @@ import {
   RowAlignCenterFlex,
   TextBody2,
   EmptyHeight,
-  TextEllipsisContainer
+  TextEllipsisContainer,
+  TextSubtitle1,
+  TextSubtitle2,
+  TextHeading5,
+  TextHeading6,
+  colorCareerDiveBlue
 } from "util/styledComponent";
 
 import OnComingShedule from "component/consult/OnComingSchedule";
@@ -19,6 +24,7 @@ import { ChevronRight } from "@material-ui/icons";
 import CalendarMentor from "component/calendar/CalendarMentor";
 import { useEffect, useState } from "react";
 import API from "API";
+import { useNavigate } from "react-router-dom";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -31,7 +37,7 @@ const dummyData = ['매드로봇님이 상담을 요청하였습니다.',
   '커리어다이브 클로즈드 베타 오픈 이벤트 🤙​']
 
 function MentorHome() {
-
+  const navigater = useNavigate();
   const [consultList, setConsultList] = useState([])
   const [reservationList, setReservationList] = useState([])
   const [onComingList, setOnComingList] = useState([])
@@ -54,7 +60,7 @@ function MentorHome() {
                 <OnComingShedule consultList={onComingList}></OnComingShedule>
               </Grid>
               <Grid item xs={6}>
-                <Card
+                {/* <Card
                   style={{ boxSizing: 'border-box', maxWidth: '100%' }}
                   no_divider={'true'}
                   title={'공지 및 알림'}
@@ -74,7 +80,15 @@ function MentorHome() {
                       )
                     }
                   })}
-                </Card>
+                </Card> */}
+                <Flex style={{ backgroundColor: colorCareerDiveBlue, padding: '24px', borderRadius: '8px', cursor: 'pointer' }}
+                  onClick={() => {
+                    window.open('https://www.notion.so/CBT-30539442ad874299a12b6e727de3a506')
+                  }}>
+                  <TextHeading6 color="white" style={{ textDecoration: 'underline' }}>
+                    서비스 정책 및 가이드라인<br />멘토편 >
+                  </TextHeading6>
+                </Flex>
               </Grid>
               <Grid item xs={12}>
                 <ConsultingRequest reservationList={reservationList}></ConsultingRequest>
