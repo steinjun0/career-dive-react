@@ -106,7 +106,7 @@ function FavoriteButton({ isFavorite, setIsFavorite }) {
 }
 
 
-function MentorProfile({ name = '', discription = '', id = -1 }) {
+function MentorProfile({ name = '', description = '', id = -1 }) {
   const [isFavorite, setIsFavorite] = useState(false)
   const navigater = useNavigate();
   const params = useParams();
@@ -117,7 +117,7 @@ function MentorProfile({ name = '', discription = '', id = -1 }) {
       <ProfileTexts>
         <TextHeading6>{name} 멘토</TextHeading6>
         <EmptyHeight height='4px'></EmptyHeight>
-        <TextBody1>{discription}</TextBody1>
+        <TextBody1>{description}</TextBody1>
         <EmptyHeight height='8px'></EmptyHeight>
         <TagMedium style={{ padding: '0 8px' }} color={colorCareerDiveBlue} background_color={colorBackgroundCareerDiveBlue}><TextButton>현직자</TextButton></TagMedium>
       </ProfileTexts>

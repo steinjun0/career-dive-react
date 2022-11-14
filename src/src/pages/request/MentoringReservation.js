@@ -68,7 +68,7 @@ function MentoringReservation() {
             {mentorData &&
               <MentorProfile
                 name={nickName}
-                discription={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+                description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
                 id={mentorData.UserID}
               />}
           </MetorProfileBanner>

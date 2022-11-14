@@ -32,7 +32,7 @@ function MentoringApplyViewerMentor() {
       <FullWidthWrapper>
         <MaxWidthDiv>
           <MetorProfileBanner>
-            <MentorProfile name={'다슬기'} discription={'(주)다파다 | 무선사업부 | 디자이너'} />
+            <MentorProfile name={'다슬기'} description={'(주)다파다 | 무선사업부 | 디자이너'} />
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
