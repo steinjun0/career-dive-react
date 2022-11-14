@@ -270,7 +270,7 @@ function Session() {
                 <ColumnAlignCenterFlex>
                   <ProfileImg src={testMentorImage} alt="profile-image" />
                   <TextSubtitle1>{mentorData && mentorData.Nickname}</TextSubtitle1>
-                  <TextBody1>{mentorData && mentorData.CompName} · {mentorData && mentorData.DivisInComp} · {mentorData && mentorData.Job}</TextBody1>
+                  <TextBody1>{mentorData && mentorData.CompName} · {mentorData && mentorData.DivisIsPub && `${mentorData.DivisInComp} · `}{mentorData && mentorData.Job}</TextBody1>
                 </ColumnAlignCenterFlex>
               </Card>}
             </VerticalFlex>}
@@ -291,12 +291,17 @@ function Session() {
             <Flex style={{ alignItems: 'center' }}>
               <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '40px', height: '40px', padding: 0 }}
                 onClick={() => {
-                  if (isMicOn) {
-                    call.muteMicrophone();
+                  if (call !== 'no call' && call !== undefined) {
+                    if (isMicOn) {
+                      call.muteMicrophone();
+                    } else {
+                      call.unmuteMicrophone();
+                    }
+                    setIsMicOn(!isMicOn)
                   } else {
-                    call.unmuteMicrophone();
+                    alert('통화가 연결 되지 않았습니다! 상대방을 기다리거나 새로고침 해주세요.')
                   }
-                  setIsMicOn(!isMicOn)
+
                 }}>
                 {isMicOn ? <MicNoneOutlinedIcon fontSize="small" /> : <MicOffOutlinedIcon fontSize="small" />}
               </Button>

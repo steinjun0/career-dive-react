@@ -43,12 +43,16 @@ function MentorCard({
         no_divider="true"
         min_width="228px"
         max_width="228px"
+        style={{
+          minHeight: '346px'
+        }}
       >
         <EmptyHeight height={'6px'} />
-        <TextBody2>{department}</TextBody2>
-        <EmptyHeight height={'6px'} />
+        {department !== '' && <TextBody2>{department}</TextBody2>}
+        {department !== '' && <EmptyHeight height={'6px'} />}
         <TextBody2>{job}</TextBody2>
         <EmptyHeight height={'28px'} />
+        {department === '' && <EmptyHeight height={'30px'} />}
 
         <VerticalFlex style={{ alignItems: 'center' }}>
           <CircleImg width={'88px'} src={testMentorImage} />

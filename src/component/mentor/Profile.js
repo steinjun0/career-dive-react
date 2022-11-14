@@ -75,14 +75,14 @@ const ApplyMentoringButton = styled(Button)`
   }
 `;
 
-function MentorProfile({ name = '', discription = '' }) {
+function MentorProfile({ name = '', description = '' }) {
   return (
     <MentorProfileWrapper>
       <MentorProfileImg src={testMentorImage} alt="profile-image" />
       <ProfileTexts>
         <Tag>현직자</Tag>
         <Name>{name} 멘토</Name>
-        <Discription>{discription}</Discription>
+        <Discription>{description}</Discription>
       </ProfileTexts>
       <Buttons>
         <FavoriteMentorButton startIcon={<FavoriteIcon />} disableElevation>

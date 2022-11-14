@@ -53,7 +53,11 @@ function SideNavigation() {
   const [mapRouteSubPage, setMapRouteSubPage] = useState({});
 
   const onClickListItem = (subPage) => {
-    navigater(subPage)
+    if (['/mentee/mypage/account', '/mentor/mypage/account'].includes(subPage)) {
+      alert('기능 준비중입니다!')
+    } else {
+      navigater(subPage)
+    }
   };
 
   useEffect(() => {

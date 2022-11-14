@@ -200,7 +200,7 @@ function Introduction({ mentorConsultContents }) {
           {consultingTime}분, {consultCategory}{consultCategory === '커리어 상담' && `, 이력서 사전 검토 ${isFilePreOpen}`}
         </TextBody2>
         <EmptyHeight height={'8px'} />
-        <Flex>
+        <Flex style={{ marginLeft: 'auto' }}>
           <TextSubtitle1 color={colorCareerDivePink} style={{ textDecorationLine: 'line-through' }}>
             {formatMoney(priceTable[`${consultingTime}-${consultCategory}-${isFilePreOpen}`][0], 0)}원
           </TextSubtitle1>

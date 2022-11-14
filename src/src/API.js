@@ -441,6 +441,8 @@ export default {
     },
 
     makeACall(calleeId, onMakeACall, onConnected, onEnded) {
+      // console.log('makeacall local_video_element_id', document.getElementById('local_video_element_id'))
+      // console.log('makeacall remote_video_element_id', document.getElementById('remote_video_element_id'))
       const dialParams = {
         userId: `${calleeId}`,
         isVideoCall: true,
@@ -452,6 +454,8 @@ export default {
         }
       };
 
+      // console.log('recieve dialParams', dialParams)
+
       const call = SendBirdCall.dial(dialParams, (call, error) => {
         if (error) {
           // dial failed
@@ -461,8 +465,8 @@ export default {
         else {
           console.log('dial succeeded')
           onMakeACall({ call })
-          call.stopVideo();
-          call.muteMicrophone();
+          // call.stopVideo();
+          // call.muteMicrophone();
         }
         // dial succeeded
       });
@@ -484,7 +488,7 @@ export default {
       };
 
       call.onRemoteAudioSettingsChanged = (call) => {
-        console.log('onRemoteAudioSettingsChanged!')
+        console.log('onRemoteAudioSettingsChanged!', call)
       };
 
       call.onRemoteVideoSettingsChanged = (call) => {
@@ -523,7 +527,8 @@ export default {
           call.onRemoteVideoSettingsChanged = (call) => {
             console.log('onRemoteVideoSettingsChanged!')
           };
-
+          // console.log('receive local_video_element_id', document.getElementById('local_video_element_id'))
+          // console.log('receive remote_video_element_id', document.getElementById('remote_video_element_id'))
           const acceptParams = {
             isVideoCall: true,
             callOption: {
@@ -533,6 +538,8 @@ export default {
               videoEnabled: true
             }
           };
+          // console.log('recieve acceptParams', acceptParams)
+
 
           call.accept(acceptParams);
         }
