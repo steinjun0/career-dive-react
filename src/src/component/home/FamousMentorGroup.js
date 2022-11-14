@@ -55,7 +55,7 @@ function JobCategoryGroup() {
           return <Flex key={index}>
             <MentorCard
               company={mentorData.CompName}
-              department={mentorData.DivisInComp}
+              department={mentorData.DivisIsPub ? mentorData.DivisInComp : ''}
               job={mentorData.JobInComp}
               name={mentorData.Nickname}
               inJob={mentorData.InService ? "현직자" : "경력자"}
