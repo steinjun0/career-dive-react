@@ -124,7 +124,7 @@ function MentorProfile({ name = '', discription = '', id = -1 }) {
       {!JSON.parse(localStorage.getItem("IsMentorMode")) && <Buttons>
         <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
 
-        {!location.pathname.includes('mentee/request/form') && <ApplyMentoringButton
+        {!location.pathname.includes('mentee/request/') && <ApplyMentoringButton
           disableElevation
           style={{ marginLeft: 12 }}
           onClick={() => { navigater(`/mentee/request/${id}`) }}
