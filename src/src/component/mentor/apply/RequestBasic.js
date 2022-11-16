@@ -240,7 +240,7 @@ function Request() {
           {isFilePreOpen === '희망' && <VerticalFlex>
             <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
             <TextBody2 color={colorCareerDiveBlue}>
-              안내문구
+              이력서 및 포트폴리오를 업로드해 주세요.
             </TextBody2>
             <EmptyHeight height='8px' />
             {/* TODO: upload 파일 취소 버튼 필요 */}
