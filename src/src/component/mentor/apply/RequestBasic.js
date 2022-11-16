@@ -149,13 +149,16 @@ function Request() {
       if (consultRes.status === 200) {
         if (isFilePreOpen === '희망' && uploadingFiles.length > 0) {
           const consultId = consultRes.data.ID
-          let formData = new FormData()
-          uploadingFiles.forEach((e) => formData.append('file', e))
-          const consultFileRes = await API.postConsultFile(consultId, formData)
 
-          if (consultFileRes.status !== 200) {
-            alert('네트워크 오류로 파일 업로드에 실패했습니다. 다시 시도해주세요')
-          }
+          uploadingFiles.forEach(async (e) => {
+            let formData = new FormData()
+            formData.append('file', e)
+            const consultFileRes = await API.postConsultFile(consultId, formData)
+
+            if (consultFileRes.status !== 200) {
+              alert('네트워크 오류로 파일 업로드에 실패했습니다. 다시 시도해주세요')
+            }
+          })
         }
         navigate('/mentee/request/finish')
       } else {
@@ -237,7 +240,7 @@ function Request() {
           {isFilePreOpen === '희망' && <VerticalFlex>
             <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
             <TextBody2 color={colorCareerDiveBlue}>
-              안내문구
+              이력서 및 포트폴리오를 업로드해 주세요.
             </TextBody2>
             <EmptyHeight height='8px' />
             {/* TODO: upload 파일 취소 버튼 필요 */}

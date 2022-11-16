@@ -102,19 +102,16 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
                           navigater(`/mentee/schedule/${consult.ID}`)
                         }}
                         enterOnClick={() => {
-                          if (consult.Status !== 'approved') {
-                            alert('예약이 성공되지 않았습니다')
-                          } else {
-                            onEnterSession({
-                              navigater,
-                              date: consult.Date,
-                              startTime: consult.StartTime,
-                              endTime: consult.EndTime,
-                              consultId: consult.ID
-                            })
-                          }
-
-                        }}
+                          onEnterSession({
+                            navigater,
+                            date: consult.Date,
+                            consultStatus: consult.Status,
+                            startTime: consult.StartTime,
+                            endTime: consult.EndTime,
+                            consultId: consult.ID
+                          })
+                        }
+                        }
                       /> :
                       <ConsultMenteeCard
                         consult={consult}
@@ -122,17 +119,14 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
                           navigater(`/mentee/schedule/${consult.ID}`)
                         }}
                         enterOnClick={() => {
-                          if (consult.Status !== 'approved') {
-                            alert('예약이 성공되지 않았습니다')
-                          } else {
-                            onEnterSession({
-                              navigater,
-                              date: consult.Date,
-                              startTime: consult.StartTime,
-                              endTime: consult.EndTime,
-                              consultId: consult.ID
-                            })
-                          }
+                          onEnterSession({
+                            navigater,
+                            date: consult.Date,
+                            consultStatus: consult.Status,
+                            startTime: consult.StartTime,
+                            endTime: consult.EndTime,
+                            consultId: consult.ID
+                          })
                         }}
                       />
                     }

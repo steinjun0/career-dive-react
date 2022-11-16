@@ -270,7 +270,7 @@ function Session() {
                 <ColumnAlignCenterFlex>
                   <ProfileImg src={testMentorImage} alt="profile-image" />
                   <TextSubtitle1>{mentorData && mentorData.Nickname}</TextSubtitle1>
-                  <TextBody1>{mentorData && mentorData.CompName} · {mentorData && mentorData.DivisIsPub && `${mentorData.DivisInComp} · `}{mentorData && mentorData.Job}</TextBody1>
+                  <TextBody1>{mentorData && mentorData.CompName} · {mentorData && mentorData.DivisIsPub && `${mentorData.DivisInComp} · `}{mentorData && mentorData.JobInComp}</TextBody1>
                 </ColumnAlignCenterFlex>
               </Card>}
             </VerticalFlex>}

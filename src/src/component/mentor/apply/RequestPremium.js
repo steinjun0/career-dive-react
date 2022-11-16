@@ -180,13 +180,16 @@ function Request() {
 
         if (uploadingFiles.length > 0) {
           const consultId = consultRes.data.ID
-          let formData = new FormData()
-          uploadingFiles.forEach((e) => formData.append('file', e))
-          const consultFileRes = await API.postConsultFile(consultId, formData)
 
-          if (consultFileRes.status !== 200) {
-            alert('네트워크 오류로 파일 업로드에 실패했습니다. 다시 시도해주세요')
-          }
+          uploadingFiles.forEach(async (e) => {
+            let formData = new FormData()
+            formData.append('file', e)
+            const consultFileRes = await API.postConsultFile(consultId, formData)
+
+            if (consultFileRes.status !== 200) {
+              alert('네트워크 오류로 파일 업로드에 실패했습니다. 다시 시도해주세요')
+            }
+          })
         }
 
         navigate('/mentee/request/finish')
