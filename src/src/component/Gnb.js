@@ -299,9 +299,14 @@ function Gnb() {
                       <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>멘토 프로필</TextSubtitle2>
                     </LinkNoDeco>
 
-                    <LinkNoDeco to={`${'mentor'}/mypage/account`}>
+                    {/* <LinkNoDeco to={`${'mentor'}/mypage/account`}>
                       <TextSubtitle2>계정</TextSubtitle2>
-                    </LinkNoDeco>
+                    </LinkNoDeco> */}
+                    <Flex style={{ cursor: 'pointer' }} onClick={() => alert('기능 준비중입니다!')}>
+                      <TextSubtitle2 style={{ color: 'black' }}>계정</TextSubtitle2>
+                    </Flex>
+
+
                     <LinkNoDeco to={`${'mentor'}/mypage/review`}>
                       <TextSubtitle2>대금 수령</TextSubtitle2>
                     </LinkNoDeco>
@@ -316,9 +321,14 @@ function Gnb() {
                       <TextSubtitle2 style={{ overFlow: 'auto', marginTop: 24 }}>프로필</TextSubtitle2>
                     </LinkNoDeco>
 
-                    <LinkNoDeco to={`${'mentee'}/mypage/account`}>
+                    {/* <LinkNoDeco to={`${'mentee'}/mypage/account`}>
                       <TextSubtitle2>계정</TextSubtitle2>
-                    </LinkNoDeco>
+                    </LinkNoDeco> */}
+                    <Flex style={{ cursor: 'pointer' }} onClick={() => alert('기능 준비중입니다!')}>
+                      <TextSubtitle2 style={{ color: 'black' }}>계정</TextSubtitle2>
+                    </Flex>
+
+
                     <LinkNoDeco to={`${'mentee'}/mypage/review`}>
                       <TextSubtitle2>리뷰</TextSubtitle2>
                     </LinkNoDeco>
@@ -342,7 +352,7 @@ function Gnb() {
         </GnbFullWidthWrapper> :
           <div style={{ marginTop: -80 }}></div>
       }
-    </div>
+    </div >
 
   );
 }
