@@ -2,7 +2,7 @@ export function onEnterSession({ navigater, date, consultStatus, startTime, endT
 
   if (consultStatus == 'created') {
     alert('상담 대기중입니다')
-  } else if (consultStatus == 'done') {
+  } else if (['done', 'mentor_noshow', 'mentee_noshow'].includes(consultStatus)) {
     alert('종료된 상담입니다')
   } else if (consultStatus === 'approved') {
     const startDateTime = new Date(date.slice(0, date.indexOf('T')) + ' ' + startTime).getTime()
