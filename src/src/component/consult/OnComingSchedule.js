@@ -126,7 +126,8 @@ function OnComingShedule({ consultList }) {
                           date: consult.Date,
                           startTime: consult.StartTime,
                           endTime: consult.EndTime,
-                          consultId: consult.ID
+                          consultId: consult.ID,
+                          consultStatus: consult.Status
                         })
                       }}
                     ></CustomIconButton>
