@@ -98,34 +98,43 @@ function Session() {
           const tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
           const tempPassTime = new Date(new Date().getTime() - tempStartDate.getTime())
           setLeftTime(tempLeftTime)
-          // 1분후
-          if (tempPassTime.getMinutes() === 1 && tempPassTime.getSeconds() === 0 && (!isMentorIn || !isMenteeIn)) {
-            let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
-            if (amIMentor) {
-              tempLatenessParams.mentorLateness = false
-            } else {
-              tempLatenessParams.menteeLateness = false
+          console.log('tempPassTime.getHours()', tempPassTime.getHours())
+          console.log('tempPassTime.getMinutes()', tempPassTime.getMinutes())
+          console.log('tempPassTime.getSeconds() === 0', tempPassTime.getSeconds())
+          console.log('tempPassTime', tempPassTime.getTime())
+          if (tempPassTime.getTime() > 0) {
+
+            // 1분후
+            if (tempPassTime.getHours() === 0 && tempPassTime.getMinutes() === 1 && tempPassTime.getSeconds() === 0 && (!isMentorIn || !isMenteeIn)) {
+              let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
+              if (amIMentor) {
+                tempLatenessParams.mentorLateness = false
+              } else {
+                tempLatenessParams.menteeLateness = false
+              }
+              API.postConsultLateness(tempLatenessParams)
+            } else if (tempPassTime.getHours() === 0 && tempPassTime.getMinutes() === 5 && tempPassTime.getSeconds() === 59 && (!isMentorIn || !isMenteeIn)) {
+              // 5분59초 후
+              let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
+              if (amIMentor) {
+                tempNoshowParams.mentorNoshow = false
+              } else {
+                tempNoshowParams.menteeNoshow = false
+              }
+              API.postConsultNoshow(tempNoshowParams)
+            } else if (tempEndDate <= new Date()) {
+              console.log('통화가 종료되었습니다')
+              // API.patchConsultDone(res.data.ID)
+              console.log('call', call)
+              API.postCallDone(call._callId)
+              // clearInterval(tempIntervalId)
+              // if (call !== 'no call') API.Sendbird.stopCalling(call)
+              // alert('통화가 종료되었습니다')
+              // navigater(`/review/${params.id}`)
             }
-            API.postConsultLateness(tempLatenessParams)
-          } else if (tempPassTime.getMinutes() === 5 && tempPassTime.getSeconds() === 59 && (!isMentorIn || !isMenteeIn)) {
-            // 5분59초 후
-            let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
-            if (amIMentor) {
-              tempNoshowParams.mentorNoshow = false
-            } else {
-              tempNoshowParams.menteeNoshow = false
-            }
-            API.postConsultNoshow(tempNoshowParams)
-          } else if (tempEndDate <= new Date()) {
-            console.log('통화가 종료되었습니다')
-            // API.patchConsultDone(res.data.ID)
-            console.log('call', call)
-            API.postCallDone(call._callId)
-            // clearInterval(tempIntervalId)
-            // if (call !== 'no call') API.Sendbird.stopCalling(call)
-            // alert('통화가 종료되었습니다')
-            // navigater(`/review/${params.id}`)
+
           }
+
         }, 1000);
         setIntervalId(tempIntervalId)
       }
@@ -154,6 +163,7 @@ function Session() {
           calleeId,
           ({ call: callProps }) => {
             setCall(_ => callProps)
+            callProps.stopVideo()
             console.log('setCall(callProps)', callProps)
             API.postCallNew(
               {
