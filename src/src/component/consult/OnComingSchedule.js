@@ -68,8 +68,7 @@ function OnComingShedule({ consultList }) {
         {consultList &&
           consultList
             .filter((consult) => new Date(consult.Date).setHours(+consult.EndTime.slice(0, 2)) >= new Date())
-            .reverse()
-            .slice(0, 2)
+            .slice(0, 3)
             .map((consult, index) => {
               return (
                 <ScheduleWrapper key={index} style={{ marginTop: '20px' }}>
