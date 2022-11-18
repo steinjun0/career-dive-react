@@ -6,10 +6,11 @@ import CustomRating from "util/Rating";
 import { Divider } from "@mui/material";
 import { CustomCheckbox } from "util/Custom/CustomCheckbox";
 import { CustomButton } from "util/Custom/CustomButton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomTextField1 from "util/Custom/CustomTextField1";
 
 function Review() {
+  const navigater = useNavigate();
   const [constultData, setConsultData] = useState()
   const [mentorData, setMentorData] = useState()
 
@@ -118,7 +119,9 @@ function Review() {
                     (e, i) => e && questionList[i])
                   .filter((e) => e !== false && e)
               }
-              API.patchConsultReview(data)
+              API.patchConsultReview(data).then(() => {
+                navigater('/mentee/schedule')
+              })
             }}
           >
             완료
