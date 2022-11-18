@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import RequestView from "../../component/mentor/apply/RequestView";
 import { Card } from "../../util/Card";
-import { colorTextLight, CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex, colorBackgroundGrayLight, EmptyWidth, colorCareerDivePink, colorBackgroundCareerDivePink, colorTextDisabled, colorBackgroundGrayDark, colorBackgroundGrayMedium, TextSubtitle2, colorBackgroundCareerDiveBlue } from "../../util/styledComponent";
+import { colorTextLight, CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex, colorBackgroundGrayLight, EmptyWidth, colorCareerDivePink, colorBackgroundCareerDivePink, colorTextDisabled, colorBackgroundGrayDark, colorBackgroundGrayMedium, TextSubtitle2, colorBackgroundCareerDiveBlue, TextHeading6, TextHeading5 } from "../../util/styledComponent";
 import testMentorImage from "assets/img/testMentorImage.png";
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
 import MicOffOutlinedIcon from '@mui/icons-material/MicOffOutlined';
@@ -231,8 +231,8 @@ function Session() {
       <CustomButton onClick={() => {
         call.stopVideo();
       }}>stop video</CustomButton> */}
-      <Flex style={{ margin: '16px auto 0 24px', color: colorTextDisabled }}>
-        <TextHeading4 style={{ fontFamily: 'Noto Sans KR' }}>커리어다이브</TextHeading4>
+      <Flex style={{ margin: '16px auto 0 48px', color: colorTextDisabled }}>
+        <TextHeading5 style={{ fontFamily: 'Noto Sans KR' }}>커리어다이브</TextHeading5>
       </Flex>
 
       <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 190px)' }}>
