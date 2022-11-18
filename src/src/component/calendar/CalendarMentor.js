@@ -357,8 +357,8 @@ function CalendarMentor() {
           return false
         }).map((e) => {
           return {
-            StartTime: `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`,
-            EndTime: `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`,
+            StartTime: e.startAMPM === '밤' ? '00:00' : `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`,
+            EndTime: e.endAMPM === '밤' ? '00:00' : `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`,
           }
         })],
       }
@@ -380,8 +380,8 @@ function CalendarMentor() {
         return true
       }).map(
         async (e) => {
-          const startTime = `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
-          const endTime = `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
+          const startTime = e.startAMPM === '밤' ? '00:00' : `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
+          const endTime = e.endAMPM === '밤' ? '00:00' : `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
           const weekDay = new Date(year, Number(month.slice(0, -1)) - 1, selectedDate).getDay()
           const type = repeatOptionConverter[e.repeatOption]
 
@@ -406,8 +406,8 @@ function CalendarMentor() {
         return false
       }).map(
         async (e) => {
-          const startTime = `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
-          const endTime = `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
+          const startTime = e.startAMPM === '밤' ? '00:00' : `${String(Number(e.startHour) + (e.startAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.startMin)).padStart(2, '0')}`
+          const endTime = e.endAMPM === '밤' ? '00:00' : `${String(Number(e.endHour) + (e.endAMPM === '오후' ? 12 : 0)).padStart(2, '0')}:${String(Number(e.endMin)).padStart(2, '0')}`
           const res = await API.patchConsultSchedule(
             e.scheduleId,
             startTime,

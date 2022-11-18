@@ -137,20 +137,18 @@ function Session() {
               console.log('통화가 종료되었습니다')
               // API.patchConsultDone(res.data.ID)
               console.log('call', call)
-              API.postCallDone(call._callId)
+              API.postCallDone(call._callId).then(() => {
+                clearInterval(tempIntervalId)
+                if (call !== 'no call') API.Sendbird.stopCalling(call)
+                alert('통화가 종료되었습니다')
 
-              // .then(() => {
-              //   if (amIMentor) {
-              //     navigater(`/mentor`)
-              //   } else {
-              //     navigater(`/review/${params.id}`)
-              //   }
-              // })
+                if (amIMentor) {
+                  navigater(`/mentor`)
+                } else {
+                  navigater(`/review/${params.id}`)
+                }
+              })
 
-              // clearInterval(tempIntervalId)
-              // if (call !== 'no call') API.Sendbird.stopCalling(call)
-              // alert('통화가 종료되었습니다')
-              // navigater(`/review/${params.id}`)
             }
 
           }
