@@ -118,7 +118,7 @@ function Request() {
   }, [])
 
   async function onClickApplyButton() {
-    if (uploadingFiles.length <= 0) {
+    if (isFilePreOpen === '희망' && uploadingFiles.length <= 0) {
       alert('첨부 파일을 업로드 해주세요!')
       return
     }
