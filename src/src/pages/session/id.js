@@ -184,7 +184,6 @@ function Session() {
     API.Sendbird.receiveACall(
       ({ call: callProps }) => {
         setCall(_ => callProps)
-        console.log('setCall(callProps)2', callProps)
         if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
           setIsMenteeIn(true)
         }
@@ -236,8 +235,8 @@ function Session() {
       </Flex>
 
       <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 190px)' }}>
-        <ReflexElement className="left-pane" >
-          <div style={{ padding: 24 }}>
+        <ReflexElement className="left-pane">
+          <div style={{ padding: 24, paddingTop: 12 }}>
             {consultData !== undefined &&
               <RequestView
                 consultData={consultData}
@@ -259,7 +258,7 @@ function Session() {
           </VerticalFlex>
 
           {!isScreenShowing && !isLocalScreenShowing && !isRemoteScreenShowing &&
-            <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 24, height: '90%', justifyContent: 'space-between' }}>
+            <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 12, height: '90%', justifyContent: 'space-between' }}>
               {isMenteeIn && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginBottom: '15px' }}>
                 <ColumnAlignCenterFlex >
                   <ProfileImg src={testMentorImage} alt="profile-image" />
@@ -430,7 +429,9 @@ function Session() {
             </Flex>
             <CustomButton custom_color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}
               onClick={() => {
-                navigater(`/review/${params.id}`)
+                API.postCallDone(call._callId).then(() => {
+                  navigater(`/review/${params.id}`)
+                })
               }}
             > 상담 종료 </CustomButton>
           </Flex>
