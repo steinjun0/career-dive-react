@@ -124,7 +124,7 @@ const onClickLogout = () => {
   // navigate('/')
 }
 
-const gnbDisableUrl = ['/session']
+const gnbDisableUrl = ['/session', '/review']
 
 function Gnb() {
   const location = useLocation().pathname;

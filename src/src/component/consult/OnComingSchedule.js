@@ -68,8 +68,7 @@ function OnComingShedule({ consultList }) {
         {consultList &&
           consultList
             .filter((consult) => new Date(consult.Date).setHours(+consult.EndTime.slice(0, 2)) >= new Date())
-            .reverse()
-            .slice(0, 2)
+            .slice(0, 3)
             .map((consult, index) => {
               return (
                 <ScheduleWrapper key={index} style={{ marginTop: '20px' }}>
@@ -86,10 +85,11 @@ function OnComingShedule({ consultList }) {
 
                   <ProfileWrapper>
                     <ProfileImg src={testImage}></ProfileImg>
-                    <VerticalFlex>
-                      <TextSubtitle2>{consult.Nickname}</TextSubtitle2>
-                      <TextBody2>{consult.CompName}</TextBody2>
-                    </VerticalFlex>
+                    <Flex>
+                      {consult.CompName !== '' && <TextSubtitle2>{`${consult.CompName} · `}</TextSubtitle2>}
+                      {consult.JobInComp !== '' && <TextSubtitle2>{`${consult.JobInComp} · `}</TextSubtitle2>}
+                      <TextBody2>{consult.Nickname}</TextBody2>
+                    </Flex>
                   </ProfileWrapper>
 
                   <Buttons>
@@ -126,7 +126,8 @@ function OnComingShedule({ consultList }) {
                           date: consult.Date,
                           startTime: consult.StartTime,
                           endTime: consult.EndTime,
-                          consultId: consult.ID
+                          consultId: consult.ID,
+                          consultStatus: consult.Status
                         })
                       }}
                     ></CustomIconButton>

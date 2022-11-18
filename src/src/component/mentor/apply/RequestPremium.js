@@ -35,11 +35,10 @@ const RequestCardWrapper = styled(Flex)`
 
 
 const ApplyButton = styled(CustomButton)`
-  width: 378px;
-  margin-top: 30px;
+  width: 170px;
+  margin-top: 24px;
   margin-left: auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  height: 52px;
 `;
 
 const getCategoryColor = (category) => {
@@ -148,6 +147,11 @@ function Request() {
   }, [])
 
   async function onClickApplyButton() {
+    if (uploadingFiles.length <= 0) {
+      alert('첨부 파일을 업로드 해주세요!')
+      return
+    }
+
     const reservations = JSON.parse(localStorage.getItem(`reservations`))
     let initialDate = undefined
     if (reservations !== null) {
@@ -315,15 +319,19 @@ function Request() {
             </Flex>
           })}
 
+          <ApplyButton
+            onClick={() => {
+              onClickApplyButton()
+            }}>
+            <TextSubtitle1>
+              완료
+            </TextSubtitle1>
+          </ApplyButton>
+
         </Card>
       </RequestCardWrapper >
 
-      <ApplyButton
-        onClick={onClickApplyButton}>
-        <TextHeading6>
-          다음
-        </TextHeading6>
-      </ApplyButton>
+
 
     </VerticalFlex>
 

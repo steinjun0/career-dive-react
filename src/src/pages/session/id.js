@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import RequestView from "../../component/mentor/apply/RequestView";
 import { Card } from "../../util/Card";
-import { colorTextLight, CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex, colorBackgroundGrayLight, EmptyWidth, colorCareerDivePink, colorBackgroundCareerDivePink, colorTextDisabled, colorBackgroundGrayDark, colorBackgroundGrayMedium, TextSubtitle2, colorBackgroundCareerDiveBlue } from "../../util/styledComponent";
+import { colorTextLight, CircleImg, ColumnAlignCenterFlex, EmptyHeight, Flex, GrayBackground, TextBody1, TextCaption, TextHeading4, TextSubtitle1, VerticalFlex, colorBackgroundGrayLight, EmptyWidth, colorCareerDivePink, colorBackgroundCareerDivePink, colorTextDisabled, colorBackgroundGrayDark, colorBackgroundGrayMedium, TextSubtitle2, colorBackgroundCareerDiveBlue, TextHeading6, TextHeading5 } from "../../util/styledComponent";
 import testMentorImage from "assets/img/testMentorImage.png";
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
 import MicOffOutlinedIcon from '@mui/icons-material/MicOffOutlined';
@@ -73,6 +73,7 @@ function Session() {
 
   useEffect(async () => {
     console.log(JSON.parse(localStorage.getItem('IsMentorMode')))
+    const amIMentor = (JSON.parse(localStorage.getItem('IsMentorMode')) === true)
     if (JSON.parse(localStorage.getItem('IsMentorMode')) === true) {
       setAmIMentor(true)
       setIsMentorIn(true)
@@ -98,34 +99,62 @@ function Session() {
           const tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
           const tempPassTime = new Date(new Date().getTime() - tempStartDate.getTime())
           setLeftTime(tempLeftTime)
-          // 1분후
-          if (tempPassTime.getMinutes() === 1 && tempPassTime.getSeconds() === 0 && (!isMentorIn || !isMenteeIn)) {
-            let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
-            if (amIMentor) {
-              tempLatenessParams.mentorLateness = false
-            } else {
-              tempLatenessParams.menteeLateness = false
+          console.log('tempPassTime.getHours()', tempPassTime.getHours())
+          console.log('tempPassTime.getMinutes()', tempPassTime.getMinutes())
+          console.log('tempPassTime.getSeconds() === 0', tempPassTime.getSeconds())
+          console.log('tempPassTime', tempPassTime.getTime())
+          if (tempPassTime.getTime() > 0) {
+
+            // 1분후
+            if (tempPassTime.getHours() === 0 && tempPassTime.getMinutes() === 1 && tempPassTime.getSeconds() === 0 && (!isMentorIn || !isMenteeIn)) {
+              let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
+              if (amIMentor) {
+                tempLatenessParams.mentorLateness = false
+              } else {
+                tempLatenessParams.menteeLateness = false
+              }
+              API.postConsultLateness(tempLatenessParams)
+            } else if (tempPassTime.getHours() === 0 && tempPassTime.getMinutes() === 5 && tempPassTime.getSeconds() === 59 && (!isMentorIn || !isMenteeIn)) {
+              // 5분59초 후
+              let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
+              if (amIMentor) {
+                tempNoshowParams.mentorNoshow = false
+              } else {
+                tempNoshowParams.menteeNoshow = false
+              }
+              API.postConsultNoshow(tempNoshowParams).then(() => {
+                if (amIMentor) {
+                  alert('멘티가 노쇼했습니다')
+                  navigater('/mentor')
+                } else {
+                  alert('멘토가 노쇼했습니다')
+                  navigater(`/mentee/schedule`)
+                }
+              })
+
+
+            } else if (tempEndDate <= new Date()) {
+              console.log('통화가 종료되었습니다')
+              // API.patchConsultDone(res.data.ID)
+              console.log('call', call)
+              API.postCallDone(call._callId)
+
+              // .then(() => {
+              //   if (amIMentor) {
+              //     navigater(`/mentor`)
+              //   } else {
+              //     navigater(`/review/${params.id}`)
+              //   }
+              // })
+
+              // clearInterval(tempIntervalId)
+              // if (call !== 'no call') API.Sendbird.stopCalling(call)
+              // alert('통화가 종료되었습니다')
+              // navigater(`/review/${params.id}`)
             }
-            API.postConsultLateness(tempLatenessParams)
-          } else if (tempPassTime.getMinutes() === 5 && tempPassTime.getSeconds() === 59 && (!isMentorIn || !isMenteeIn)) {
-            // 5분59초 후
-            let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
-            if (amIMentor) {
-              tempNoshowParams.mentorNoshow = false
-            } else {
-              tempNoshowParams.menteeNoshow = false
-            }
-            API.postConsultNoshow(tempNoshowParams)
-          } else if (tempEndDate <= new Date()) {
-            console.log('통화가 종료되었습니다')
-            // API.patchConsultDone(res.data.ID)
-            console.log('call', call)
-            API.postCallDone(call._callId)
-            // clearInterval(tempIntervalId)
-            // if (call !== 'no call') API.Sendbird.stopCalling(call)
-            // alert('통화가 종료되었습니다')
-            // navigater(`/review/${params.id}`)
+
           }
+
         }, 1000);
         setIntervalId(tempIntervalId)
       }
@@ -154,6 +183,7 @@ function Session() {
           calleeId,
           ({ call: callProps }) => {
             setCall(_ => callProps)
+            callProps.stopVideo()
             console.log('setCall(callProps)', callProps)
             API.postCallNew(
               {
@@ -184,7 +214,6 @@ function Session() {
     API.Sendbird.receiveACall(
       ({ call: callProps }) => {
         setCall(_ => callProps)
-        console.log('setCall(callProps)2', callProps)
         if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
           setIsMenteeIn(true)
         }
@@ -231,13 +260,13 @@ function Session() {
       <CustomButton onClick={() => {
         call.stopVideo();
       }}>stop video</CustomButton> */}
-      <Flex style={{ margin: '16px auto 0 24px', color: colorTextDisabled }}>
-        <TextHeading4 style={{ fontFamily: 'Noto Sans KR' }}>커리어다이브</TextHeading4>
+      <Flex style={{ margin: '16px auto 0 48px', color: colorTextDisabled }}>
+        <TextHeading5 style={{ fontFamily: 'Noto Sans KR' }}>커리어다이브</TextHeading5>
       </Flex>
 
       <ReflexContainer orientation="vertical" style={{ height: 'calc(100vh - 190px)' }}>
-        <ReflexElement className="left-pane" >
-          <div style={{ padding: 24 }}>
+        <ReflexElement className="left-pane">
+          <div style={{ padding: 24, paddingTop: 12 }}>
             {consultData !== undefined &&
               <RequestView
                 consultData={consultData}
@@ -259,7 +288,7 @@ function Session() {
           </VerticalFlex>
 
           {!isScreenShowing && !isLocalScreenShowing && !isRemoteScreenShowing &&
-            <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 24, height: '90%', justifyContent: 'space-between' }}>
+            <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 12, height: '90%', justifyContent: 'space-between' }}>
               {isMenteeIn && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginBottom: '15px' }}>
                 <ColumnAlignCenterFlex >
                   <ProfileImg src={testMentorImage} alt="profile-image" />
@@ -430,7 +459,13 @@ function Session() {
             </Flex>
             <CustomButton custom_color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}
               onClick={() => {
-                navigater(`/review/${params.id}`)
+                API.postCallDone(call._callId).then(() => {
+                  if (amIMentor) {
+                    navigater(`/mentor`)
+                  } else {
+                    navigater(`/review/${params.id}`)
+                  }
+                })
               }}
             > 상담 종료 </CustomButton>
           </Flex>
