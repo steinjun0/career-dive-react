@@ -73,6 +73,7 @@ function Session() {
 
   useEffect(async () => {
     console.log(JSON.parse(localStorage.getItem('IsMentorMode')))
+    const amIMentor = (JSON.parse(localStorage.getItem('IsMentorMode')) === true)
     if (JSON.parse(localStorage.getItem('IsMentorMode')) === true) {
       setAmIMentor(true)
       setIsMentorIn(true)
@@ -121,12 +122,31 @@ function Session() {
               } else {
                 tempNoshowParams.menteeNoshow = false
               }
-              API.postConsultNoshow(tempNoshowParams)
+              API.postConsultNoshow(tempNoshowParams).then(() => {
+                if (amIMentor) {
+                  alert('멘티가 노쇼했습니다')
+                  navigater('/mentor')
+                } else {
+                  alert('멘토가 노쇼했습니다')
+                  navigater(`/mentee/schedule`)
+                }
+              })
+
+
             } else if (tempEndDate <= new Date()) {
               console.log('통화가 종료되었습니다')
               // API.patchConsultDone(res.data.ID)
               console.log('call', call)
               API.postCallDone(call._callId)
+
+              // .then(() => {
+              //   if (amIMentor) {
+              //     navigater(`/mentor`)
+              //   } else {
+              //     navigater(`/review/${params.id}`)
+              //   }
+              // })
+
               // clearInterval(tempIntervalId)
               // if (call !== 'no call') API.Sendbird.stopCalling(call)
               // alert('통화가 종료되었습니다')
@@ -440,7 +460,11 @@ function Session() {
             <CustomButton custom_color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}
               onClick={() => {
                 API.postCallDone(call._callId).then(() => {
-                  navigater(`/review/${params.id}`)
+                  if (amIMentor) {
+                    navigater(`/mentor`)
+                  } else {
+                    navigater(`/review/${params.id}`)
+                  }
                 })
               }}
             > 상담 종료 </CustomButton>
