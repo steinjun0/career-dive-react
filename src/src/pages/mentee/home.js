@@ -11,7 +11,7 @@ function App() {
       <HomeBanner></HomeBanner>
       <GrayBackground>
         <MaxWidthDiv>
-          <JobCategoryGroup></JobCategoryGroup>
+          {/* <JobCategoryGroup></JobCategoryGroup> */}
           <FamousMentorGroup></FamousMentorGroup>
           <BottomEventGroup></BottomEventGroup>
         </MaxWidthDiv>

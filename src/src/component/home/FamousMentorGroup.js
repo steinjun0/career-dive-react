@@ -46,7 +46,7 @@ function JobCategoryGroup() {
     <FamousMentorGroupWrapper>
       <TopWrapper>
         <Title>상담 가능한 멘토</Title>
-        <LinkNoDeco to={'/search'} style={{ zIndex: 3 }}><SellAll>전체보기</SellAll></LinkNoDeco>
+        <LinkNoDeco to={'/search'} style={{ zIndex: 2 }}><SellAll>전체보기</SellAll></LinkNoDeco>
 
       </TopWrapper>
 

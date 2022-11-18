@@ -14,7 +14,7 @@ import BannerIdCard2 from "../../assets/img/home/BannerIDCard-2.png";
 import BannerSearchIcon from "../../assets/icon/bannerSearch.svg";
 
 const HomeBannerFullWidthWrapper = styled(FullWidthWrapper)`
-  height: 600px;
+  height: 450px;
   background-color: white;
 `;
 const HomeBannerWrapper = styled(Flex)`
@@ -29,14 +29,14 @@ const HomeBannerWrapper = styled(Flex)`
 
 const FirstBannerIdCard = styled("img")`
   position: absolute;
-  margin-top: -74px;
+  margin-top: -214px;
   width: 444px;
   right: 181px;
 `;
 
 const SecondBannerIdCard = styled("img")`
   position: absolute;
-  margin-top: -96px;
+  margin-top: -236px;
   width: 444px;
   right: -123px;
 `;
@@ -81,7 +81,7 @@ function HomeBanner() {
         <FirstBannerIdCard src={BannerIdCard1} alt="" />
         <SecondBannerIdCard src={BannerIdCard2} alt="" />
 
-        <SearchBar>
+        {/* <SearchBar>
           <RowAlignCenterFlex>
             <SearchBarSpan>직무</SearchBarSpan>
             <EmptyWidth width={'6px'} />
@@ -118,7 +118,7 @@ function HomeBanner() {
           </RowAlignCenterFlex>
 
           <img src={BannerSearchIcon} alt="" />
-        </SearchBar>
+        </SearchBar> */}
 
         <BannerTitle>
           평소 만나고 싶던

@@ -6,7 +6,7 @@ const BottomEventCardsWrapper = styled(RowAlignCenterFlex)`
     justify-content: space-between;
     width: 100%;
     margin-top: 80px;
-    margin-bottom: 204px;
+    margin-bottom: 160px;
 `;
 
 
