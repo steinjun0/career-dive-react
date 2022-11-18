@@ -83,7 +83,7 @@ const SpeechBubbleIcon = styled('img')`
   margin-right: 6px;
 `;
 
-const footerDisableUrl = ['/login', '/signup', '/mentor/register', '/session']
+const footerDisableUrl = ['/login', '/signup', '/mentor/register', '/session', '/review']
 
 
 function Footer() {
