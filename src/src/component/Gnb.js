@@ -187,19 +187,21 @@ function Gnb() {
   useEffect(() => {
     if (firstRender) {
       setFirstRender(false)
-      if (location === '/') {
-        if (JSON.parse(localStorage.getItem('IsMentor'))) {
-          setIsMentorMode(true)
-          localStorage.setItem('IsMentorMode', true)
-          navigater('/mentor')
-        }
-      } else if (location === '/mentor') {
+
+      if (JSON.parse(localStorage.getItem('IsMentor'))) {
+        setIsMentorMode(true)
+        localStorage.setItem('IsMentorMode', true)
+        navigater('/mentor')
+      }
+
+      if (location === '/mentor') {
         if (!JSON.parse(localStorage.getItem('IsMentor'))) {
           setIsMentorMode(false)
           alert('멘토 등록을 진행해주세요')
           navigater('/mentor/register')
         }
       }
+
     }
 
   }, [firstRender, navigater])
