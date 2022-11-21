@@ -7,7 +7,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 import logoMentee from '../assets/img/logo/careerDiveLogo.svg';
 import logoMentor from '../assets/img/logo/careerDiveMentorLogo.svg';
-import testProfileImage from '../assets/img/testMentorImage.png';
+import testProfileImage from '../assets/img/logo/testProfileImage.png';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import API from "API";

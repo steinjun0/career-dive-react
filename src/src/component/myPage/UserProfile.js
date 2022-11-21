@@ -1,5 +1,6 @@
 import { Divider, styled, TextField } from "@mui/material";
-import testMentorImage from "../../assets/img/testMentorImage.png";
+// import testMentorImage from "../../assets/img/testMentorImage.png";
+import testMentorImage from '../../assets/img/logo/testProfileImage.png';
 
 import {
   CircleImg,
