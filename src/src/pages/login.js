@@ -86,7 +86,13 @@ function Login() {
                 window.localStorage.setItem('IsMentor', loginResponse.data['IsMentor'])
                 window.localStorage.setItem('Nickname', loginResponse.data['Nickname'])
                 window.localStorage.setItem('isAutoLogin', isAutoLogin)
-                navigate('/')
+                if (loginResponse.data['IsMentor']) {
+                    window.localStorage.setItem('IsMentorMode', true)
+                    navigate('/mentor')
+                } else {
+                    window.localStorage.setItem('IsMentorMode', false)
+                    navigate('/')
+                }
             } else {
                 alert(loginResponse.error.response.data.error) // 이렇게 복잡해야하는가?
             }
