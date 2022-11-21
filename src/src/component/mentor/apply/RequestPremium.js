@@ -148,8 +148,10 @@ function Request() {
 
   async function onClickApplyButton() {
     if (uploadingFiles.length <= 0) {
-      alert('첨부 파일을 업로드 해주세요!')
-      return
+      const isContinue = window.confirm('첨부파일 없이 계속 하시겠습니까?')
+      if (!isContinue) {
+        return
+      }
     }
 
     const reservations = JSON.parse(localStorage.getItem(`reservations`))

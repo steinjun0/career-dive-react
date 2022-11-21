@@ -7,10 +7,11 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 import logoMentee from '../assets/img/logo/careerDiveLogo.svg';
 import logoMentor from '../assets/img/logo/careerDiveMentorLogo.svg';
-import testProfileImage from '../assets/img/logo/testProfileImage.jpeg';
+import testProfileImage from '../assets/img/testMentorImage.png';
 import { useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import API from "API";
+import Login from "pages/login";
 
 
 const GnbFullWidthWrapper = styled("nav")`
@@ -141,33 +142,69 @@ function Gnb() {
   const isMouseOnProfileMenuRef = useRef(false);
 
 
-  useEffect(async () => {
-    const AccessToken = localStorage.getItem('AccessToken')
-    setIsMentor(JSON.parse(localStorage.getItem('IsMentor')))
-    setIsMentorMode(JSON.parse(localStorage.getItem('IsMentorMode')))
+  useEffect(() => {
+    async function checkToken() {
+      const AccessToken = localStorage.getItem('AccessToken');
+      setIsMentor(JSON.parse(localStorage.getItem('IsMentor')))
+      setIsMentorMode(JSON.parse(localStorage.getItem('IsMentorMode')))
 
-    if (AccessToken !== null) {
-      const validResponse = await API.postAccountValid(AccessToken);
-      if (validResponse.status === 200) {
-        setIsLogin(true)
-        return
-      }
-    }
-    const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
-    if (isAutoLogin === true) {
-      const RefreshToken = localStorage.getItem('RefreshToken')
-      if (RefreshToken !== null) {
-        const refreshResponse = await API.postAccountRenew(RefreshToken);
-        if (refreshResponse.status === 200) {
-          const newAccessToken = refreshResponse.data
-          localStorage.setItem('AccessToken', newAccessToken)
-          setIsLogin(true)
-          return
+      let isAccessTokenValid = false
+
+      if (AccessToken !== null) {
+        const validResponse = await API.postAccountValid(AccessToken);
+        if (validResponse.status === 200) {
+          isAccessTokenValid = true
+        }
+      } else {
+        const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
+        if (isAutoLogin === true) {
+          const RefreshToken = localStorage.getItem('RefreshToken')
+          if (RefreshToken !== null) {
+            const refreshResponse = await API.postAccountRenew(RefreshToken);
+            if (refreshResponse.status === 200) {
+              const newAccessToken = refreshResponse.data
+              localStorage.setItem('AccessToken', newAccessToken)
+              isAccessTokenValid = true
+            }
+          }
         }
       }
+
+      if (isAccessTokenValid) {
+        setIsLogin(true)
+      } else {
+        setIsLogin(false)
+      }
+
     }
-    setIsLogin(false)
+
+    checkToken();
+
   }, [location])
+
+  const [firstRender, setFirstRender] = useState(true)
+
+  useEffect(() => {
+    if (firstRender) {
+      setFirstRender(false)
+
+      if (JSON.parse(localStorage.getItem('IsMentor'))) {
+        setIsMentorMode(true)
+        localStorage.setItem('IsMentorMode', true)
+        navigater('/mentor')
+      }
+
+      if (location === '/mentor') {
+        if (!JSON.parse(localStorage.getItem('IsMentor'))) {
+          setIsMentorMode(false)
+          alert('멘토 등록을 진행해주세요')
+          navigater('/mentor/register')
+        }
+      }
+
+    }
+
+  }, [firstRender, navigater])
 
   return (
     <div>

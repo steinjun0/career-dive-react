@@ -71,164 +71,174 @@ function Session() {
   const [intervalId, setIntervalId] = useState()
 
 
-  useEffect(async () => {
-    console.log(JSON.parse(localStorage.getItem('IsMentorMode')))
-    const amIMentor = (JSON.parse(localStorage.getItem('IsMentorMode')) === true)
-    if (JSON.parse(localStorage.getItem('IsMentorMode')) === true) {
-      setAmIMentor(true)
-      setIsMentorIn(true)
-    } else {
-      setIsMenteeIn(true)
-    }
+  useEffect(() => {
+    async function getConsultData() {
+      console.log(JSON.parse(localStorage.getItem('IsMentorMode')))
+      const amIMentor = (JSON.parse(localStorage.getItem('IsMentorMode')) === true)
+      if (JSON.parse(localStorage.getItem('IsMentorMode')) === true) {
+        setAmIMentor(true)
+        setIsMentorIn(true)
+      } else {
+        setIsMenteeIn(true)
+      }
 
-    let consultRes = await API.getConsult(params.id).then((res) => {
-      if (res.status === 200) {
-        if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
-          calleeId = res.data.MentorID
-        } else {
-          calleeId = res.data.MenteeID
-        }
-        menteeId = res.data.MenteeID
-        mentorId = res.data.MentorID
-        setConsultData(res.data)
+      let consultRes = await API.getConsult(params.id).then((res) => {
+        if (res.status === 200) {
+          if (+res.data.MenteeID === +localStorage.getItem("UserID")) {
+            calleeId = res.data.MentorID
+          } else {
+            calleeId = res.data.MenteeID
+          }
+          menteeId = res.data.MenteeID
+          mentorId = res.data.MentorID
+          setConsultData(res.data)
 
-        const [tempStartDate, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
-        setEndDate(tempEndDate)
+          const [tempStartDate, tempEndDate] = createDateFromHourMin(res.data.Date, res.data.StartTime, res.data.EndTime)
+          setEndDate(tempEndDate)
 
-        const tempIntervalId = setInterval(() => {
-          const tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
-          const tempPassTime = new Date(new Date().getTime() - tempStartDate.getTime())
-          setLeftTime(tempLeftTime)
-          console.log('tempPassTime.getHours()', tempPassTime.getHours())
-          console.log('tempPassTime.getMinutes()', tempPassTime.getMinutes())
-          console.log('tempPassTime.getSeconds() === 0', tempPassTime.getSeconds())
-          console.log('tempPassTime', tempPassTime.getTime())
-          if (tempPassTime.getTime() > 0) {
+          const tempIntervalId = setInterval(() => {
+            console.log('tempEndDate', tempEndDate)
+            const tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
+            const tempPassTime = new Date(new Date().getTime() - tempStartDate.getTime())
+            setLeftTime(tempLeftTime)
+            const tempLeftHour = Math.floor((tempEndDate.getTime() - new Date().getTime()) / 1000 / 60 / 60)
+            const tempLeftMin = Math.floor((tempEndDate.getTime() - new Date().getTime()) / 1000 / 60)
+            const tempLeftSecond = Math.floor((tempEndDate.getTime() - new Date().getTime()) / 1000 % 60)
+            console.log(tempLeftHour, tempLeftMin, tempLeftSecond)
+            console.log('tempLeftHour === 0 && tempLeftMin >= 6 && (!isMentorIn || !isMenteeIn)', tempLeftHour === 0 && tempLeftMin >= 6)
+            if (tempPassTime.getTime() > 0) {
 
-            // 1분후
-            if (tempPassTime.getHours() === 0 && tempPassTime.getMinutes() === 1 && tempPassTime.getSeconds() === 0 && (!isMentorIn || !isMenteeIn)) {
-              let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
-              if (amIMentor) {
-                tempLatenessParams.mentorLateness = false
-              } else {
-                tempLatenessParams.menteeLateness = false
-              }
-              API.postConsultLateness(tempLatenessParams)
-            } else if (tempPassTime.getHours() === 0 && tempPassTime.getMinutes() === 5 && tempPassTime.getSeconds() === 59 && (!isMentorIn || !isMenteeIn)) {
-              // 5분59초 후
-              let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
-              if (amIMentor) {
-                tempNoshowParams.mentorNoshow = false
-              } else {
-                tempNoshowParams.menteeNoshow = false
-              }
-              API.postConsultNoshow(tempNoshowParams).then(() => {
+              // 1분후
+              if (tempLeftHour === 0 && tempLeftMin === 1 && tempLeftSecond === 0 && (!isMentorIn || !isMenteeIn)) {
+                let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
                 if (amIMentor) {
-                  alert('멘티가 노쇼했습니다')
-                  navigater('/mentor')
+                  tempLatenessParams.mentorLateness = false
                 } else {
-                  alert('멘토가 노쇼했습니다')
-                  navigater(`/mentee/schedule`)
+                  tempLatenessParams.menteeLateness = false
                 }
-              })
-
-
-            } else if (tempEndDate <= new Date()) {
-              console.log('통화가 종료되었습니다')
-              // API.patchConsultDone(res.data.ID)
-              console.log('call', call)
-              API.postCallDone(call._callId).then(() => {
-                clearInterval(tempIntervalId)
-                if (call !== 'no call') API.Sendbird.stopCalling(call)
-                alert('통화가 종료되었습니다')
-
+                API.postConsultLateness(tempLatenessParams)
+              } else if (tempLeftHour === 0 && tempLeftMin >= 6 && (!isMentorIn || !isMenteeIn)) {
+                // 5분59초 후
+                let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
                 if (amIMentor) {
-                  navigater(`/mentor`)
+                  tempNoshowParams.mentorNoshow = false
                 } else {
-                  navigater(`/review/${params.id}`)
+                  tempNoshowParams.menteeNoshow = false
                 }
-              })
+                API.postConsultNoshow(tempNoshowParams).then(() => {
+                  if (amIMentor) {
+                    clearInterval(tempIntervalId)
+                    if (call !== 'no call') API.Sendbird.stopCalling(call)
+                    alert('멘티가 노쇼했습니다')
+                    navigater('/mentor')
+                  } else {
+                    clearInterval(tempIntervalId)
+                    if (call !== 'no call') API.Sendbird.stopCalling(call)
+                    alert('멘토가 노쇼했습니다')
+                    navigater(`/mentee/schedule`)
+                  }
+                })
+
+
+              } else if (tempEndDate <= new Date()) {
+                console.log('통화가 종료되었습니다')
+                // API.patchConsultDone(res.data.ID)
+                console.log('call', call)
+                API.postCallDone(call._callId).then(() => {
+                  clearInterval(tempIntervalId)
+                  if (call !== 'no call') API.Sendbird.stopCalling(call)
+                  alert('통화가 종료되었습니다')
+
+                  if (amIMentor) {
+                    navigater(`/mentor`)
+                  } else {
+                    navigater(`/review/${params.id}`)
+                  }
+                })
+
+              }
 
             }
 
-          }
+          }, 1000);
+          setIntervalId(tempIntervalId)
+        }
+        return res
+      })
 
-        }, 1000);
-        setIntervalId(tempIntervalId)
-      }
-      return res
-    })
-
-    API.getAccountMentee(menteeId).then((res) => {
-      if (res.status === 200) {
-        setMenteeData(res.data)
-      }
-    })
+      API.getAccountMentee(menteeId).then((res) => {
+        if (res.status === 200) {
+          setMenteeData(res.data)
+        }
+      })
 
 
-    API.getAccountMentor(mentorId).then((res) => {
-      if (res.status === 200) {
-        setMentorData(res.data)
-      }
-    })
+      API.getAccountMentor(mentorId).then((res) => {
+        if (res.status === 200) {
+          setMentorData(res.data)
+        }
+      })
 
-    // params.id
-    API.Sendbird.initSendbird()
-    await API.Sendbird.checkAuth(+localStorage.getItem("UserID"), localStorage.getItem("SendbirdToken"))
-    API.Sendbird.connectWebSocket().then(() => {
-      setTimeout(() => {
-        API.Sendbird.makeACall(
-          calleeId,
-          ({ call: callProps }) => {
-            setCall(_ => callProps)
-            callProps.stopVideo()
-            console.log('setCall(callProps)', callProps)
-            API.postCallNew(
-              {
-                calleeId: calleeId,
-                callerId: +localStorage.getItem("UserID"),
-                consultId: consultRes.data.ID,
-                callId: callProps._callId
+      // params.id
+      API.Sendbird.initSendbird()
+      await API.Sendbird.checkAuth(+localStorage.getItem("UserID"), localStorage.getItem("SendbirdToken"))
+      API.Sendbird.connectWebSocket().then(() => {
+        setTimeout(() => {
+          API.Sendbird.makeACall(
+            calleeId,
+            ({ call: callProps }) => {
+              setCall(_ => callProps)
+              callProps.stopVideo()
+              console.log('setCall(callProps)', callProps)
+              API.postCallNew(
+                {
+                  calleeId: calleeId,
+                  callerId: +localStorage.getItem("UserID"),
+                  consultId: consultRes.data.ID,
+                  callId: callProps._callId
+                }
+              )
+            },
+            () => {
+              setIsMenteeIn(true)
+              setIsMentorIn(true)
+            },
+            () => {
+              if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+                setIsMenteeIn(false)
               }
-            )
-          },
-          () => {
+              else {
+                setIsMentorIn(false)
+              }
+            }
+          )
+        }, 1000)
+
+      })
+      API.Sendbird.addEventHandler()
+      API.Sendbird.receiveACall(
+        ({ call: callProps }) => {
+          setCall(_ => callProps)
+          if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
             setIsMenteeIn(true)
-            setIsMentorIn(true)
-          },
-          () => {
-            if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
-              setIsMenteeIn(false)
-            }
-            else {
-              setIsMentorIn(false)
-            }
           }
-        )
-      }, 1000)
+          else {
+            setIsMentorIn(true)
+          }
+          API.postCallStart(callProps._callId)
+        },
+        () => {
+          if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+            setIsMenteeIn(false)
+          }
+          else {
+            setIsMentorIn(false)
+          }
+        }
+      )
+    }
+    getConsultData();
 
-    })
-    API.Sendbird.addEventHandler()
-    API.Sendbird.receiveACall(
-      ({ call: callProps }) => {
-        setCall(_ => callProps)
-        if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
-          setIsMenteeIn(true)
-        }
-        else {
-          setIsMentorIn(true)
-        }
-        API.postCallStart(callProps._callId)
-      },
-      () => {
-        if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
-          setIsMenteeIn(false)
-        }
-        else {
-          setIsMentorIn(false)
-        }
-      }
-    )
   }, [])
 
   usePrompt('dd', true, () => {
