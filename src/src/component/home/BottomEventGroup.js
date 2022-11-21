@@ -17,7 +17,13 @@ function BottomEventGroup() {
                 padding: 24, marginRight: '12px',
                 width: '100%', height: '202px',
                 cursor: 'pointer'
-            }}>
+            }}
+                onClick={
+                    () => {
+                        window.open('https://www.notion.so/CBT-c57283dae1fe4602ad25f2b6ba0419aa')
+                    }
+                }
+            >
                 <TextHeading5 color="white" style={{ textDecoration: 'underline' }}>서비스 정책 및 가이드라인 멘티편 ></TextHeading5>
             </Flex>
             <Flex style={{
