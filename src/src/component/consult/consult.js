@@ -11,7 +11,7 @@ export function onEnterSession({ navigater, date, consultStatus, startTime, endT
   // noshow
   // mentee_noshow
   // mentor_noshow
-  if (nowTime - startDateTime <= 1000 * 60 * 6 - 1) { // 5분59초 이후 진입 불가. 
+  if (nowTime - startDateTime >= 1000 * 60 * 6 - 1) { // 5분59초 이후 진입 불가. 
     alert('종료된 상담이에요.')
     return
   }
