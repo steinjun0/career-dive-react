@@ -69,9 +69,9 @@ function ConsultMentorCard({ consult, requestFormOnClick, changeOnClick, enterOn
     categoryIcon = calendarSuccess;
   } else if (consult.Status === 'created') {
     categoryIcon = calendarWait;
-  } else if (consult.Status === 'rejected' || consult.Status === 'canceled') {
+  } else if (consult.Status === 'rejected') {
     categoryIcon = calendarCancel;
-  } else if (consult.Status === 'done') {
+  } else if (['done', 'mentor_noshow', 'mentee_noshow', 'noshow'].includes(consult.Status)) {
     categoryIcon = calendarSuccess;
   } else {
     categoryIcon = calendarSuccess;
