@@ -30,7 +30,7 @@ import { CustomButton } from 'util/Custom/CustomButton'
 import { useNavigate, useParams } from "react-router-dom";
 import API from "API"
 import { usePrompt } from "util/usePromprt";
-import { createDateFromHourMin } from "util/util";
+import { addMinute, createDateFromHourMin } from "util/util";
 
 
 
@@ -96,13 +96,17 @@ function Session() {
           setEndDate(tempEndDate)
 
           const tempIntervalId = setInterval(() => {
-            console.log('tempEndDate', tempEndDate)
-            const tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
+            let tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
             const tempPassTime = new Date(new Date().getTime() - tempStartDate.getTime())
-            setLeftTime(tempLeftTime)
+
             const tempLeftHour = Math.floor((tempLeftTime) / 1000 / 60 / 60)
             const tempLeftMin = Math.floor((tempLeftTime) / 1000 / 60)
             const tempLeftSecond = Math.floor((tempLeftTime) / 1000 % 60)
+            tempLeftTime.setHours(tempLeftHour);
+            tempLeftTime.setMinutes(tempLeftMin);
+            tempLeftTime.setSeconds(tempLeftSecond);
+            tempLeftTime = addMinute(tempLeftTime, 5)
+            setLeftTime(tempLeftTime)
 
             const tempPassHour = Math.floor((tempPassTime) / 1000 / 60 / 60)
             const tempPassMin = Math.floor((tempPassTime) / 1000 / 60)
