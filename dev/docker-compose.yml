@@ -7,8 +7,9 @@ services:
       context: ../
       dockerfile: ./Dockerfile # context 경로 기준 상대경로
       target: builder
-    volumes: # docker-comose 파일 경로 기준 상대 경로
-      - ../src:/root/src
+    volumes:
+      # docker-comose 파일 경로 기준 상대 경로
+      - ../:/root/src
     env_file:
       - ../src/.env
     ports:
