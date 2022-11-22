@@ -49,7 +49,7 @@ const priceTable = {
 
 function Introduction({ mentorConsultContents }) {
   const contentGuideObject = {
-    '면접 대비': `${localStorage.getItem('Nickname')}의 경력, 스펙 그리고 자소서를 토대로 한 예상 면접 질문을 제공해요.경력, 스펙 그리고 자소서를 토대로 한 예상 면접 질문을 제공합니다.`,
+    '면접 대비': `${localStorage.getItem('Nickname')}의 경력, 스펙 그리고 자소서를 토대로 한 예상 면접 질문을 제공해요.`,
     '자소서 구성': `${localStorage.getItem('Nickname')}님의 경력과 스펙을 토대로 자기소개서 구성을 도와줘요.`,
     '자소서 첨삭': `${localStorage.getItem('Nickname')}님이 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공해요.`,
     '포트폴리오 첨삭': `${localStorage.getItem('Nickname')}님이 작성한 초안을 토대로 구성 및 내용 등에 관한 피드백을 제공해요.`,
