@@ -185,7 +185,7 @@ function Gnb() {
   const [firstRender, setFirstRender] = useState(true)
 
   useEffect(() => {
-    if (firstRender) {
+    if (firstRender && !gnbDisableUrl.map((e) => location.includes(e)).includes(true)) {
       setFirstRender(false)
 
       if (JSON.parse(localStorage.getItem('IsMentor'))) {
