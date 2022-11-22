@@ -67,7 +67,12 @@ function OnComingShedule({ consultList }) {
       <Card no_divider={'true'} title={'다가오는 일정'}>
         {consultList &&
           consultList
-            .filter((consult) => new Date(consult.Date).setHours(+consult.EndTime.slice(0, 2)) >= new Date())
+            .filter((consult) => {
+              let endTempDate = new Date(consult.Date)
+              endTempDate.setHours(+consult.EndTime.slice(0, 2))
+              endTempDate.setMinutes(+consult.EndTime.slice(3))
+              return endTempDate >= new Date()
+            })
             .slice(0, 3)
             .map((consult, index) => {
               return (

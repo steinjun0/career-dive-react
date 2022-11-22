@@ -30,7 +30,7 @@ import { CustomButton } from 'util/Custom/CustomButton'
 import { useNavigate, useParams } from "react-router-dom";
 import API from "API"
 import { usePrompt } from "util/usePromprt";
-import { createDateFromHourMin } from "util/util";
+import { addMinute, createDateFromHourMin } from "util/util";
 
 
 
@@ -73,7 +73,6 @@ function Session() {
 
   useEffect(() => {
     async function getConsultData() {
-      console.log(JSON.parse(localStorage.getItem('IsMentorMode')))
       const amIMentor = (JSON.parse(localStorage.getItem('IsMentorMode')) === true)
       if (JSON.parse(localStorage.getItem('IsMentorMode')) === true) {
         setAmIMentor(true)
@@ -97,19 +96,25 @@ function Session() {
           setEndDate(tempEndDate)
 
           const tempIntervalId = setInterval(() => {
-            console.log('tempEndDate', tempEndDate)
-            const tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
+            let tempLeftTime = new Date(tempEndDate.getTime() - new Date().getTime())
             const tempPassTime = new Date(new Date().getTime() - tempStartDate.getTime())
+
+            const tempLeftHour = Math.floor((tempLeftTime) / 1000 / 60 / 60)
+            const tempLeftMin = Math.floor((tempLeftTime) / 1000 / 60)
+            const tempLeftSecond = Math.floor((tempLeftTime) / 1000 % 60)
+            tempLeftTime.setHours(tempLeftHour);
+            tempLeftTime.setMinutes(tempLeftMin);
+            tempLeftTime.setSeconds(tempLeftSecond);
+            tempLeftTime = addMinute(tempLeftTime, 5)
             setLeftTime(tempLeftTime)
-            const tempLeftHour = Math.floor((tempEndDate.getTime() - new Date().getTime()) / 1000 / 60 / 60)
-            const tempLeftMin = Math.floor((tempEndDate.getTime() - new Date().getTime()) / 1000 / 60)
-            const tempLeftSecond = Math.floor((tempEndDate.getTime() - new Date().getTime()) / 1000 % 60)
-            console.log(tempLeftHour, tempLeftMin, tempLeftSecond)
-            console.log('tempLeftHour === 0 && tempLeftMin >= 6 && (!isMentorIn || !isMenteeIn)', tempLeftHour === 0 && tempLeftMin >= 6)
+
+            const tempPassHour = Math.floor((tempPassTime) / 1000 / 60 / 60)
+            const tempPassMin = Math.floor((tempPassTime) / 1000 / 60)
+            const tempPassSecond = Math.floor((tempPassTime) / 1000 % 60)
             if (tempPassTime.getTime() > 0) {
 
               // 1분후
-              if (tempLeftHour === 0 && tempLeftMin === 1 && tempLeftSecond === 0 && (!isMentorIn || !isMenteeIn)) {
+              if (tempPassHour === 0 && tempPassMin === 1 && tempPassSecond === 0 && (!isMentorIn || !isMenteeIn)) {
                 let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
                 if (amIMentor) {
                   tempLatenessParams.mentorLateness = false
@@ -117,7 +122,7 @@ function Session() {
                   tempLatenessParams.menteeLateness = false
                 }
                 API.postConsultLateness(tempLatenessParams)
-              } else if (tempLeftHour === 0 && tempLeftMin >= 6 && (!isMentorIn || !isMenteeIn)) {
+              } else if (tempPassHour === 0 && tempPassMin >= 6 && (!isMentorIn || !isMenteeIn)) {
                 // 5분59초 후
                 let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
                 if (amIMentor) {
@@ -141,9 +146,7 @@ function Session() {
 
 
               } else if (tempEndDate <= new Date()) {
-                console.log('통화가 종료되었습니다')
                 // API.patchConsultDone(res.data.ID)
-                console.log('call', call)
                 API.postCallDone(call._callId).then(() => {
                   clearInterval(tempIntervalId)
                   if (call !== 'no call') API.Sendbird.stopCalling(call)

@@ -25,7 +25,7 @@ import Dropzone from 'react-dropzone'
 import UploadIcon from 'assets/icon/UploadIcon'
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addMinute, getAMOrPM, getDayInKorean, getKoreanTimeString, updateReservation } from "util/util";
+import { addMinute, getAMOrPM, getDayInKorean, getKoreanTimeString, removeReservation, updateReservation } from "util/util";
 import { CustomTextField } from "util/Custom/CustomTextField";
 import API from "API"
 
@@ -197,7 +197,7 @@ function Request() {
             }
           })
         }
-
+        removeReservation(params.id)
         navigate('/mentee/request/finish')
       } else {
         alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')

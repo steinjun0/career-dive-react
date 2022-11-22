@@ -2,7 +2,9 @@ import { styled } from "@mui/material";
 import {
   CircleImg,
   colorBackgroundCareerDiveBlue,
+  colorBackgroundCareerDivePink,
   colorCareerDiveBlue,
+  colorCareerDivePink,
   colorTextLight,
   EmptyHeight,
   Flex,
@@ -60,8 +62,8 @@ function MentorCard({
           <TextSubtitle1>{name}</TextSubtitle1>
           <EmptyHeight height={'8px'} />
           <TagMedium
-            color={colorCareerDiveBlue}
-            background_color={colorBackgroundCareerDiveBlue}
+            color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
+            background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
             style={{ fontWeight: '500', padding: '4px 8px', boxSizing: 'border-box' }}>
 
             {inJob} {duration !== '' ? `· ${duration}년` : ''}

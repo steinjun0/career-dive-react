@@ -36,20 +36,20 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
   const navigater = useNavigate();
   const location = useLocation();
 
-  // 생성된(created), 대기(pending), 승인(approved), 완료(done)
   const categoryStatusConverter = {
     '전체': '',
-    '예약 성공': 'approved',
-    '예약 대기': 'created',
-    '예약 실패': 'rejected',
-    '예약 취소': 'canceled',
-    '상담 완료': 'done',
+    '예약 성공': ['approved'],
+    '예약 대기': ['created'],
+    '예약 실패': ['rejected'],
+    '상담 완료': ['done', 'mentor_noshow', 'mentee_noshow', 'noshow'],
     '': '전체',
     'approved': '예약 성공',
     'created': '예약 대기',
     'rejected': '예약 실패',
-    'canceled': '예약 취소',
-    'done': '상담 완료'
+    'done': '상담 완료',
+    'mentor_noshow': '상담 완료',
+    'mentee_noshow': '상담 완료',
+    'noshow': '상담 완료'
   }
   const categories = ['전체', '예약 성공', '예약 대기', '예약 실패', '상담 완료']
   const [category, setCategory] = useState('전체');
@@ -92,7 +92,7 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
           <Divider style={{ color: colorBackgroundGrayMedium }} />
           <Grid container spacing={'30px'} marginTop={0}>
             {consultList && consultList.map((consult, index) => {
-              if (category === '전체' || consult.Status === categoryStatusConverter[category]) {
+              if (category === '전체' || categoryStatusConverter[category].includes(consult.Status)) {
                 return (
                   <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
                     {location.pathname.includes('mentor') ?
