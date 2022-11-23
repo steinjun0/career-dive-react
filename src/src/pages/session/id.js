@@ -159,7 +159,7 @@ function Session() {
                 // API.patchConsultDone(res.data.ID)
                 API.postCallDone(callRef.current._callId).then(() => {
                   clearInterval(tempIntervalId)
-                  if (call !== 'no call') API.Sendbird.stopCalling(call)
+                  if (callRef.current !== 'no call') API.Sendbird.stopCalling(callRef.current)
                   alert('통화가 종료되었습니다')
 
                   if (amIMentor) {
