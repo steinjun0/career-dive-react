@@ -55,6 +55,7 @@ function Session() {
   const isMenteeInRef = useRef(false);
 
   const [call, setCall] = useState('no call')
+  const callRef = useRef('no call')
   const [consultData, setConsultData] = useState()
   const [isMicOn, setIsMicOn] = useState(false)
   const [isScreenSharing, setIsScreenSharing] = useState(false)
@@ -194,81 +195,113 @@ function Session() {
       // params.id
       API.Sendbird.initSendbird()
       await API.Sendbird.checkAuth(+localStorage.getItem("UserID"), localStorage.getItem("SendbirdToken"))
-      API.Sendbird.connectWebSocket().then(() => {
-        API.Sendbird.makeACall(
-          calleeId,
-          ({ call: callProps }) => {
-            setCall(_ => callProps)
-            callProps.stopVideo()
-            API.postCallNew(
-              {
-                calleeId: calleeId,
-                callerId: +localStorage.getItem("UserID"),
-                consultId: consultRes.data.ID,
-                callId: callProps._callId
-              }
-            )
-          },
-          () => {
-            setIsMenteeIn(true)
-            setIsMentorIn(true)
-            isMentorInRef.current = true
-            isMenteeInRef.current = true;
-          },
-          () => {
-            console.log('end1')
-            if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
-              setIsMenteeIn(false)
-              isMenteeInRef.current = false;
-            }
-            else {
-              setIsMentorIn(false)
-              isMentorInRef.current = false
-            }
-          }
-        )
+      API.Sendbird.connectWebSocket().then((res) => {
         API.Sendbird.addEventHandler()
         API.Sendbird.receiveACall(
-          ({ call: callProps }) => {
-            setCall(_ => callProps)
-            if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
-              setIsMenteeIn(true)
-              isMenteeInRef.current = true;
-            }
-            else {
-              setIsMentorIn(true)
-              isMentorInRef.current = true
-            }
-            API.postCallStart(callProps._callId)
-          },
-          () => {
-            console.log('end2')
-            if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
-              setIsMenteeIn(false)
-              isMenteeInRef.current = false;
-            }
-            else {
-              setIsMentorIn(false)
-              isMentorInRef.current = false
+          {
+            onReceiveACall: ({ call: callProps }) => {
+              setCall(_ => callProps)
+              callRef.current = callProps
+              if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+                setIsMenteeIn(true)
+                isMenteeInRef.current = true;
+              }
+              else {
+                setIsMentorIn(true)
+                isMentorInRef.current = true
+              }
+              API.postCallStart(callProps._callId)
+            },
+            onEnded: () => {
+              console.log('onEnded from receiveACall')
+              if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+                setIsMenteeIn(false)
+                isMenteeInRef.current = false;
+              }
+              else {
+                setIsMentorIn(false)
+                isMentorInRef.current = false
+              }
             }
           }
         )
+        setTimeout(() => {
+          callRef.current === 'no call' && API.Sendbird.makeACall(
+            {
+              calleeId: calleeId,
+              onMakeACall: ({ call: callProps }) => {
+                setCall(_ => callProps)
+                callRef.current = callProps
+                callProps.stopVideo()
+                API.postCallNew(
+                  {
+                    calleeId: calleeId,
+                    callerId: +localStorage.getItem("UserID"),
+                    consultId: consultRes.data.ID,
+                    callId: callProps._callId
+                  }
+                )
+              },
+              onConnected: () => {
+                setIsMenteeIn(true)
+                setIsMentorIn(true)
+                isMentorInRef.current = true
+                isMenteeInRef.current = true;
+              },
+              onEnded: () => {
+                console.log('onEnd from onMakeACall')
+                if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+                  setIsMenteeIn(false)
+                  isMenteeInRef.current = false;
+                }
+                else {
+                  setIsMentorIn(false)
+                  isMentorInRef.current = false
+                }
+              }
+            }
+          )
+        }, 1000);
+
+
+
       })
 
     }
     getConsultData();
 
+    window.addEventListener('beforeunload',
+      function listener(e) {
+        e.returnValue = '';
+      })
+
+
+    window.onunload = () => {
+      console.log('unload!!!!!!')
+      console.log('call', callRef.current)
+      if (callRef.current !== 'no call' && callRef.current !== undefined) {
+        API.Sendbird.stopCalling(callRef.current)
+      }
+      if (intervalId !== undefined) {
+        clearInterval(intervalId)
+      }
+    }
+
+
   }, [])
 
-  usePrompt('dd', true, () => {
-    console.log('prompt!!!!!', call)
-    if (call !== 'no call' && call !== undefined) {
-      API.Sendbird.stopCalling(call)
-    }
-    if (intervalId !== undefined) {
-      clearInterval(intervalId)
-    }
-  })
+
+
+
+  // usePrompt('dd', true, () => {
+  //   console.log('prompt!!!!!', call)
+  //   if (call !== 'no call' && call !== undefined) {
+  //     API.Sendbird.stopCalling(call)
+  //   }
+  //   if (intervalId !== undefined) {
+  //     clearInterval(intervalId)
+  //   }
+  // })
 
 
   return (
