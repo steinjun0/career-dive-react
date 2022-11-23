@@ -261,7 +261,7 @@ function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTim
 
 
 function CalendarMentor() {
-  const year = 2022;
+  const [year, setYear] = useState(2022);
   const [month, setMonth] = useState(`${new Date().getMonth() + 1}월`);
 
   const [selectedDate, setSelectedDate] = useState(0);
@@ -299,7 +299,7 @@ function CalendarMentor() {
   const getConsultSchedule = async () => {
     try {
       const res = await API.getConsultSchedule(
-        year,
+        ['11월', '12월'].includes(month) ? 2022 : 2023,
         month.slice(0, -1),
         Number(localStorage.getItem('UserID')))
       if (res.status === 200) {
@@ -508,7 +508,13 @@ function CalendarMentor() {
 
 
   useEffect(async () => {
+    if (['11월', '12월'].includes(month)) {
+      setYear(2022)
+    } else {
+      setYear(2023)
+    }
     getConsultSchedule()
+
   }, [month])
 
 

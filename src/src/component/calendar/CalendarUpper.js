@@ -85,9 +85,6 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
     selectedDateObjProp && selectedDateObjProp.getDate && setSelectedDate(selectedDateObjProp.getDate())
   }, [selectedDateObjProp])
 
-  useEffect(() => {
-  }, [month])
-
 
 
   return (
