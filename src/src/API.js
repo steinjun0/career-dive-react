@@ -483,13 +483,14 @@ export default {
 
       call.onEstablished = (call) => {
         console.log('established!')
+        call.stopVideo();
+        call.muteMicrophone();
       };
 
       call.onConnected = (call) => {
         console.log('onConnected!')
         onConnected();
-        call.stopVideo();
-        call.muteMicrophone();
+
       };
 
       call.onEnded = (call) => {
@@ -556,7 +557,7 @@ export default {
       });
     },
     stopCalling(call) {
-      console.log(call)
+      console.log('callEnd', call)
       call.end()
       SendBirdCall.removeAllListeners()
     }
