@@ -141,13 +141,13 @@ function Session() {
                 API.postConsultNoshow(tempNoshowParams).then(() => {
                   if (amIMentor) {
                     clearInterval(tempIntervalId)
-                    if (call !== 'no call') API.Sendbird.stopCalling(call)
+                    if (callRef.current !== 'no call') API.Sendbird.stopCalling(callRef.current)
                     alert('상대방이 입장하지 않아 상담이 종료되었습니다. 멘티')
                     console.log('상대방이 입장하지 않아 상담이 종료되었습니다. 멘티')
                     navigater('/mentor')
                   } else {
                     clearInterval(tempIntervalId)
-                    if (call !== 'no call') API.Sendbird.stopCalling(call)
+                    if (callRef.current !== 'no call') API.Sendbird.stopCalling(callRef.current)
                     alert('상대방이 입장하지 않아 상담이 종료되었습니다. 멘토')
                     console.log('상대방이 입장하지 않아 상담이 종료되었습니다. 멘티')
                     navigater(`/mentee/schedule`)
@@ -157,7 +157,7 @@ function Session() {
 
               } else if (tempEndDate <= new Date()) {
                 // API.patchConsultDone(res.data.ID)
-                API.postCallDone(call._callId).then(() => {
+                API.postCallDone(callRef.current._callId).then(() => {
                   clearInterval(tempIntervalId)
                   if (call !== 'no call') API.Sendbird.stopCalling(call)
                   alert('통화가 종료되었습니다')
