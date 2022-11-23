@@ -45,8 +45,8 @@ function MentorHome() {
     const res = await API.getConsultMentorList(localStorage.getItem('UserID'), '')
     if (res.status === 200) {
       setConsultList(res.data)
-      setReservationList(res.data.filter((e) => e.Status === 'created'))
-      setOnComingList(res.data.filter((e) => e.Status === 'approved'))
+      res.data && setReservationList(res.data.filter((e) => e.Status === 'created'))
+      res.data && setOnComingList(res.data.filter((e) => e.Status === 'approved'))
     }
   }, [])
 

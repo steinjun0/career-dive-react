@@ -197,7 +197,7 @@ function Request() {
             }
           })
         }
-        removeReservation(params.id)
+        // removeReservation(params.id)
         navigate('/mentee/request/finish')
       } else {
         alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')

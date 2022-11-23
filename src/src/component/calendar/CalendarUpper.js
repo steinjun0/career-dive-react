@@ -30,7 +30,7 @@ const getDatesOfMonth = (year, month) => {
 
 
 function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDateObjProp, onClickAvailableDateProps }) {
-  const year = 2022;
+  const [year, setYear] = useState(2022)
   const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : new Date().getMonth() + 1 + '월');
 
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
@@ -60,6 +60,11 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
 
   useEffect(() => {
     setDates(getDatesOfMonth(year, month.slice(0, - 1)))
+    if (['11월', '12월'].includes(month)) {
+      setYear(2022)
+    } else {
+      setYear(2023)
+    }
   }, [month])
 
 
@@ -80,9 +85,6 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
     selectedDateObjProp && selectedDateObjProp.getDate && setSelectedDate(selectedDateObjProp.getDate())
   }, [selectedDateObjProp])
 
-  useEffect(() => {
-  }, [month])
-
 
 
   return (
@@ -90,8 +92,8 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
       <YearMonthMenuWrapper>
         <YearMonthMenu
           style={{ fontWeight: 700, fontSize: 16, color: 'black' }}
-          title={`2022년 ${month}`}
-          menuItems={['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']}
+          title={`${year}년 ${month}`}
+          menuItems={['11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월']}
           onClickProps={onClickMonth}
           setState={setMonth}
           endIcon={<KeyboardArrowDownIcon />}></YearMonthMenu>
@@ -108,9 +110,12 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
 
               if (date === 0) return <DateBox key={`${weekIndex}${dateIndex}`}></DateBox>
               else {
-                if (+month.slice(0, -1) >= (new Date().getMonth() + 1) && date === selectedDate) {
+                if ((year <= new Date().getFullYear() ? +month.slice(0, -1) >= (new Date().getMonth() + 1) : true) && date === selectedDate) {
                   return <SelectedDateBox key={`${weekIndex}${dateIndex}`}>{date}</SelectedDateBox>
-                } else if (+month.slice(0, -1) < (new Date().getMonth() + 1) || (+month.slice(0, -1) == (new Date().getMonth() + 1) && date < new Date().getDate())) {
+                } else if (
+                  (year < new Date().getFullYear()) ||
+                  (year === new Date().getFullYear() && +month.slice(0, -1) < (new Date().getMonth() + 1)) ||
+                  (year === new Date().getFullYear() && (+month.slice(0, -1) == (new Date().getMonth() + 1) && date < new Date().getDate()))) {
                   return <DisableDateBox key={`${weekIndex}${dateIndex}`}>{date}</DisableDateBox>
                 } else if (availableDates.includes(date)) {
                   return <AvailableDateBox onClick={() => { onClickAvailableDate(date) }} key={`${weekIndex}${dateIndex}`}>{date}</AvailableDateBox>

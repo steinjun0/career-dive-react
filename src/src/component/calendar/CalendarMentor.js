@@ -67,7 +67,7 @@ const repeatOptionConverter = {
 }
 
 function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTime, setIsAdding, setIsEditing, style }) {
-  const hoursList = ['밤 12', '오전 01', '오전 02', '오전 03', '오전 04', '오전 05', '오전 06', '오전 07', '오전 08', '오전 09', '오전 10', '오전 11', '오전 12',
+  const hoursList = ['오전 00', '오전 01', '오전 02', '오전 03', '오전 04', '오전 05', '오전 06', '오전 07', '오전 08', '오전 09', '오전 10', '오전 11', '오전 12',
     '오후 01', '오후 02', '오후 03', '오후 04', '오후 05', '오후 06', '오후 07', '오후 08', '오후 09', '오후 10', '오후 11']
   const minsList = ['00', '30']
 
@@ -261,7 +261,7 @@ function SetAvailableTime({ onSetTime, onRemoveRule, onRemoveNotRule, initialTim
 
 
 function CalendarMentor() {
-  const year = 2022;
+  const [year, setYear] = useState(2022);
   const [month, setMonth] = useState(`${new Date().getMonth() + 1}월`);
 
   const [selectedDate, setSelectedDate] = useState(0);
@@ -299,7 +299,7 @@ function CalendarMentor() {
   const getConsultSchedule = async () => {
     try {
       const res = await API.getConsultSchedule(
-        year,
+        ['11월', '12월'].includes(month) ? 2022 : 2023,
         month.slice(0, -1),
         Number(localStorage.getItem('UserID')))
       if (res.status === 200) {
@@ -508,7 +508,13 @@ function CalendarMentor() {
 
 
   useEffect(async () => {
+    if (['11월', '12월'].includes(month)) {
+      setYear(2022)
+    } else {
+      setYear(2023)
+    }
     getConsultSchedule()
+
   }, [month])
 
 

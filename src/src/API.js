@@ -1,9 +1,19 @@
 import axios from 'axios'
 import SendBirdCall from "sendbird-calls";
 
-const CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
+let CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
 // const CAREER_DIVE_API_URL = 'https://api.dev.careerdive.co.kr'
-// const CAREER_DIVE_API_URL = 'https://api.careerdive.co.kr'
+
+if (window.location.host === 'careerdive.co.kr') {
+  CAREER_DIVE_API_URL = 'https://api.careerdive.co.kr'
+} else if (window.location.host === 'staging.careerdive.co.kr') {
+  CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
+} else if (window.location.host === 'dev.careerdive.co.kr') {
+  CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
+} else {
+  CAREER_DIVE_API_URL = 'https://api.staging.careerdive.co.kr'
+}
+
 
 const APP_ID = 'DCFAABFA-CE04-46DC-877A-C3C87B929C2D'
 // let user = JSON.parse(localStorage.getItem('userData'))
@@ -419,8 +429,8 @@ export default {
     connectWebSocket() {
       // Websocket Connection
       return SendBirdCall.connectWebSocket()
-        .then(/* connect succeeded */)
-        .catch(/* connect failed */);
+      // .then(/* connect succeeded */)
+      // .catch(/* connect failed */);
     },
 
     addEventHandler() {
@@ -440,7 +450,7 @@ export default {
       });
     },
 
-    makeACall(calleeId, onMakeACall, onConnected, onEnded) {
+    makeACall({ calleeId, onMakeACall, onConnected, onEnded }) {
       // console.log('makeacall local_video_element_id', document.getElementById('local_video_element_id'))
       // console.log('makeacall remote_video_element_id', document.getElementById('remote_video_element_id'))
       const dialParams = {
@@ -473,13 +483,14 @@ export default {
 
       call.onEstablished = (call) => {
         console.log('established!')
+        call.stopVideo();
+        call.muteMicrophone();
       };
 
       call.onConnected = (call) => {
         console.log('onConnected!')
         onConnected();
-        call.stopVideo();
-        call.muteMicrophone();
+
       };
 
       call.onEnded = (call) => {
@@ -499,20 +510,20 @@ export default {
       return call
     },
 
-    receiveACall(onReceiveACall, onEnded) {
+    receiveACall({ onReceiveACall, onEstablished, onEnded }) {
       SendBirdCall.addListener(2, {
         onRinging: (call) => {
           call.onEstablished = (call) => {
             console.log('established!')
-          };
-
-          call.onConnected = (call) => {
-            console.log('onConnected!')
             call.stopVideo();
             call.muteMicrophone();
             console.log('onreceive call', call)
             onReceiveACall({ call })
             console.log('mutemute!')
+          };
+
+          call.onConnected = (call) => {
+            console.log('onConnected!')
           };
 
           call.onEnded = (call) => {
@@ -546,7 +557,7 @@ export default {
       });
     },
     stopCalling(call) {
-      console.log(call)
+      console.log('callEnd', call)
       call.end()
       SendBirdCall.removeAllListeners()
     }
