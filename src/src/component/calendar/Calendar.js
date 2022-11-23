@@ -113,7 +113,7 @@ function Calendar({ setIsFinishSet }) {
   const [availableDates, setAvailableDates] = useState([]);
 
 
-  const year = 2022;
+  const [year, setYear] = useState(2022)
   const [month, setMonth] = useState('0월');
 
   const [selectedDate, setSelectedDate] = useState(0);
@@ -266,6 +266,7 @@ function Calendar({ setIsFinishSet }) {
     }
     setConsultingTime(newConsultingTime);
     // setConsultingStartTime(0);
+    console.log(newConsultingTime, new Date(year, month.slice(0, -1) - 1, selectedDate), originData.DayTimes)
     updateAvailableTimes(newConsultingTime, new Date(year, month.slice(0, -1) - 1, selectedDate), originData.DayTimes)
     setIsFinishSet && setIsFinishSet(false)
 
@@ -377,8 +378,17 @@ function Calendar({ setIsFinishSet }) {
   }, [])
 
   const onMonthChange = async (month) => {
+    setMonth(month)
+    let tempYear = 2022
+    if (['11월', '12월'].includes(month)) {
+      setYear(2022)
+      tempYear = 2022
+    } else {
+      setYear(2023)
+      tempYear = 2023
+    }
     const res = await API.getConsultSchedule(
-      year,
+      tempYear,
       month.slice(0, month.length - 1),
       params.id)
     if (res.status === 200) {
@@ -424,6 +434,14 @@ function Calendar({ setIsFinishSet }) {
 
 
   }, [consultingStartTime])
+
+  useEffect(() => {
+    if (['11월', '12월'].includes(month)) {
+      setYear(2022)
+    } else {
+      setYear(2023)
+    }
+  }, [month])
 
   return (
     <CalendarWrapper>
