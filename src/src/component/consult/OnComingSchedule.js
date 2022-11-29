@@ -65,6 +65,13 @@ function OnComingShedule({ consultList }) {
   return (
     <ScheduleCardWrapper>
       <Card no_divider={'true'} title={'다가오는 일정'}>
+        {consultList.length === 0 &&
+          <Flex style={{ height: '132px', justifyContent: 'center', alignItems: 'center' }}>
+            <TextBody2>
+              다가오는 일정이 없습니다
+            </TextBody2>
+          </Flex>
+        }
         {consultList &&
           consultList
             .filter((consult) => {

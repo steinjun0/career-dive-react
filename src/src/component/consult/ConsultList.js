@@ -67,7 +67,8 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
       //   </LinkNoDeco>
       // }
       >
-        {consultList && <VerticalFlex>
+
+        <VerticalFlex>
           <EmptyHeight height={'12px'} />
           <Flex>
             {categories.map((element, index) => {
@@ -91,53 +92,62 @@ function ConsultList({ consultList, onCategoryChange = () => { } }) {
           </Flex>
           <Divider style={{ color: colorBackgroundGrayMedium }} />
           <Grid container spacing={'30px'} marginTop={0}>
-            {consultList && consultList.map((consult, index) => {
-              if (category === '전체' || categoryStatusConverter[category].includes(consult.Status)) {
-                return (
-                  <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                    {location.pathname.includes('mentor') ?
-                      <ConsultMentorCard
-                        consult={consult}
-                        requestFormOnClick={() => {
-                          navigater(`/mentee/schedule/${consult.ID}`)
-                        }}
-                        enterOnClick={() => {
-                          onEnterSession({
-                            navigater,
-                            date: consult.Date,
-                            consultStatus: consult.Status,
-                            startTime: consult.StartTime,
-                            endTime: consult.EndTime,
-                            consultId: consult.ID
-                          })
-                        }
-                        }
-                      /> :
-                      <ConsultMenteeCard
-                        consult={consult}
-                        requestFormOnClick={() => {
-                          navigater(`/mentee/schedule/${consult.ID}`)
-                        }}
-                        enterOnClick={() => {
-                          onEnterSession({
-                            navigater,
-                            date: consult.Date,
-                            consultStatus: consult.Status,
-                            startTime: consult.StartTime,
-                            endTime: consult.EndTime,
-                            consultId: consult.ID
-                          })
-                        }}
-                      />
-                    }
-                  </Grid>
+            {(consultList && consultList.length > 0) ?
+              consultList.map((consult, index) => {
+                if (category === '전체' || categoryStatusConverter[category].includes(consult.Status)) {
+                  return (
+                    <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+                      {location.pathname.includes('mentor') ?
+                        <ConsultMentorCard
+                          consult={consult}
+                          requestFormOnClick={() => {
+                            navigater(`/mentee/schedule/${consult.ID}`)
+                          }}
+                          enterOnClick={() => {
+                            onEnterSession({
+                              navigater,
+                              date: consult.Date,
+                              consultStatus: consult.Status,
+                              startTime: consult.StartTime,
+                              endTime: consult.EndTime,
+                              consultId: consult.ID
+                            })
+                          }
+                          }
+                        /> :
+                        <ConsultMenteeCard
+                          consult={consult}
+                          requestFormOnClick={() => {
+                            navigater(`/mentee/schedule/${consult.ID}`)
+                          }}
+                          enterOnClick={() => {
+                            onEnterSession({
+                              navigater,
+                              date: consult.Date,
+                              consultStatus: consult.Status,
+                              startTime: consult.StartTime,
+                              endTime: consult.EndTime,
+                              consultId: consult.ID
+                            })
+                          }}
+                        />
+                      }
+                    </Grid>
 
-                );
-              }
+                  );
+                }
 
-            })}
+              })
+              : <Grid item xs={12}>
+                <Flex style={{ height: '52px', justifyContent: 'center', alignItems: 'center' }}>
+                  <TextBody2>
+                    상담 내역이 없습니다
+                  </TextBody2>
+                </Flex>
+              </Grid>}
+
           </Grid>
-        </VerticalFlex>}
+        </VerticalFlex>
 
       </Card>
     </ScheduleListWrapper >

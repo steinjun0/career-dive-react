@@ -73,7 +73,13 @@ function ConsultingRequest({ reservationList }) {
     <ScheduleCardWrapper>
       <Card no_divider={'true'} title={'상담 요청'}>
         <SchedulesWrapper>
-
+          {reservationList.length === 0 &&
+            <Flex style={{ height: '52px', justifyContent: 'center', alignItems: 'center' }}>
+              <TextBody2>
+                상담 요청이 없습니다
+              </TextBody2>
+            </Flex>
+          }
           {reservationList && reservationList.map((consult, index) => {
             return (
               <ScheduleWrapper key={index} style={{ marginBottom: index == reservationList.length - 1 ? 8 : 20 }}>
