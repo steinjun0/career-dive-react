@@ -74,13 +74,13 @@ function MentorHome() {
                 }}
                   onClick={
                     () => {
-                      window.open('https://www.notion.so/CBT-c57283dae1fe4602ad25f2b6ba0419aa')
+                      window.open('https://www.notion.so/CBT-30539442ad874299a12b6e727de3a506#a1ad0076d52e456fa46601d031fa34b3')
                     }
                   }
                 >
                   <VerticalFlex>
                     <TextHeading5 color={colorTextLight}>서비스 정책 및 가이드라인</TextHeading5>
-                    <TextHeading5 color={colorCareerDivePink}>멘티편</TextHeading5>
+                    <TextHeading5 color={colorCareerDivePink}>멘토편</TextHeading5>
                   </VerticalFlex>
                   <VerticalFlex
                     style={{ justifyContent: 'end' }}>
