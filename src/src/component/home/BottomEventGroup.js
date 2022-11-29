@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import { colorCareerDiveBlue, colorTextLight, Flex, RowAlignCenterFlex, TextHeading5, VerticalFlex } from 'util/styledComponent'
-import GuideLineBook from "assets/img/home/GuidelineBook.svg";
+import GuidelineMenteeBook from "assets/img/home/GuidelineMenteeBook.svg";
 import KakaotalkChannel from "assets/img/home/KakaotalkChannel.svg";
 
 const BottomEventCardsWrapper = styled(RowAlignCenterFlex)`
@@ -33,8 +33,8 @@ function BottomEventGroup() {
                     <TextHeading5 color={colorCareerDiveBlue}>멘티편</TextHeading5>
                 </VerticalFlex>
                 <VerticalFlex
-                    style={{ paddingTop: '24px' }}>
-                    <img src={GuideLineBook} alt="" />
+                    style={{ justifyContent: 'end' }}>
+                    <img src={GuidelineMenteeBook} alt="" />
                 </VerticalFlex>
             </Flex>
             <Flex style={{
@@ -56,7 +56,7 @@ function BottomEventGroup() {
 
                 </VerticalFlex>
                 <VerticalFlex
-                    style={{ paddingTop: '66px' }}>
+                    style={{ justifyContent: 'end' }}>
                     <img src={KakaotalkChannel} alt="" />
                 </VerticalFlex>
             </Flex>

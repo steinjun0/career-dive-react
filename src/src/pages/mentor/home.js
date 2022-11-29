@@ -13,7 +13,10 @@ import {
   TextSubtitle2,
   TextHeading5,
   TextHeading6,
-  colorCareerDiveBlue
+  colorCareerDiveBlue,
+  VerticalFlex,
+  colorTextLight,
+  colorCareerDivePink
 } from "util/styledComponent";
 
 import OnComingShedule from "component/consult/OnComingSchedule";
@@ -25,6 +28,7 @@ import CalendarMentor from "component/calendar/CalendarMentor";
 import { useEffect, useState } from "react";
 import API from "API";
 import { useNavigate } from "react-router-dom";
+import GuideLineMentorBook from "assets/img/home/GuidelineMentorBook.svg"
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -60,34 +64,28 @@ function MentorHome() {
                 <OnComingShedule consultList={onComingList}></OnComingShedule>
               </Grid>
               <Grid item xs={6}>
-                {/* <Card
-                  style={{ boxSizing: 'border-box', maxWidth: '100%' }}
-                  no_divider={'true'}
-                  title={'공지 및 알림'}
-                  titleHead={
-                    <ChevronRight fontSize="medium" />
-                  }>
-                  <EmptyHeight height={'20px'} />
-                  {dummyData.map((elem, index) => {
-                    if (index == dummyData.length - 1) {
-                      return (<TextEllipsisContainer key={index}>
-                        <TextBody2>{elem}</TextBody2>
-                      </TextEllipsisContainer>)
-                    } else {
-                      return (<TextEllipsisContainer key={index}>
-                        <TextBody2 style={{ marginBottom: 12 }}>{elem}</TextBody2>
-                      </TextEllipsisContainer>
-                      )
+                <Flex style={{
+                  justifyContent: 'space-between',
+                  backgroundColor: 'white', borderRadius: 8,
+                  padding: 24,
+                  height: '184px',
+                  cursor: 'pointer',
+                  boxShadow: '10px 20px 40px rgba(130, 130, 130, 0.1)'
+                }}
+                  onClick={
+                    () => {
+                      window.open('https://www.notion.so/CBT-c57283dae1fe4602ad25f2b6ba0419aa')
                     }
-                  })}
-                </Card> */}
-                <Flex style={{ backgroundColor: colorCareerDiveBlue, padding: '24px', borderRadius: '8px', cursor: 'pointer' }}
-                  onClick={() => {
-                    window.open('https://www.notion.so/CBT-30539442ad874299a12b6e727de3a506')
-                  }}>
-                  <TextHeading6 color="white" style={{ textDecoration: 'underline' }}>
-                    서비스 정책 및 가이드라인<br />멘토편 >
-                  </TextHeading6>
+                  }
+                >
+                  <VerticalFlex>
+                    <TextHeading5 color={colorTextLight}>서비스 정책 및 가이드라인</TextHeading5>
+                    <TextHeading5 color={colorCareerDivePink}>멘티편</TextHeading5>
+                  </VerticalFlex>
+                  <VerticalFlex
+                    style={{ justifyContent: 'end' }}>
+                    <img src={GuideLineMentorBook} alt="" />
+                  </VerticalFlex>
                 </Flex>
               </Grid>
               <Grid item xs={12}>
