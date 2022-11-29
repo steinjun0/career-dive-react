@@ -14,7 +14,8 @@ import {
   TextSubtitle1,
   VerticalFlex
 } from "util/styledComponent";
-import testMentorImage from "../../assets/img/testMentorImage.png";
+// import testMentorImage from "../../assets/img/testMentorImage.png";
+import testMentorImage from '../../assets/img/logo/testProfileImage.png';
 import Rating from "util/Rating";
 import { Card } from "util/Card";
 import { TagLarge, TagMedium, TagSmall } from "util/Custom/CustomTag";
