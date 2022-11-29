@@ -70,6 +70,7 @@ function MentoringReservation() {
                 name={nickName}
                 description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
                 id={mentorData.UserID}
+                inService={mentorData.InService}
               />}
           </MetorProfileBanner>
         </MaxWidthDiv>

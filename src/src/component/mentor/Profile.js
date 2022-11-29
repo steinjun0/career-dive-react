@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import testMentorImage from "../../assets/img/testMentorImage.png";
+import testMentorImage from "../../assets/img/logo/testProfileImage.png";
 import Button from "@mui/material/Button";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
@@ -19,7 +19,8 @@ import {
   TextHeading6,
   TextBody1,
   TextSubtitle2,
-  TextButton
+  TextButton,
+  colorBackgroundCareerDivePink
 } from "util/styledComponent";
 import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -106,7 +107,7 @@ function FavoriteButton({ isFavorite, setIsFavorite }) {
 }
 
 
-function MentorProfile({ name = '', description = '', id = -1 }) {
+function MentorProfile({ name = '', description = '', inService = true, id = -1 }) {
   const [isFavorite, setIsFavorite] = useState(false)
   const navigater = useNavigate();
   const params = useParams();
@@ -119,7 +120,9 @@ function MentorProfile({ name = '', description = '', id = -1 }) {
         <EmptyHeight height='4px'></EmptyHeight>
         <TextBody1>{description}</TextBody1>
         <EmptyHeight height='8px'></EmptyHeight>
-        <TagMedium style={{ padding: '0 8px' }} color={colorCareerDiveBlue} background_color={colorBackgroundCareerDiveBlue}><TextButton>현직자</TextButton></TagMedium>
+        {inService ?
+          <TagMedium style={{ padding: '0 8px' }} color={colorCareerDiveBlue} background_color={colorBackgroundCareerDiveBlue}><TextButton>현직자</TextButton></TagMedium> :
+          <TagMedium style={{ padding: '0 8px' }} color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}><TextButton>경력자</TextButton></TagMedium>}
       </ProfileTexts>
       {!JSON.parse(localStorage.getItem("IsMentorMode")) && <Buttons>
         <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
