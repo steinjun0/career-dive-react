@@ -7,6 +7,7 @@ import {
   colorCareerDiveBlue,
   colorBackgroundGrayMedium,
   colorTextLight,
+  LinkNoDeco,
 } from "util/styledComponent";
 
 import speechBubble from "../assets/icon/speechBubble.svg";
@@ -76,6 +77,7 @@ const ContactCCudaButton = styled(RowAlignCenterFlex)`
 
   color: white;
   font-size: 14px;
+  cursor: pointer;
 `;
 
 const SpeechBubbleIcon = styled('img')`
@@ -106,10 +108,20 @@ function Footer() {
             </ColumnSet>
             <ColumnSet>
               <ColumnTitle>SUPPORT</ColumnTitle>
-              <div>FAQ</div>
+              <div style={{ cursor: 'pointer' }} onClick={() => {
+                if (JSON.parse(localStorage.getItem('IsMentorMode'))) {
+                  window.open('https://www.notion.so/CBT-30539442ad874299a12b6e727de3a506#a1ad0076d52e456fa46601d031fa34b3')
+                } else {
+                  window.open('https://www.notion.so/CBT-c57283dae1fe4602ad25f2b6ba0419aa#c92e00a335c0443b986c70e77da7b5e1')
+                }
+              }}>FAQ</div>
               <div>커다센터</div>
             </ColumnSet>
-            <ContactCCudaButton>
+            <ContactCCudaButton onClick={
+              () => {
+                window.open('http://pf.kakao.com/_xhHtxlxj/chat')
+              }
+            }>
               <SpeechBubbleIcon src={speechBubble} alt='speech-bubble' />
               문의하기
             </ContactCCudaButton>
