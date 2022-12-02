@@ -459,7 +459,7 @@ function Calendar({ setIsFinishSet }) {
             }
             } />
           <TimeSelectWrapper
-            is_show={(selectedDate != 0).toString()}
+            is_show={(selectedDate !== null && selectedDate != 0).toString()}
             height={100}
           >
             <DateTitle>

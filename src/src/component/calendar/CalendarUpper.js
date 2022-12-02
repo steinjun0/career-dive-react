@@ -93,7 +93,7 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
         <YearMonthMenu
           style={{ fontWeight: 700, fontSize: 16, color: 'black' }}
           title={`${year}년 ${month}`}
-          menuItems={['11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월']}
+          menuItems={['12월', '1월', '2월', '3월', '4월', '5월', '6월']}
           onClickProps={onClickMonth}
           setState={setMonth}
           endIcon={<KeyboardArrowDownIcon />}></YearMonthMenu>
