@@ -81,8 +81,11 @@ function CalendarUpper({ availableDates, onDateChange, onMonthChange, selectedDa
   // }, [selectedDate])
 
   useEffect(() => {
-
-    selectedDateObjProp && selectedDateObjProp.getDate && setSelectedDate(selectedDateObjProp.getDate())
+    if (selectedDateObjProp && selectedDateObjProp.getDate) {
+      setSelectedDate(selectedDateObjProp.getDate())
+      setMonth(selectedDateObjProp.getMonth() + 1 + '월')
+      setDates(getDatesOfMonth(selectedDateObjProp.getFullYear(), selectedDateObjProp.getMonth() + 1))
+    }
   }, [selectedDateObjProp])
 
 
