@@ -24,10 +24,8 @@ function Search() {
       <GrayBackground style={{}}>
         <Flex style={{ maxWidth: 1194 + 30, marginRight: -30, flexWrap: 'wrap', marginBottom: 60 }}>
           {mentorList && [...mentorList].map((mentorData, index) => {
-            console.log('mentorData.DivisIsPub', mentorData.DivisIsPub)
-            return <Flex style={{ marginTop: 30, marginRight: 30 }}>
+            return <Flex key={index} style={{ marginTop: 30, marginRight: 30 }}>
               <MentorCard
-                key={index}
                 company={mentorData.CompName}
                 department={mentorData.DivisIsPub ? mentorData.DivisInComp : ''}
                 job={mentorData.JobInComp}
