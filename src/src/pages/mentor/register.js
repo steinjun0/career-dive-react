@@ -405,7 +405,7 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
             </RowAlignCenterFlex>
             <EmptyHeight height='4px' />
             <TextBody2>
-                국민건강보험 사이트에서 발급한 자격득실확인서(PDF)를 첨부해 주세요. 해당 서류를 통해 재직 기간과 회사가 인증되며, 한 개의 회사만 인증이 가능합니다.
+                <a target='_blank' style={{ color: 'black' }} href='http://www.nhis.or.kr/nhis/index.do'>국민건강보험 사이트</a>에서 발급한 <span style={{ color: colorCareerDiveBlue }}>자격득실확인서</span>(PDF)를 첨부해 주세요. 해당 서류를 통해 재직 기간과 회사가 인증되며, 한 개의 회사만 인증이 가능합니다.
                 <br />
                 <br />
                 (사이트 접속 > 자격득실 확인서 발급 > ‘프린트 발급’ 클릭)
