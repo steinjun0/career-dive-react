@@ -196,6 +196,7 @@ function Request() {
               <EmptyHeight height='16px' />
               <Flex>
                 <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
+                {isFilePreOpen === '희망' && <CategoryTag category={consultCategory} style={{ marginLeft: 8 }}><TextBody2>이력서 검토</TextBody2></CategoryTag>}
                 <EmptyWidth width='8px' />
                 {consultContents && consultContents.map((value, index) => {
                   return (
