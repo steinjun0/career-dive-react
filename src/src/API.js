@@ -201,7 +201,7 @@ export default {
 
 
   async getAccountMentorList() {
-    const mentorListRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/mentor/list`)
+    const mentorListRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/mentor/list?PageSize=1000`)
     return mentorListRes
   },
 
