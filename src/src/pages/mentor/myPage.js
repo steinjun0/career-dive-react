@@ -6,7 +6,11 @@ import {
   MaxWidthDiv,
   Flex,
   TextHeading6,
-  LinkNoDeco
+  LinkNoDeco,
+  TextBody1,
+  EmptyHeight,
+  colorCareerDivePink,
+  VerticalFlex
 } from "util/styledComponent";
 
 import SideNavigation from "component/myPage/SideNavigation";
@@ -24,6 +28,9 @@ import CareerInfoChange from "component/myPage/CareerInfoChange";
 import ConsultRange from "component/myPage/ConsultRange";
 import { useEffect, useState } from "react";
 import API from "API";
+
+import ArrowCircleRightIcon from 'assets/icon/arrowCircleRight.svg';
+
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-bottom: 154px;
@@ -117,6 +124,25 @@ function MyPage() {
                     </Grid>
                     {mentorData && <MentorIntroduce mentorData={mentorData} />}
                     {mentorData && <ConsultRange mentorData={mentorData} />}
+                    <LinkNoDeco to={'/mentor/calendar'}>
+                      <Flex style={{
+                        backgroundColor: colorCareerDivePink,
+                        justifyContent: 'space-between', alignItems: 'center',
+                        height: '64px', padding: '30px', marginTop: '38px',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        width: '100%'
+                      }}
+                      >
+                        <VerticalFlex>
+                          <TextHeading6 color="white">일정 등록하러 가기</TextHeading6>
+                          <EmptyHeight height="8px" />
+                          <TextBody1 color="white">상담 일정을 등록해야만 상담을 진행할 수 있어요!</TextBody1>
+                        </VerticalFlex>
+                        <img src={ArrowCircleRightIcon} />
+                      </Flex>
+                    </LinkNoDeco>
+
                   </div>
                 }
                 {
