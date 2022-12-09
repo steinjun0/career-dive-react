@@ -67,7 +67,7 @@ export const DayBox = styled(DateBox)`
 `;
 
 export const AvailableDateBox = styled(DateBox)`
-  background-color: ${colorBackgroundGrayLight};
+  background-color: rgb(240,240,240);
   color: ${colorTextLight};
   cursor: pointer;
 `;
