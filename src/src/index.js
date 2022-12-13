@@ -1,4 +1,6 @@
-import React, { useEffect } from "react";
+import ReactGA from 'react-ga';
+
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
@@ -34,6 +36,9 @@ import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
 import Search from 'pages/search'
 import Review from "pages/review/id";
 
+const TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID; // 발급받은 추적ID를 환경 변수로 불러온다.
+ReactGA.initialize(TRACKING_ID);
+
 
 const theme = createTheme({
   palette: {
@@ -46,7 +51,7 @@ const theme = createTheme({
   }
 });
 
-export default function ScrollToTop() {
+function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -56,10 +61,29 @@ export default function ScrollToTop() {
   return null;
 }
 
+function RouteChangeTracker() {
+  const location = useLocation();
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID);
+    setInitialized(true);
+  }, []);
+
+  useEffect(() => {
+    if (initialized) {
+      ReactGA.pageview(location.pathname + location.search);
+    }
+  }, [initialized, location]);
+
+  return null;
+}
+
 ReactDOM.render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
       <ScrollToTop />
+      <RouteChangeTracker />
       <Gnb />
       <EmptyHeight height={'80px'} />
       <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 220px)' }}>
