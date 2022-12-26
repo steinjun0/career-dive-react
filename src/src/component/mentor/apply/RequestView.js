@@ -161,7 +161,7 @@ function RequestView({ consultData, menteeIntroduce, urlLink }) {
         </VerticalFlex>}
 
 
-        {urlLink !== '' && <VerticalFlex>
+        {consultData.PreReview && urlLink !== '' && <VerticalFlex>
           <EmptyHeight height='16px' />
           <TextSubtitle1>URL</TextSubtitle1>
           <EmptyHeight height='16px' />
