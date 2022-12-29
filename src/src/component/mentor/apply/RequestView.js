@@ -110,6 +110,7 @@ function RequestView({ consultData, menteeIntroduce, urlLink }) {
             <EmptyHeight height='16px' />
             <Flex>
               <CategoryTag category={consultData.Type}><TextBody2>{consultData.Type}</TextBody2></CategoryTag>
+              {consultData.Type === '커리어 상담' && consultData.PreReview && <CategoryTag category={consultData.Type} style={{ marginLeft: 8 }}><TextBody2>이력서 검토</TextBody2></CategoryTag>}
               <EmptyWidth width='8px' />
               {consultData.ConsultContentList.map((value, index) => {
                 return (
