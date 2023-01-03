@@ -88,9 +88,9 @@ function ConsultingRequest({ reservationList }) {
                   <TextBody2>{new Date(consult.Date).getFullYear().toString().slice(2)}.{new Date(consult.Date).getMonth() + 1}.{new Date(consult.Date).getDate()}({getDayInKorean(new Date(consult.Date))})</TextBody2>
                   <TextSubtitle1>{+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) <= 12
                     ?
-                    `${getAMOrPM(consult.StartTime)} ${getMinuteString(new Date('2022-01-01 ' + consult.StartTime))}`
+                    `${getAMOrPM(consult.StartTime)} ${getMinuteString(new Date('2023-01-01 ' + consult.StartTime))}`
                     :
-                    `${getAMOrPM(consult.StartTime)} ${getMinuteString(addMinute(new Date('2022-01-01 ' + consult.StartTime), -720))}`}</TextSubtitle1>
+                    `${getAMOrPM(consult.StartTime)} ${getMinuteString(addMinute(new Date('2023-01-01 ' + consult.StartTime), -720))}`}</TextSubtitle1>
                 </ScheduleDateAndTime>
 
                 <ProfileWrapper>
