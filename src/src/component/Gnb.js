@@ -16,7 +16,7 @@ import Login from "pages/login";
 
 const GnbFullWidthWrapper = styled("nav")`
       position: fixed;
-      min-width: 1194px;
+      // min-width: 1194px;
       display:flex;
       flex-direction: row;
       justify-content: center;
@@ -314,8 +314,6 @@ function Gnb() {
                   </TextSubtitle2>
                 </CustomButton>
               }
-
-
               <NotificationsNoneIcon style={{ marginRight: 24 }} />
               <Flex
                 style={{ position: 'relative' }}
@@ -378,13 +376,8 @@ function Gnb() {
                       onClick={onClickLogout}>로그아웃</TextBody2>
                   </ProfileMenu>
                 }
-
               </Flex>
-
-
             </RightTopGnb>}
-
-
           </GnbWrapper>
         </GnbFullWidthWrapper> :
           <div style={{ marginTop: -80 }}></div>
