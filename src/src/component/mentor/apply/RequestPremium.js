@@ -78,7 +78,7 @@ const CategoryTag = styled(TagLarge)`
   background-color:${props => getCategoryBackgroundColor(props.category)};
 `
 const getConsultingRangeInKorean = (consultingStartTime, consultingTime) => {
-  const consultingStartTimeDate = new Date(`2022-01-02 ${consultingStartTime}`);
+  const consultingStartTimeDate = new Date(`2023-01-02 ${consultingStartTime}`);
   if (!isNaN(consultingStartTimeDate.getTime())) {
     const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
     return `${getKoreanTimeString(consultingStartTimeDate)} ~ ${getKoreanTimeString(consultingEndTimeDate)}`
@@ -159,7 +159,7 @@ function Request() {
     if (reservations !== null) {
       const reservation = reservations[params.id]
 
-      const consultingStartTimeDate = new Date(`2022-01-02 ${reservation['consultingStartTime']}`);
+      const consultingStartTimeDate = new Date(`2023-01-02 ${reservation['consultingStartTime']}`);
       const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
       const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
 

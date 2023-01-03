@@ -113,7 +113,7 @@ function Calendar({ setIsFinishSet }) {
   const [availableDates, setAvailableDates] = useState([]);
 
 
-  const [year, setYear] = useState(2022)
+  const [year, setYear] = useState(2023)
   const [month, setMonth] = useState('0월');
 
   const [selectedDate, setSelectedDate] = useState(0);
@@ -379,10 +379,10 @@ function Calendar({ setIsFinishSet }) {
 
   const onMonthChange = async (month) => {
     setMonth(month)
-    let tempYear = 2022
+    let tempYear = 2023
     if (['11월', '12월'].includes(month)) {
-      setYear(2022)
-      tempYear = 2022
+      setYear(2023)
+      tempYear = 2023
     } else {
       setYear(2023)
       tempYear = 2023
@@ -437,7 +437,7 @@ function Calendar({ setIsFinishSet }) {
 
   useEffect(() => {
     if (['11월', '12월'].includes(month)) {
-      setYear(2022)
+      setYear(2023)
     } else {
       setYear(2023)
     }

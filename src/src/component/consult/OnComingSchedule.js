@@ -90,9 +90,9 @@ function OnComingShedule({ consultList }) {
                     <TextSubtitle1>
                       {+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) <= 12
                         ?
-                        `${getAMOrPM(consult.StartTime)} ${getMinuteString(new Date('2022-01-01 ' + consult.StartTime))}`
+                        `${getAMOrPM(consult.StartTime)} ${getMinuteString(new Date('2023-01-01 ' + consult.StartTime))}`
                         :
-                        `${getAMOrPM(consult.StartTime)} ${getMinuteString(addMinute(new Date('2022-01-01 ' + consult.StartTime), -720))}`}</TextSubtitle1>
+                        `${getAMOrPM(consult.StartTime)} ${getMinuteString(addMinute(new Date('2023-01-01 ' + consult.StartTime), -720))}`}</TextSubtitle1>
                   </ScheduleDateAndTime>
 
                   <ProfileWrapper>

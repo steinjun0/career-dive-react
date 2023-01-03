@@ -30,7 +30,7 @@ const getDatesOfMonth = (year, month) => {
 
 
 function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp, month, setMonth }) {
-  const [year, setYear] = useState(2022);
+  const [year, setYear] = useState(2023);
   // const [month, setMonth] = useState(selectedDateObjProp ? selectedDateObjProp.getMonth() + 1 + '월' : '0월');
 
   const dayInKorean = ['일', '월', '화', '수', '목', '금', '토'];
@@ -56,10 +56,10 @@ function CalendarMentorUpper({ availableDates, onDateChange, selectedDateObjProp
   }
 
   useEffect(() => {
-    let tempYear = 2022
+    let tempYear = 2023
     if (['11월', '12월'].includes(month)) {
-      setYear(2022)
-      tempYear = 2022
+      setYear(2023)
+      tempYear = 2023
     } else {
       setYear(2023)
       tempYear = 2023
