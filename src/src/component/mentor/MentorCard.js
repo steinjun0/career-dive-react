@@ -22,6 +22,16 @@ import { TagLarge, TagMedium, TagSmall } from "util/Custom/CustomTag";
 import CustomRating from "util/Rating";
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
+function getJobDurationFormat(year) {
+  if (year < 1)
+    return '1년 미만'
+  else if (1 <= year && year < 3)
+    return '1년~3년'
+  else if (year >= 3)
+    return '3년 이상'
+
+}
+
 function MentorCard({
   company = "기업명",
   department = "부서명",
@@ -67,7 +77,7 @@ function MentorCard({
             background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
             style={{ fontWeight: '500', padding: '4px 8px', boxSizing: 'border-box' }}>
 
-            {inJob} {duration !== '' ? `· ${duration}년` : ''}
+            {inJob} {duration !== '' ? `· ${getJobDurationFormat(+duration)}` : ''}
           </TagMedium>
           <EmptyHeight height={'24px'} />
           {isShowRating && <CustomRating value={rating}></CustomRating>}
