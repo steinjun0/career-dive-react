@@ -63,7 +63,7 @@ function MentorCard({
         <EmptyHeight height={'6px'} />
         {department !== '' && <TextBody2>{department}</TextBody2>}
         {department !== '' && <EmptyHeight height={'6px'} />}
-        <TextBody2>{job}</TextBody2>
+        <TextBody2 style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{job}</TextBody2>
         <EmptyHeight height={'28px'} />
         {department === '' && <EmptyHeight height={'30px'} />}
 
