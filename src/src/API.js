@@ -206,8 +206,8 @@ export default {
   },
 
 
-  async postAccount(email, password, nickname) {
-    const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { email, password, nickname })
+  async postAccount({ email, password, nickname, phoneNumber }) {
+    const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { Email: email, Password: password, Nickname: nickname, Phone: `${phoneNumber}` })
     return res
   },
 
