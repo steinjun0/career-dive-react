@@ -148,9 +148,9 @@ function Login() {
                                     </RowAlignCenterFlex>
 
                                     <Flex>
-                                        <SubButtons>이메일 찾기</SubButtons>
+                                        <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 이메일을 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>이메일 찾기</SubButtons>
                                         <EmptyWidth width="16px"></EmptyWidth>
-                                        <SubButtons>비밀번호 찾기</SubButtons>
+                                        <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 비밀번호를 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>비밀번호 찾기</SubButtons>
                                     </Flex>
                                 </SubButtonsWrapper>
                                 <EmptyHeight height={'24px'} />
