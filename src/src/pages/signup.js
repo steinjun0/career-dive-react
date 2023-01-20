@@ -7,10 +7,10 @@ import {
     MaxWidthDiv,
     VerticalFlex,
 } from "util/styledComponent";
-import SignUpInfo from './\bsignup/SignUpInfo.js';
-import SignUpPhone from './\bsignup/SignUpPhone.js';
-import SignUpNickName from './\bsignup/SignUpNickName.js';
-import SignUpPhoneTemp from './\bsignup/SignUpPhoneTemp.js';
+import SignUpInfo from './signup/SignUpInfo.js';
+import SignUpPhone from './signup/SignUpPhone.js';
+import SignUpNickName from './signup/SignUpNickName.js';
+import SignUpPhoneTemp from './signup/SignUpPhoneTemp.js';
 
 const LoginWrapper = styled(VerticalFlex)`
   width: 100%;
