@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 
-describe('example to-do app', () => {
+describe('basic functions', () => {
     beforeEach(() => {
 
         cy.visit('localhost:3333')
