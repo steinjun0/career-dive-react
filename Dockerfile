@@ -4,7 +4,7 @@ RUN Xvfb :99 &
 RUN export DISPLAY=:99
 COPY ./src /root/src
 WORKDIR /root/src
-RUN npm i --only=production
+RUN npm ci --only=production
 RUN npm run build
 
 
