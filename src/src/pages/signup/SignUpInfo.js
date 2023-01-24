@@ -184,8 +184,7 @@ function SignUpInfo({ signUpStep, setSignUpStep, signUpData, setSignUpData }) {
             <EmptyHeight height={'12px'} />
             <ButtonWrapper>
                 <CustomButton
-                    disabled={!isCheckPersonalData || !isCheckUsingTerm}
-
+                    disabled={!isCheckPersonalData || !isCheckUsingTerm || email === '' || password === ''}
                     height={'48px'}
                     onClick={() => {
                         updateSignUpData(signUpData, setSignUpData);
