@@ -38,7 +38,7 @@ function SignUpPhoneTemp({ signUpStep, setSignUpStep, signUpData, setSignUpData 
             <EmptyHeight height={'36px'} />
             <CustomTextField
                 onChange={(event) => {
-                    setPhoneNumber(+event.target.value)
+                    setPhoneNumber(event.target.value)
                 }}
                 variant="filled"
                 InputProps={{ disableUnderline: true, }}
