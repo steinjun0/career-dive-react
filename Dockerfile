@@ -1,8 +1,12 @@
 FROM node:14.17 AS builder
+RUN apt-get update && apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y
+RUN Xvfb :99 &
+RUN export DISPLAY=:99
 COPY ./src /root/src
 WORKDIR /root/src
 RUN npm i --only=production
 RUN npm run build
+
 
 # COPY ./vscode-server-bin /root/.vscode-server/bin
 
