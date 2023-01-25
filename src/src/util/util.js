@@ -24,6 +24,28 @@ export const addMinute = (beforeDate, addingMin) => {
   return afterDate
 }
 
+export const addMinuteTs = (beforeDate, addingMin) => {
+  const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
+  if (afterDate === 'Invalid Date')
+    throw new Error('올바르지 않은 날짜를 입력했습니다')
+  return afterDate
+}
+
+export const createDateFromHourMinTs = (date, startTime, endTime) => {
+  let startDate = new Date(date)
+  let endDate = new Date(date)
+
+  startDate.setHours(0)
+  endDate.setHours(0)
+  let startHour = +startTime.slice(0, startTime.indexOf(':'))
+  let startMin = +startTime.slice(startTime.indexOf(':') + 1)
+
+  let endHour = +endTime.slice(0, endTime.indexOf(':'))
+  let endMin = +endTime.slice(endTime.indexOf(':') + 1)
+  return [addMinuteTs(startDate, (startHour * 60 + startMin)), addMinuteTs(endDate, (endHour * 60 + endMin))]
+}
+
+
 export const createDateFromHourMin = (date, startTime, endTime) => {
   let startDate = new Date(date)
   let endDate = new Date(date)
