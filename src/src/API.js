@@ -52,19 +52,37 @@ export default {
   },
   async getAxios(url) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.get(url, tokenHeader) : await axios.get(url)
+    let res
+    try {
+      res = tokenHeader ? await axios.get(url, tokenHeader) : await axios.get(url)
+    } catch (error) {
+      res = error.response
+    }
+
     return res
 
   },
   async getAxiosBinary(url) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.get(url, tokenHeader) : await axios.get(url)
+    let res
+    try {
+      res = tokenHeader ? await axios.get(url, tokenHeader) : await axios.get(url)
+    } catch (error) {
+      res = error.response
+    }
+
     return res
 
   },
   async getAxiosZip(url) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.get(url, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
+    let res
+    try {
+      res = tokenHeader ? await axios.get(url, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, accept: 'application/x-zip-compressed' } }) : await axios.get(url, { headers: { accept: 'application/x-zip-compressed' } })
+    } catch (error) {
+      res = error.response
+    }
+
     return res
 
   },
@@ -79,39 +97,74 @@ export default {
   },
   async postAxios(url, data) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.post(url, data, tokenHeader) : await axios.post(url, data)
+    let res
+    try {
+      res = tokenHeader ? await axios.post(url, data, tokenHeader) : await axios.post(url, data)
+    } catch (error) {
+      res = error.response
+    }
     return res
 
   },
   async postAxiosFormData(url, data) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.post(url, data, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+    let res
+    try {
+      res = tokenHeader ? await axios.post(url, data, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, 'Content-Type': 'multipart/form-data' } }) : await axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+    } catch (error) {
+      res = error.response
+    }
+
     return res
 
   },
   async patchAxios(url, data) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.patch(url, data, tokenHeader) : await axios.patch(url, data)
+    let res
+    try {
+      res = tokenHeader ? await axios.patch(url, data, tokenHeader) : await axios.patch(url, data)
+    } catch (error) {
+      res = error.response
+    }
+
     return res
 
   },
   async patchAxiosFormData(url, data) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.patch(url, data, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+    let res
+    try {
+      res = tokenHeader ? await axios.patch(url, data, { headers: { Authorization: `${tokenHeader.headers.Authorization}`, 'Content-Type': 'multipart/form-data' } }) : await axios.patch(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+    } catch (error) {
+      res = error.response
+    }
+
     return res
 
   },
 
   async putAxios(url) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.put(url, tokenHeader) : await axios.put(url)
+    let res
+    try {
+      res = tokenHeader ? await axios.put(url, tokenHeader) : await axios.put(url)
+    } catch (error) {
+      res = error.response
+    }
+
     return res
 
   },
 
   async deleteAxios(url) {
     this.refreshUserData()
-    const res = tokenHeader ? await axios.delete(url, tokenHeader) : await axios.delete(url)
+    let res
+    try {
+      res = tokenHeader ? await axios.delete(url, tokenHeader) : await axios.delete(url)
+    } catch (error) {
+      res = error.response
+    }
+
     return res
 
   },

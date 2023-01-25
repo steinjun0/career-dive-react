@@ -1,7 +1,7 @@
 import { Button, styled } from "@mui/material";
-import { colorBackgroundGrayLight, colorCareerDiveBlue, colorTextDisabled } from '../styledComponent';
+import { colorBackgroundGrayLight, colorCareerDiveBlue, colorTextDisabled, cssLength } from '../styledComponent';
 
-export const CustomButton = styled(Button)`
+export const CustomButton = styled(Button) <{ padding?: string, background_color?: string, custom_color?: string, height?: cssLength, width?: cssLength }>`
   padding: ${props => props.padding ? props.padding : '4px 12px'};
   background-color: ${props => props.background_color ? props.background_color : colorCareerDiveBlue};
   color: ${props => props.custom_color ? props.custom_color : 'white'};

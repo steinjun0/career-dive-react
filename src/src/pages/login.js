@@ -94,7 +94,7 @@ function Login() {
                     navigate('/')
                 }
             } else {
-                alert(loginResponse.error.response.data.error) // 이렇게 복잡해야하는가?
+                alert(loginResponse.data.error) // 이렇게 복잡해야하는가?
             }
         }
         catch {

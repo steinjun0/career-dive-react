@@ -41,7 +41,7 @@ function SignUpNickName({ signUpStep, setSignUpStep, signUpData, setSignUpData }
                 navigate('/mentee/mypage/profile')
 
             } else {
-                alert(accountCreateResponse.error.response.data.error) // 이렇게 복잡해야하는가?
+                alert(accountCreateResponse.data.error) // 이렇게 복잡해야하는가?
             }
         }
         catch {
