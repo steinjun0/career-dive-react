@@ -7,9 +7,9 @@ import {
   VerticalFlex,
   Flex,
   colorBackgroundGrayMedium,
+  cssLength
 } from "../styledComponent";
-
-type cssLength = `${number | undefined}px` | `${number | undefined}%`
+// import { cssLength } from "./styledComponent";
 
 const CardWrapper = styled(VerticalFlex) <{
   min_width?: cssLength,
