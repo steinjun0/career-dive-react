@@ -41,15 +41,12 @@ function Session() {
   const navigater = useNavigate()
   // (window.RTCPeerConnection) ? alert('supported') : alert('not supported')
 
-
-
-  const [isMentorIn, setIsMentorIn] = useState<boolean>(false);
-  const [isMenteeIn, setIsMenteeIn] = useState<boolean>(false);
-  const isMentorInRef = useRef(false);
-  const isMenteeInRef = useRef(false);
-
-  const [call, setCall] = useState<any>('no call')
-  const callRef = useRef<any>('no call')
+  const isMentorInRef = useRef<boolean>(false);
+  const isMenteeInRef = useRef<boolean>(false);
+  // TODO
+  // callRef 'no call' -> null로 변경
+  const [call, setCall] = useState<any>(null)
+  const callRef = useRef<any>(null)
   const [consultData, setConsultData] = useState()
   const [isMicOn, setIsMicOn] = useState(false)
   const [isScreenSharing, setIsScreenSharing] = useState(false)
@@ -62,216 +59,361 @@ function Session() {
   const [menteeData, setMenteeData] = useState<any>()
   const [mentorData, setMentorData] = useState<any>()
 
-  const [endDate, setEndDate] = useState<Date>()
+  const endDateRef = useRef<Date>()
+  const startDateRef = useRef<Date>()
   const [leftTime, setLeftTime] = useState<number>()
-  const [intervalId, setIntervalId] = useState<ReturnType<typeof setTimeout>>()
+  const intervalIdRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // useEffect로 trigger하기 위해서 useState, useRef를 둘 다 사용한다.
+  const [isReadyToCall, setIsReadyToCall] = useState<boolean>(false);
+  const isQuitPageRef = useRef<boolean>(false);
 
   const isMentorMode: boolean = JSON.parse(localStorage.getItem('IsMentorMode')!)
   const userId: number = +localStorage.getItem("UserID")!
 
-  let calleeId: number = -1;
-  let mentorId: number = -1;
-  let menteeId: number = -1;
+  const calleeIdRef = useRef<number | null>(null);
+  const mentorIdRef = useRef<number | null>(null);
+  const menteeIdRef = useRef<number | null>(null);
 
-  async function getConsultData() {
-    if (isMentorMode === true) {
-      setIsMentorIn(true)
-      isMentorInRef.current = true;
-    } else {
-      setIsMenteeIn(true)
-      isMenteeInRef.current = true;
+  function checkEnterTime({ consultId }: { consultId: number }) {
+    if (endDateRef.current && startDateRef.current) {
+      let tempLeftTime = endDateRef.current.getTime() - new Date().getTime()
+      const passTime = new Date().getTime() - startDateRef.current.getTime()
+      setLeftTime(tempLeftTime)
+      const passHour = ~~(passTime / 1000 / 60 / 60)
+      const passMin = ~~(passTime / 1000 / 60)
+      const passSec = ~~(passTime / 1000 % 60)
+      // // 1분후
+      // if (passHour === 0 && passMin === 1 && passSec === 0 && (!isMentorInRef.current || !isMenteeInRef.current)) {
+      //   let tempLatenessParams = { consultId: consultId, menteeLateness: true, mentorLateness: true }
+      //   if (isMentorMode) {
+      //     tempLatenessParams.mentorLateness = false
+      //   } else {
+      //     tempLatenessParams.menteeLateness = false
+      //   }
+      //   API.postConsultLateness(tempLatenessParams)
+      // } else if (passTime >= 360000 && (!isMentorInRef.current || !isMenteeInRef.current)) {
+      //   // 5분59초 후
+      //   let tempNoshowParams = { consultId: consultId, menteeNoshow: true, mentorNoshow: true }
+      //   if (isMentorMode) {
+      //     tempNoshowParams.mentorNoshow = false
+      //   } else {
+      //     tempNoshowParams.menteeNoshow = false
+      //   }
+      //   isQuitPageRef.current = true
+      //   API.postConsultNoshow(tempNoshowParams).then(() => {
+      //     if (isMentorMode) {
+      //       intervalIdRef.current && clearInterval(intervalIdRef.current)
+      //       if (callRef.current !== null) API.Sendbird.stopCalling(callRef.current)
+      //       alert('상대방이 입장하지 않아 상담이 종료되었습니다.')
+      //       console.log('상대방이 입장하지 않아 상담이 종료되었습니다.')
+      //       navigater('/mentor')
+      //     } else {
+      //       intervalIdRef.current && clearInterval(intervalIdRef.current)
+      //       if (callRef.current !== null) API.Sendbird.stopCalling(callRef.current)
+      //       alert('상대방이 입장하지 않아 상담이 종료되었습니다.')
+      //       console.log('상대방이 입장하지 않아 상담이 종료되었습니다.')
+      //       navigater(`/mentee/schedule`)
+      //     }
+      //   })
+      // } else 
+      if (endDateRef.current <= new Date()) {
+        // API.patchConsultDone(res.data.ID)
+        isQuitPageRef.current = true
+        API.postCallDone(callRef.current._callId).then(() => {
+          intervalIdRef.current && clearInterval(intervalIdRef.current)
+          if (callRef.current !== null) API.Sendbird.stopCalling(callRef.current)
+          alert('상담 종료시간이 지났습니다.')
+          if (isMentorMode) {
+            navigater(`/mentor`)
+          } else {
+            navigater(`/review/${params.id}`)
+          }
+        })
+      }
     }
 
-
-    let consultRes = await API.getConsult(params.id).then((res) => {
+  }
+  function getConsultData() {
+    API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
         if (+res.data.MenteeID === userId) {
-          calleeId = res.data.MentorID
+          calleeIdRef.current = res.data.MentorID
         } else {
-          calleeId = res.data.MenteeID
+          calleeIdRef.current = res.data.MenteeID
         }
-        menteeId = res.data.MenteeID
-        mentorId = res.data.MentorID
+        menteeIdRef.current = res.data.MenteeID
+        mentorIdRef.current = res.data.MentorID
 
         setConsultData(res.data)
 
         let [tempStartDate, tempEndDate]: Date[] = createDateFromHourMinTs(res.data.Date, res.data.StartTime, res.data.EndTime)
-        tempEndDate = addMinuteTs(tempEndDate, 5)
-        setEndDate(tempEndDate)
+        tempEndDate = addMinuteTs(tempEndDate, 5) // 여유 시간 5분 추가
+        endDateRef.current = tempEndDate
+        startDateRef.current = tempStartDate
 
-        const tempIntervalId = setInterval(() => {
-          let tempLeftTime = tempEndDate.getTime() - new Date().getTime()
-          const tempPassTime = new Date().getTime() - tempStartDate.getTime()
-          setLeftTime(tempLeftTime)
+        // noshow logic 제거
 
-          if (tempPassTime > 0) {
-            // 1분후
-            if (~~(tempPassTime / 1000 / 60) === 1 && (!isMentorInRef.current || !isMenteeInRef.current)) {
-              let tempLatenessParams = { consultId: res.data.ID, menteeLateness: true, mentorLateness: true }
-              if (isMentorMode) {
-                tempLatenessParams.mentorLateness = false
-              } else {
-                tempLatenessParams.menteeLateness = false
-              }
-              API.postConsultLateness(tempLatenessParams)
-            } else if (~~(tempPassTime / 1000 / 60) >= 6 && (!isMentorInRef.current || !isMenteeInRef.current)) {
-              // 5분59초 후
-              let tempNoshowParams = { consultId: res.data.ID, menteeNoshow: true, mentorNoshow: true }
-              if (isMentorMode) {
-                tempNoshowParams.mentorNoshow = false
-              } else {
-                tempNoshowParams.menteeNoshow = false
-              }
-              API.postConsultNoshow(tempNoshowParams).then(() => {
-                if (isMentorMode) {
-                  clearInterval(tempIntervalId)
-                  if (callRef.current !== 'no call') API.Sendbird.stopCalling(callRef.current)
-                  alert('상대방이 입장하지 않아 상담이 종료되었습니다. 멘티')
-                  console.log('상대방이 입장하지 않아 상담이 종료되었습니다. 멘티')
-                  // navigater('/mentor')
-                } else {
-                  clearInterval(tempIntervalId)
-                  if (callRef.current !== 'no call') API.Sendbird.stopCalling(callRef.current)
-                  alert('상대방이 입장하지 않아 상담이 종료되었습니다. 멘토')
-                  console.log('상대방이 입장하지 않아 상담이 종료되었습니다. 멘티')
-                  // navigater(`/mentee/schedule`)
-                }
-              })
-            } else if (tempEndDate <= new Date()) {
-              // API.patchConsultDone(res.data.ID)
-              API.postCallDone(callRef.current._callId).then(() => {
-                clearInterval(tempIntervalId)
-                if (callRef.current !== 'no call') API.Sendbird.stopCalling(callRef.current)
-                alert('통화가 종료되었습니다')
-
-                if (isMentorMode) {
-                  // navigater(`/mentor`)
-                } else {
-                  // navigater(`/review/${params.id}`)
-                }
-              })
-            }
-          }
-        }, 1000);
-        setIntervalId(tempIntervalId)
+        // const tempIntervalId = setInterval(() => {
+        //   checkEnterTime(res.data.ID)
+        // }, 1000);
+        // intervalIdRef.current = tempIntervalId
       }
       return res
     })
 
-    API.getAccountMentee(menteeId).then((res) => {
+    API.getAccountMentee(menteeIdRef.current).then((res) => {
+      console.log('res.data', res.data)
       if (res.status === 200) {
         setMenteeData(res.data)
       }
     })
 
 
-    API.getAccountMentor(mentorId).then((res) => {
+    API.getAccountMentor(mentorIdRef.current).then((res) => {
       if (res.status === 200) {
         setMentorData(res.data)
       }
     })
 
     // params.id
-    API.Sendbird.initSendbird()
-    await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
+    // API.Sendbird.initSendbird()
+    // await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
 
-    API.Sendbird.connectWebSocket().then((res) => {
-      API.Sendbird.addEventHandler()
-      API.Sendbird.receiveACall(
-        {
-          onReceiveACall: ({ call: callProps }: { call: any }) => {
-            setCall(() => callProps)
-            callRef.current = callProps
-            if (isMentorMode) {
-              setIsMenteeIn(true)
-              isMenteeInRef.current = true;
-            }
-            else {
-              setIsMentorIn(true)
-              isMentorInRef.current = true
-            }
-            API.postCallStart(callProps._callId)
-          },
-          onEstablished: () => { },
-          onEnded: () => {
-            console.log('onEnded from receiveACall')
-            if (isMentorMode) {
-              setIsMenteeIn(false)
-              isMenteeInRef.current = false;
-            }
-            else {
-              setIsMentorIn(false)
-              isMentorInRef.current = false
-            }
+    // API.Sendbird.connectWebSocket().then((res) => {
+    //   API.Sendbird.addEventHandler()
+    //   API.Sendbird.receiveACall(
+    //     {
+    //       onReceiveACall: ({ call: callProps }: { call: any }) => {
+    //         setCall(() => callProps)
+    //         callRef.current = callProps
+    //         if (isMentorMode) {
+    //           isMenteeInRef.current = true;
+    //         }
+    //         else {
+    //           isMentorInRef.current = true
+    //         }
+    //         API.postCallStart(callProps._callId)
+    //       },
+    //       onEstablished: () => { },
+    //       onEnded: () => {
+    //         console.log('onEnded from receiveACall')
+    //         if (isMentorMode) {
+    //           isMenteeInRef.current = false;
+    //         }
+    //         else {
+    //           isMentorInRef.current = false
+    //         }
+    //       }
+    //     }
+    //   )
+    //   setTimeout(() => {
+    //     callRef.current === null && API.Sendbird.makeACall(
+    //       {
+    //         calleeId: calleeId,
+    //         onMakeACall: ({ call: callProps }: { call: any }) => {
+    //           setCall(() => callProps)
+    //           callRef.current = callProps
+    //           callProps.stopVideo()
+    //           API.postCallNew(
+    //             {
+    //               calleeId: calleeId,
+    //               callerId: userId,
+    //               consultId: consultRes.data.ID,
+    //               callId: callProps._callId
+    //             }
+    //           )
+    //         },
+    //         onConnected: () => {
+    //           isMentorInRef.current = true
+    //           isMenteeInRef.current = true;
+    //         },
+    //         onEnded: () => {
+    //           console.log('onEnd from onMakeACall')
+    //           if (isMentorMode) {
+    //             isMenteeInRef.current = false;
+    //           }
+    //           else {
+    //             isMentorInRef.current = false
+    //           }
+    //         }
+    //       }
+    //     )
+    //   }, 1000);
+    // })
+  }
+
+  function setDefaultConsultData(apiRes: any) {
+    setConsultData(apiRes.data)
+
+    if (+apiRes.data.MenteeID === userId) {
+      calleeIdRef.current = apiRes.data.MentorID
+    } else {
+      calleeIdRef.current = apiRes.data.MenteeID
+    }
+    menteeIdRef.current = apiRes.data.MenteeID
+    mentorIdRef.current = apiRes.data.MentorID
+
+    API.getAccountMentee(menteeIdRef.current).then((res) => {
+      if (res.status === 200) {
+        setMenteeData(res.data)
+      }
+    })
+
+
+    API.getAccountMentor(mentorIdRef.current).then((res) => {
+      if (res.status === 200) {
+        setMentorData(res.data)
+      }
+    })
+
+    let [tempStartDate, tempEndDate]: Date[] = createDateFromHourMinTs(apiRes.data.Date, apiRes.data.StartTime, apiRes.data.EndTime)
+    tempEndDate = addMinuteTs(tempEndDate, 5) // 여유 시간 5분 추가
+    endDateRef.current = tempEndDate
+    startDateRef.current = tempStartDate
+
+    checkEnterTime({ consultId: +apiRes.ID })
+
+    setIsReadyToCall(true)
+
+    // noshow logic 제거
+
+    const tempIntervalId = setInterval(() => {
+      checkEnterTime({ consultId: +apiRes.ID })
+    }, 1000);
+    intervalIdRef.current = tempIntervalId
+  }
+
+
+  useEffect(() => {
+    if (isMentorMode === true) {
+      isMentorInRef.current = true;
+    } else {
+      isMenteeInRef.current = true;
+    }
+
+    API.getConsult(params.id).then((res) => {
+      if (res.status === 200) {
+        setDefaultConsultData(res)
+      }
+    })
+    // getConsultData();
+
+    // window.addEventListener('beforeunload',
+    //   function listener(e) {
+    //     e.returnValue = '';
+    //     console.log('before unload')
+    //   }
+    // )
+
+    window.onunload = () => {
+      console.log('unload!!!!!!')
+      console.log('call', callRef.current)
+      callRef.current && API.Sendbird.stopCalling(callRef.current)
+      intervalIdRef.current && clearInterval(intervalIdRef.current)
+    }
+
+    return () => {
+      console.log('clearInterval', intervalIdRef.current)
+      console.log('callRef.current', callRef.current)
+      callRef.current && API.Sendbird.stopCalling(callRef.current)
+      intervalIdRef.current && clearInterval(intervalIdRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isReadyToCall) {
+      const createCall = async () => {
+        // 1. setting for call
+        // API.Sendbird.useMedia()
+        API.Sendbird.initSendbird()
+        const isAuthSuccess = await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
+        if (!isAuthSuccess) {
+          const res = await API.postAccountRenewSendbird()
+          console.log('res', res)
+          const isLastAuthSuccess = await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
+          if (!isLastAuthSuccess) {
+            alert('유저 정보가 인증되지 못하였습니다. 다시 로그아웃 후, 다시 로그인 해주세요. (확인 버튼 클릭시 로그인 화면으로 이동합니다)')
+            localStorage.clear();
+            navigater(`/login`)
+            return
           }
         }
-      )
-      setTimeout(() => {
-        callRef.current === 'no call' && API.Sendbird.makeACall(
+
+        await API.Sendbird.connectWebSocket()
+        API.Sendbird.addEventHandler()
+        // 2. receive a call
+        API.Sendbird.receiveACall(
           {
-            calleeId: calleeId,
-            onMakeACall: ({ call: callProps }: { call: any }) => {
+            onReceiveACall: ({ call: callProps }: { call: any }) => {
               setCall(() => callProps)
               callRef.current = callProps
-              callProps.stopVideo()
-              API.postCallNew(
-                {
-                  calleeId: calleeId,
-                  callerId: userId,
-                  consultId: consultRes.data.ID,
-                  callId: callProps._callId
-                }
-              )
-            },
-            onConnected: () => {
-              setIsMenteeIn(true)
-              setIsMentorIn(true)
-              isMentorInRef.current = true
               isMenteeInRef.current = true;
+              isMentorInRef.current = true
+              API.postCallStart(callProps._callId)
+              setIsMicOn(false)
             },
+            onEstablished: () => { },
             onEnded: () => {
-              console.log('onEnd from onMakeACall')
               if (isMentorMode) {
-                setIsMenteeIn(false)
                 isMenteeInRef.current = false;
               }
               else {
-                setIsMentorIn(false)
                 isMentorInRef.current = false
               }
             }
           }
         )
-      }, 1000);
-    })
-  }
-  useEffect(() => {
-
-    getConsultData();
-
-    window.addEventListener('beforeunload',
-      function listener(e) {
-        e.returnValue = '';
-      })
-
-
-    window.onunload = () => {
-      console.log('unload!!!!!!')
-      console.log('call', callRef.current)
-      if (callRef.current !== 'no call' && callRef.current !== undefined) {
-        API.Sendbird.stopCalling(callRef.current)
+        // 3. wait for receive a call listener can get Signal
+        // 4. make a call
+        const makeACall = () => {
+          if (callRef.current === null && !isQuitPageRef.current) {
+            // there isn't a ringing
+            console.log("there isn't a ringing", calleeIdRef.current)
+            API.Sendbird.makeACall(
+              {
+                calleeId: calleeIdRef.current,
+                onMakeACall: ({ call: callProps }: { call: any }) => {
+                  setCall(() => callProps)
+                  callRef.current = callProps
+                  callProps.stopVideo()
+                  API.postCallNew(
+                    {
+                      calleeId: calleeIdRef.current,
+                      callerId: userId,
+                      consultId: +!params.id,
+                      callId: callProps._callId
+                    }
+                  )
+                },
+                onConnected: () => {
+                  isMentorInRef.current = true
+                  isMenteeInRef.current = true;
+                  setIsMicOn(false)
+                },
+                onEnded: () => {
+                  console.log('onEnd from onMakeACall')
+                  callRef.current = null
+                  makeACall()
+                  if (isMentorMode) {
+                    isMenteeInRef.current = false;
+                  }
+                  else {
+                    isMentorInRef.current = false
+                  }
+                }
+              }
+            )
+          }
+        }
+        setTimeout(() => {
+          makeACall()
+        }, 2000)
       }
-      if (intervalId !== undefined) {
-        clearInterval(intervalId)
-      }
+      createCall()
     }
+  }, [isReadyToCall])
 
-    return () => {
-      console.log('clearInterval', intervalId)
-      clearInterval(intervalId)
-    }
-  }, [])
 
 
   return (
@@ -321,13 +463,13 @@ function Session() {
 
           {!isScreenShowing && !isLocalScreenShowing && !isRemoteScreenShowing &&
             <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 12, height: '90%', justifyContent: 'space-between' }}>
-              {isMenteeIn && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginBottom: '15px' }}>
+              {isMenteeInRef.current && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginBottom: '15px' }}>
                 <ColumnAlignCenterFlex >
                   <ProfileImg src={testMentorImage} alt="profile-image" />
                   <TextSubtitle1>{menteeData && menteeData.User && menteeData.User.Nickname}</TextSubtitle1>
                 </ColumnAlignCenterFlex>
               </Card>}
-              {isMentorIn && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginTop: '15px' }}>
+              {isMentorInRef.current && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginTop: '15px' }}>
                 <ColumnAlignCenterFlex>
                   <ProfileImg src={testMentorImage} alt="profile-image" />
                   <TextSubtitle1>{mentorData && mentorData.Nickname}</TextSubtitle1>
@@ -352,7 +494,7 @@ function Session() {
             <Flex style={{ alignItems: 'center' }}>
               <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '40px', height: '40px', padding: 0 }}
                 onClick={() => {
-                  if (call !== 'no call' && call !== undefined) {
+                  if (call !== null && call !== undefined) {
                     if (isMicOn) {
                       call.muteMicrophone();
                     } else {
@@ -470,7 +612,8 @@ function Session() {
 
             </Flex>
             <CustomButton custom_color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}
-              onClick={() => {
+              onClick={async () => {
+                await API.Sendbird.stopCalling(callRef.current)
                 API.postCallDone(call._callId).then(() => {
                   if (isMentorMode) {
                     navigater(`/mentor`)
