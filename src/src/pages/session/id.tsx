@@ -75,7 +75,7 @@ function Session() {
   const mentorIdRef = useRef<number | null>(null);
   const menteeIdRef = useRef<number | null>(null);
 
-  function checkEnterTime({ consultId }: { consultId: number }) {
+  function checkTimer({ consultId }: { consultId: number }) {
     if (endDateRef.current && startDateRef.current) {
       let tempLeftTime = endDateRef.current.getTime() - new Date().getTime()
       // const passTime = new Date().getTime() - startDateRef.current.getTime()
@@ -175,14 +175,14 @@ function Session() {
     endDateRef.current = tempEndDate
     startDateRef.current = tempStartDate
 
-    checkEnterTime({ consultId: +apiRes.ID })
+    checkTimer({ consultId: +apiRes.ID })
 
     setIsReadyToCall(true)
 
     // noshow logic 제거
 
     const tempIntervalId = setInterval(() => {
-      checkEnterTime({ consultId: +apiRes.ID })
+      checkTimer({ consultId: +apiRes.ID })
     }, 1000);
     intervalIdRef.current = tempIntervalId
   }
@@ -380,7 +380,7 @@ function Session() {
               <TextCaption style={{ fontWeight: '400' }}>
                 남은 시간
               </TextCaption>
-              <TextHeading4>{leftTime && `${Math.floor(leftTime / 1000 / 60).toString().padStart(2, '0')}:${Math.floor(leftTime / 1000 % 60).toString().padStart(2, '0')}`}</TextHeading4>
+              <TextHeading4>{leftTime && (leftTime < 0 ? '00:00' : `${Math.floor(leftTime / 1000 / 60).toString().padStart(2, '0')}:${Math.floor(leftTime / 1000 % 60).toString().padStart(2, '0')}`)}</TextHeading4>
             </VerticalFlex>
             <Flex style={{ alignItems: 'center' }}>
               <Button style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '24px', minWidth: '40px', height: '40px', padding: 0 }}
