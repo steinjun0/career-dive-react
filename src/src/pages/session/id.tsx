@@ -78,11 +78,11 @@ function Session() {
   function checkEnterTime({ consultId }: { consultId: number }) {
     if (endDateRef.current && startDateRef.current) {
       let tempLeftTime = endDateRef.current.getTime() - new Date().getTime()
-      const passTime = new Date().getTime() - startDateRef.current.getTime()
+      // const passTime = new Date().getTime() - startDateRef.current.getTime()
       setLeftTime(tempLeftTime)
-      const passHour = ~~(passTime / 1000 / 60 / 60)
-      const passMin = ~~(passTime / 1000 / 60)
-      const passSec = ~~(passTime / 1000 % 60)
+      // const passHour = ~~(passTime / 1000 / 60 / 60)
+      // const passMin = ~~(passTime / 1000 / 60)
+      // const passSec = ~~(passTime / 1000 % 60)
       // // 1분후
       // if (passHour === 0 && passMin === 1 && passSec === 0 && (!isMentorInRef.current || !isMenteeInRef.current)) {
       //   let tempLatenessParams = { consultId: consultId, menteeLateness: true, mentorLateness: true }
@@ -120,127 +120,30 @@ function Session() {
       if (endDateRef.current <= new Date()) {
         // API.patchConsultDone(res.data.ID)
         isQuitPageRef.current = true
-        API.postCallDone(callRef.current._callId).then(() => {
+        if (callRef.current !== null) {
+          API.postCallDone(callRef.current._callId).then(() => {
+            intervalIdRef.current && clearInterval(intervalIdRef.current)
+            if (callRef.current !== null) API.Sendbird.stopCalling(callRef.current)
+            alert('상담 종료시간이 지났습니다.')
+            if (isMentorMode) {
+              navigater(`/mentor`)
+            } else {
+              navigater(`/review/${params.id}`)
+            }
+          })
+        } else {
           intervalIdRef.current && clearInterval(intervalIdRef.current)
-          if (callRef.current !== null) API.Sendbird.stopCalling(callRef.current)
           alert('상담 종료시간이 지났습니다.')
           if (isMentorMode) {
             navigater(`/mentor`)
           } else {
             navigater(`/review/${params.id}`)
           }
-        })
+        }
+
       }
     }
 
-  }
-  function getConsultData() {
-    API.getConsult(params.id).then((res) => {
-      if (res.status === 200) {
-        if (+res.data.MenteeID === userId) {
-          calleeIdRef.current = res.data.MentorID
-        } else {
-          calleeIdRef.current = res.data.MenteeID
-        }
-        menteeIdRef.current = res.data.MenteeID
-        mentorIdRef.current = res.data.MentorID
-
-        setConsultData(res.data)
-
-        let [tempStartDate, tempEndDate]: Date[] = createDateFromHourMinTs(res.data.Date, res.data.StartTime, res.data.EndTime)
-        tempEndDate = addMinuteTs(tempEndDate, 5) // 여유 시간 5분 추가
-        endDateRef.current = tempEndDate
-        startDateRef.current = tempStartDate
-
-        // noshow logic 제거
-
-        // const tempIntervalId = setInterval(() => {
-        //   checkEnterTime(res.data.ID)
-        // }, 1000);
-        // intervalIdRef.current = tempIntervalId
-      }
-      return res
-    })
-
-    API.getAccountMentee(menteeIdRef.current).then((res) => {
-      console.log('res.data', res.data)
-      if (res.status === 200) {
-        setMenteeData(res.data)
-      }
-    })
-
-
-    API.getAccountMentor(mentorIdRef.current).then((res) => {
-      if (res.status === 200) {
-        setMentorData(res.data)
-      }
-    })
-
-    // params.id
-    // API.Sendbird.initSendbird()
-    // await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
-
-    // API.Sendbird.connectWebSocket().then((res) => {
-    //   API.Sendbird.addEventHandler()
-    //   API.Sendbird.receiveACall(
-    //     {
-    //       onReceiveACall: ({ call: callProps }: { call: any }) => {
-    //         setCall(() => callProps)
-    //         callRef.current = callProps
-    //         if (isMentorMode) {
-    //           isMenteeInRef.current = true;
-    //         }
-    //         else {
-    //           isMentorInRef.current = true
-    //         }
-    //         API.postCallStart(callProps._callId)
-    //       },
-    //       onEstablished: () => { },
-    //       onEnded: () => {
-    //         console.log('onEnded from receiveACall')
-    //         if (isMentorMode) {
-    //           isMenteeInRef.current = false;
-    //         }
-    //         else {
-    //           isMentorInRef.current = false
-    //         }
-    //       }
-    //     }
-    //   )
-    //   setTimeout(() => {
-    //     callRef.current === null && API.Sendbird.makeACall(
-    //       {
-    //         calleeId: calleeId,
-    //         onMakeACall: ({ call: callProps }: { call: any }) => {
-    //           setCall(() => callProps)
-    //           callRef.current = callProps
-    //           callProps.stopVideo()
-    //           API.postCallNew(
-    //             {
-    //               calleeId: calleeId,
-    //               callerId: userId,
-    //               consultId: consultRes.data.ID,
-    //               callId: callProps._callId
-    //             }
-    //           )
-    //         },
-    //         onConnected: () => {
-    //           isMentorInRef.current = true
-    //           isMenteeInRef.current = true;
-    //         },
-    //         onEnded: () => {
-    //           console.log('onEnd from onMakeACall')
-    //           if (isMentorMode) {
-    //             isMenteeInRef.current = false;
-    //           }
-    //           else {
-    //             isMentorInRef.current = false
-    //           }
-    //         }
-    //       }
-    //     )
-    //   }, 1000);
-    // })
   }
 
   function setDefaultConsultData(apiRes: any) {
@@ -322,15 +225,19 @@ function Session() {
   }, [])
 
   useEffect(() => {
+    console.log('isReadyToCall', isReadyToCall)
     if (isReadyToCall) {
       const createCall = async () => {
         // 1. setting for call
         // API.Sendbird.useMedia()
         API.Sendbird.initSendbird()
         const isAuthSuccess = await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
+        console.log('isAuthSuccess', isAuthSuccess)
         if (!isAuthSuccess) {
           const res = await API.postAccountRenewSendbird()
-          console.log('res', res)
+          if (res.status === 200) {
+            localStorage.setItem("SendbirdToken", res.data.token)
+          }
           const isLastAuthSuccess = await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
           if (!isLastAuthSuccess) {
             alert('유저 정보가 인증되지 못하였습니다. 다시 로그아웃 후, 다시 로그인 해주세요. (확인 버튼 클릭시 로그인 화면으로 이동합니다)')
@@ -418,22 +325,6 @@ function Session() {
 
   return (
     <GrayBackground>
-      {/* <CustomButton onClick={() => {
-        console.log('calleeId', calleeId)
-        API.Sendbird.makeACall(calleeId, setCall)
-      }}>입장하기</CustomButton>
-
-      <CustomButton onClick={() => {
-        console.log('call', call)
-      }}>console.log(call)출력</CustomButton>
-
-      <CustomButton onClick={() => {
-        call.startScreenShare();
-      }}>화면공유 시작</CustomButton>
-
-      <CustomButton onClick={() => {
-        call.stopVideo();
-      }}>stop video</CustomButton> */}
       <Flex style={{ margin: '16px auto 0 48px', color: colorTextDisabled }}>
         <TextHeading5 style={{ fontFamily: 'Noto Sans KR' }}>커리어다이브</TextHeading5>
       </Flex>
