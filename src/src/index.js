@@ -27,6 +27,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MentorSchedule from "pages/mentor/Schedule";
 import Sendbird from "pages/Sendbird";
 import Session from "./pages/session/id";
+import SessionTs from "./pages/session/id.tsx"
 import MentorCalendar from "pages/mentor/Calendar";
 import MentorRegister from "pages/mentor/register";
 import MentorMyPage from "./pages/mentor/myPage";
@@ -116,7 +117,8 @@ ReactDOM.render(
           {/* TODO: 멘토가 진입하는 멘티 요청서 화면 */}
 
           <Route path="/sendbird" element={<Sendbird />} />
-          <Route path="/session/:id" element={<Session />} />
+          <Route path="/js/session/:id" element={<Session />} />
+          <Route path="/session/:id" element={<SessionTs />} />
           <Route path="/search" element={<Search />} />
 
           <Route path="/review/:id" element={<Review />} />

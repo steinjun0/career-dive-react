@@ -16,6 +16,8 @@ if (window.location.host === 'careerdive.co.kr') {
 
 
 const APP_ID = 'DCFAABFA-CE04-46DC-877A-C3C87B929C2D'
+const SENDBIRD_CALL_RINGING_LISNTER_ID = 1
+const SENDBIRD_CALL_RECEIVING_LISNTER_ID = 2
 // let user = JSON.parse(localStorage.getItem('userData'))
 // let tokenHeader = false
 
@@ -327,6 +329,10 @@ export default {
     return scheduleRes
   },
 
+  async postAccountRenewSendbird() {
+    const sendbirdRenewRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/renew/sendbird`)
+    return sendbirdRenewRes
+  },
 
   async postCallNew({ calleeId, callerId, consultId, callId }) {
     const callNewRes = await this.postAxios(`${CAREER_DIVE_API_URL}/call/new`, { CalleeID: calleeId, CallerID: callerId, ConsultID: consultId, call_id: callId })
@@ -427,26 +433,34 @@ export default {
 
 
 
+
   Sendbird: {
     initSendbird() {
       SendBirdCall.init(APP_ID)
+    },
+    useMedia() {
+      SendBirdCall.useMedia({ audio: true, video: true })
     },
 
     async checkAuth(USER_ID, ACCESS_TOKEN) {
       // Authentication
       const authOption = { userId: USER_ID, accessToken: ACCESS_TOKEN };
-
-      await SendBirdCall.authenticate(authOption, (res, error) => {
-        if (error) {
-          // auth failed
-          console.log('auth fail')
-          alert('통화 연결에 실패하였습니다. 새로고침해 주세요. (계속 안된다면 로그아웃 후 다시 로그인해 주세요)')
-        } else {
-          // auth succeeded
-          console.log('auth success')
-
-        }
-      });
+      try {
+        await SendBirdCall.authenticate(authOption).then((res, error) => {
+          console.log(res)
+          if (error) {
+            // auth failed
+            console.log('auth fail')
+            // alert('통화 연결에 실패하였습니다. 새로고침해 주세요. (계속 안된다면 로그아웃 후 다시 로그인해 주세요)')
+          } else {
+            // auth succeeded
+            console.log('auth success')
+          }
+        });
+        return true
+      } catch {
+        return false
+      }
     },
 
     connectWebSocket() {
@@ -457,7 +471,7 @@ export default {
     },
 
     addEventHandler() {
-      SendBirdCall.addListener(1, {
+      SendBirdCall.addListener(SENDBIRD_CALL_RINGING_LISNTER_ID, {
         onRinging: (call) => {
           console.log('onRinging')
         },
@@ -534,15 +548,15 @@ export default {
     },
 
     receiveACall({ onReceiveACall, onEstablished, onEnded }) {
-      SendBirdCall.addListener(2, {
+      SendBirdCall.addListener(SENDBIRD_CALL_RECEIVING_LISNTER_ID, {
         onRinging: (call) => {
           call.onEstablished = (call) => {
-            console.log('established!')
             call.stopVideo();
             call.muteMicrophone();
+            console.log('established!')
+            console.log('mutemute!')
             console.log('onreceive call', call)
             onReceiveACall({ call })
-            console.log('mutemute!')
           };
 
           call.onConnected = (call) => {
@@ -580,7 +594,7 @@ export default {
       });
     },
     stopCalling(call) {
-      console.log('callEnd', call)
+      console.log('callEnd by stopCalling', call)
       call.end()
       SendBirdCall.removeAllListeners()
     }
