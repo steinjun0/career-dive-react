@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { colorBackgroundCareerDiveBlue, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextDisabled, colorTextLight, Flex, VerticalFlex } from "util/styledComponent";
+import { colorBackgroundCareerDiveBlue, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextDisabled, colorTextLight, Flex, TextSubtitle1, VerticalFlex } from "util/styledComponent";
 import Card from "../../util/ts/Card";
 import { getDatesOfMonth, isPastDate, monthList } from "./Calendar.service";
 import SimpleSelect from "util/ts/SimpleSelect";
 import API from "API";
 import styled from "styled-components";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { addMinute, getHoursAndMinuteString } from "util/ts/util";
+import { addMinute, getHoursAndMinuteString, getKoreanTimeString } from "util/ts/util";
 import { wrap } from "module";
+import { addMinuteTs } from "util/util";
+import { CustomButton } from "util/Custom/CustomButton";
+import { useNavigate, useParams } from "react-router-dom";
 
 const dateDefaultStyle = {
     justifyContent: 'center', alignItems: 'center', borderRadius: '12px', minHeight: '32px'
@@ -45,7 +48,6 @@ const TimeButton = styled(ToggleButton)`
 function getSplitTimes(startTime: Date, endTime: Date): Date[] {
     const result = [startTime]
     const gapMin = (endTime.getTime() - startTime.getTime()) / 1000 / 60
-    console.log(startTime, endTime, gapMin)
     for (let addMin = 30; addMin < gapMin; addMin += 30) {
         result.push(addMinute(startTime, addMin))
     }
@@ -70,11 +72,13 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
     const monthTextList = monthList.map(e => koDtf.format(e))
 
-    const [calendarState, setCalendarState] = useState<'view' | 'set consultingTime' | 'set startTime'>('view')
+    const [calendarState, setCalendarState] = useState<'view' | 'setting consultingTime' | 'setting startTime' | 'finish set'>('view')
     const [consultingTime, setConsultingTime] = useState<number | null>(null)
     const [startTime, setStartTime] = useState<Date | null>(null)
 
     const timeSelectRef = useRef<HTMLDivElement>(null)
+    const navigate = useNavigate()
+    const params = useParams();
 
     // availableDate,Times 설정
     useEffect(() => {
@@ -128,7 +132,6 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     // (availableDates로 하면 뒤 연산에서 availableTimes가 nullable)
     useEffect(() => {
         if (availableDates[0]) {
-            console.log('hihih111')
             setSelectedDate(availableDates[0])
         } else {
             setSelectedDate(null)
@@ -138,27 +141,26 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     // 날짜 선택
     useEffect(() => {
         if (selectedDate !== null) {
-            setCalendarState('set consultingTime')
-            setConsultingTime(null)
-            setStartTime(null)
-
             const temp: IstartTimeObj = { 20: { AM: [], PM: [] }, 40: { AM: [], PM: [] } }
 
             const schedules = availableTimes[selectedDate.getDate()]
-            const splitTimes = schedules.map(schedule => {
-                return getSplitTimes(schedule.startTime, schedule.endTime)
-                    .map(date => {
-                        return date
-                    })
-            })
-            splitTimes.forEach(times => {
-                const timesAm = times.filter(time => time.getHours() < 12)
-                const timesPm = times.filter(time => time.getHours() >= 12)
-                temp['20']['AM'] = [...timesAm]
-                temp['40']['AM'] = [...timesAm.slice(0, timesAm.length - 1)]
-                temp['20']['PM'] = [...timesPm]
-                temp['40']['PM'] = [...timesPm.slice(0, timesPm.length - 1)]
-            })
+            if (schedules) {
+                const splitTimes = schedules.map(schedule => {
+                    return getSplitTimes(schedule.startTime, schedule.endTime)
+                        .map(date => {
+                            return date
+                        })
+                })
+                splitTimes.forEach(times => {
+                    const timesAm = times.filter(time => time.getHours() < 12)
+                    const timesPm = times.filter(time => time.getHours() >= 12)
+                    temp['20']['AM'] = [...timesAm]
+                    temp['40']['AM'] = [...timesAm.slice(0, timesAm.length - 1)]
+                    temp['20']['PM'] = [...timesPm]
+                    temp['40']['PM'] = [...timesPm.slice(0, timesPm.length - 1)]
+                })
+            }
+
             setStartTimesObj(temp)
         }
         else {
@@ -167,21 +169,32 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     }, [selectedDate])
 
 
+    useEffect(() => {
+        setConsultingTime(null)
+        setStartTime(null)
+    }, [selectedDate])
+
+
+    useEffect(() => {
+        setStartTime(null)
+    }, [consultingTime])
+
     // 상담 시간
     useEffect(() => {
+        console.log('startTime', startTime)
         if (selectedDate === null) {
             setCalendarState('view')
         }
         else if (consultingTime === null) {
-            setCalendarState('set consultingTime')
+            setCalendarState('setting consultingTime')
         } else if (startTime === null) {
-            setCalendarState('set startTime')
+            setCalendarState('setting startTime')
+        } else {
+            setCalendarState('finish set')
         }
-        setStartTime(null)
+    }, [selectedDate, consultingTime, startTime])
 
-        console.log('calendarState', calendarState)
-        console.log('availableTimes', availableTimes)
-    }, [selectedDate, consultingTime])
+
 
 
     return (
@@ -274,7 +287,17 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
 
             <VerticalFlex
                 style={{
-                    height: calendarState === 'set startTime' ? timeSelectRef.current?.scrollHeight! + 50 : 0, overflow: 'hidden',
+                    height: calendarState === 'finish set' ? 100 : 0, overflow: 'hidden',
+                    transitionDelay: '0.2s', transition: 'all 0.2s ease'
+                }}
+            >
+                <Flex>상담 진행 시간</Flex>
+                {startTime && getKoreanTimeString(startTime)} ~ {startTime && getKoreanTimeString(addMinuteTs(startTime, consultingTime))}
+            </VerticalFlex>
+
+            <VerticalFlex
+                style={{
+                    height: ['setting startTime', 'finish set'].includes(calendarState) ? timeSelectRef.current?.scrollHeight! + 50 : 0, overflow: 'hidden',
                     transitionDelay: '0.2s', transition: 'all 0.2s ease'
                 }}
             >
@@ -284,8 +307,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                         value={startTime ? startTime?.getTime() : null}
                         exclusive
                         onChange={(e, time) => {
-                            console.log('time', time)
-                            setStartTime(new Date(time))
+                            setStartTime(time ? new Date(time) : null)
                         }}
                     >
                         {startTimesObj && consultingTime &&
@@ -300,8 +322,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                         value={startTime ? startTime?.getTime() : null}
                         exclusive
                         onChange={(e, time) => {
-                            console.log('time', time)
-                            setStartTime(new Date(time))
+                            setStartTime(time ? new Date(time) : null)
                         }}
                         ref={timeSelectRef}
                     >
@@ -313,8 +334,22 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                         }
                     </TimeButtonWrapper>
                 </VerticalFlex>
-
             </VerticalFlex>
+            <Flex style={{
+                height: calendarState === 'finish set' ? 100 : 0, overflow: 'hidden',
+                transitionDelay: '0.2s', transition: 'all 0.2s ease'
+            }}>
+                <CustomButton
+                    height='48px'
+                    width="100%"
+                    onClick={() => {
+                        navigate(`/mentee/request/${params.id}`)
+                    }}>
+                    <TextSubtitle1>
+                        신청
+                    </TextSubtitle1>
+                </CustomButton>
+            </Flex>
 
         </Card >
     );
