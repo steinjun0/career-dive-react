@@ -1,20 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { colorBackgroundCareerDiveBlue, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextDisabled, colorTextLight, Flex, TextSubtitle1, TextSubtitle2, VerticalFlex } from "util/styledComponent";
+import { colorBackgroundCareerDiveBlue, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextDisabled, colorTextLight, EmptyHeight, Flex, TextBody2, TextSubtitle1, TextSubtitle2, VerticalFlex } from "util/styledComponent";
 import Card from "../../util/ts/Card";
 import { getDatesOfMonth, isPastDate, monthList } from "./Calendar.service";
 import SimpleSelect from "util/ts/SimpleSelect";
 import API from "API";
 import styled from "styled-components";
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Button, Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { addMinute, getHoursAndMinuteString, getKoreanTimeString } from "util/ts/util";
 import { wrap } from "module";
 import { addMinuteTs } from "util/util";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
-
-const dateDefaultStyle = {
-    justifyContent: 'center', alignItems: 'center', borderRadius: '12px', minHeight: '32px',
-}
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CircleIcon from '@mui/icons-material/Circle';
 
 const calendarAnimationStyle = {
     overflow: 'hidden',
@@ -78,7 +77,6 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     interface IstartTimeObj { 20: { AM: Date[], PM: Date[] }, 40: { AM: Date[], PM: Date[] } }
     const [startTimesObj, setStartTimesObj] = useState<IstartTimeObj | null>(null)
     const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
-    const monthTextList = monthList.map(e => koDtf.format(e))
 
     const [calendarState, setCalendarState] = useState<'view' | 'setting consultingTime' | 'setting startTime' | 'finish set'>('view')
     const [consultingTime, setConsultingTime] = useState<number | null>(null)
@@ -88,6 +86,10 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     const navigate = useNavigate()
     const params = useParams();
 
+
+    function addCurrentYearAndMonth(month: number) {
+        setCurrentYearAndMonth(new Date(currentYearAndMonth.setMonth(currentYearAndMonth.getMonth() + month)))
+    }
 
     // availableDate,Times 설정
     useEffect(() => {
@@ -211,110 +213,109 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
             style={{ boxSizing: 'border-box' }}
         >
             <Flex style={{ justifyContent: 'center' }}>
-                <Flex style={{ flexWrap: 'wrap', }}>
+                <Flex style={{
+                    justifyContent: 'space-between', alignItems: 'center',
+                    marginTop: '16px', width: '100%'
+                }}>
                     {/* <SimpleSelect<Date>
                         items={monthList}
                         texts={monthTextList}
                         onChange={(date: string) => { setCurrentYearAndMonth(new Date(date)) }}
                     /> */}
+                    <IconButton
+                        sx={{
+                            backgroundColor: colorBackgroundGrayLight,
+                            borderRadius: '8px',
+                            height: '32px',
+                            width: '32px'
+                        }}
+                        disabled={currentYearAndMonth.getMonth() === new Date().getMonth()}
+                        onClick={() =>
+                            addCurrentYearAndMonth(-1)
+                        }
+                    >
+                        <ChevronLeftIcon sx={{ color: currentYearAndMonth.getMonth() === new Date().getMonth() ? colorTextDisabled : 'black' }} />
+                    </IconButton>
                     <TextSubtitle2 style={{
                         backgroundColor: colorBackgroundGrayLight,
                         padding: '4px 12px',
                         borderRadius: '8px',
-                        marginTop: '16px'
                     }}>{koDtf.format(currentYearAndMonth)}</TextSubtitle2>
+                    <IconButton
+                        sx={{
+                            backgroundColor: colorBackgroundGrayLight,
+                            borderRadius: '8px',
+                            height: '32px',
+                            width: '32px'
+                        }}
+                        disabled={currentYearAndMonth.getMonth() >= new Date().getMonth() + 6}
+                        onClick={() => addCurrentYearAndMonth(1)}
+                    >
+                        <ChevronRightIcon sx={{ color: currentYearAndMonth.getMonth() >= new Date().getMonth() + 6 ? colorTextDisabled : 'black' }} />
+                    </IconButton>
+
                 </Flex>
             </Flex>
-            <Flex style={{ flexWrap: 'wrap', height: '344px', borderBottom: `1px solid ${colorBackgroundGrayMedium}`, paddingBottom: '16px' }}>
-                {
-                    ['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
-                        return <Flex style={{ minWidth: '14.286%', ...dateDefaultStyle }} key={i}> <TextSubtitle1 >{koDay}</TextSubtitle1> </Flex>
-                    })
-                }
-                {
-                    calendarDates && calendarDates.map((date, i) => {
-                        if (date === null) {
-                            return <Flex data-testid="date-elem" style={{ minWidth: '14.286%', ...dateDefaultStyle }} key={i}></Flex>
-                        }
-                        else {
-                            //비활성
-                            if (isPastDate(date)) {
-                                return <Flex
-                                    data-testid="date-elem" style={{ minWidth: '14.286%', ...dateDefaultStyle, color: colorTextDisabled }} key={i}>{date.getDate()}
-                                </Flex>
-                            }
-                            // 선택
-                            else if (selectedDate && selectedDate.getTime() === date.getTime()) {
-                                return <Flex
-                                    data-testid="date-elem" style={{ minWidth: '14.286%', ...dateDefaultStyle }} key={i}>
-                                    <Flex
-                                        style={{ width: '32px', ...dateDefaultStyle, color: 'white', backgroundColor: colorCareerDiveBlue, cursor: 'pointer' }}>
-                                        {date.getDate()}
-                                    </Flex>
-
-                                </Flex>
-                            }
-                            // 선택가능 
-                            else if (availableDates.map(e => e.getTime()).includes(date.getTime())) {
-                                return <Flex
-                                    data-testid="date-elem" style={{ minWidth: '14.286%', ...dateDefaultStyle }} key={i}>
-                                    <Flex style={{ width: '32px', ...dateDefaultStyle, color: colorTextLight, backgroundColor: 'rgb(240, 240, 240)', cursor: 'pointer' }}
-                                        onClick={() => { setSelectedDate(date) }}>
-                                        {date.getDate()}
-                                    </Flex>
-
-                                </Flex>
-                            }
-                            // 일반
-                            else {
-                                return <Flex
-                                    data-testid="date-elem" style={{ width: '14.286%', ...dateDefaultStyle, color: colorTextLight }} key={i}>
-                                    {date.getDate()}
-                                </Flex>
-                            }
-                        }
-                    })
-                }
+            <Flex style={{ flexWrap: 'wrap', borderBottom: `1px solid ${colorBackgroundGrayMedium}`, paddingBottom: '16px', marginTop: '16px' }}>
+                {['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
+                    return <Flex style={{ minWidth: '14.286%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1 >{koDay}</TextSubtitle1> </Flex>
+                })}
+                {calendarDates && calendarDates.map((date, i) => {
+                    const isSelected = (date: Date) => selectedDate && selectedDate.getTime() === date.getTime()
+                    const isAvailable = (date: Date) => availableDates.map(e => e.getTime()).includes(date.getTime())
+                    return date === null ?
+                        <Flex key={i} style={{ minWidth: '14.286%', justifyContent: 'center', marginBottom: '10px' }} />
+                        :
+                        <Flex key={i} style={{ minWidth: '14.286%', justifyContent: 'center', marginBottom: '10px' }}>
+                            <Flex
+                                onClick={() => {
+                                    setSelectedDate(date)
+                                }}
+                                style={{
+                                    backgroundColor: isSelected(date) ? colorBackgroundCareerDiveBlue : 'transparent',
+                                    cursor: isAvailable(date) ? 'pointer' : '',
+                                    color: isPastDate(date) ? colorTextDisabled : colorTextLight,
+                                    width: '27px', height: '54px', borderRadius: 8,
+                                    justifyContent: 'center', alignItems: 'center',
+                                    flexDirection: 'column'
+                                }}>
+                                <TextBody2>{date.getDate()}</TextBody2>
+                                <CircleIcon sx={{ width: 10, height: 10, color: isAvailable(date) ? colorCareerDiveBlue : 'transparent' }} />
+                            </Flex>
+                        </Flex>
+                })}
             </Flex>
 
             <VerticalFlex
                 style={{
-                    height: calendarState !== 'view' ? 100 : 0, ...calendarAnimationStyle
+                    height: calendarState !== 'view' ? 84 : 0, ...calendarAnimationStyle,
+                    paddingTop: '16px',
                 }}
             >
-                <Flex>상담시간</Flex>
+                <TextSubtitle1>상담시간</TextSubtitle1>
                 <TimeButtonWrapper
                     value={consultingTime}
                     exclusive
                     onChange={(e, time) => { setConsultingTime(time) }}
                 >
                     <TimeButton value={20} aria-label="20min">
-                        20분
+                        <TextBody2>20분</TextBody2>
                     </TimeButton>
                     <TimeButton value={40} aria-label="40min">
-                        40분
+                        <TextBody2>40분</TextBody2>
                     </TimeButton>
                 </TimeButtonWrapper>
             </VerticalFlex>
 
             <VerticalFlex
                 style={{
-                    height: calendarState === 'finish set' ? 100 : 0, ...calendarAnimationStyle
-                }}
-            >
-                <Flex>상담 진행 시간</Flex>
-                {startTime && getKoreanTimeString(startTime)} ~ {startTime && getKoreanTimeString(addMinuteTs(startTime, consultingTime))}
-            </VerticalFlex>
-
-            <VerticalFlex
-                style={{
-                    height: ['setting startTime', 'finish set'].includes(calendarState) ? timeSelectRef.current?.scrollHeight! + 50 : 0,
-                    paddingLeft: '1px',
+                    height: ['setting startTime', 'finish set'].includes(calendarState) ? timeSelectRef.current?.scrollHeight! : 0,
+                    paddingLeft: '1px', paddingTop: '16px',
                     ...calendarAnimationStyle
                 }}
             >
                 <VerticalFlex ref={timeSelectRef}>
-                    <Flex>오전</Flex>
+                    <TextSubtitle1>오전</TextSubtitle1>
                     <TimeButtonWrapper
                         value={startTime ? startTime?.getTime() : null}
                         exclusive
@@ -325,44 +326,101 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                         {startTimesObj && consultingTime &&
                             startTimesObj[consultingTime as keyof IstartTimeObj].AM
                                 .map(date => {
-                                    return <TimeButton key={date.getTime()} value={date.getTime()}>{getHoursAndMinuteString(date)}</TimeButton>
+                                    return <TimeButton key={date.getTime()} value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2></TimeButton>
                                 })
                         }
                     </TimeButtonWrapper>
-                    <Flex>오후</Flex>
+                    <EmptyHeight height="16px" />
+                    <TextSubtitle1>오후</TextSubtitle1>
                     <TimeButtonWrapper
                         value={startTime ? startTime?.getTime() : null}
                         exclusive
                         onChange={(e, time) => {
                             setStartTime(time ? new Date(time) : null)
                         }}
-                        ref={timeSelectRef}
                     >
                         {startTimesObj && consultingTime &&
                             startTimesObj[consultingTime as keyof IstartTimeObj].PM
                                 .map(date => {
-                                    return <TimeButton key={date.getTime()} value={date.getTime()}>{getHoursAndMinuteString(date)}</TimeButton>
+                                    return <TimeButton key={date.getTime()} value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2></TimeButton>
                                 })
                         }
                     </TimeButtonWrapper>
                 </VerticalFlex>
             </VerticalFlex>
-            <Flex style={{
-                height: calendarState === 'finish set' ? 100 : 0, ...calendarAnimationStyle
-            }}>
-                <CustomButton
-                    height='48px'
-                    width="100%"
-                    onClick={() => {
-                        navigate(`/mentee/request/${params.id}`)
-                    }}>
-                    <TextSubtitle1>
-                        신청
-                    </TextSubtitle1>
-                </CustomButton>
-            </Flex>
+            <VerticalFlex
+                style={{
+                    height: calendarState === 'finish set' ? 170 : 0,
+                    ...calendarAnimationStyle
+                }}
+            >
+                <EmptyHeight height="16px" />
+                <Divider />
+                <VerticalFlex style={{ paddingTop: '16px' }}>
+                    <TextSubtitle1>상담 진행 시간</TextSubtitle1>
+                    <EmptyHeight height="8px" />
+                    <TextSubtitle1 color={colorCareerDiveBlue}>{startTime && getKoreanTimeString(startTime)} ~ {startTime && getKoreanTimeString(addMinuteTs(startTime, consultingTime))}</TextSubtitle1>
+                    <EmptyHeight height="24px" />
+                    <CustomButton
+                        height='48px'
+                        width="100%"
+                        onClick={() => {
+                            navigate(`/mentee/request/${params.id}`)
+                        }}>
+                        <TextSubtitle1>
+                            다음
+                        </TextSubtitle1>
+                    </CustomButton>
+                </VerticalFlex>
+
+            </VerticalFlex>
+
+
 
         </Card >
     );
 };
 export default MenteeCalendar
+
+
+{/* {(() => {
+                                if (date === null) {
+                                    return <Flex data-testid="date-elem" style={{ ...dateDefaultStyle }} key={i}></Flex>
+                                }
+                                else {
+                                    //비활성
+                                    if (isPastDate(date)) {
+                                        return <Flex
+                                            data-testid="date-elem" style={{ ...dateDefaultStyle, color: colorTextDisabled }} key={i}>{date.getDate()}
+                                        </Flex>
+                                    }
+                                    // 선택
+                                    else if (selectedDate && selectedDate.getTime() === date.getTime()) {
+                                        return <Flex
+                                            data-testid="date-elem" style={{ ...dateDefaultStyle }} key={i}>
+                                            <TextBody2
+                                                style={{ ...dateDefaultStyle, backgroundColor: colorBackgroundCareerDiveBlue, cursor: 'pointer' }}>
+                                                {date.getDate()}
+                                            </TextBody2>
+                                        </Flex>
+                                    }
+                                    // 선택가능 
+                                    else if (availableDates.map(e => e.getTime()).includes(date.getTime())) {
+                                        return <Flex
+                                            data-testid="date-elem" style={{ ...dateDefaultStyle }} key={i}>
+                                            <Flex style={{ ...dateDefaultStyle, color: colorTextLight, backgroundColor: 'rgb(240, 240, 240)', cursor: 'pointer' }}
+                                                onClick={() => { setSelectedDate(date) }}>
+                                                {date.getDate()}
+                                            </Flex>
+
+                                        </Flex>
+                                    }
+                                    // 일반
+                                    else {
+                                        return <Flex
+                                            data-testid="date-elem" style={{ ...dateDefaultStyle, color: colorTextLight }} key={i}>
+                                            {date.getDate()}
+                                        </Flex>
+                                    }
+                                }
+                            })()} */}
