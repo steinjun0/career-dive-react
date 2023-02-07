@@ -12,16 +12,7 @@ export const getDifferenceMinutes = (startTime: string, finishTime: string) => {
 }
 
 export const addMinute = (beforeDate: Date, addingMin: number) => {
-
-  // const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
   const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
-
-  const hour: number = +`${'00' + afterDate.getHours()}`.slice(-2)
-  const min: number = +`${'00' + afterDate.getMinutes()}`.slice(-2)
-
-  if (isNaN(hour) || isNaN(min)) {
-    return ''
-  }
   return afterDate
 }
 
@@ -85,7 +76,7 @@ export const getKoreanTimeString = (date: Date) => {
   return `${amOrPmString} ${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`
 }
 
-export const getMinuteString = (date: Date) => {
+export const getHoursAndMinuteString = (date: Date) => {
   return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }
 
