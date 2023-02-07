@@ -95,7 +95,7 @@ export const TextBody1 = styled(`span`)`
   overflow: inherit;
 `;
 
-export const TextBody2 = styled(`p`) <{ line_height: cssLength }>`
+export const TextBody2 = styled(`p`) <{ line_height?: cssLength }>`
   font-size: 14px;
   line-height: ${props => props.line_height ? props.line_height : '24px'};
   font-weight: 400;
