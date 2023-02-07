@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { colorBackgroundCareerDiveBlue, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextDisabled, colorTextLight, Flex, TextSubtitle1, VerticalFlex } from "util/styledComponent";
+import { colorBackgroundCareerDiveBlue, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextDisabled, colorTextLight, Flex, TextSubtitle1, TextSubtitle2, VerticalFlex } from "util/styledComponent";
 import Card from "../../util/ts/Card";
 import { getDatesOfMonth, isPastDate, monthList } from "./Calendar.service";
 import SimpleSelect from "util/ts/SimpleSelect";
@@ -13,7 +13,13 @@ import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
 
 const dateDefaultStyle = {
-    justifyContent: 'center', alignItems: 'center', borderRadius: '12px', minHeight: '32px'
+    justifyContent: 'center', alignItems: 'center', borderRadius: '12px', minHeight: '32px',
+}
+
+const calendarAnimationStyle = {
+    overflow: 'hidden',
+    transitionDelay: '0.2s',
+    transition: 'all 0.2s ease'
 }
 
 const TimeButtonWrapper = styled(ToggleButtonGroup)`
@@ -44,6 +50,8 @@ const TimeButton = styled(ToggleButton)`
   background-color: ${colorBackgroundCareerDiveBlue};
  }
 `
+
+
 
 function getSplitTimes(startTime: Date, endTime: Date): Date[] {
     const result = [startTime]
@@ -79,6 +87,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     const timeSelectRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
     const params = useParams();
+
 
     // availableDate,Times 설정
     useEffect(() => {
@@ -179,9 +188,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
         setStartTime(null)
     }, [consultingTime])
 
-    // 상담 시간
     useEffect(() => {
-        console.log('startTime', startTime)
         if (selectedDate === null) {
             setCalendarState('view')
         }
@@ -205,17 +212,23 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
         >
             <Flex style={{ justifyContent: 'center' }}>
                 <Flex style={{ flexWrap: 'wrap', }}>
-                    <SimpleSelect<Date>
+                    {/* <SimpleSelect<Date>
                         items={monthList}
                         texts={monthTextList}
                         onChange={(date: string) => { setCurrentYearAndMonth(new Date(date)) }}
-                    />
+                    /> */}
+                    <TextSubtitle2 style={{
+                        backgroundColor: colorBackgroundGrayLight,
+                        padding: '4px 12px',
+                        borderRadius: '8px',
+                        marginTop: '16px'
+                    }}>{koDtf.format(currentYearAndMonth)}</TextSubtitle2>
                 </Flex>
             </Flex>
             <Flex style={{ flexWrap: 'wrap', height: '344px', borderBottom: `1px solid ${colorBackgroundGrayMedium}`, paddingBottom: '16px' }}>
                 {
                     ['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
-                        return <Flex style={{ width: '14.286%', ...dateDefaultStyle }} key={i}>{koDay}</Flex>
+                        return <Flex style={{ minWidth: '14.286%', ...dateDefaultStyle }} key={i}> <TextSubtitle1 >{koDay}</TextSubtitle1> </Flex>
                     })
                 }
                 {
@@ -227,13 +240,13 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                             //비활성
                             if (isPastDate(date)) {
                                 return <Flex
-                                    data-testid="date-elem" style={{ width: '14.286%', ...dateDefaultStyle, color: colorTextDisabled }} key={i}>{date.getDate()}
+                                    data-testid="date-elem" style={{ minWidth: '14.286%', ...dateDefaultStyle, color: colorTextDisabled }} key={i}>{date.getDate()}
                                 </Flex>
                             }
                             // 선택
                             else if (selectedDate && selectedDate.getTime() === date.getTime()) {
                                 return <Flex
-                                    data-testid="date-elem" style={{ width: '14.286%', ...dateDefaultStyle }} key={i}>
+                                    data-testid="date-elem" style={{ minWidth: '14.286%', ...dateDefaultStyle }} key={i}>
                                     <Flex
                                         style={{ width: '32px', ...dateDefaultStyle, color: 'white', backgroundColor: colorCareerDiveBlue, cursor: 'pointer' }}>
                                         {date.getDate()}
@@ -244,7 +257,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                             // 선택가능 
                             else if (availableDates.map(e => e.getTime()).includes(date.getTime())) {
                                 return <Flex
-                                    data-testid="date-elem" style={{ width: '14.286%', ...dateDefaultStyle }} key={i}>
+                                    data-testid="date-elem" style={{ minWidth: '14.286%', ...dateDefaultStyle }} key={i}>
                                     <Flex style={{ width: '32px', ...dateDefaultStyle, color: colorTextLight, backgroundColor: 'rgb(240, 240, 240)', cursor: 'pointer' }}
                                         onClick={() => { setSelectedDate(date) }}>
                                         {date.getDate()}
@@ -266,8 +279,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
 
             <VerticalFlex
                 style={{
-                    height: calendarState !== 'view' ? 100 : 0, overflow: 'hidden',
-                    transitionDelay: '0.2s', transition: 'all 0.2s ease'
+                    height: calendarState !== 'view' ? 100 : 0, ...calendarAnimationStyle
                 }}
             >
                 <Flex>상담시간</Flex>
@@ -287,8 +299,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
 
             <VerticalFlex
                 style={{
-                    height: calendarState === 'finish set' ? 100 : 0, overflow: 'hidden',
-                    transitionDelay: '0.2s', transition: 'all 0.2s ease'
+                    height: calendarState === 'finish set' ? 100 : 0, ...calendarAnimationStyle
                 }}
             >
                 <Flex>상담 진행 시간</Flex>
@@ -297,8 +308,9 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
 
             <VerticalFlex
                 style={{
-                    height: ['setting startTime', 'finish set'].includes(calendarState) ? timeSelectRef.current?.scrollHeight! + 50 : 0, overflow: 'hidden',
-                    transitionDelay: '0.2s', transition: 'all 0.2s ease'
+                    height: ['setting startTime', 'finish set'].includes(calendarState) ? timeSelectRef.current?.scrollHeight! + 50 : 0,
+                    paddingLeft: '1px',
+                    ...calendarAnimationStyle
                 }}
             >
                 <VerticalFlex ref={timeSelectRef}>
@@ -336,8 +348,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                 </VerticalFlex>
             </VerticalFlex>
             <Flex style={{
-                height: calendarState === 'finish set' ? 100 : 0, overflow: 'hidden',
-                transitionDelay: '0.2s', transition: 'all 0.2s ease'
+                height: calendarState === 'finish set' ? 100 : 0, ...calendarAnimationStyle
             }}>
                 <CustomButton
                     height='48px'
