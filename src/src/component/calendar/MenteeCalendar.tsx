@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { colorBackgroundCareerDiveBlue, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextDisabled, colorTextLight, EmptyHeight, Flex, TextBody2, TextSubtitle1, TextSubtitle2, VerticalFlex } from "util/styledComponent";
 import Card from "../../util/ts/Card";
 import { getDatesOfMonth, isPastDate, monthList } from "./Calendar.service";
-import SimpleSelect from "util/ts/SimpleSelect";
 import API from "API";
 import styled from "styled-components";
 import { Button, Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { addMinute, getHoursAndMinuteString, getKoreanTimeString } from "util/ts/util";
-import { wrap } from "module";
 import { addMinuteTs } from "util/util";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
@@ -50,8 +48,6 @@ const TimeButton = styled(ToggleButton)`
  }
 `
 
-
-
 function getSplitTimes(startTime: Date, endTime: Date): Date[] {
     const result = [startTime]
     const gapMin = (endTime.getTime() - startTime.getTime()) / 1000 / 60
@@ -61,15 +57,20 @@ function getSplitTimes(startTime: Date, endTime: Date): Date[] {
     return result
 }
 
-const MenteeCalendar = ({ userId }: { userId: number }) => {
+// 1. props가 있다면 순서대로 누르는 것과 동일하게 진행한다.
+// 2. api를 통해서 해당 날짜의 일정을 받아와야한다.
+// 3. 만약 해당 날짜의 일정에 props로 받은 일정과 같은게 있다면 선택, 아니면 미선택
+
+const MenteeCalendar = (props:
+    { userId: number, startDate: Date | null, consultingTime: 20 | 40 | null, setIsFinished?: Dispatch<SetStateAction<boolean>> }) => {
     // Setting
     // 1. 모든 날짜 데이터는 Date 객체로 관리됨
     // 2. 오늘 날짜는 new Date() 객체를 매번 생성해서 받아온다.
 
     const [calendarDates, setCalendarDates] = useState<Array<Date | null>>()
     const [currentYearAndMonth, setCurrentYearAndMonth] = useState<Date>(new Date(new Date().setDate(1)))
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-    const [availableDates, setAvailableDates] = useState<Date[]>([])
+    const [selectedDate, setSelectedDate] = useState<Date | null>(props.startDate)
+    const [availableDates, setAvailableDates] = useState<Date[] | null>(null)
     interface IavailableTime {
         [key: number]: { startTime: Date, endTime: Date, ruleType: string, ruleId: number, scheduleId: number }[]
     }
@@ -78,14 +79,12 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     const [startTimesObj, setStartTimesObj] = useState<IstartTimeObj | null>(null)
     const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
 
-    const [calendarState, setCalendarState] = useState<'view' | 'setting consultingTime' | 'setting startTime' | 'finish set'>('view')
-    const [consultingTime, setConsultingTime] = useState<number | null>(null)
-    const [startTime, setStartTime] = useState<Date | null>(null)
-
+    const [calendarState, setCalendarState] = useState<'view' | 'setting consultingTime' | 'setting startTime' | 'finish set' | 'initializing'>('view')
+    const [consultingTime, setConsultingTime] = useState<20 | 40 | null>(props.consultingTime)
+    const [startTime, setStartTime] = useState<Date | null>(props.startDate)
     const timeSelectRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
     const params = useParams();
-
 
     function addCurrentYearAndMonth(month: number) {
         setCurrentYearAndMonth(new Date(currentYearAndMonth.setMonth(currentYearAndMonth.getMonth() + month)))
@@ -113,7 +112,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
             for (let i = 0; i < dayTimes.length; i++) {
                 const dayTime = dayTimes[i]
                 if (!isPastDate(new Date(year, month - 1, dayTime.Day))) {
-                    setAvailableDates(old => [...old, new Date(year, month - 1, dayTime.Day)])
+                    setAvailableDates(old => old === null ? [new Date(year, month - 1, dayTime.Day)] : [...old, new Date(year, month - 1, dayTime.Day)])
                     for (let j = 0; j < dayTime.StartEnds.length; j++) {
                         const startEnd = dayTime.StartEnds[j]
                         if (tempTimes[dayTime.Day] === undefined)
@@ -131,7 +130,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
             setAvailableTimes(tempTimes)
         }
 
-        API.getConsultSchedule(currentYearAndMonth.getFullYear(), currentYearAndMonth.getMonth() + 1, userId)
+        API.getConsultSchedule(currentYearAndMonth.getFullYear(), currentYearAndMonth.getMonth() + 1, props.userId)
             .then((res) => {
                 if (res.status === 200) {
                     updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
@@ -142,7 +141,7 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     // 선택 가능 시간 갱신될 때, 값이 있다면 첫 번째 값으로 날짜 자동 선택
     // (availableDates로 하면 뒤 연산에서 availableTimes가 nullable)
     useEffect(() => {
-        if (availableDates[0]) {
+        if (availableDates && availableDates[0]) {
             setSelectedDate(availableDates[0])
         } else {
             setSelectedDate(null)
@@ -151,6 +150,8 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
 
     // 날짜 선택
     useEffect(() => {
+        setConsultingTime(null)
+        setStartTime(null)
         if (selectedDate !== null) {
             const temp: IstartTimeObj = { 20: { AM: [], PM: [] }, 40: { AM: [], PM: [] } }
 
@@ -171,18 +172,8 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                     temp['40']['PM'] = [...timesPm.slice(0, timesPm.length - 1)]
                 })
             }
-
             setStartTimesObj(temp)
         }
-        else {
-            setCalendarState('view')
-        }
-    }, [selectedDate])
-
-
-    useEffect(() => {
-        setConsultingTime(null)
-        setStartTime(null)
     }, [selectedDate])
 
 
@@ -193,17 +184,18 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
     useEffect(() => {
         if (selectedDate === null) {
             setCalendarState('view')
-        }
-        else if (consultingTime === null) {
+            props.setIsFinished && props.setIsFinished(false)
+        } else if (consultingTime === null) {
             setCalendarState('setting consultingTime')
+            // props.setIsFinished && props.setIsFinished(false)
         } else if (startTime === null) {
             setCalendarState('setting startTime')
+            props.setIsFinished && props.setIsFinished(false)
         } else {
             setCalendarState('finish set')
+            props.setIsFinished && props.setIsFinished(true)
         }
     }, [selectedDate, consultingTime, startTime])
-
-
 
 
     return (
@@ -258,18 +250,19 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
             </Flex>
             <Flex style={{ flexWrap: 'wrap', borderBottom: `1px solid ${colorBackgroundGrayMedium}`, paddingBottom: '16px', marginTop: '16px' }}>
                 {['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
-                    return <Flex style={{ minWidth: '14.286%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1 >{koDay}</TextSubtitle1> </Flex>
+                    return <Flex style={{ minWidth: '14.286%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1>{koDay}</TextSubtitle1> </Flex>
                 })}
                 {calendarDates && calendarDates.map((date, i) => {
-                    const isSelected = (date: Date) => selectedDate && selectedDate.getTime() === date.getTime()
-                    const isAvailable = (date: Date) => availableDates.map(e => e.getTime()).includes(date.getTime())
+                    const isSelected = (date: Date) => selectedDate && selectedDate.getDate() === date.getDate()
+                    const isAvailable = (date: Date) => availableDates ? availableDates.map(e => e.getTime()).includes(date.getTime()) : false
                     return date === null ?
                         <Flex key={i} style={{ minWidth: '14.286%', justifyContent: 'center', marginBottom: '10px' }} />
                         :
                         <Flex key={i} style={{ minWidth: '14.286%', justifyContent: 'center', marginBottom: '10px' }}>
                             <Flex
                                 onClick={() => {
-                                    setSelectedDate(date)
+                                    if (isAvailable(date))
+                                        setSelectedDate(date)
                                 }}
                                 style={{
                                     backgroundColor: isSelected(date) ? colorBackgroundCareerDiveBlue : 'transparent',
@@ -372,55 +365,8 @@ const MenteeCalendar = ({ userId }: { userId: number }) => {
                         </TextSubtitle1>
                     </CustomButton>
                 </VerticalFlex>
-
             </VerticalFlex>
-
-
-
         </Card >
     );
 };
 export default MenteeCalendar
-
-
-{/* {(() => {
-                                if (date === null) {
-                                    return <Flex data-testid="date-elem" style={{ ...dateDefaultStyle }} key={i}></Flex>
-                                }
-                                else {
-                                    //비활성
-                                    if (isPastDate(date)) {
-                                        return <Flex
-                                            data-testid="date-elem" style={{ ...dateDefaultStyle, color: colorTextDisabled }} key={i}>{date.getDate()}
-                                        </Flex>
-                                    }
-                                    // 선택
-                                    else if (selectedDate && selectedDate.getTime() === date.getTime()) {
-                                        return <Flex
-                                            data-testid="date-elem" style={{ ...dateDefaultStyle }} key={i}>
-                                            <TextBody2
-                                                style={{ ...dateDefaultStyle, backgroundColor: colorBackgroundCareerDiveBlue, cursor: 'pointer' }}>
-                                                {date.getDate()}
-                                            </TextBody2>
-                                        </Flex>
-                                    }
-                                    // 선택가능 
-                                    else if (availableDates.map(e => e.getTime()).includes(date.getTime())) {
-                                        return <Flex
-                                            data-testid="date-elem" style={{ ...dateDefaultStyle }} key={i}>
-                                            <Flex style={{ ...dateDefaultStyle, color: colorTextLight, backgroundColor: 'rgb(240, 240, 240)', cursor: 'pointer' }}
-                                                onClick={() => { setSelectedDate(date) }}>
-                                                {date.getDate()}
-                                            </Flex>
-
-                                        </Flex>
-                                    }
-                                    // 일반
-                                    else {
-                                        return <Flex
-                                            data-testid="date-elem" style={{ ...dateDefaultStyle, color: colorTextLight }} key={i}>
-                                            {date.getDate()}
-                                        </Flex>
-                                    }
-                                }
-                            })()} */}
