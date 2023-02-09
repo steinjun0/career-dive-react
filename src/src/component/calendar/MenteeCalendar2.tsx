@@ -15,7 +15,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 
 const calendarAnimationStyle = {
     overflow: 'hidden',
-    transitionDelay: '0.2s',
+    transitionDelay: '0.0s',
     transition: 'all 0.2s ease'
 }
 
@@ -46,6 +46,10 @@ const TimeButton = styled(ToggleButton)`
   border: 1px ${colorCareerDiveBlue} solid !important;
   background-color: ${colorBackgroundCareerDiveBlue};
  }
+`
+
+const TransitionFlex = styled(VerticalFlex) <{ height: number }>`
+ height: ${props => props && props.height}px;
 `
 
 function getSplitTimes(startTime: Date, endTime: Date): Date[] {
@@ -99,18 +103,13 @@ const initialState: IcalendarState =
 
 function reducer(state: IcalendarState, action: ACTIONTYPE) {
     function getCalendarStart(newState: IcalendarState) {
-        console.log('newState', newState)
         if (newState.selectedDate === null) {
-            console.log('hi1')
             return 'view'
         } else if (newState.consultingTime === null) {
-            console.log('hi2')
             return 'setting consultingTime'
         } else if (newState.startTime === null) {
-            console.log('hi3')
             return 'setting startTime'
         } else {
-            console.log('hi4')
             return 'finish set'
         }
     }
@@ -119,7 +118,6 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
         //     return { ...state, calendarDates: action.payload }
         // }
         case 'updateCurrentYearAndMonth':
-            console.log(1)
             const temp = getDatesOfMonth(state.currentYearAndMonth)
             const startDay = temp[0].getDay()
             const endDay = temp[temp.length - 1].getDay()
@@ -135,7 +133,6 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             }
 
         case 'updateSelectedDate':
-            console.log(2)
             return {
                 ...state,
                 selectedDate: action.payload,
@@ -145,15 +142,12 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             }
 
         case 'updateAvailableDates':
-            console.log(3)
             return { ...state, availableDates: [...state.availableDates, ...action.payload] }
 
         case 'resetAvailableDates':
-            console.log(4)
             return { ...state, availableDates: [] }
 
         case 'updateAvailableTimes':
-            console.log(5)
             return {
                 ...state,
                 selectedDate: state.availableDates[0] ?? null,
@@ -162,11 +156,9 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             }
 
         case 'resetAvailableTimes':
-            console.log(6)
             return { ...state, availableTimes: {} }
 
         case 'updateStartTimeObj':
-            console.log(7)
             return {
                 ...state,
                 startTimeObj: action.payload,
@@ -174,7 +166,6 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             }
 
         case 'updateConultingTime':
-            console.log(8)
             return {
                 ...state,
                 consultingTime: action.payload,
@@ -183,7 +174,6 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             }
 
         case 'updateStartTime':
-            console.log(9)
             return {
                 ...state,
                 startTime: action.payload,
@@ -263,7 +253,6 @@ const MenteeCalendar2 = (props:
 
     // 날짜 선택
     useEffect(() => {
-        console.log('state.selectedDate effect')
         if (state.selectedDate !== null) {
             const temp: IstartTimeObj = { 20: { AM: [], PM: [] }, 40: { AM: [], PM: [] } }
 
@@ -294,9 +283,9 @@ const MenteeCalendar2 = (props:
     // }, [state.consultingTime])
 
 
-    useEffect(() => {
-        console.log('state.calendarState', state.calendarState)
-    }, [state.calendarState])
+    // useEffect(() => {
+    //     console.log('state.calendarState', state.calendarState)
+    // }, [state.calendarState])
 
     return (
         <Card
@@ -391,7 +380,10 @@ const MenteeCalendar2 = (props:
                 <TimeButtonWrapper
                     value={state.consultingTime}
                     exclusive
-                    onChange={(e, time) => { dispatch({ type: 'updateConultingTime', payload: time }) }}
+                    onChange={(e, time) => {
+                        dispatch({ type: 'updateConultingTime', payload: time })
+                        setTimeout(() => dispatch({ type: 'updateConultingTime', payload: time }), 1)
+                    }}
                 >
                     <TimeButton value={20} aria-label="20min">
                         <TextBody2>20분</TextBody2>
@@ -402,12 +394,13 @@ const MenteeCalendar2 = (props:
                 </TimeButtonWrapper>
             </VerticalFlex>
 
-            <VerticalFlex
+            <TransitionFlex
                 style={{
-                    height: ['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0,
+                    // height: ['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0,
                     paddingLeft: '1px', paddingTop: '16px',
                     ...calendarAnimationStyle
                 }}
+                height={['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0}
             >
                 <VerticalFlex ref={timeSelectRef}>
                     <TextSubtitle1>오전</TextSubtitle1>
@@ -422,7 +415,7 @@ const MenteeCalendar2 = (props:
                             state.startTimeObj[20].AM
                                 .map(date => {
                                     return <TimeButton
-                                        style={{ display: state.consultingTime !== 20 ? 'hidden' : 'block' }}
+                                        style={{ display: state.consultingTime !== 20 ? 'none' : 'block' }}
                                         key={date.getTime()}
                                         value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
                                     </TimeButton>
@@ -432,12 +425,13 @@ const MenteeCalendar2 = (props:
                             state.startTimeObj[40].AM
                                 .map(date => {
                                     return <TimeButton
-                                        style={{ display: state.consultingTime !== 40 ? 'hidden' : 'block' }}
+                                        style={{ display: state.consultingTime !== 40 ? 'none' : 'block' }}
                                         key={date.getTime()}
                                         value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
                                     </TimeButton>
                                 })
                         }
+
                     </TimeButtonWrapper>
                     <EmptyHeight height="16px" />
                     <TextSubtitle1>오후</TextSubtitle1>
@@ -452,7 +446,7 @@ const MenteeCalendar2 = (props:
                             state.startTimeObj[20].PM
                                 .map(date => {
                                     return <TimeButton
-                                        style={{ display: state.consultingTime !== 20 ? 'hidden' : 'block' }}
+                                        style={{ display: state.consultingTime !== 20 ? 'none' : 'block' }}
                                         key={date.getTime()}
                                         value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
                                     </TimeButton>
@@ -462,7 +456,7 @@ const MenteeCalendar2 = (props:
                             state.startTimeObj[40].PM
                                 .map(date => {
                                     return <TimeButton
-                                        style={{ display: state.consultingTime !== 40 ? 'hidden' : 'block' }}
+                                        style={{ display: state.consultingTime !== 40 ? 'none' : 'block' }}
                                         key={date.getTime()}
                                         value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
                                     </TimeButton>
@@ -470,7 +464,7 @@ const MenteeCalendar2 = (props:
                         }
                     </TimeButtonWrapper>
                 </VerticalFlex>
-            </VerticalFlex>
+            </TransitionFlex>
             <VerticalFlex
                 style={{
                     height: state.calendarState === 'finish set' ? 170 : 0,
