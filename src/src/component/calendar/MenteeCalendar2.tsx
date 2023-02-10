@@ -5,7 +5,7 @@ import { getDatesOfMonth, isPastDate, monthList } from "./Calendar.service";
 import API from "API";
 import styled from "styled-components";
 import { Button, Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { addMinute, getHoursAndMinuteString, getKoreanTimeString } from "util/ts/util";
+import { addMinute, getHoursAndMinuteString, getKoreanTimeString, updateReservation } from "util/ts/util";
 import { addMinuteTs } from "util/util";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
@@ -322,7 +322,6 @@ const MenteeCalendar2 = (props:
                             return date
                         })
                 })
-                console.log('splitTimes', splitTimes)
                 splitTimes.forEach(times => {
                     const timesAm = times.filter(time => time.getHours() < 12)
                     const timesPm = times.filter(time => time.getHours() >= 12)
@@ -551,17 +550,23 @@ const MenteeCalendar2 = (props:
                         height='48px'
                         width="100%"
                         onClick={() => {
-                            console.log(state.availableTimes[state.selectedDate!.getDate()])
-                            console.log(
-                                state.availableTimes[state.selectedDate!.getDate()]
-                                    .find(
-                                        e => {
-                                            console.log(e.startTime.getTime(), state.startTime!.getTime())
-                                            return e.startTime.getTime() <= state.startTime!.getTime() && state.startTime!.getTime() <= e.endTime.getTime()
-                                        }
-                                    )?.scheduleId
+                            const scheduleId = state.availableTimes[state.selectedDate!.getDate()]
+                                .find(
+                                    e => {
+                                        return e.startTime.getTime() <= state.startTime!.getTime() && state.startTime!.getTime() <= e.endTime.getTime()
+                                    }
+                                )!.scheduleId
+
+                            updateReservation(
+                                +params.id!,
+                                [
+                                    { name: 'schduleId', data: scheduleId },
+                                    { name: 'startTime', data: state.startTime },
+                                    { name: 'consultingTime', data: state.consultingTime }
+                                ]
                             )
-                            // navigate(`/mentee/request/${params.id}`)
+
+                            navigate(`/mentee/request/${params.id}`)
                         }}>
                         <TextSubtitle1>
                             다음

@@ -126,6 +126,10 @@ export const formatMoney = (amount: any, decimalCount: any = 2, decimal: any = "
   }
 };
 
+export const getParsedLocalStorage = (name: string) => {
+  return localStorage.getItem(name) !== null ? JSON.parse(localStorage.getItem(name)!) : null
+}
+
 export const updateReservation = (id: number, updateDataArray: { name: string, data: any }[]) => {
   let reservations = localStorage.getItem(`reservations`) === null ? null : JSON.parse(localStorage.getItem(`reservations`)!)
   let reservation: any = {}
