@@ -95,7 +95,7 @@ interface IcalendarState {
 
 function reducer(state: IcalendarState, action: ACTIONTYPE) {
     function getCalendarStart(newState: IcalendarState) {
-        console.log(action.type)
+        // console.log(action.type)
         if (newState.selectedDate === null) {
             return 'view'
         } else if (newState.consultingTime === null) {
@@ -292,7 +292,6 @@ const MenteeCalendar2 = (props:
                     }
                 }
             }
-            // 두 개를 분리해야함
             dispatch({ type: 'updateAvailableTimes', payload: tempTimes })
             if (state.calendarState === 'initializing') {
                 dispatch({ type: 'updateStartTime', payload: state.startTime })
@@ -323,14 +322,21 @@ const MenteeCalendar2 = (props:
                             return date
                         })
                 })
+                console.log('splitTimes', splitTimes)
                 splitTimes.forEach(times => {
                     const timesAm = times.filter(time => time.getHours() < 12)
                     const timesPm = times.filter(time => time.getHours() >= 12)
-                    temp['20']['AM'] = [...timesAm]
-                    temp['40']['AM'] = [...timesAm.slice(0, timesAm.length - 1)]
-                    temp['20']['PM'] = [...timesPm]
-                    temp['40']['PM'] = [...timesPm.slice(0, timesPm.length - 1)]
+                    temp['20']['AM'].push(...timesAm)
+                    temp['40']['AM'].push(...timesAm.slice(0, timesAm.length - 1))
+                    temp['20']['PM'].push(...timesPm)
+                    temp['40']['PM'].push(...timesPm.slice(0, timesPm.length - 1))
                 })
+
+                for (let time of ['20', '40']) {
+                    for (let AMPM of ['AM', 'PM']) {
+                        temp[time as "20" | "40"][AMPM as "AM" | "PM"].sort((a, b) => a.getTime() - b.getTime())
+                    }
+                }
             }
             dispatch({ type: 'updateStartTimeObj', payload: temp })
         }
@@ -545,7 +551,17 @@ const MenteeCalendar2 = (props:
                         height='48px'
                         width="100%"
                         onClick={() => {
-                            navigate(`/mentee/request/${params.id}`)
+                            console.log(state.availableTimes[state.selectedDate!.getDate()])
+                            console.log(
+                                state.availableTimes[state.selectedDate!.getDate()]
+                                    .find(
+                                        e => {
+                                            console.log(e.startTime.getTime(), state.startTime!.getTime())
+                                            return e.startTime.getTime() <= state.startTime!.getTime() && state.startTime!.getTime() <= e.endTime.getTime()
+                                        }
+                                    )?.scheduleId
+                            )
+                            // navigate(`/mentee/request/${params.id}`)
                         }}>
                         <TextSubtitle1>
                             다음
