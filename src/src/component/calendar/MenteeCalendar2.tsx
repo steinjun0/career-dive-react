@@ -74,6 +74,7 @@ interface IstartTimeObj { 20: { AM: Date[], PM: Date[] }, 40: { AM: Date[], PM: 
 type ACTIONTYPE =
     // | { type: "updateCalendarDates"; payload: Date[] }
     | { type: "updateCurrentYearAndMonth"; payload: Date }
+    | { type: "updateCurrentYearAndMonthInitial"; payload: Date }
     | { type: "updateSelectedDate"; payload: Date | null }
     | { type: "updateAvailableDates"; payload: Date[] }
     | { type: "resetAvailableDates", }
@@ -91,18 +92,10 @@ interface IcalendarState {
     calendarState: string | 'view' | 'setting consultingTime' | 'setting startTime' | 'finish set' | 'initializing'
 }
 
-const initialState: IcalendarState =
-{
-    calendarDates: [], currentYearAndMonth: new Date(new Date().setDate(1)),
-    selectedDate: null, availableDates: [],
-    availableTimes: {}, startTimeObj: null,
-    consultingTime: null, startTime: null,
-    calendarState: 'view'
-}
-
 
 function reducer(state: IcalendarState, action: ACTIONTYPE) {
     function getCalendarStart(newState: IcalendarState) {
+        console.log(action.type)
         if (newState.selectedDate === null) {
             return 'view'
         } else if (newState.consultingTime === null) {
@@ -117,7 +110,7 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
         // case 'updateCalendarDates': {
         //     return { ...state, calendarDates: action.payload }
         // }
-        case 'updateCurrentYearAndMonth':
+        case 'updateCurrentYearAndMonth': {
             const temp = getDatesOfMonth(state.currentYearAndMonth)
             const startDay = temp[0].getDay()
             const endDay = temp[temp.length - 1].getDay()
@@ -131,8 +124,21 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 currentYearAndMonth: action.payload,
                 calendarState: 'view'
             }
+        }
 
-        case 'updateSelectedDate':
+        case 'updateCurrentYearAndMonthInitial': {
+            const temp = getDatesOfMonth(state.currentYearAndMonth)
+            const startDay = temp[0].getDay()
+            const endDay = temp[temp.length - 1].getDay()
+            return {
+                ...state,
+                calendarDates: [...Array(startDay).fill(null), ...temp, ...Array(6 - endDay).fill(null)],
+                startTimeObj: null,
+                currentYearAndMonth: action.payload,
+            }
+        }
+
+        case 'updateSelectedDate': {
             return {
                 ...state,
                 selectedDate: action.payload,
@@ -140,38 +146,73 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 startTime: null,
                 calendarState: getCalendarStart({ ...state, selectedDate: action.payload, consultingTime: null, startTime: null, })
             }
+        }
 
-        case 'updateAvailableDates':
+        case 'updateAvailableDates': {
             return { ...state, availableDates: [...state.availableDates, ...action.payload] }
+        }
 
-        case 'resetAvailableDates':
+        case 'resetAvailableDates': {
             return { ...state, availableDates: [] }
+        }
 
-        case 'updateAvailableTimes':
-            return {
-                ...state,
-                selectedDate: state.availableDates[0] ?? null,
-                availableTimes: action.payload,
-                calendarState: getCalendarStart({ ...state, selectedDate: state.availableDates[0] ?? null, })
+        case 'updateAvailableTimes': {
+            if (state.calendarState === 'initializing') {
+                return {
+                    ...state,
+                    selectedDate: state.selectedDate,
+                    availableTimes: action.payload,
+                    calendarState: state.calendarState
+                }
+            } else {
+                return {
+                    ...state,
+                    selectedDate: state.availableDates[0] ?? null,
+                    availableTimes: action.payload,
+                    calendarState: getCalendarStart({ ...state, selectedDate: state.availableDates[0] ?? null, })
+                }
             }
 
-        case 'resetAvailableTimes':
+        }
+
+        case 'resetAvailableTimes': {
             return { ...state, availableTimes: {} }
+        }
 
-        case 'updateStartTimeObj':
-            return {
-                ...state,
-                startTimeObj: action.payload,
-                // calendarState: getCalendarStart({ ...state, selectedDate: state.availableDates[0] ?? null })
+        case 'updateStartTimeObj': {
+            if (state.calendarState === 'initializing') {
+                return {
+                    ...state,
+                    startTimeObj: action.payload,
+                    calendarState: 'finish set'
+                }
+            } else {
+                return {
+                    ...state,
+                    startTimeObj: action.payload,
+                    // calendarState: getCalendarStart({ ...state, selectedDate: state.availableDates[0] ?? null })
+                }
             }
+
+        }
 
         case 'updateConultingTime':
-            return {
-                ...state,
-                consultingTime: action.payload,
-                startTime: null,
-                calendarState: getCalendarStart({ ...state, consultingTime: action.payload, startTime: null, })
+            if (state.calendarState === 'initializing') {
+                return {
+                    ...state,
+                    consultingTime: state.consultingTime,
+                    startTime: state.startTime,
+                    calendarState: getCalendarStart({ ...state, consultingTime: action.payload, startTime: null, })
+                }
+            } else {
+                return {
+                    ...state,
+                    consultingTime: action.payload,
+                    startTime: null,
+                    calendarState: getCalendarStart({ ...state, consultingTime: action.payload, startTime: null, })
+                }
             }
+
 
         case 'updateStartTime':
             return {
@@ -190,6 +231,14 @@ const MenteeCalendar2 = (props:
     // Setting
     // 1. 모든 날짜 데이터는 Date 객체로 관리됨
     // 2. 오늘 날짜는 new Date() 객체를 매번 생성해서 받아온다.
+    const initialState: IcalendarState =
+    {
+        calendarDates: [], currentYearAndMonth: props.startDate ? new Date(new Date(props.startDate).setDate(1)) : new Date(new Date().setDate(1)),
+        selectedDate: props.startDate, availableDates: [],
+        availableTimes: {}, startTimeObj: null,
+        consultingTime: props.consultingTime, startTime: props.startDate,
+        calendarState: 'initializing'
+    }
 
     const navigate = useNavigate()
     const params = useParams();
@@ -205,7 +254,10 @@ const MenteeCalendar2 = (props:
     }
 
     useEffect(() => {
-        dispatch({ type: 'updateCurrentYearAndMonth', payload: state.currentYearAndMonth })
+        if (props.startDate)
+            dispatch({ type: 'updateCurrentYearAndMonthInitial', payload: state.currentYearAndMonth })
+        else
+            dispatch({ type: 'updateCurrentYearAndMonth', payload: state.currentYearAndMonth })
     }, [])
 
     // availableDate,Times 설정
@@ -240,7 +292,14 @@ const MenteeCalendar2 = (props:
                     }
                 }
             }
+            // 두 개를 분리해야함
             dispatch({ type: 'updateAvailableTimes', payload: tempTimes })
+            if (state.calendarState === 'initializing') {
+                dispatch({ type: 'updateStartTime', payload: state.startTime })
+                setTimeout(() => {
+                    dispatch({ type: 'updateStartTime', payload: state.startTime })
+                }, 1);
+            }
         }
 
         API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, props.userId)
@@ -253,7 +312,7 @@ const MenteeCalendar2 = (props:
 
     // 날짜 선택
     useEffect(() => {
-        if (state.selectedDate !== null) {
+        if (state.selectedDate !== null && state.availableTimes[state.selectedDate.getDate()]) {
             const temp: IstartTimeObj = { 20: { AM: [], PM: [] }, 40: { AM: [], PM: [] } }
 
             const schedules = state.availableTimes[state.selectedDate.getDate()]
@@ -275,7 +334,7 @@ const MenteeCalendar2 = (props:
             }
             dispatch({ type: 'updateStartTimeObj', payload: temp })
         }
-    }, [state.selectedDate])
+    }, [state.selectedDate, state.availableTimes])
 
 
     // useEffect(() => {
@@ -286,6 +345,10 @@ const MenteeCalendar2 = (props:
     // useEffect(() => {
     //     console.log('state.calendarState', state.calendarState)
     // }, [state.calendarState])
+
+    // useEffect(() => {
+    //     console.log(state)
+    // }, [state])
 
     return (
         <Card
