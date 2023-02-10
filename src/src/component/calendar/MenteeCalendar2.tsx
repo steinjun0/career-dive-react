@@ -8,7 +8,7 @@ import { Button, Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@m
 import { addMinute, getHoursAndMinuteString, getKoreanTimeString, updateReservation } from "util/ts/util";
 import { addMinuteTs } from "util/util";
 import { CustomButton } from "util/Custom/CustomButton";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CircleIcon from '@mui/icons-material/Circle';
@@ -241,6 +241,7 @@ const MenteeCalendar2 = (props:
     }
 
     const navigate = useNavigate()
+    const location = useLocation()
     const params = useParams();
     const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -347,9 +348,10 @@ const MenteeCalendar2 = (props:
     // }, [state.consultingTime])
 
 
-    // useEffect(() => {
-    //     console.log('state.calendarState', state.calendarState)
-    // }, [state.calendarState])
+    useEffect(() => {
+        if (props.setIsFinished)
+            props.setIsFinished(state.calendarState === 'finish set')
+    }, [state.calendarState, props.setIsFinished])
 
     // useEffect(() => {
     //     console.log(state)
@@ -535,7 +537,7 @@ const MenteeCalendar2 = (props:
             </TransitionFlex>
             <VerticalFlex
                 style={{
-                    height: state.calendarState === 'finish set' ? 170 : 0,
+                    height: state.calendarState === 'finish set' ? location.pathname.includes('request') ? 88 : 170 : 0,
                     ...calendarAnimationStyle
                 }}
             >
