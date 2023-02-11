@@ -52,12 +52,15 @@ export const createDateFromHourMin = (date: Date, startTime: string, endTime: st
   return [addMinute(startDate, (startHour * 60 + startMin)), addMinute(endDate, (endHour * 60 + endMin))]
 }
 
-export const getDateString = (date: Date) => {
-  let year = date.getFullYear().toString().slice(2)
-  let month = (date.getMonth() + 1).toString().padStart(2, '0')
-  let dateStr = date.getDate().toString().padStart(2, '0')
+export const getDateString = (date: Date, type: 'short' | 'long') => {
+  let year = date.getFullYear().toString()
+  let month = (date.getMonth() + 1).toString()
+  let dateStr = date.getDate().toString()
 
-  return `${year}.${month}.${dateStr} (${getDayInKorean(date)})`
+  if (type === 'short')
+    return `${year.slice(2)}.${month.padStart(2, '0')}.${dateStr.padStart(2, '0')} (${getDayInKorean(date)})`
+  else if (type === 'long')
+    return `${year}년 ${month}월 ${dateStr}일(${getDayInKorean(date)})`
 }
 
 export const getKoreanTimeString = (date: Date) => {
@@ -130,7 +133,19 @@ export const getParsedLocalStorage = (name: string) => {
   return localStorage.getItem(name) !== null ? JSON.parse(localStorage.getItem(name)!) : null
 }
 
-export const updateReservation = (id: number, updateDataArray: { name: string, data: any }[]) => {
+export type ReservationAttr =
+  'consultCategory' | 'consultContent' | 'consultingTime' |
+  'isFilePreOpen' | 'requestText' | 'startTime' | 'scheduleId'
+// export type ReservationObj = {
+//   name:'consultCategory': data:'커리어 상담' | '전형 준비',
+//   'consultContent'?: string[],
+//   'consultingTime'?: 20 | 40,
+//   'isFilePreOpen'?: '희망' | '비희망',
+//   'requestText'?: string,
+//   'startTime'?: Date
+// }
+
+export const updateReservation = (id: number, updateDataArray: { name: ReservationAttr, data: any }[]) => {
   let reservations = localStorage.getItem(`reservations`) === null ? null : JSON.parse(localStorage.getItem(`reservations`)!)
   let reservation: any = {}
   if (reservations !== null) {
