@@ -72,10 +72,10 @@ const CategoryTag = styled(TagLarge) <{ category: '커리어 상담' | '전형 �
 
 const maxLength = 600;
 
-function Request() {
+function Request(props: { type: 'careerConsult' | 'prepare' }) {
   const navigate = useNavigate()
 
-  const consultCategory = '커리어 상담'
+  const consultCategory = props.type === 'careerConsult' ? '커리어 상담' : '전형 준비'
 
   const [consultContents, setConsultContents] = useState<string[]>([])
   const [startTime, setStartTime] = useState<Date>()
@@ -170,7 +170,7 @@ function Request() {
       <Card
         title={
           startTime
-            ? <span>{getDateString(startTime, 'long')} <span style={{ color: colorCareerDiveBlue }}>{getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}</span></span>
+            ? <span>{getDateString(startTime, 'long')} <span style={{ color: consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink }}>{getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}</span></span>
             :
             ''}
         titleBottom={
@@ -229,7 +229,7 @@ function Request() {
 
         {isFilePreOpen === '희망' && <VerticalFlex>
           <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
-          <TextBody2 color={colorCareerDiveBlue}>
+          <TextBody2 color={consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink}>
             이력서 및 포트폴리오를 업로드해 주세요.
           </TextBody2>
           <EmptyHeight height='8px' />
