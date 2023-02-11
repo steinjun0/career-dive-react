@@ -562,7 +562,7 @@ const MenteeCalendar2 = (props:
                             updateReservation(
                                 +params.id!,
                                 [
-                                    { name: 'schduleId', data: scheduleId },
+                                    { name: 'scheduleId', data: scheduleId },
                                     { name: 'startTime', data: state.startTime },
                                     { name: 'consultingTime', data: state.consultingTime }
                                 ]
