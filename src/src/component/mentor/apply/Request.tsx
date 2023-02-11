@@ -6,7 +6,7 @@ import { CustomTextArea } from "util/Custom/CustomTextArea";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addMinute, getAMOrPM, getDayInKorean, getKoreanTimeString, removeReservation, updateReservation } from "util/ts/util";
+import { addMinute, getAMOrPM, getDateString, getDayInKorean, getKoreanTimeString, removeReservation, updateReservation } from "util/ts/util";
 import UploadIcon from 'assets/icon/UploadIcon'
 import Dropzone, { FileWithPath } from "react-dropzone";
 import API from "API";
@@ -77,15 +77,11 @@ function Request() {
 
   const consultCategory = '커리어 상담'
 
-  const [consultContents, setConsultContents] = useState([])
+  const [consultContents, setConsultContents] = useState<string[]>([])
   const [startTime, setStartTime] = useState<Date>()
-
-  const [consultingDate, setConsultingDate] = useState({})
-  const [consultingStartTime, setConsultingStartTime] = useState()
-  const [consultingTime, setConsultingTime] = useState(20)
-  const [requestText, setRequestText] = useState('')
-
-  const [isFilePreOpen, setIsFilePreOpen] = useState('')
+  const [consultingTime, setConsultingTime] = useState<number>(20)
+  const [requestText, setRequestText] = useState<string>('')
+  const [isFilePreOpen, setIsFilePreOpen] = useState<'희망' | '비희망'>()
   const [uploadingFiles, setUploadingFiles] = useState<File[]>([])
 
   const params = useParams()
@@ -96,11 +92,8 @@ function Request() {
         throw Error
       const reservation = getParsedLocalStorage('reservations')[+params.id]
 
-      setStartTime(reservation['startTime'])
-
+      setStartTime(new Date(reservation['startTime']))
       setConsultContents(reservation['consultContent'])
-      setConsultingDate(reservation['consultingDate'])
-      setConsultingStartTime(reservation['consultingStartTime'])
       setConsultingTime(reservation['consultingTime'])
       reservation['requestText'] && setRequestText(reservation['requestText'])
 
@@ -121,12 +114,11 @@ function Request() {
     }
 
     const reservations = getParsedLocalStorage('reservations')
-    let initialDate = undefined
-    if (reservations !== null && params.id) {
+    if (reservations !== null && params.id && startTime) {
       const reservation = reservations[params.id]
-
-      const consultingStartTimeDate = new Date(`2023-01-02 ${reservation['consultingStartTime']}`);
-      const consultingEndTimeDate = addMinute(consultingStartTimeDate, consultingTime)
+      console.log('reservation', reservation)
+      const consultingEndTimeDate = addMinute(startTime, consultingTime)
+      const consultingStartTime = `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}`
       const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
       const postConsultObject = {
         consultContentList: [...reservation['consultContent'].map((e: string) => {
@@ -140,12 +132,10 @@ function Request() {
         preReview: reservation['isFilePreOpen'] === '희망' ? true : false,
         requestContent: requestText,
         scheduleId: reservation['scheduleId'],
-        startTime: reservation['consultingStartTime'],
+        startTime: consultingStartTime,
         endTime: consultingEndTime,
         type: reservation['consultCategory']
       }
-      let formData = new FormData()
-
 
       const consultRes = await API.postConsult(postConsultObject)
 
@@ -178,12 +168,11 @@ function Request() {
   return (<VerticalFlex>
     <RequestCardWrapper>
       <Card
-        title={startTime?.toString()}
-        titleHead={
-          <Flex>
-            <EmptyWidth width='12px' />
-            {/* <TextSubtitle1 color={colorCareerDiveBlue}>{getConsultingRangeInKorean(consultingStartTime, consultingTime)}</TextSubtitle1> */}
-          </Flex>}
+        title={
+          startTime
+            ? <span>{getDateString(startTime, 'long')} <span style={{ color: colorCareerDiveBlue }}>{getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}</span></span>
+            :
+            ''}
         titleBottom={
           <VerticalFlex>
             <EmptyHeight height='16px' />
@@ -222,7 +211,7 @@ function Request() {
             event.target.placeholder = '희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다.'
           }}
           onChange={(event) => {
-            const updatingData = [
+            const updatingData: { name: 'requestText', data: string }[] = [
               { name: 'requestText', data: event.target.value },
             ]
             setRequestText(event.target.value)
@@ -244,7 +233,6 @@ function Request() {
             이력서 및 포트폴리오를 업로드해 주세요.
           </TextBody2>
           <EmptyHeight height='8px' />
-          {/* TODO: upload 파일 취소 버튼 필요 */}
           <Dropzone onDrop={(acceptedFiles: File[]) => {
             if (uploadingFiles.length + acceptedFiles.length > 2) {
               alert('업로드 파일은 최대 2개입니다.')
