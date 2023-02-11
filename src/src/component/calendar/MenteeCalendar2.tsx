@@ -523,7 +523,7 @@ const MenteeCalendar2 = (props:
                                     return <TimeButton
                                         style={{ display: state.consultingTime !== 20 ? 'none' : 'block' }}
                                         key={date.getTime()}
-                                        value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
+                                        value={date.getTime()}><TextBody2>{getHoursAndMinuteString(new Date(new Date(date).setHours(date.getHours() - 12)))}</TextBody2>
                                     </TimeButton>
                                 })
                         }
