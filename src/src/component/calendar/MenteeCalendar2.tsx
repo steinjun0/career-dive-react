@@ -89,7 +89,7 @@ interface IcalendarState {
     selectedDate: Date | null, availableDates: Date[],
     availableTimes: IavailableTime, startTimeObj: IstartTimeObj | null,
     consultingTime: 20 | 40 | null, startTime: Date | null,
-    calendarState: string | 'view' | 'setting consultingTime' | 'setting startTime' | 'finish set' | 'initializing'
+    calendarState: string | 'view' | 'setting consultingTime' | 'setting startTime' | 'finish set' | 'initializing',
 }
 
 
@@ -144,6 +144,7 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 selectedDate: action.payload,
                 consultingTime: null,
                 startTime: null,
+                startTimeObj: null,
                 calendarState: getCalendarStart({ ...state, selectedDate: action.payload, consultingTime: null, startTime: null, })
             }
         }
@@ -228,9 +229,6 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
 
 const MenteeCalendar2 = (props:
     { userId: number, startDate: Date | null, consultingTime: 20 | 40 | null, setIsFinished?: Dispatch<SetStateAction<boolean>> }) => {
-    // Setting
-    // 1. 모든 날짜 데이터는 Date 객체로 관리됨
-    // 2. 오늘 날짜는 new Date() 객체를 매번 생성해서 받아온다.
     const initialState: IcalendarState =
     {
         calendarDates: [], currentYearAndMonth: props.startDate ? new Date(new Date(props.startDate).setDate(1)) : new Date(new Date().setDate(1)),
@@ -244,11 +242,10 @@ const MenteeCalendar2 = (props:
     const location = useLocation()
     const params = useParams();
     const [state, dispatch] = useReducer(reducer, initialState)
+    const [startTimeLen, setStartTimeLen] = useState<number>(0)
 
     const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
-
     const timeSelectRef = useRef<HTMLDivElement>(null)
-
 
     function addCurrentYearAndMonth(month: number) {
         dispatch({ type: 'updateCurrentYearAndMonth', payload: new Date(state.currentYearAndMonth.setMonth(state.currentYearAndMonth.getMonth() + month)) })
@@ -347,20 +344,21 @@ const MenteeCalendar2 = (props:
         }
     }, [state.selectedDate, state.availableTimes])
 
-
-    // useEffect(() => {
-    //     dispatch({ type: 'updateStartTime', payload: null })
-    // }, [state.consultingTime])
-
-
     useEffect(() => {
         if (props.setIsFinished)
             props.setIsFinished(state.calendarState === 'finish set')
     }, [state.calendarState, props.setIsFinished])
 
-    // useEffect(() => {
-    //     console.log(state)
-    // }, [state])
+    useEffect(() => {
+        if (state.startTimeObj) {
+            const len = state.startTimeObj[20].AM.length + state.startTimeObj[20].PM.length +
+                state.startTimeObj[40].AM.length + state.startTimeObj[40].PM.length
+            setStartTimeLen(len)
+        }
+        else {
+            setStartTimeLen(0)
+        }
+    }, [state.startTimeObj])
 
     return (
         <Card
@@ -373,11 +371,6 @@ const MenteeCalendar2 = (props:
                     justifyContent: 'space-between', alignItems: 'center',
                     marginTop: '16px', width: '100%'
                 }}>
-                    {/* <SimpleSelect<Date>
-                        items={monthList}
-                        texts={monthTextList}
-                        onChange={(date: string) => { setCurrentYearAndMonth(new Date(date)) }}
-                    /> */}
                     <IconButton
                         sx={{
                             backgroundColor: colorBackgroundGrayLight,
@@ -428,7 +421,6 @@ const MenteeCalendar2 = (props:
                                     if (isAvailable(date)) {
                                         dispatch({ type: 'updateSelectedDate', payload: date })
                                     }
-
                                 }}
                                 style={{
                                     backgroundColor: isSelected(date) ? colorBackgroundCareerDiveBlue : 'transparent',
@@ -460,12 +452,23 @@ const MenteeCalendar2 = (props:
                         setTimeout(() => dispatch({ type: 'updateConultingTime', payload: time }), 1)
                     }}
                 >
-                    <TimeButton value={20} aria-label="20min">
-                        <TextBody2>20분</TextBody2>
-                    </TimeButton>
-                    <TimeButton value={40} aria-label="40min">
-                        <TextBody2>40분</TextBody2>
-                    </TimeButton>
+
+                    {
+                        state.startTimeObj && state.startTimeObj[20].AM.length + state.startTimeObj[20].PM.length > 0 &&
+                        <TimeButton value={20} aria-label="20min">
+                            <TextBody2>20분</TextBody2>
+                        </TimeButton>
+                    }
+                    {
+                        state.startTimeObj && state.startTimeObj[40].AM.length + state.startTimeObj[40].PM.length > 0 &&
+                        <TimeButton value={40} aria-label="40min">
+                            <TextBody2>40분</TextBody2>
+                        </TimeButton>
+                    }
+                    {
+                        startTimeLen === 0 &&
+                        <TextBody2 style={{ marginTop: 16, color: colorTextLight }}>상담 시간이 모두 예약 되었어요</TextBody2>
+                    }
                 </TimeButtonWrapper>
             </VerticalFlex>
 
@@ -478,66 +481,54 @@ const MenteeCalendar2 = (props:
                 height={['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0}
             >
                 <VerticalFlex ref={timeSelectRef}>
-                    <TextSubtitle1>오전</TextSubtitle1>
-                    <TimeButtonWrapper
-                        value={state.startTime ? state.startTime.getTime() : null}
-                        exclusive
-                        onChange={(e, time) => {
-                            dispatch({ type: 'updateStartTime', payload: time ? new Date(time) : null })
-                        }}
-                    >
-                        {state.startTimeObj &&
-                            state.startTimeObj[20].AM
-                                .map(date => {
-                                    return <TimeButton
-                                        style={{ display: state.consultingTime !== 20 ? 'none' : 'block' }}
-                                        key={date.getTime()}
-                                        value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
-                                    </TimeButton>
-                                })
-                        }
-                        {state.startTimeObj &&
-                            state.startTimeObj[40].AM
-                                .map(date => {
-                                    return <TimeButton
-                                        style={{ display: state.consultingTime !== 40 ? 'none' : 'block' }}
-                                        key={date.getTime()}
-                                        value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
-                                    </TimeButton>
-                                })
-                        }
+                    {
+                        state.startTimeObj && state.consultingTime && state.startTimeObj[state.consultingTime].AM.length > 0 &&
+                        <>
+                            <TextSubtitle1>오전</TextSubtitle1>
+                            <TimeButtonWrapper
+                                value={state.startTime ? state.startTime.getTime() : null}
+                                exclusive
+                                onChange={(e, time) => {
+                                    dispatch({ type: 'updateStartTime', payload: time ? new Date(time) : null })
+                                }}
+                            >
+                                {
+                                    state.startTimeObj[state.consultingTime].AM
+                                        .map(date => {
+                                            return <TimeButton
+                                                key={date.getTime()}
+                                                value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
+                                            </TimeButton>
+                                        })
+                                }
+                            </TimeButtonWrapper>
+                            <EmptyHeight height="16px" />
+                        </>
+                    }
+                    {state.startTimeObj && state.consultingTime && state.startTimeObj[state.consultingTime].PM.length > 0 &&
+                        <>
+                            <TextSubtitle1>오후</TextSubtitle1>
+                            <TimeButtonWrapper
+                                value={state.startTime ? state.startTime.getTime() : null}
+                                exclusive
+                                onChange={(e, time) => {
+                                    dispatch({ type: 'updateStartTime', payload: time ? new Date(time) : null })
+                                }}
+                            >
+                                {
+                                    state.startTimeObj[state.consultingTime].PM
+                                        .map(date => {
+                                            console.log('date', date)
+                                            return <TimeButton
+                                                key={date.getTime()}
+                                                value={date.getTime()}><TextBody2>{getHoursAndMinuteString(new Date(new Date(date).setHours(date.getHours() - 12)))}</TextBody2>
+                                            </TimeButton>
+                                        })
+                                }
+                            </TimeButtonWrapper>
+                        </>
+                    }
 
-                    </TimeButtonWrapper>
-                    <EmptyHeight height="16px" />
-                    <TextSubtitle1>오후</TextSubtitle1>
-                    <TimeButtonWrapper
-                        value={state.startTime ? state.startTime.getTime() : null}
-                        exclusive
-                        onChange={(e, time) => {
-                            dispatch({ type: 'updateStartTime', payload: time ? new Date(time) : null })
-                        }}
-                    >
-                        {state.startTimeObj &&
-                            state.startTimeObj[20].PM
-                                .map(date => {
-                                    return <TimeButton
-                                        style={{ display: state.consultingTime !== 20 ? 'none' : 'block' }}
-                                        key={date.getTime()}
-                                        value={date.getTime()}><TextBody2>{getHoursAndMinuteString(new Date(new Date(date).setHours(date.getHours() - 12)))}</TextBody2>
-                                    </TimeButton>
-                                })
-                        }
-                        {state.startTimeObj &&
-                            state.startTimeObj[40].PM
-                                .map(date => {
-                                    return <TimeButton
-                                        style={{ display: state.consultingTime !== 40 ? 'none' : 'block' }}
-                                        key={date.getTime()}
-                                        value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
-                                    </TimeButton>
-                                })
-                        }
-                    </TimeButtonWrapper>
                 </VerticalFlex>
             </TransitionFlex>
             <VerticalFlex
