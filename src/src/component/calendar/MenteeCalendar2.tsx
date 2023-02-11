@@ -324,8 +324,13 @@ const MenteeCalendar2 = (props:
                         })
                 })
                 splitTimes.forEach(times => {
-                    const timesAm = times.filter(time => time.getHours() < 12)
-                    const timesPm = times.filter(time => time.getHours() >= 12)
+                    const timesAm = times
+                        .filter(time => time.getHours() < 12)
+                        .filter(time => ![...temp['20']['AM'], ...temp['40']['AM']].map(time => time.getTime()).includes(time.getTime()))
+                    const timesPm = times
+                        .filter(time => time.getHours() >= 12)
+                        .filter(time => ![...temp['20']['PM'], ...temp['40']['PM']].map(time => time.getTime()).includes(time.getTime()))
+
                     temp['20']['AM'].push(...timesAm)
                     temp['40']['AM'].push(...timesAm.slice(0, timesAm.length - 1))
                     temp['20']['PM'].push(...timesPm)
@@ -334,7 +339,7 @@ const MenteeCalendar2 = (props:
 
                 for (let time of ['20', '40']) {
                     for (let AMPM of ['AM', 'PM']) {
-                        temp[time as "20" | "40"][AMPM as "AM" | "PM"].sort((a, b) => a.getTime() - b.getTime())
+                        temp[time as "20" | "40"][AMPM as "AM" | "PM"] = Array.from(new Set(temp[time as "20" | "40"][AMPM as "AM" | "PM"])).sort((a, b) => a.getTime() - b.getTime())
                     }
                 }
             }
@@ -409,15 +414,15 @@ const MenteeCalendar2 = (props:
             </Flex>
             <Flex style={{ flexWrap: 'wrap', borderBottom: `1px solid ${colorBackgroundGrayMedium}`, paddingBottom: '16px', marginTop: '16px' }}>
                 {['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
-                    return <Flex style={{ minWidth: '14.286%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1>{koDay}</TextSubtitle1> </Flex>
+                    return <Flex style={{ minWidth: '14.28%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1>{koDay}</TextSubtitle1> </Flex>
                 })}
                 {state.calendarDates.map((date, i) => {
                     const isSelected = (date: Date) => state.selectedDate && state.selectedDate.getDate() === date.getDate()
                     const isAvailable = (date: Date) => state.availableDates.map(e => e.getTime()).includes(date.getTime())
                     return date === null ?
-                        <Flex key={i} style={{ minWidth: '14.286%', justifyContent: 'center', marginBottom: '10px' }} />
+                        <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }} />
                         :
-                        <Flex key={i} style={{ minWidth: '14.286%', justifyContent: 'center', marginBottom: '10px' }}>
+                        <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }}>
                             <Flex
                                 onClick={() => {
                                     if (isAvailable(date)) {
