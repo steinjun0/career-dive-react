@@ -518,7 +518,6 @@ const MenteeCalendar2 = (props:
                                 {
                                     state.startTimeObj[state.consultingTime].PM
                                         .map(date => {
-                                            console.log('date', date)
                                             return <TimeButton
                                                 key={date.getTime()}
                                                 value={date.getTime()}><TextBody2>{getHoursAndMinuteString(new Date(new Date(date).setHours(date.getHours() - 12)))}</TextBody2>
