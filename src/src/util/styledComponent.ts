@@ -2,10 +2,18 @@ import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
 
 // type
-export type cssLength = `${number | undefined}px` | `${number | undefined}%`
+export type Percent = `${string}%`
+export type cssLength = `${number | undefined}px` | Percent
+export type NumberOrPercent = number | Percent
+export type CssColor =
+  `#${string}`
+  | `rgb(${number},${number},${number})`
+  | `rgb(${Percent},${Percent},${Percent})`
+  | `rgba(${number},${number},${number},${number})`
+  | `rgba(${Percent},${Percent},${Percent},${Percent})`
 
 // color
-export const colorCareerDiveBlue = "#698CFF";
+export const colorCareerDiveBlue: CssColor = "#698CFF";
 export const colorBackgroundCareerDiveBlue = "#698CFF1a";
 export const colorCareerDivePink = "#E25D7D";
 export const colorBackgroundCareerDivePink = "#E25D7D1a";
@@ -13,7 +21,7 @@ export const colorBlueGray = '#CFD6E0';
 export const colorTextLight = "#5F6368";
 export const colorTextBody = "#191919";
 export const colorTextDisabled = "#D9D9D9";
-export const colorBackgroundGrayLight = "#F8F8F8";
+export const colorBackgroundGrayLight: CssColor = "#F8F8F8";
 export const colorBackgroundGrayMedium = "#E6E6E6";
 export const colorBackgroundGrayDark = "#7C7C7C";
 export const colorSuccess = "#B4CE16";
