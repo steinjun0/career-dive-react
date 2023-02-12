@@ -7,9 +7,9 @@ import { CSSProperties } from "@mui/styled-engine";
 
 
 function SimpleSelect<T>(
-    { items = [], texts = [], label = '', onChange, sx }: { items: T[], texts: string[], label?: string, onChange: Function, sx?: SxProps }
+    { items = [], texts = [], label = '', onChange, initialValue, sx }: { items: T[], texts: string[], label?: string, onChange: Function, initialValue?: T, sx?: SxProps }
 ) {
-    const [value, setValue] = React.useState<T>(items[0]);
+    const [value, setValue] = React.useState<T>(initialValue ?? items[0]);
 
     const handleChange = (event: SelectChangeEvent) => {
         onChange(event.target.value as T)
