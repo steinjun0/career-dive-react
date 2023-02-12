@@ -26,35 +26,6 @@ const calendarAnimationStyle = {
     transition: 'all 0.2s ease'
 }
 
-const TimeButtonWrapper = styled(ToggleButtonGroup)`
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: -16px;
-`
-const TimeButton = styled(ToggleButton)`
- justify-content: center;
- width: 76px;
- min-width: 76px;
- margin-top: 16px;
- margin-right: 16px;
- height: 44px;
- background-color: ${colorBackgroundGrayLight};
- color: ${colorTextLight};
- border: solid 1px ${colorBackgroundGrayLight};
- border-radius: 8px !important;
-
- &.Mui-selected {
-  color: ${colorCareerDiveBlue};
-  border: 1px ${colorCareerDiveBlue} solid !important;
-  background-color: ${colorBackgroundCareerDiveBlue};
- }
- &.Mui-selected:hover {
-  color: ${colorCareerDiveBlue};
-  border: 1px ${colorCareerDiveBlue} solid !important;
-  background-color: ${colorBackgroundCareerDiveBlue};
- }
-`
-
 const TransitionFlex = styled(VerticalFlex) <{ height: number }>`
  height: ${props => props && props.height}px;
 `
@@ -72,9 +43,10 @@ function getSplitTimes(startTime: Date, endTime: Date): Date[] {
 // 1. props가 있다면 순서대로 누르는 것과 동일하게 진행한다.
 // 2. api를 통해서 해당 날짜의 일정을 받아와야한다.
 // 3. 만약 해당 날짜의 일정에 props로 받은 일정과 같은게 있다면 선택, 아니면 미선택
+type RuleType = 'custom' | 'week' | 'day'
 
 interface IavailableTime {
-    [key: number]: { startTime: Date, endTime: Date, ruleType: string, ruleId: number, scheduleId: number }[]
+    [key: number]: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number }[]
 }
 interface IstartTimeObj { 20: { AM: Date[], PM: Date[] }, 40: { AM: Date[], PM: Date[] } }
 
@@ -87,16 +59,18 @@ type ACTIONTYPE =
     | { type: "resetAvailableDates", }
     | { type: "updateAvailableTimes"; payload: IavailableTime }
     | { type: "resetAvailableTimes", }
-    | { type: "updateStartTimeObj", payload: IstartTimeObj | null }
-    | { type: "updateConultingTime", payload: 20 | 40 | null }
-    | { type: "updateStartTime", payload: Date | null }
     | { type: "updateCalendarState", payload: 'view' | 'add' | 'edit' }
+    | { type: "addNewTime" }
+    | { type: "updateNewTime", payload: { startTime: Date, endTime: Date, ruleType: RuleType } }
+    | { type: "saveCalendar" }
+
 
 interface IcalendarState {
     calendarDates: Date[], currentYearAndMonth: Date,
     selectedDate: Date | null, availableDates: Date[],
     availableTimes: IavailableTime, startTimeObj: IstartTimeObj | null,
     calendarState: string | 'view' | 'add' | 'edit',
+    newTime: { startTime: Date, endTime: Date, ruleType: RuleType } | null
 }
 
 
@@ -111,7 +85,6 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 ...state,
                 calendarDates: [...Array(startDay).fill(null), ...temp, ...Array(6 - endDay).fill(null)],
                 selectedDate: null,
-                consultingTime: null,
                 startTime: null,
                 startTimeObj: null,
                 currentYearAndMonth: action.payload,
@@ -130,7 +103,6 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             return {
                 ...state,
                 selectedDate: action.payload,
-                consultingTime: null,
                 startTime: null,
                 startTimeObj: null,
             }
@@ -167,40 +139,64 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             return { ...state, availableTimes: {} }
         }
 
-        case 'updateStartTimeObj': {
-            if (state.calendarState === 'initializing') {
-                return {
-                    ...state,
-                    startTimeObj: action.payload,
-                }
-            } else {
-                return {
-                    ...state,
-                    startTimeObj: action.payload,
-                    // calendarState: getCalendarStart({ ...state, selectedDate: state.availableDates[0] ?? null })
-                }
-            }
-
-        }
-
-        case 'updateConultingTime':
-            if (state.calendarState === 'initializing') {
-                return {
-                    ...state,
-                }
-            } else {
-                return {
-                    ...state,
-                    consultingTime: action.payload,
-                    startTime: null,
-                }
-            }
-
-
-        case 'updateStartTime':
+        case 'addNewTime':
             return {
                 ...state,
+                calendarState: 'add',
+                newTime: {
+                    startTime: new Date(new Date(state.selectedDate!).setHours(8)),
+                    endTime: new Date(new Date(state.selectedDate!).setHours(23)),
+                    ruleType: 'week' as RuleType
+                }
             }
+
+        case 'updateNewTime':
+            return {
+                ...state,
+                calendarState: 'add',
+                newTime: action.payload,
+            }
+
+        case 'saveCalendar':
+            if (state.calendarState === 'add') {
+                const dayTimes = [...Object.keys(state.availableTimes).map((date) => {
+                    return {
+                        Day: Number(date),
+                        StartEnds: [...state.availableTimes[+date].filter((e) => {
+                            if (e.ruleType === 'custom')
+                                return true
+                            else
+                                return false
+                        }).map((e) => {
+                            return {
+                                StartTime: getHoursAndMinuteString(e.startTime),
+                                EndTime: getHoursAndMinuteString(e.endTime),
+                            }
+                        })],
+                    }
+                })]
+                if (state.newTime!.ruleType === 'custom') {
+                    dayTimes.push({
+                        Day: state.newTime!.startTime.getDate(),
+                        StartEnds: [{
+                            StartTime: getHoursAndMinuteString(state.newTime!.startTime),
+                            EndTime: getHoursAndMinuteString(state.newTime!.endTime)
+                        }],
+                    })
+                }
+                API.postConsultSchedule(dayTimes,
+                    state.selectedDate!.getFullYear(),
+                    state.selectedDate!.getMonth() + 1,
+                    Number(localStorage.getItem('UserID'))
+                )
+            } else {
+
+            }
+            return {
+                ...state,
+                calendarState: 'view',
+            }
+
 
         default:
             throw new Error()
@@ -213,17 +209,12 @@ const MentorCalendar = (props: { userId: number }) => {
         calendarDates: [], currentYearAndMonth: new Date(new Date().setDate(1)),
         selectedDate: new Date(new Date().setDate(1)), availableDates: [],
         availableTimes: {}, startTimeObj: null,
-        calendarState: 'initializing'
+        calendarState: 'view', newTime: null
     }
 
-    const navigate = useNavigate()
-    const location = useLocation()
-    const params = useParams();
     const [state, dispatch] = useReducer(reducer, initialState)
-    const [startTimeLen, setStartTimeLen] = useState<number>(0)
 
     const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
-    const timeSelectRef = useRef<HTMLDivElement>(null)
 
     function addCurrentYearAndMonth(month: number) {
         dispatch({ type: 'updateCurrentYearAndMonth', payload: new Date(state.currentYearAndMonth.setMonth(state.currentYearAndMonth.getMonth() + month)) })
@@ -241,7 +232,7 @@ const MentorCalendar = (props: { userId: number }) => {
 
         interface IDayTime {
             Day: number,
-            StartEnds: { StartTime: string, EndTime: string, RuleType: string, RuleID: number, ScheduleID: number }[]
+            StartEnds: { StartTime: string, EndTime: string, RuleType: RuleType, RuleID: number, ScheduleID: number }[]
         }
 
         function updateAvailableTimes(year: number, month: number, dayTimes: IDayTime[]) {
@@ -276,60 +267,18 @@ const MentorCalendar = (props: { userId: number }) => {
             })
     }, [state.currentYearAndMonth])
 
-    // 날짜 선택
-    useEffect(() => {
-        if (state.selectedDate !== null && state.availableTimes[state.selectedDate.getDate()]) {
-            const temp: IstartTimeObj = { 20: { AM: [], PM: [] }, 40: { AM: [], PM: [] } }
 
-            const schedules = state.availableTimes[state.selectedDate.getDate()]
-            if (schedules) {
-                const splitTimes = schedules.map(schedule => {
-                    return getSplitTimes(schedule.startTime, schedule.endTime)
-                        .map(date => {
-                            return date
-                        })
-                })
-                splitTimes.forEach(times => {
-                    const timesAm = times
-                        .filter(time => time.getHours() < 12)
-                        .filter(time => ![...temp['20']['AM'], ...temp['40']['AM']].map(time => time.getTime()).includes(time.getTime()))
-                    const timesPm = times
-                        .filter(time => time.getHours() >= 12)
-                        .filter(time => ![...temp['20']['PM'], ...temp['40']['PM']].map(time => time.getTime()).includes(time.getTime()))
+    // useEffect(() => {
+    //     console.log(state)
 
-                    temp['20']['AM'].push(...timesAm)
-                    temp['40']['AM'].push(...timesAm.slice(0, timesAm.length - 1))
-                    temp['20']['PM'].push(...timesPm)
-                    temp['40']['PM'].push(...timesPm.slice(0, timesPm.length - 1))
-                })
+    // }, [state])
 
-                for (let time of ['20', '40']) {
-                    for (let AMPM of ['AM', 'PM']) {
-                        temp[time as "20" | "40"][AMPM as "AM" | "PM"] = Array.from(new Set(temp[time as "20" | "40"][AMPM as "AM" | "PM"])).sort((a, b) => a.getTime() - b.getTime())
-                    }
-                }
-            }
-            dispatch({ type: 'updateStartTimeObj', payload: temp })
-        }
-    }, [state.selectedDate, state.availableTimes])
-
-
-    useEffect(() => {
-        if (state.startTimeObj) {
-            const len = state.startTimeObj[20].AM.length + state.startTimeObj[20].PM.length +
-                state.startTimeObj[40].AM.length + state.startTimeObj[40].PM.length
-            setStartTimeLen(len)
-        }
-        else {
-            setStartTimeLen(0)
-        }
-    }, [state.startTimeObj])
 
     return (
         <Card
             title='상담 가능 일정'
             no_divider={false}
-            style={{ boxSizing: 'border-box' }}
+            style={{ boxSizing: 'border-box', maxWidth: '400px' }}
         >
             <Flex style={{ justifyContent: 'center' }}>
                 <Flex style={{
@@ -383,7 +332,7 @@ const MentorCalendar = (props: { userId: number }) => {
                         <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }}>
                             <Flex
                                 onClick={() => {
-                                    if (!isPastDate(date)) {
+                                    if (!isPastDate(date) && state.calendarState === 'view') {
                                         dispatch({ type: 'updateSelectedDate', payload: date })
                                     }
                                 }}
@@ -403,11 +352,11 @@ const MentorCalendar = (props: { userId: number }) => {
             </Flex>
             <VerticalFlex
                 style={{
-                    height: { view: '184px', edit: '184px', add: '184px' }[state.calendarState],
+                    height: { view: '184px', edit: '184px', add: '300px' }[state.calendarState],
                     paddingTop: '16px', gap: '16px',
                     ...calendarAnimationStyle,
                 }}>
-                <Flex style={{ justifyContent: 'space-between' }}>
+                <Flex style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                     <TextSubtitle1>상담 가능 시간대 설정</TextSubtitle1>
                     <Flex style={{ gap: '8px' }}>
                         {['edit', 'add'].includes(state.calendarState) &&
@@ -430,7 +379,7 @@ const MentorCalendar = (props: { userId: number }) => {
                                     custom_color={colorCareerDiveBlue}
                                     style={{ padding: '7px', }}
                                     onClick={() => {
-                                        dispatch({ type: 'updateCalendarState', payload: 'view' })
+                                        dispatch({ type: 'saveCalendar' })
                                     }}
                                 >
                                     <CheckIcon
@@ -452,16 +401,7 @@ const MentorCalendar = (props: { userId: number }) => {
                             />
                         </CustomButton>}
 
-                        <CustomButton
-                            background_color={colorBackgroundCareerDivePink}
-                            custom_color={colorCareerDivePink}
-                            style={{ padding: '7px', }}
-                            onClick={() => { }}
-                        >
-                            <DeleteIcon
-                                fontSize={'small'}
-                            />
-                        </CustomButton>
+
                     </Flex>
                 </Flex>
 
@@ -475,7 +415,7 @@ const MentorCalendar = (props: { userId: number }) => {
                                 &nbsp;~&nbsp;
                                 <TextBody2>{getKoreanTimeString(time.endTime)}</TextBody2>
                                 <EmptyWidth width="4px" /> · <EmptyWidth width="4px" />
-                                <TextBody2>{ruleTypeConverter[time.ruleType as 'custom' | 'week' | 'day']}</TextBody2>
+                                <TextBody2>{ruleTypeConverter[time.ruleType as RuleType]}</TextBody2>
                             </TagLarge>
                         }
                     )
@@ -487,7 +427,8 @@ const MentorCalendar = (props: { userId: number }) => {
                         width='fit-content'
                         padding="4px 8px 4px 12px"
                         onClick={() => {
-                            dispatch({ type: 'updateCalendarState', payload: 'add' })
+
+                            dispatch({ type: 'addNewTime' })
                         }}
                     >
                         <TextSubtitle2>추가</TextSubtitle2>
@@ -500,33 +441,19 @@ const MentorCalendar = (props: { userId: number }) => {
                     state.availableTimes[state.selectedDate?.getDate()] &&
                     state.availableTimes[state.selectedDate?.getDate()].map(
                         time => {
-                            return <TagLarge style={{ padding: '4px 12px', width: 'fit-content' }}>
-                                <TextBody2>{getKoreanTimeString(time.startTime)}</TextBody2>
-                                &nbsp;~&nbsp;
-                                <TextBody2>{getKoreanTimeString(time.endTime)}</TextBody2>
-                                <EmptyWidth width="4px" /> · <EmptyWidth width="4px" />
-                                <TextBody2>{ruleTypeConverter[time.ruleType as 'custom' | 'week' | 'day']}</TextBody2>
-                            </TagLarge>
+                            return <TimeShower time={time} />
                         }
                     )
                 }
                 {
-                    ['add'].includes(state.calendarState) &&
-                    <VerticalFlex>
-                        <Flex>
-                            <TextBody2>시작</TextBody2>
-                            <Flex style={{ width: '78px', }}>
-                                <SimpleSelect<Date>
-                                    sx={{ padding: 0, borderRadius: '8px !important', backgroundColor: colorBackgroundGrayLight, width: 'fit-content', '.MuiSelect-select': { padding: '4px 12px !important' }, '.MuiSelect-icon': { visibility: 'hidden' } }}
-                                    items={[new Date()]}
-                                    texts={[new Date().getHours().toString() + ' : 00']}
-                                    onChange={() => { }} />
-                            </Flex>
-
-                        </Flex>
-                        <Flex><TextBody2>종료</TextBody2></Flex>
-                        <Flex><TextBody2>반복</TextBody2></Flex>
-                    </VerticalFlex>
+                    ['add'].includes(state.calendarState) && state.selectedDate && state.newTime &&
+                    <TimeEditor
+                        selectedDate={state.selectedDate}
+                        startTime={state.newTime.startTime}
+                        endTime={state.newTime.endTime}
+                        ruleType={state.newTime.ruleType}
+                        dispatch={dispatch}
+                    />
                 }
 
                 {/* <SimpleSelect<Date>
@@ -538,4 +465,137 @@ const MentorCalendar = (props: { userId: number }) => {
         </Card >
     );
 };
+
+function TimeShower({ time }: { time: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number; scheduleId: number; } }) {
+    return <TagLarge style={{ padding: '4px 12px', width: 'fit-content' }}>
+        <TextBody2>{getKoreanTimeString(time.startTime)}</TextBody2>
+        &nbsp;~&nbsp;
+        <TextBody2>{getKoreanTimeString(time.endTime)}</TextBody2>
+        <EmptyWidth width="4px" /> · <EmptyWidth width="4px" />
+        <TextBody2>{ruleTypeConverter[time.ruleType]}</TextBody2>
+    </TagLarge>
+}
+
+function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Date, ruleType?: RuleType, dispatch: (value: ACTIONTYPE) => void }) {
+    const longSelectStyle = {
+        fontSize: '14px',
+        color: colorTextLight, padding: 0, borderRadius: '8px !important',
+        backgroundColor: colorBackgroundGrayLight,
+        width: '100%',
+        '.MuiSelect-select':
+            { padding: '4px 12px !important', display: 'flex', justifyContent: 'center' },
+        '.MuiSelect-icon':
+            { visibility: 'hidden' }
+    }
+
+    const shortSelectStyle = {
+        fontSize: '14px', color: colorTextLight,
+        padding: 0, borderRadius: '8px !important',
+        backgroundColor: colorBackgroundGrayLight, width: '100%',
+        '.MuiSelect-select':
+            { padding: '4px 12px', display: 'flex', justifyContent: 'center' },
+    }
+
+    const hours = Array(24).fill(0).map((e, i) => {
+        const AMPM = i < 12 ? '오전' : i === 12 ? '낮' : '오후'
+        const hour = `${i >= 13 ? i - 12 : i}`.padStart(2, '0')
+        return `${AMPM} ${hour}`
+    })
+
+    const times: Date[] = Array(24).fill(0).map((e, i) => {
+        const temp = new Date(props.selectedDate)
+        temp.setHours(i)
+        return temp
+    })
+
+    const [startTime, setStartTime] = useState<Date>(props.startTime ?? new Date(new Date(props.selectedDate).setHours(8)))
+    const [endTime, setEndTime] = useState<Date>(props.endTime ?? new Date(new Date(props.selectedDate).setHours(23)))
+    const [ruleType, setRuleType] = useState<typeof props.ruleType>(props.ruleType ?? 'week')
+
+    useEffect(() => {
+        props.dispatch({
+            type: 'updateNewTime',
+            payload: {
+                startTime: startTime,
+                endTime: endTime,
+                ruleType: ruleType!
+            }
+        })
+    }, [startTime, endTime, ruleType])
+
+
+    return <Flex style={{ justifyContent: 'space-between', alignItems: 'start' }}>
+        <VerticalFlex style={{ gap: '8px', color: colorTextLight }}>
+            <Flex style={{ alignItems: 'center', gap: '4px' }}>
+                <TextBody2>시작</TextBody2>
+                <Flex style={{ width: '73px', }}>
+                    <SimpleSelect<Date>
+                        sx={longSelectStyle}
+                        items={times}
+                        texts={hours}
+                        initialValue={startTime}
+                        onChange={(e: string) => {
+                            setStartTime(new Date(e))
+                        }} />
+                </Flex>
+                <TextBody2>:</TextBody2>
+                <Flex style={{ width: '41px', }}>
+                    <SimpleSelect<'00' | '30'>
+                        sx={longSelectStyle}
+                        items={startTime?.getHours() === 23 ? ['00'] : ['00', '30']}
+                        texts={startTime?.getHours() === 23 ? ['00'] : ['00', '30']}
+                        onChange={(e: '00' | '30') => {
+                            setStartTime(new Date(new Date(startTime).setMinutes(+e)))
+                        }} />
+                </Flex>
+            </Flex>
+            <Flex style={{ alignItems: 'center', gap: '4px' }}>
+                <TextBody2>종료</TextBody2>
+                <Flex style={{ width: '73px', }}>
+                    <SimpleSelect<Date>
+                        sx={longSelectStyle}
+                        items={times.slice(startTime?.getHours() + (startTime?.getMinutes() === 30 ? 1 : 0))}
+                        texts={hours.slice(startTime?.getHours() + (startTime?.getMinutes() === 30 ? 1 : 0))}
+                        initialValue={endTime}
+                        onChange={(e: Date) => {
+                            setEndTime(new Date(e))
+                        }} />
+                </Flex>
+                <TextBody2>:</TextBody2>
+                <Flex style={{ width: '41px', }}>
+                    <SimpleSelect<'00' | '30'>
+                        sx={longSelectStyle}
+                        items={startTime?.getHours() === endTime.getHours() ? ['30'] : ['00', '30']}
+                        texts={startTime?.getHours() === endTime.getHours() ? ['30'] : ['00', '30']}
+                        onChange={(e: '00' | '30') => {
+                            setEndTime(new Date(new Date(endTime).setMinutes(+e)))
+                        }} />
+                </Flex>
+            </Flex>
+            <Flex style={{ alignItems: 'center', gap: '4px' }}>
+                <TextBody2>반복</TextBody2>
+                <Flex style={{ width: '73px', }}>
+                    <SimpleSelect<typeof props.ruleType>
+                        sx={shortSelectStyle}
+                        items={['week', 'day', 'custom']}
+                        texts={['매주', '매일', '없음']}
+                        onChange={(e: typeof props.ruleType) => {
+                            setRuleType(e)
+                        }} />
+                </Flex>
+            </Flex>
+        </VerticalFlex>
+        <CustomButton
+            background_color={colorBackgroundCareerDivePink}
+            custom_color={colorCareerDivePink}
+            style={{ padding: '7px', }}
+            onClick={() => { }}
+        >
+            <DeleteIcon
+                fontSize={'small'}
+            />
+        </CustomButton>
+    </Flex>
+
+}
 export default MentorCalendar
