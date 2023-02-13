@@ -1,14 +1,12 @@
-import React, { Dispatch, SetStateAction, useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { colorBackgroundCareerDiveBlue, colorBackgroundCareerDivePink, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorCareerDivePink, colorTextDisabled, colorTextLight, EmptyHeight, EmptyWidth, Flex, TextBody2, TextSubtitle1, TextSubtitle2, VerticalFlex } from "util/styledComponent";
 import Card from "../../util/ts/Card";
-import { getDatesOfMonth, isPastDate, monthList } from "./Calendar.service";
+import { getDatesOfMonth, isPastDate } from "./Calendar.service";
 import API from "API";
 import styled from "styled-components";
-import { Button, Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { addMinute, getHoursAndMinuteString, getKoreanTimeString, updateReservation } from "util/ts/util";
-import { addMinuteTs } from "util/util";
+import { IconButton, } from "@mui/material";
+import { addMinute, getHoursAndMinuteString, getKoreanTimeString } from "util/ts/util";
 import { CustomButton } from "util/Custom/CustomButton";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CircleIcon from '@mui/icons-material/Circle';
@@ -32,18 +30,7 @@ const TransitionFlex = styled(VerticalFlex) <{ height: number }>`
 `
 const ruleTypeConverter = { 'custom': '반복 없음', 'week': '매주 반복', 'day': '매일 반복' }
 
-function getSplitTimes(startTime: Date, endTime: Date): Date[] {
-    const result = [startTime]
-    const gapMin = (endTime.getTime() - startTime.getTime()) / 1000 / 60
-    for (let addMin = 30; addMin < gapMin; addMin += 30) {
-        result.push(addMinute(startTime, addMin))
-    }
-    return result
-}
 
-// 1. props가 있다면 순서대로 누르는 것과 동일하게 진행한다.
-// 2. api를 통해서 해당 날짜의 일정을 받아와야한다.
-// 3. 만약 해당 날짜의 일정에 props로 받은 일정과 같은게 있다면 선택, 아니면 미선택
 type RuleType = 'custom' | 'week' | 'day'
 
 interface IavailableTime {
@@ -65,6 +52,7 @@ type ACTIONTYPE =
     | { type: "updateNewTime", payload: { startTime: Date, endTime: Date, ruleType: RuleType } }
     | { type: "editSchedule", payload: { scheduleId: number, startTime: Date, endTime: Date, ruleType: RuleType, } }
     | { type: "removeSchedule", payload: { scheduleId: number } }
+    | { type: "forceRendering" }
 
 interface IcalendarState {
     calendarDates: Date[], currentYearAndMonth: Date,
@@ -179,7 +167,10 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             return {
                 ...state,
             }
-
+        // for animation
+        case 'forceRendering': {
+            return { ...state }
+        }
 
         default:
             throw new Error()
@@ -197,6 +188,7 @@ const MentorCalendar = (props: { userId: number }) => {
     }
 
     const [state, dispatch] = useReducer(reducer, initialState)
+    const bottomDivRef = useRef<HTMLDivElement>(null)
 
     const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
 
@@ -234,6 +226,7 @@ const MentorCalendar = (props: { userId: number }) => {
 
     useEffect(() => {
         dispatch({ type: 'updateCurrentYearAndMonth', payload: state.currentYearAndMonth })
+        setTimeout(() => { dispatch({ type: 'forceRendering', }) }, 1);
     }, [])
 
     // availableDate,Times 설정
@@ -246,6 +239,9 @@ const MentorCalendar = (props: { userId: number }) => {
             .then((res) => {
                 if (res.status === 200) {
                     updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
+                    setTimeout(() => {
+                        dispatch({ type: 'updateCalendarState', payload: "view" })
+                    }, 1);
                 }
             })
     }, [state.currentYearAndMonth])
@@ -436,6 +432,8 @@ const MentorCalendar = (props: { userId: number }) => {
                                 onClick={() => {
                                     if (!isPastDate(date) && state.calendarState === 'view') {
                                         dispatch({ type: 'updateSelectedDate', payload: date })
+
+                                        setTimeout(() => { dispatch({ type: 'forceRendering', }) }, 1);
                                     }
                                 }}
                                 style={{
@@ -454,117 +452,124 @@ const MentorCalendar = (props: { userId: number }) => {
             </Flex>
             <VerticalFlex
                 style={{
-                    height: { view: '184px', edit: '284px', add: '300px' }[state.calendarState],
-                    paddingTop: '16px', gap: '16px',
-                    ...calendarAnimationStyle,
+                    height: bottomDivRef.current ? bottomDivRef.current?.scrollHeight : '0',
+                    ...calendarAnimationStyle
                 }}>
-                <Flex style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                    <TextSubtitle1>상담 가능 시간대 설정</TextSubtitle1>
-                    <Flex style={{ gap: '8px' }}>
-                        {['edit', 'add'].includes(state.calendarState) &&
-                            <>
+                <VerticalFlex
+                    style={{
+                        paddingTop: '16px', gap: '16px',
+                    }}
+                    ref={bottomDivRef}
+                >
+                    <Flex style={{ justifyContent: 'space-between', alignItems: 'center', height: '32px' }}>
+                        <TextSubtitle1>상담 가능 시간대 설정</TextSubtitle1>
+                        <Flex style={{ gap: '8px' }}>
+                            {['edit', 'add'].includes(state.calendarState) &&
+                                <>
+                                    <CustomButton
+                                        background_color={colorBackgroundGrayLight}
+                                        custom_color={colorTextLight}
+                                        style={{ padding: '7px', }}
+                                        onClick={() => {
+                                            dispatch({ type: 'updateCalendarState', payload: 'view' })
+                                            setTimeout(() => {
+                                                dispatch({ type: 'updateCalendarState', payload: "view" })
+                                            }, 1);
+                                        }}
+                                    >
+                                        <ShortcutOutlinedIcon
+                                            style={{ transform: 'scaleX(-1)' }}
+                                            fontSize={'small'}
+                                        />
+                                    </CustomButton>
+                                    <CustomButton
+                                        background_color={colorBackgroundCareerDiveBlue}
+                                        custom_color={colorCareerDiveBlue}
+                                        style={{ padding: '7px', }}
+                                        onClick={() => {
+                                            saveCalendar()
+                                            setTimeout(() => {
+                                                dispatch({ type: 'updateCalendarState', payload: "view" })
+                                            }, 1);
+                                        }}
+                                    >
+                                        <CheckIcon
+                                            fontSize={'small'}
+                                        />
+                                    </CustomButton>
+                                </>
+                            }
+                            {
+                                ['view'].includes(state.calendarState) &&
+                                state.selectedDate &&
+                                state.availableTimes[state.selectedDate.getDate()] &&
+                                state.availableTimes[state.selectedDate.getDate()].length > 0 &&
                                 <CustomButton
                                     background_color={colorBackgroundGrayLight}
                                     custom_color={colorTextLight}
                                     style={{ padding: '7px', }}
                                     onClick={() => {
-                                        dispatch({ type: 'updateCalendarState', payload: 'view' })
+                                        dispatch({ type: 'updateCalendarState', payload: 'edit' })
                                     }}
                                 >
-                                    <ShortcutOutlinedIcon
-                                        style={{ transform: 'scaleX(-1)' }}
+                                    <ModeEditOutlineOutlinedIcon
                                         fontSize={'small'}
                                     />
                                 </CustomButton>
-                                <CustomButton
-                                    background_color={colorBackgroundCareerDiveBlue}
-                                    custom_color={colorCareerDiveBlue}
-                                    style={{ padding: '7px', }}
-                                    onClick={() => {
-                                        saveCalendar()
-                                    }}
-                                >
-                                    <CheckIcon
-                                        fontSize={'small'}
-                                    />
-                                </CustomButton>
-                            </>
-                        }
-                        {['view'].includes(state.calendarState) && <CustomButton
-                            background_color={colorBackgroundGrayLight}
-                            custom_color={colorTextLight}
-                            style={{ padding: '7px', }}
+                            }
+                        </Flex>
+                    </Flex>
+                    {['view'].includes(state.calendarState) &&
+                        state.selectedDate &&
+                        state.availableTimes[state.selectedDate?.getDate()] &&
+                        state.availableTimes[state.selectedDate?.getDate()].map(
+                            (time, i) => {
+                                return <TimeShower time={time} key={i} />
+                            }
+                        )
+                    }
+                    {['view'].includes(state.calendarState) &&
+                        <CustomButton
+                            custom_color={colorCareerDiveBlue}
+                            background_color={colorBackgroundCareerDiveBlue}
+                            width='fit-content'
+                            padding="4px 8px 4px 12px"
                             onClick={() => {
-                                dispatch({ type: 'updateCalendarState', payload: 'edit' })
+                                dispatch({ type: 'addNewTime' })
                             }}
                         >
-                            <ModeEditOutlineOutlinedIcon
-                                fontSize={'small'}
-                            />
-                        </CustomButton>}
-
-
-                    </Flex>
-                </Flex>
-
-                {['view'].includes(state.calendarState) &&
-                    state.selectedDate &&
-                    state.availableTimes[state.selectedDate?.getDate()] &&
-                    state.availableTimes[state.selectedDate?.getDate()].map(
-                        (time, i) => {
-                            return <TimeShower time={time} key={i} />
-                        }
-                    )
-                }
-                {['view'].includes(state.calendarState) &&
-                    <CustomButton
-                        custom_color={colorCareerDiveBlue}
-                        background_color={colorBackgroundCareerDiveBlue}
-                        width='fit-content'
-                        padding="4px 8px 4px 12px"
-                        onClick={() => {
-
-                            dispatch({ type: 'addNewTime' })
-                        }}
-                    >
-                        <TextSubtitle2>추가</TextSubtitle2>
-                        <EmptyWidth width="4px" />
-                        <AddIcon sx={{ fontSize: '18px' }} />
-                    </CustomButton>
-                }
-                {['edit'].includes(state.calendarState) &&
-                    state.tempSchedules!.map(
-                        (time: { startTime: Date, endTime: Date, ruleType: RuleType, scheduleId: number }, i: number) => {
-                            return <TimeEditor
-                                key={i}
-                                selectedDate={time.startTime}
-                                startTime={time.startTime}
-                                endTime={time.endTime}
-                                ruleType={time.ruleType}
-                                scheduleId={time.scheduleId}
-                                state={state}
-                                dispatch={dispatch} />
-                        }
-                    )
-                }
-
-                {
-                    ['add'].includes(state.calendarState) && state.selectedDate && state.newTime &&
-                    <TimeEditor
-                        selectedDate={state.selectedDate}
-                        startTime={state.newTime.startTime}
-                        endTime={state.newTime.endTime}
-                        ruleType={state.newTime.ruleType}
-                        state={state}
-                        dispatch={dispatch}
-                    />
-                }
-
-                {/* <SimpleSelect<Date>
-                    items={monthList}
-                    texts={monthTextList}
-                    onChange={(date: string) => { setCurrentYearAndMonth(new Date(date)) }}
-                /> */}
+                            <TextSubtitle2>추가</TextSubtitle2>
+                            <EmptyWidth width="4px" />
+                            <AddIcon sx={{ fontSize: '18px' }} />
+                        </CustomButton>
+                    }
+                    {['edit'].includes(state.calendarState) &&
+                        state.tempSchedules!.map(
+                            (time: { startTime: Date, endTime: Date, ruleType: RuleType, scheduleId: number }, i: number) => {
+                                return <TimeEditor
+                                    key={i}
+                                    selectedDate={time.startTime}
+                                    startTime={time.startTime}
+                                    endTime={time.endTime}
+                                    ruleType={time.ruleType}
+                                    scheduleId={time.scheduleId}
+                                    state={state}
+                                    dispatch={dispatch} />
+                            }
+                        )
+                    }
+                    {
+                        ['add'].includes(state.calendarState) && state.selectedDate && state.newTime &&
+                        <TimeEditor
+                            selectedDate={state.selectedDate}
+                            startTime={state.newTime.startTime}
+                            endTime={state.newTime.endTime}
+                            ruleType={state.newTime.ruleType}
+                            state={state}
+                            dispatch={dispatch}
+                        />
+                    }
+                </VerticalFlex>
             </VerticalFlex>
         </Card >
     );
@@ -716,6 +721,8 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         scheduleId: props.scheduleId!,
                     }
                 })
+
+                setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
             }}
         >
             <DeleteIcon
