@@ -51,7 +51,7 @@ type ACTIONTYPE =
     | { type: "addNewTime" }
     | { type: "updateNewTime", payload: { startTime: Date, endTime: Date, ruleType: RuleType } }
     | { type: "editSchedule", payload: { scheduleId: number, startTime: Date, endTime: Date, ruleType: RuleType, } }
-    | { type: "removeSchedule", payload: { scheduleId: number } }
+    | { type: "removeSchedule", payload: { scheduleId: number, ruleDelete: 'rule' | 'day' } }
     | { type: "forceRendering" }
 
 interface IcalendarState {
@@ -60,7 +60,7 @@ interface IcalendarState {
     availableTimes: IavailableTime, startTimeObj: IstartTimeObj | null,
     calendarState: string | 'view' | 'add' | 'edit',
     newTime: { startTime: Date, endTime: Date, ruleType: RuleType } | null,
-    tempSchedules: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number }[] | null
+    tempSchedules: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number, ruleDelete?: 'rule' | 'day' }[] | null
 }
 
 
@@ -162,8 +162,12 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 ...state,
             }
         case 'removeSchedule':
-            state.tempSchedules = state.tempSchedules!
-                .filter(e => e.scheduleId !== action.payload.scheduleId)
+            // if (action.payload.ruleDelete === 'rule') {
+            state.tempSchedules!.find((schedule) => schedule.scheduleId === action.payload.scheduleId)!.ruleDelete = action.payload.ruleDelete
+            // }
+            // if (action.payload.ruleDelete === 'day') {
+            //     state.tempSchedules = state.tempSchedules!.filter(schedule => schedule.scheduleId !== action.payload.scheduleId)
+            // }
             return {
                 ...state,
             }
@@ -311,7 +315,7 @@ const MentorCalendar = (props: { userId: number }) => {
             // rule add/patch
             apiList.push(
                 ...state.tempSchedules!
-                    .filter(schedule => schedule.ruleType !== 'custom')
+                    .filter(schedule => schedule.ruleType !== 'custom' && (schedule as any).ruleDelete === null)
                     .map(schedule => {
                         const startTime = getHoursAndMinuteString(schedule.startTime)
                         const endTime = getHoursAndMinuteString(schedule.endTime)
@@ -333,6 +337,7 @@ const MentorCalendar = (props: { userId: number }) => {
                         // 원래 규칙이었다면 patch
                         else {
                             return API.patchConsultScheduleRule(
+                                schedule.ruleId,
                                 startTime,
                                 endTime,
                                 weekDay,
@@ -347,9 +352,20 @@ const MentorCalendar = (props: { userId: number }) => {
 
             // rule delete
             apiList.push(
-                ...state.availableTimes[state.selectedDate!.getDate()]
-                    .filter(schedule => !state.tempSchedules!.map(e => e.scheduleId).includes(schedule.scheduleId))
-                    .map(schedule => API.deleteConsultSchedule(schedule.scheduleId))
+                ...state.tempSchedules!.map(function (schedule) {
+                    const ruleDelete = (schedule as { startTime: Date; endTime: Date; ruleType: RuleType; ruleId: number; scheduleId: number; ruleDelete: 'rule' | 'day'; }).ruleDelete;
+                    if (ruleDelete === 'rule') {
+                        return API.deleteConsultScheduleRule(
+                            schedule.ruleId,
+                            `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
+                        );
+                    } else if (ruleDelete === 'day') {
+                        return API.deleteConsultSchedule(
+                            schedule.scheduleId
+                        );
+                    }
+
+                })
             )
         }
         Promise.all(apiList).then(() => {
@@ -567,16 +583,21 @@ const MentorCalendar = (props: { userId: number }) => {
                     }
                     {['edit'].includes(state.calendarState) &&
                         state.tempSchedules!.map(
-                            (time: { startTime: Date, endTime: Date, ruleType: RuleType, scheduleId: number }, i: number) => {
-                                return <TimeEditor
-                                    key={i}
-                                    selectedDate={time.startTime}
-                                    startTime={time.startTime}
-                                    endTime={time.endTime}
-                                    ruleType={time.ruleType}
-                                    scheduleId={time.scheduleId}
-                                    state={state}
-                                    dispatch={dispatch} />
+                            (time: { startTime: Date, endTime: Date, ruleType: RuleType, scheduleId: number, ruleDelete?: 'day' | 'rule' }, i: number) => {
+                                if (time.ruleDelete) {
+                                    return null
+                                } else {
+                                    return <TimeEditor
+                                        key={i}
+                                        selectedDate={time.startTime}
+                                        startTime={time.startTime}
+                                        endTime={time.endTime}
+                                        ruleType={time.ruleType}
+                                        scheduleId={time.scheduleId}
+                                        state={state}
+                                        dispatch={dispatch} />
+                                }
+
                             }
                         )
                     }
@@ -737,12 +758,24 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
             custom_color={colorCareerDivePink}
             style={{ padding: '7px', }}
             onClick={() => {
-                props.dispatch({
-                    type: 'removeSchedule',
-                    payload: {
-                        scheduleId: props.scheduleId!,
-                    }
-                })
+                if (ruleType === 'custom') {
+                    props.dispatch({
+                        type: 'removeSchedule',
+                        payload: {
+                            scheduleId: props.scheduleId!,
+                            ruleDelete: 'day'
+                        }
+                    })
+                } else {
+                    props.dispatch({
+                        type: 'removeSchedule',
+                        payload: {
+                            scheduleId: props.scheduleId!,
+                            ruleDelete: 'rule'
+                        }
+                    })
+                }
+
 
                 setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
             }}
