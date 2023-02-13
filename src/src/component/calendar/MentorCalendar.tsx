@@ -19,6 +19,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ShortcutOutlinedIcon from '@mui/icons-material/ShortcutOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import SimpleSelect from "util/ts/SimpleSelect";
+import { AxiosResponse } from "axios";
 
 const calendarAnimationStyle = {
     overflow: 'hidden',
@@ -117,12 +118,11 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
         }
 
         case 'updateAvailableTimes': {
-            if (state.calendarState === 'initializing') {
+            if (state.calendarState === 'add') {
                 return {
                     ...state,
                     selectedDate: state.selectedDate,
                     availableTimes: action.payload,
-                    calendarState: state.calendarState
                 }
             } else {
                 return {
@@ -130,7 +130,6 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                     selectedDate: state.availableDates[0] ?? null,
                     availableTimes: action.payload,
                 }
-
             }
 
         }
@@ -158,24 +157,28 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             }
 
         case 'saveCalendar':
+            // 추가
             if (state.calendarState === 'add') {
-                const dayTimes = [...Object.keys(state.availableTimes).map((date) => {
-                    return {
-                        Day: Number(date),
-                        StartEnds: [...state.availableTimes[+date].filter((e) => {
-                            if (e.ruleType === 'custom')
-                                return true
-                            else
-                                return false
-                        }).map((e) => {
-                            return {
-                                StartTime: getHoursAndMinuteString(e.startTime),
-                                EndTime: getHoursAndMinuteString(e.endTime),
-                            }
-                        })],
-                    }
-                })]
+                let apiCall: Promise<AxiosResponse> | null = null
                 if (state.newTime!.ruleType === 'custom') {
+                    const dayTimes = [...Object.keys(state.availableTimes)
+                        .map((date) => {
+                            return {
+                                Day: Number(date),
+                                StartEnds: [...state.availableTimes[+date].filter((e) => {
+                                    if (e.ruleType === 'custom')
+                                        return true
+                                    else
+                                        return false
+                                }).map((e) => {
+                                    return {
+                                        StartTime: getHoursAndMinuteString(e.startTime),
+                                        EndTime: getHoursAndMinuteString(e.endTime),
+                                    }
+                                })],
+                            }
+                        })
+                    ]
                     dayTimes.push({
                         Day: state.newTime!.startTime.getDate(),
                         StartEnds: [{
@@ -183,13 +186,32 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                             EndTime: getHoursAndMinuteString(state.newTime!.endTime)
                         }],
                     })
+
+                    apiCall = API.postConsultSchedule(dayTimes,
+                        state.selectedDate!.getFullYear(),
+                        state.selectedDate!.getMonth() + 1,
+                        Number(localStorage.getItem('UserID'))
+                    )
+                } else {
+                    if (state.newTime) {
+                        const startTime = getHoursAndMinuteString(state.newTime.startTime)
+                        const endTime = getHoursAndMinuteString(state.newTime.endTime)
+                        const weekDay = state.newTime.startTime.getDay()
+                        const type = state.newTime.ruleType
+
+                        apiCall = API.postConsultScheduleRule(
+                            startTime,
+                            endTime,
+                            weekDay,
+                            type,
+                            Number(localStorage.getItem('UserID')),
+                            `${state.newTime.startTime.getFullYear()}-${`${state.newTime.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${state.newTime.startTime.getDate()}`.padStart(2, '0')}`
+                        )
+                    }
                 }
-                API.postConsultSchedule(dayTimes,
-                    state.selectedDate!.getFullYear(),
-                    state.selectedDate!.getMonth() + 1,
-                    Number(localStorage.getItem('UserID'))
-                )
-            } else {
+            }
+            // 수정
+            else {
 
             }
             return {
@@ -216,6 +238,35 @@ const MentorCalendar = (props: { userId: number }) => {
 
     const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
 
+    interface IDayTime {
+        Day: number,
+        StartEnds: { StartTime: string, EndTime: string, RuleType: RuleType, RuleID: number, ScheduleID: number }[]
+    }
+
+    function updateAvailableTimes(year: number, month: number, dayTimes: IDayTime[]) {
+        const tempTimes: IavailableTime = {}
+        for (let i = 0; i < dayTimes.length; i++) {
+            const dayTime = dayTimes[i]
+            if (!isPastDate(new Date(year, month - 1, dayTime.Day))) {
+                dispatch({ type: 'updateAvailableDates', payload: [new Date(year, month - 1, dayTime.Day)] })
+                for (let j = 0; j < dayTime.StartEnds.length; j++) {
+                    const startEnd = dayTime.StartEnds[j]
+                    if (tempTimes[dayTime.Day] === undefined)
+                        tempTimes[dayTime.Day] = []
+                    tempTimes[dayTime.Day].push({
+                        startTime: new Date(year, month - 1, dayTime.Day, +startEnd.StartTime.slice(0, 2), +startEnd.StartTime.slice(3, 5)),
+                        endTime: new Date(year, month - 1, dayTime.Day, +startEnd.EndTime.slice(0, 2), +startEnd.EndTime.slice(3, 5)),
+                        ruleType: startEnd.RuleType,
+                        ruleId: startEnd.RuleID,
+                        scheduleId: startEnd.ScheduleID
+                    })
+                }
+            }
+        }
+        console.log('updateAvailableTimes', tempTimes)
+        dispatch({ type: 'updateAvailableTimes', payload: tempTimes })
+    }
+
     function addCurrentYearAndMonth(month: number) {
         dispatch({ type: 'updateCurrentYearAndMonth', payload: new Date(state.currentYearAndMonth.setMonth(state.currentYearAndMonth.getMonth() + month)) })
     }
@@ -230,35 +281,6 @@ const MentorCalendar = (props: { userId: number }) => {
         dispatch({ type: 'resetAvailableDates' })
         dispatch({ type: 'resetAvailableTimes' })
 
-        interface IDayTime {
-            Day: number,
-            StartEnds: { StartTime: string, EndTime: string, RuleType: RuleType, RuleID: number, ScheduleID: number }[]
-        }
-
-        function updateAvailableTimes(year: number, month: number, dayTimes: IDayTime[]) {
-            const tempTimes: IavailableTime = {}
-            for (let i = 0; i < dayTimes.length; i++) {
-                const dayTime = dayTimes[i]
-                if (!isPastDate(new Date(year, month - 1, dayTime.Day))) {
-                    dispatch({ type: 'updateAvailableDates', payload: [new Date(year, month - 1, dayTime.Day)] })
-
-                    for (let j = 0; j < dayTime.StartEnds.length; j++) {
-                        const startEnd = dayTime.StartEnds[j]
-                        if (tempTimes[dayTime.Day] === undefined)
-                            tempTimes[dayTime.Day] = []
-                        tempTimes[dayTime.Day].push({
-                            startTime: new Date(year, month - 1, dayTime.Day, +startEnd.StartTime.slice(0, 2), +startEnd.StartTime.slice(3, 5)),
-                            endTime: new Date(year, month - 1, dayTime.Day, +startEnd.EndTime.slice(0, 2), +startEnd.EndTime.slice(3, 5)),
-                            ruleType: startEnd.RuleType,
-                            ruleId: startEnd.RuleID,
-                            scheduleId: startEnd.ScheduleID
-                        })
-                    }
-                }
-            }
-            dispatch({ type: 'updateAvailableTimes', payload: tempTimes })
-        }
-
         API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
             .then((res) => {
                 if (res.status === 200) {
@@ -267,6 +289,75 @@ const MentorCalendar = (props: { userId: number }) => {
             })
     }, [state.currentYearAndMonth])
 
+
+    async function saveCalendar() {
+        // 추가
+        if (state.calendarState === 'add') {
+            let apiCall: Promise<AxiosResponse> | null = null
+            if (state.newTime!.ruleType === 'custom') {
+                const dayTimes = [...Object.keys(state.availableTimes)
+                    .map((date) => {
+                        return {
+                            Day: Number(date),
+                            StartEnds: [...state.availableTimes[+date].filter((e) => {
+                                if (e.ruleType === 'custom')
+                                    return true
+                                else
+                                    return false
+                            }).map((e) => {
+                                return {
+                                    StartTime: getHoursAndMinuteString(e.startTime),
+                                    EndTime: getHoursAndMinuteString(e.endTime),
+                                }
+                            })],
+                        }
+                    })
+                ]
+                dayTimes.push({
+                    Day: state.newTime!.startTime.getDate(),
+                    StartEnds: [{
+                        StartTime: getHoursAndMinuteString(state.newTime!.startTime),
+                        EndTime: getHoursAndMinuteString(state.newTime!.endTime)
+                    }],
+                })
+
+                apiCall = API.postConsultSchedule(dayTimes,
+                    state.selectedDate!.getFullYear(),
+                    state.selectedDate!.getMonth() + 1,
+                    Number(localStorage.getItem('UserID'))
+                )
+            } else {
+                if (state.newTime) {
+                    const startTime = getHoursAndMinuteString(state.newTime.startTime)
+                    const endTime = getHoursAndMinuteString(state.newTime.endTime)
+                    const weekDay = state.newTime.startTime.getDay()
+                    const type = state.newTime.ruleType
+
+                    apiCall = API.postConsultScheduleRule(
+                        startTime,
+                        endTime,
+                        weekDay,
+                        type,
+                        Number(localStorage.getItem('UserID')),
+                        `${state.newTime.startTime.getFullYear()}-${`${state.newTime.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${state.newTime.startTime.getDate()}`.padStart(2, '0')}`
+                    )
+                }
+            }
+            apiCall!.then(() => {
+                API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
+                    .then((res) => {
+                        if (res.status === 200) {
+                            updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
+                            dispatch({ type: 'updateCalendarState', payload: 'view' })
+                        }
+                    })
+            })
+        }
+        // 수정
+        else {
+
+        }
+    }
 
     // useEffect(() => {
     //     console.log(state)
@@ -379,7 +470,7 @@ const MentorCalendar = (props: { userId: number }) => {
                                     custom_color={colorCareerDiveBlue}
                                     style={{ padding: '7px', }}
                                     onClick={() => {
-                                        dispatch({ type: 'saveCalendar' })
+                                        saveCalendar()
                                     }}
                                 >
                                     <CheckIcon
@@ -409,8 +500,8 @@ const MentorCalendar = (props: { userId: number }) => {
                     state.selectedDate &&
                     state.availableTimes[state.selectedDate?.getDate()] &&
                     state.availableTimes[state.selectedDate?.getDate()].map(
-                        time => {
-                            return <TagLarge style={{ padding: '4px 12px', width: 'fit-content' }}>
+                        (time, i) => {
+                            return <TagLarge key={i} style={{ padding: '4px 12px', width: 'fit-content' }}>
                                 <TextBody2>{getKoreanTimeString(time.startTime)}</TextBody2>
                                 &nbsp;~&nbsp;
                                 <TextBody2>{getKoreanTimeString(time.endTime)}</TextBody2>
