@@ -63,15 +63,16 @@ type ACTIONTYPE =
     | { type: "updateCalendarState", payload: 'view' | 'add' | 'edit' }
     | { type: "addNewTime" }
     | { type: "updateNewTime", payload: { startTime: Date, endTime: Date, ruleType: RuleType } }
-    | { type: "saveCalendar" }
-
+    | { type: "editSchedule", payload: { scheduleId: number, startTime: Date, endTime: Date, ruleType: RuleType, } }
+    | { type: "removeSchedule", payload: { scheduleId: number } }
 
 interface IcalendarState {
     calendarDates: Date[], currentYearAndMonth: Date,
     selectedDate: Date | null, availableDates: Date[],
     availableTimes: IavailableTime, startTimeObj: IstartTimeObj | null,
     calendarState: string | 'view' | 'add' | 'edit',
-    newTime: { startTime: Date, endTime: Date, ruleType: RuleType } | null
+    newTime: { startTime: Date, endTime: Date, ruleType: RuleType } | null,
+    tempSchedules: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number }[] | null
 }
 
 
@@ -94,8 +95,15 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
         }
 
         case 'updateCalendarState': {
+            let tempSchedules
+            if (action.payload === 'edit') {
+                tempSchedules = structuredClone(state.availableTimes[state.selectedDate!.getDate()])
+            } else {
+                tempSchedules = null
+            }
             return {
                 ...state,
+                tempSchedules: tempSchedules,
                 calendarState: action.payload
             }
         }
@@ -156,67 +164,20 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 newTime: action.payload,
             }
 
-        case 'saveCalendar':
-            // 추가
-            if (state.calendarState === 'add') {
-                let apiCall: Promise<AxiosResponse> | null = null
-                if (state.newTime!.ruleType === 'custom') {
-                    const dayTimes = [...Object.keys(state.availableTimes)
-                        .map((date) => {
-                            return {
-                                Day: Number(date),
-                                StartEnds: [...state.availableTimes[+date].filter((e) => {
-                                    if (e.ruleType === 'custom')
-                                        return true
-                                    else
-                                        return false
-                                }).map((e) => {
-                                    return {
-                                        StartTime: getHoursAndMinuteString(e.startTime),
-                                        EndTime: getHoursAndMinuteString(e.endTime),
-                                    }
-                                })],
-                            }
-                        })
-                    ]
-                    dayTimes.push({
-                        Day: state.newTime!.startTime.getDate(),
-                        StartEnds: [{
-                            StartTime: getHoursAndMinuteString(state.newTime!.startTime),
-                            EndTime: getHoursAndMinuteString(state.newTime!.endTime)
-                        }],
-                    })
-
-                    apiCall = API.postConsultSchedule(dayTimes,
-                        state.selectedDate!.getFullYear(),
-                        state.selectedDate!.getMonth() + 1,
-                        Number(localStorage.getItem('UserID'))
-                    )
-                } else {
-                    if (state.newTime) {
-                        const startTime = getHoursAndMinuteString(state.newTime.startTime)
-                        const endTime = getHoursAndMinuteString(state.newTime.endTime)
-                        const weekDay = state.newTime.startTime.getDay()
-                        const type = state.newTime.ruleType
-
-                        apiCall = API.postConsultScheduleRule(
-                            startTime,
-                            endTime,
-                            weekDay,
-                            type,
-                            Number(localStorage.getItem('UserID')),
-                            `${state.newTime.startTime.getFullYear()}-${`${state.newTime.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${state.newTime.startTime.getDate()}`.padStart(2, '0')}`
-                        )
-                    }
-                }
-            }
-            // 수정
-            else {
-
-            }
+        case 'editSchedule':
+            const schedule = state.tempSchedules!
+                .find(e => e.scheduleId === action.payload.scheduleId)
+            schedule!.startTime = action.payload.startTime
+            schedule!.endTime = action.payload.endTime
+            schedule!.ruleType = action.payload.ruleType
             return {
                 ...state,
-                calendarState: 'view',
+            }
+        case 'removeSchedule':
+            state.tempSchedules = state.tempSchedules!
+                .filter(e => e.scheduleId !== action.payload.scheduleId)
+            return {
+                ...state,
             }
 
 
@@ -231,7 +192,8 @@ const MentorCalendar = (props: { userId: number }) => {
         calendarDates: [], currentYearAndMonth: new Date(new Date().setDate(1)),
         selectedDate: new Date(new Date().setDate(1)), availableDates: [],
         availableTimes: {}, startTimeObj: null,
-        calendarState: 'view', newTime: null
+        calendarState: 'view', newTime: null,
+        tempSchedules: null
     }
 
     const [state, dispatch] = useReducer(reducer, initialState)
@@ -263,7 +225,6 @@ const MentorCalendar = (props: { userId: number }) => {
                 }
             }
         }
-        console.log('updateAvailableTimes', tempTimes)
         dispatch({ type: 'updateAvailableTimes', payload: tempTimes })
     }
 
@@ -291,28 +252,30 @@ const MentorCalendar = (props: { userId: number }) => {
 
 
     async function saveCalendar() {
+        const apiList = []
+
+        const dayTimes = [...Object.keys(state.availableTimes)
+            .map((date) => {
+                return {
+                    Day: Number(date),
+                    StartEnds: [...state.availableTimes[+date].filter((e) => {
+                        if (e.ruleType === 'custom')
+                            return true
+                        else
+                            return false
+                    }).map((e) => {
+                        return {
+                            StartTime: getHoursAndMinuteString(e.startTime),
+                            EndTime: getHoursAndMinuteString(e.endTime),
+                        }
+                    })],
+                }
+            })
+        ]
         // 추가
         if (state.calendarState === 'add') {
             let apiCall: Promise<AxiosResponse> | null = null
             if (state.newTime!.ruleType === 'custom') {
-                const dayTimes = [...Object.keys(state.availableTimes)
-                    .map((date) => {
-                        return {
-                            Day: Number(date),
-                            StartEnds: [...state.availableTimes[+date].filter((e) => {
-                                if (e.ruleType === 'custom')
-                                    return true
-                                else
-                                    return false
-                            }).map((e) => {
-                                return {
-                                    StartTime: getHoursAndMinuteString(e.startTime),
-                                    EndTime: getHoursAndMinuteString(e.endTime),
-                                }
-                            })],
-                        }
-                    })
-                ]
                 dayTimes.push({
                     Day: state.newTime!.startTime.getDate(),
                     StartEnds: [{
@@ -321,10 +284,12 @@ const MentorCalendar = (props: { userId: number }) => {
                     }],
                 })
 
-                apiCall = API.postConsultSchedule(dayTimes,
-                    state.selectedDate!.getFullYear(),
-                    state.selectedDate!.getMonth() + 1,
-                    Number(localStorage.getItem('UserID'))
+                apiList.push(
+                    API.postConsultSchedule(dayTimes,
+                        state.selectedDate!.getFullYear(),
+                        state.selectedDate!.getMonth() + 1,
+                        Number(localStorage.getItem('UserID'))
+                    )
                 )
             } else {
                 if (state.newTime) {
@@ -333,36 +298,82 @@ const MentorCalendar = (props: { userId: number }) => {
                     const weekDay = state.newTime.startTime.getDay()
                     const type = state.newTime.ruleType
 
-                    apiCall = API.postConsultScheduleRule(
-                        startTime,
-                        endTime,
-                        weekDay,
-                        type,
-                        Number(localStorage.getItem('UserID')),
-                        `${state.newTime.startTime.getFullYear()}-${`${state.newTime.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${state.newTime.startTime.getDate()}`.padStart(2, '0')}`
+                    apiList.push(
+                        API.postConsultScheduleRule(
+                            startTime,
+                            endTime,
+                            weekDay,
+                            type,
+                            Number(localStorage.getItem('UserID')),
+                            `${state.newTime.startTime.getFullYear()}-${`${state.newTime.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${state.newTime.startTime.getDate()}`.padStart(2, '0')}`
+                        )
                     )
                 }
             }
-            apiCall!.then(() => {
-                API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
-                    .then((res) => {
-                        if (res.status === 200) {
-                            updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
-                            dispatch({ type: 'updateCalendarState', payload: 'view' })
-                        }
-                    })
-            })
+
         }
         // 수정
-        else {
+        else if (state.calendarState === 'edit') {
+            // day add
+            state.tempSchedules!
+                .filter(schedule => schedule.ruleType === 'custom')
+                .forEach(schedule => {
+                    dayTimes.push({
+                        Day: schedule.startTime.getDate(),
+                        StartEnds: [{
+                            StartTime: getHoursAndMinuteString(schedule.startTime),
+                            EndTime: getHoursAndMinuteString(schedule.endTime)
+                        }],
+                    })
+                })
 
+            apiList.push(
+                API.postConsultSchedule(dayTimes,
+                    state.selectedDate!.getFullYear(),
+                    state.selectedDate!.getMonth() + 1,
+                    Number(localStorage.getItem('UserID'))
+                )
+            )
+
+            // rule patch
+            apiList.push(
+                ...state.tempSchedules!
+                    .filter(schedule => schedule.ruleType !== 'custom')
+                    .map(schedule => {
+                        API.patchConsultScheduleRule(
+                            schedule.ruleId,
+                            schedule.startTime,
+                            schedule.endTime,
+                            schedule.startTime.getDay(),
+                            schedule.ruleType,
+                            Number(localStorage.getItem('UserID')),
+                            `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
+                        )
+                    })
+            )
+
+            // rule delete
+            apiList.push(
+                ...state.availableTimes[state.selectedDate!.getDate()]
+                    .filter(schedule => !state.tempSchedules!.map(e => e.scheduleId).includes(schedule.scheduleId))
+                    .map(schedule => API.deleteConsultSchedule(schedule.scheduleId))
+            )
         }
+        Promise.all(apiList).then(() => {
+            API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
+                .then((res) => {
+                    if (res.status === 200) {
+                        updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
+                        dispatch({ type: 'updateCalendarState', payload: 'view' })
+                    }
+                })
+        })
     }
 
-    // useEffect(() => {
-    //     console.log(state)
+    useEffect(() => {
+        console.log(state)
 
-    // }, [state])
+    }, [state])
 
 
     return (
@@ -443,7 +454,7 @@ const MentorCalendar = (props: { userId: number }) => {
             </Flex>
             <VerticalFlex
                 style={{
-                    height: { view: '184px', edit: '184px', add: '300px' }[state.calendarState],
+                    height: { view: '184px', edit: '284px', add: '300px' }[state.calendarState],
                     paddingTop: '16px', gap: '16px',
                     ...calendarAnimationStyle,
                 }}>
@@ -496,18 +507,12 @@ const MentorCalendar = (props: { userId: number }) => {
                     </Flex>
                 </Flex>
 
-                {['view', 'add'].includes(state.calendarState) &&
+                {['view'].includes(state.calendarState) &&
                     state.selectedDate &&
                     state.availableTimes[state.selectedDate?.getDate()] &&
                     state.availableTimes[state.selectedDate?.getDate()].map(
                         (time, i) => {
-                            return <TagLarge key={i} style={{ padding: '4px 12px', width: 'fit-content' }}>
-                                <TextBody2>{getKoreanTimeString(time.startTime)}</TextBody2>
-                                &nbsp;~&nbsp;
-                                <TextBody2>{getKoreanTimeString(time.endTime)}</TextBody2>
-                                <EmptyWidth width="4px" /> · <EmptyWidth width="4px" />
-                                <TextBody2>{ruleTypeConverter[time.ruleType as RuleType]}</TextBody2>
-                            </TagLarge>
+                            return <TimeShower time={time} key={i} />
                         }
                     )
                 }
@@ -528,14 +533,21 @@ const MentorCalendar = (props: { userId: number }) => {
                     </CustomButton>
                 }
                 {['edit'].includes(state.calendarState) &&
-                    state.selectedDate &&
-                    state.availableTimes[state.selectedDate?.getDate()] &&
-                    state.availableTimes[state.selectedDate?.getDate()].map(
-                        time => {
-                            return <TimeShower time={time} />
+                    state.tempSchedules!.map(
+                        (time: { startTime: Date, endTime: Date, ruleType: RuleType, scheduleId: number }, i: number) => {
+                            return <TimeEditor
+                                key={i}
+                                selectedDate={time.startTime}
+                                startTime={time.startTime}
+                                endTime={time.endTime}
+                                ruleType={time.ruleType}
+                                scheduleId={time.scheduleId}
+                                state={state}
+                                dispatch={dispatch} />
                         }
                     )
                 }
+
                 {
                     ['add'].includes(state.calendarState) && state.selectedDate && state.newTime &&
                     <TimeEditor
@@ -543,6 +555,7 @@ const MentorCalendar = (props: { userId: number }) => {
                         startTime={state.newTime.startTime}
                         endTime={state.newTime.endTime}
                         ruleType={state.newTime.ruleType}
+                        state={state}
                         dispatch={dispatch}
                     />
                 }
@@ -567,7 +580,8 @@ function TimeShower({ time }: { time: { startTime: Date, endTime: Date, ruleType
     </TagLarge>
 }
 
-function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Date, ruleType?: RuleType, dispatch: (value: ACTIONTYPE) => void }) {
+
+function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Date, ruleType?: RuleType, scheduleId?: number, state: IcalendarState, dispatch: (value: ACTIONTYPE) => void }) {
     const longSelectStyle = {
         fontSize: '14px',
         color: colorTextLight, padding: 0, borderRadius: '8px !important',
@@ -602,18 +616,30 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
     const [startTime, setStartTime] = useState<Date>(props.startTime ?? new Date(new Date(props.selectedDate).setHours(8)))
     const [endTime, setEndTime] = useState<Date>(props.endTime ?? new Date(new Date(props.selectedDate).setHours(23)))
     const [ruleType, setRuleType] = useState<typeof props.ruleType>(props.ruleType ?? 'week')
-
+    console.log(startTime)
     useEffect(() => {
-        props.dispatch({
-            type: 'updateNewTime',
-            payload: {
-                startTime: startTime,
-                endTime: endTime,
-                ruleType: ruleType!
-            }
-        })
-    }, [startTime, endTime, ruleType])
+        if (props.state.calendarState === 'add') {
+            props.dispatch({
+                type: 'updateNewTime',
+                payload: {
+                    startTime: startTime,
+                    endTime: endTime,
+                    ruleType: ruleType!
+                }
+            })
+        } else if (props.state.calendarState === 'edit') {
+            props.dispatch({
+                type: 'editSchedule',
+                payload: {
+                    scheduleId: props.scheduleId!,
+                    startTime: startTime,
+                    endTime: endTime,
+                    ruleType: ruleType!
+                }
+            })
+        }
 
+    }, [startTime, endTime, ruleType])
 
     return <Flex style={{ justifyContent: 'space-between', alignItems: 'start' }}>
         <VerticalFlex style={{ gap: '8px', color: colorTextLight }}>
@@ -635,6 +661,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         sx={longSelectStyle}
                         items={startTime?.getHours() === 23 ? ['00'] : ['00', '30']}
                         texts={startTime?.getHours() === 23 ? ['00'] : ['00', '30']}
+                        initialValue={startTime?.getMinutes() === 0 ? '00' : '30'}
                         onChange={(e: '00' | '30') => {
                             setStartTime(new Date(new Date(startTime).setMinutes(+e)))
                         }} />
@@ -658,6 +685,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         sx={longSelectStyle}
                         items={startTime?.getHours() === endTime.getHours() ? ['30'] : ['00', '30']}
                         texts={startTime?.getHours() === endTime.getHours() ? ['30'] : ['00', '30']}
+                        initialValue={endTime?.getMinutes() === 0 ? '00' : '30'}
                         onChange={(e: '00' | '30') => {
                             setEndTime(new Date(new Date(endTime).setMinutes(+e)))
                         }} />
@@ -670,6 +698,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         sx={shortSelectStyle}
                         items={['week', 'day', 'custom']}
                         texts={['매주', '매일', '없음']}
+                        initialValue={ruleType ?? 'week'}
                         onChange={(e: typeof props.ruleType) => {
                             setRuleType(e)
                         }} />
@@ -680,7 +709,14 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
             background_color={colorBackgroundCareerDivePink}
             custom_color={colorCareerDivePink}
             style={{ padding: '7px', }}
-            onClick={() => { }}
+            onClick={() => {
+                props.dispatch({
+                    type: 'removeSchedule',
+                    payload: {
+                        scheduleId: props.scheduleId!,
+                    }
+                })
+            }}
         >
             <DeleteIcon
                 fontSize={'small'}
