@@ -83,7 +83,7 @@ type ACTIONTYPE =
     | { type: "updateStartTimeObj", payload: IstartTimeObj | null }
     | { type: "updateConultingTime", payload: 20 | 40 | null }
     | { type: "updateStartTime", payload: Date | null }
-
+    | { type: "forceRendering" }
 interface IcalendarState {
     calendarDates: Date[], currentYearAndMonth: Date,
     selectedDate: Date | null, availableDates: Date[],
@@ -222,6 +222,10 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 calendarState: getCalendarStart({ ...state, startTime: action.payload, })
             }
 
+        case 'forceRendering': {
+            return { ...state }
+        }
+
         default:
             throw new Error()
     }
@@ -294,7 +298,7 @@ const MenteeCalendar2 = (props:
             if (state.calendarState === 'initializing') {
                 dispatch({ type: 'updateStartTime', payload: state.startTime })
                 setTimeout(() => {
-                    dispatch({ type: 'updateStartTime', payload: state.startTime })
+                    dispatch({ type: 'forceRendering' })
                 }, 1);
             }
         }
@@ -449,7 +453,9 @@ const MenteeCalendar2 = (props:
                     exclusive
                     onChange={(e, time) => {
                         dispatch({ type: 'updateConultingTime', payload: time })
-                        setTimeout(() => dispatch({ type: 'updateConultingTime', payload: time }), 1)
+                        setTimeout(() => {
+                            dispatch({ type: 'forceRendering' })
+                        }, 1);
                     }}
                 >
 
