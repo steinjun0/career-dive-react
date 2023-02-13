@@ -409,10 +409,10 @@ const MentorCalendar = (props: { userId: number }) => {
 
 
 
-    useEffect(() => {
-        console.log(state)
+    // useEffect(() => {
+    //     console.log(state)
 
-    }, [state])
+    // }, [state])
 
 
     return (
@@ -670,7 +670,6 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
     const [endTime, setEndTime] = useState<Date>(props.endTime ?? new Date(new Date(props.selectedDate).setHours(23)))
     const [ruleType, setRuleType] = useState<typeof props.ruleType>(props.ruleType ?? 'week')
     const [isShowDeleteDropDown, setIsShowDeleteDropDown] = useState<boolean>(false);
-    console.log(startTime)
     useEffect(() => {
         if (props.state.calendarState === 'add') {
             props.dispatch({
