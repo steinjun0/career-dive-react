@@ -374,6 +374,7 @@ const MentorCalendar = (props: { userId: number }) => {
                     if (res.status === 200) {
                         updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
                         dispatch({ type: 'updateCalendarState', payload: 'view' })
+                        resetAll()
                     }
                 })
         })
@@ -384,8 +385,7 @@ const MentorCalendar = (props: { userId: number }) => {
         setTimeout(() => { dispatch({ type: 'forceRendering', }) }, 1);
     }, [])
 
-    // availableDate,Times 설정
-    useEffect(() => {
+    function resetAll() {
         // 선택 가능 날짜 데이터 받아오고, state 설정하기
         dispatch({ type: 'resetAvailableDates' })
         dispatch({ type: 'resetAvailableTimes' })
@@ -399,6 +399,11 @@ const MentorCalendar = (props: { userId: number }) => {
                     }, 1);
                 }
             })
+    }
+
+    // availableDate,Times 설정
+    useEffect(() => {
+        resetAll()
     }, [state.currentYearAndMonth])
 
 
@@ -664,6 +669,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
     const [startTime, setStartTime] = useState<Date>(props.startTime ?? new Date(new Date(props.selectedDate).setHours(8)))
     const [endTime, setEndTime] = useState<Date>(props.endTime ?? new Date(new Date(props.selectedDate).setHours(23)))
     const [ruleType, setRuleType] = useState<typeof props.ruleType>(props.ruleType ?? 'week')
+    const [isShowDeleteDropDown, setIsShowDeleteDropDown] = useState<boolean>(false);
     console.log(startTime)
     useEffect(() => {
         if (props.state.calendarState === 'add') {
@@ -766,24 +772,51 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                             ruleDelete: 'day'
                         }
                     })
+                    setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
                 } else {
-                    props.dispatch({
-                        type: 'removeSchedule',
-                        payload: {
-                            scheduleId: props.scheduleId!,
-                            ruleDelete: 'rule'
-                        }
-                    })
+                    setIsShowDeleteDropDown(true)
                 }
 
-
-                setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
             }}
         >
             <DeleteIcon
                 fontSize={'small'}
             />
+            {isShowDeleteDropDown && <Flex style={{ position: 'relative', zIndex: 10 }}>
+                <VerticalFlex style={{ position: 'absolute', zIndex: 10, top: '-17px', right: '-6px', width: '140px', padding: '8px', backgroundColor: 'white', border: '1px solid #eee', borderRadius: '8px' }}>
+                    <Flex style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => setIsShowDeleteDropDown(false)}>X</Flex>
+                    <Flex
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            props.dispatch({
+                                type: 'removeSchedule',
+                                payload: {
+                                    scheduleId: props.scheduleId!,
+                                    ruleDelete: 'rule'
+                                }
+                            })
+                            setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
+                            setIsShowDeleteDropDown(false)
+                        }}>이후 모든 일정 삭제</Flex>
+                    <EmptyHeight height="8px" />
+                    <Flex
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            props.dispatch({
+                                type: 'removeSchedule',
+                                payload: {
+                                    scheduleId: props.scheduleId!,
+                                    ruleDelete: 'day'
+                                }
+                            })
+                            setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
+                            setIsShowDeleteDropDown(false)
+                        }}>이 일정만 삭제</Flex>
+                </VerticalFlex>
+            </Flex>
+            }
         </CustomButton>
+
     </Flex>
 
 }
