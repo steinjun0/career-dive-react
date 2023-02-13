@@ -224,29 +224,6 @@ const MentorCalendar = (props: { userId: number }) => {
         dispatch({ type: 'updateCurrentYearAndMonth', payload: new Date(state.currentYearAndMonth.setMonth(state.currentYearAndMonth.getMonth() + month)) })
     }
 
-    useEffect(() => {
-        dispatch({ type: 'updateCurrentYearAndMonth', payload: state.currentYearAndMonth })
-        setTimeout(() => { dispatch({ type: 'forceRendering', }) }, 1);
-    }, [])
-
-    // availableDate,Times 설정
-    useEffect(() => {
-        // 선택 가능 날짜 데이터 받아오고, state 설정하기
-        dispatch({ type: 'resetAvailableDates' })
-        dispatch({ type: 'resetAvailableTimes' })
-
-        API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
-            .then((res) => {
-                if (res.status === 200) {
-                    updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
-                    setTimeout(() => {
-                        dispatch({ type: 'updateCalendarState', payload: "view" })
-                    }, 1);
-                }
-            })
-    }, [state.currentYearAndMonth])
-
-
     async function saveCalendar() {
         const apiList = []
 
@@ -331,20 +308,40 @@ const MentorCalendar = (props: { userId: number }) => {
                 )
             )
 
-            // rule patch
+            // rule add/patch
             apiList.push(
                 ...state.tempSchedules!
                     .filter(schedule => schedule.ruleType !== 'custom')
                     .map(schedule => {
-                        API.patchConsultScheduleRule(
-                            schedule.ruleId,
-                            schedule.startTime,
-                            schedule.endTime,
-                            schedule.startTime.getDay(),
-                            schedule.ruleType,
-                            Number(localStorage.getItem('UserID')),
-                            `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
-                        )
+                        const startTime = getHoursAndMinuteString(schedule.startTime)
+                        const endTime = getHoursAndMinuteString(schedule.endTime)
+                        const weekDay = schedule.startTime.getDay()
+                        const type = schedule.ruleType
+                        // 원래 규칙이 아니었다면 add
+                        if (state.availableTimes[state.selectedDate!.getDate()]
+                            .find(e => e.scheduleId === schedule.scheduleId)!
+                            .ruleType === 'custom') {
+                            return API.postConsultScheduleRule(
+                                startTime,
+                                endTime,
+                                weekDay,
+                                type,
+                                Number(localStorage.getItem('UserID')),
+                                `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
+                            )
+                        }
+                        // 원래 규칙이었다면 patch
+                        else {
+                            return API.patchConsultScheduleRule(
+                                startTime,
+                                endTime,
+                                weekDay,
+                                type,
+                                Number(localStorage.getItem('UserID')),
+                                `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
+                            )
+                        }
+
                     })
             )
 
@@ -365,6 +362,31 @@ const MentorCalendar = (props: { userId: number }) => {
                 })
         })
     }
+
+    useEffect(() => {
+        dispatch({ type: 'updateCurrentYearAndMonth', payload: state.currentYearAndMonth })
+        setTimeout(() => { dispatch({ type: 'forceRendering', }) }, 1);
+    }, [])
+
+    // availableDate,Times 설정
+    useEffect(() => {
+        // 선택 가능 날짜 데이터 받아오고, state 설정하기
+        dispatch({ type: 'resetAvailableDates' })
+        dispatch({ type: 'resetAvailableTimes' })
+
+        API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
+            .then((res) => {
+                if (res.status === 200) {
+                    updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
+                    setTimeout(() => {
+                        dispatch({ type: 'updateCalendarState', payload: "view" })
+                    }, 1);
+                }
+            })
+    }, [state.currentYearAndMonth])
+
+
+
 
     useEffect(() => {
         console.log(state)
