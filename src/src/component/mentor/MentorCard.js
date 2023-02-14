@@ -26,7 +26,7 @@ function getJobDurationFormat(year) {
   if (year < 1)
     return '1년 미만'
   else if (1 <= year && year < 3)
-    return '1년~3년'
+    return '1~3년'
   else if (year >= 3)
     return '3년 이상'
 
