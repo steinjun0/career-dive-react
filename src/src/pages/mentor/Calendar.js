@@ -5,33 +5,34 @@ import {
   GrayBackground,
   MaxWidthDiv,
   Flex,
-  RowAlignCenterFlex,
-  TextBody2,
-  EmptyHeight,
-  TextEllipsisContainer
 } from "util/styledComponent";
 
 
 import CalendarMentor from "component/calendar/CalendarMentor";
+import MentorCalendar from "component/calendar/MentorCalendar";
 
 const CardsWrapper = styled(Flex)`
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 30px;
   margin-bottom: 154px;
 `;
 
 
-function MentorCalendar() {
+function MentorCalendarPage() {
   return (
     <FullWidthWrapper>
       <GrayBackground>
         <MaxWidthDiv>
           <CardsWrapper>
-            <Grid container spacing={'30px'} marginTop={0} direction="column" alignItems="center">
-              <Grid item xs={6} minWidth={582}>
+            <MentorCalendar />
+            {/* <Grid container spacing={'30px'} marginTop={0} justifyContent="center">
+              <Grid item xs={12} minWidth={582}>
                 <CalendarMentor></CalendarMentor>
               </Grid>
-            </Grid>
+              <Grid item xs={12} alignItems="center">
+                <MentorCalendar />
+              </Grid>
+            </Grid> */}
           </CardsWrapper>
         </MaxWidthDiv>
       </GrayBackground>
@@ -39,4 +40,4 @@ function MentorCalendar() {
   );
 }
 
-export default MentorCalendar;
+export default MentorCalendarPage;

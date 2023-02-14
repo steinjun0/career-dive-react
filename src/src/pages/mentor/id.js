@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import API from 'API';
 import { useParams } from "react-router-dom";
 import MenteeCalendar from "../../component/calendar/MenteeCalendar";
+import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
 
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
@@ -95,8 +96,9 @@ function Mentor() {
                 <Grid item xs={12} md={6}>
                   <Grid container item spacing={2}>
                     <Grid item xs={12}>
-                      <MentorCalendar></MentorCalendar>
-                      {/* <MenteeCalendar /> */}
+                      {/* <MentorCalendar></MentorCalendar> */}
+                      {/* <MenteeCalendar userId={+params.id} startDate={null} /> */}
+                      <MenteeCalendar2 userId={+params.id} startDate={null} />
                     </Grid>
                   </Grid>
                 </Grid>

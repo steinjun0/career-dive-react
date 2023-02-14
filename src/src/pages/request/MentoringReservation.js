@@ -5,15 +5,18 @@ import {
   CenterWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
-  Flex
+  Flex,
 } from "util/styledComponent";
 
 import MentorProfile from 'component/mentor/Profile'
 import MentorCalendar from 'component/calendar/Calendar'
-import SelectContent from 'component/mentor/apply/SelectContent'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "API";
+import MenteeCalendar from "component/calendar/MenteeCalendar";
+import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
+import { getParsedLocalStorage } from "util/ts/util";
+import SelectContent from "component/mentor/apply/SelectContent2";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
@@ -40,10 +43,11 @@ function MentoringReservation() {
   const params = useParams();
   const [mentorData, setMentorData] = useState();
   const [nickName, setNickName] = useState('');
+  const [initialData, setInitialData] = useState()
 
-  const [isFinishSet, setIsFinishSet] = useState(false)
+  const [isFinish, setIsFinish] = useState(false)
   useEffect(() => {
-  }, [isFinishSet])
+  }, [isFinish])
 
   useEffect(() => {
     API.getAccountMentor(params.id).then((value) => {
@@ -57,6 +61,18 @@ function MentoringReservation() {
         setNickName(value.data.Nickname);
       }
     })
+    if (getParsedLocalStorage('reservations') && getParsedLocalStorage('reservations')[+params.id]) {
+      setInitialData({
+        startTime: new Date(getParsedLocalStorage('reservations')[+params.id].startTime),
+        consultingTime: getParsedLocalStorage('reservations')[+params.id].consultingTime,
+      })
+    } else {
+      setInitialData({
+        startTime: null,
+        consultingTime: null,
+      })
+    }
+
   }, [])
 
 
@@ -76,15 +92,30 @@ function MentoringReservation() {
         </MaxWidthDiv>
         <GrayBackground >
           <CardsWrapper >
-            <MentorCalendar setIsFinishSet={setIsFinishSet}>
-            </MentorCalendar>
+            {/* <MentorCalendar setIsFinish={setIsFinish}>
+            </MentorCalendar> */}
+            {/* <MenteeCalendar
+                userId={+params.id}
+                startDate={new Date(2023, 1, 9, 12, 30)}
+                consultingTime={20}
+                setIsFinished={setIsFinish}
+              /> */}
+            {initialData !== undefined && <MenteeCalendar2
+              userId={+params.id}
+              startDate={initialData.startTime}
+              consultingTime={initialData.consultingTime}
+              setIsFinished={setIsFinish}
+            />}
+
           </CardsWrapper>
           {
-            isFinishSet &&
+            isFinish &&
             <CardsWrapper2>
+              {/* {mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />} */}
               {mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />}
             </CardsWrapper2>
           }
+
         </GrayBackground>
       </FullWidthWrapper>
     </div>
