@@ -36,12 +36,17 @@ function JobCategoryGroup() {
 
   const [mentorList, setMentorList] = useState()
   useEffect(() => {
-    API.getAccountMentorList().then((res) => {
-      if (res.status === 200) {
+    let isCancel = false
+    const apiCall = API.getAccountMentorList()
+    apiCall.then((res) => {
+      if (!isCancel)
         setMentorList(res.data.Results)
-      }
     })
+    return () => {
+      isCancel = true
+    }
   }, [])
+
   return (
     <FamousMentorGroupWrapper>
       <TopWrapper>
