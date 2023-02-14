@@ -262,6 +262,16 @@ const MenteeCalendar2 = (props:
             dispatch({ type: 'updateCurrentYearAndMonth', payload: state.currentYearAndMonth })
     }, [])
 
+    const [test, setTest] = useState()
+    useEffect(() => {
+        const tempFunc = async () => {
+            const res = await API.getAccountMentorList()
+            setTest(res)
+            console.log(res)
+        }
+        tempFunc()
+    }, [])
+
     // availableDate,Times 설정
     useEffect(() => {
         // 선택 가능 날짜 데이터 받아오고, state 설정하기
@@ -390,7 +400,7 @@ const MenteeCalendar2 = (props:
                         <ChevronLeftIcon sx={{ color: state.currentYearAndMonth.getMonth() === new Date().getMonth() ? colorTextDisabled : 'black' }} />
                     </IconButton>
                     <TextSubtitle2 style={{
-                        backgroundColor: colorBackgroundGrayLight,
+                        // backgroundColor: colorBackgroundGrayLight,
                         padding: '4px 12px',
                         borderRadius: '8px',
                     }}>{koDtf.format(state.currentYearAndMonth)}</TextSubtitle2>
@@ -447,7 +457,7 @@ const MenteeCalendar2 = (props:
                     paddingTop: '16px',
                 }}
             >
-                <TextSubtitle1>상담시간</TextSubtitle1>
+                <TextSubtitle1>상담 시간</TextSubtitle1>
                 <TimeButtonWrapper
                     value={state.consultingTime}
                     exclusive

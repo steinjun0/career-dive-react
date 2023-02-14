@@ -441,7 +441,7 @@ const MentorCalendar = (props: { userId: number }) => {
                         <ChevronLeftIcon sx={{ color: state.currentYearAndMonth.getMonth() === new Date().getMonth() ? colorTextDisabled : 'black' }} />
                     </IconButton>
                     <TextSubtitle2 style={{
-                        backgroundColor: colorBackgroundGrayLight,
+                        // backgroundColor: colorBackgroundGrayLight,
                         padding: '4px 12px',
                         borderRadius: '8px',
                     }}>{koDtf.format(state.currentYearAndMonth)}</TextSubtitle2>
