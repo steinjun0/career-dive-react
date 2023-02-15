@@ -114,20 +114,11 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
         }
 
         case 'updateAvailableTimes': {
-            if (state.calendarState === 'add') {
-                return {
-                    ...state,
-                    selectedDate: state.selectedDate,
-                    availableTimes: action.payload,
-                }
-            } else {
-                return {
-                    ...state,
-                    selectedDate: state.availableDates[0] ?? null,
-                    availableTimes: action.payload,
-                }
+            return {
+                ...state,
+                selectedDate: state.selectedDate ?? state.availableDates[0] ?? null,
+                availableTimes: action.payload,
             }
-
         }
 
         case 'resetAvailableTimes': {
@@ -395,7 +386,7 @@ const MentorCalendar = (props: { userId: number }) => {
                 if (res.status === 200) {
                     updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
                     setTimeout(() => {
-                        dispatch({ type: 'updateCalendarState', payload: "view" })
+                        dispatch({ type: 'forceRendering' })
                     }, 1);
                 }
             })
