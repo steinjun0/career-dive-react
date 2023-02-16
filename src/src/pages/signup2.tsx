@@ -1,13 +1,12 @@
-import { Box, Divider, styled, TextField } from "@mui/material";
-import { TextFieldWrapper } from "component/myPage/MenteeIntroduce";
+import { Divider, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import { CustomCheckbox } from "util/Custom/CustomCheckbox";
-import { CustomPasswordTextField } from "util/Custom/CustomPasswordTextField";
 import CustomTextField from "util/ts/Custom/CustomTextField";
-import { CenterFlex, colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextLight, EmptyHeight, Flex, RowAlignCenterFlex, TextBody2, TextCaption, TextHeading6, VerticalFlex } from "util/styledComponent";
+import { colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextLight, EmptyHeight, Flex, RowAlignCenterFlex, TextBody2, TextCaption, TextHeading6, VerticalFlex } from "util/styledComponent";
 import SignupTemplate from "./signup/SignupTemplate";
-import { validateEmail, validatePassword } from "util/ts/util";
+import *  as util from "util/ts/util";
+import API from "API";
 
 const TermsButton = styled(Flex)({
   justifyContent: 'center',
@@ -32,6 +31,10 @@ export default function Signup2() {
   const [isCheckMarketing, setIsCheckMarketing] = useState(false);
   const [isCheckAll, setIsCheckAll] = useState(false);
 
+  const [emailHelperText, setEmailHelperText] = useState<string>('')
+  const [passwordHelperText, setPasswordHelperText] = useState<string>('')
+
+
   function toggleAll() {
     if (isCheckUsingTerm &&
       isCheckPersonalData &&
@@ -47,20 +50,40 @@ export default function Signup2() {
     }
   }
 
-  useEffect(() => {
+  async function validateEmail() {
     if (email === '') {
-      setIsEmailValid(true)
+      setEmailHelperText('이메일을 입력해주세요')
+    } else if (!util.validateEmail(email)) {
+      setEmailHelperText('올바른 이메일 형식을 입력해 주세요.')
     } else {
-      setIsEmailValid(validateEmail(email))
+      if (!await API.getAccountEmailDuplicate(email)) {
+        setEmailHelperText('이미 존재하는 이메일이에요.')
+      } else {
+        setIsEmailValid(true)
+        return
+      }
     }
+    setIsEmailValid(false)
+  }
+
+  function validatePassword() {
+
+    if (password === '') {
+      setPasswordHelperText('비밀번호를 입력해 주세요.')
+    } else if (!util.validatePassword(password)) {
+      setPasswordHelperText('영문, 숫자, 특수문자를 혼합하여 8자 이상으로 설정해주세요.')
+    } else {
+      return setIsPasswordValid(true)
+    }
+    setIsPasswordValid(false)
+  }
+
+  useEffect(() => {
+    setIsEmailValid(true)
   }, [email])
 
   useEffect(() => {
-    if (password === '') {
-      setIsPasswordValid(true)
-    } else {
-      setIsPasswordValid(validatePassword(password))
-    }
+    setIsPasswordValid(true)
   }, [password])
 
   useEffect(() => {
@@ -76,9 +99,10 @@ export default function Signup2() {
       <section style={{ height: 72 }}>
         <CustomTextField
           onChange={(event) => { setEmail(event.target.value) }}
+          onBlur={(event) => { validateEmail() }}
           placeholder="이메일"
           error={!isEmailValid}
-          helperText={!isEmailValid ? "올바른 형식으로 입력해주세요" : undefined}
+          helperText={!isEmailValid ? emailHelperText : undefined}
           height="48px"
         />
       </section>
@@ -90,9 +114,11 @@ export default function Signup2() {
         <div style={{ height: 72 }}>
           <CustomTextField
             onChange={(event) => { setPassword(event.target.value) }}
+            onFocus={() => { validateEmail() }}
+            onBlur={() => { validatePassword() }}
             placeholder="비밀번호"
             error={!isPasswordValid}
-            helperText={!isPasswordValid ? "비밀번호는 영문, 숫자, 특수문자 포함 8자 이상입니다." : undefined}
+            helperText={!isPasswordValid ? passwordHelperText : undefined}
             height="48px"
             type="password"
           />
@@ -139,19 +165,21 @@ export default function Signup2() {
             약관
           </TermsButton>
         </Flex>
+
+        <Divider style={{ margin: '12px 0', color: colorBackgroundGrayMedium }}></Divider>
+        <Flex>
+          <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} onClick={toggleAll} children={undefined} />
+          <TextBody2 style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }} onClick={(e) => { toggleAll() }}>전체 동의</TextBody2>
+        </Flex>
       </section>
-      <Divider style={{ margin: '12px 0', color: colorBackgroundGrayMedium }}></Divider>
-      <Flex>
-        <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} onClick={toggleAll} children={undefined} />
-        <TextBody2 style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }} onClick={(e) => { toggleAll() }}>전체 동의</TextBody2>
-      </Flex>
 
       <CustomButton
         style={{ marginTop: 24 }}
         disabled={!isCheckPersonalData || !isCheckUsingTerm || email === '' || password === '' || !isEmailValid || !isPasswordValid}
         height={'48px'}
         onClick={() => {
-
+          validateEmail()
+          validatePassword()
         }}>
         다음
       </CustomButton>

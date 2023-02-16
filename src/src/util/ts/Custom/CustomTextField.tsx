@@ -27,6 +27,8 @@ const CustomTextFieldStyle = styled(TextField)((props: { height?: CSSProperties[
 
 export default function CustomTextField(
   { onChange,
+    onBlur,
+    onFocus,
     placeholder,
     error = false,
     helperText,
@@ -35,6 +37,8 @@ export default function CustomTextField(
   }:
     {
       onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>,
+      onBlur?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>,
+      onFocus?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>,
       placeholder?: string,
       error?: boolean,
       helperText?: string,
@@ -44,6 +48,8 @@ export default function CustomTextField(
 ) {
   return <CustomTextFieldStyle
     onChange={onChange}
+    onBlur={onBlur}
+    onFocus={onFocus}
     variant="filled"
     fullWidth={true}
     size="small"
