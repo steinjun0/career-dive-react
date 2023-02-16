@@ -170,6 +170,11 @@ export const RowAlignCenterFlex = styled(Flex)`
   height: 100%;
 `;
 
+export const CenterFlex = styled(Flex)({
+  justifyContent: 'center',
+  alignItems: 'center'
+})
+
 export const FullWidthWrapper = styled(VerticalFlex)`
   justify-content: center;
   align-items: center;
