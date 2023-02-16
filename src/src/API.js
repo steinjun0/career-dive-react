@@ -181,6 +181,21 @@ export default {
     return accountRes
   },
 
+  async getAccountEmailDuplicate(email) {
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/email?email=${email}`)
+    return accountRes
+  },
+
+  async getAccountNicknameDuplicate(nickname) {
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/nickname?nickname=${nickname}`)
+    return accountRes
+  },
+
+  async getAccountPhoneDuplicate(phone) {
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/phone?phone=${phone}`)
+    return accountRes
+  },
+
   async getAccountMentor(id) {
     const accountMentornRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/mentor/${id}`)
     return accountMentornRes
