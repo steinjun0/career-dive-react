@@ -182,17 +182,17 @@ export default {
   },
 
   async getAccountEmailDuplicate(email) {
-    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/email?email=${email}`)
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/validation/email?email=${email}`)
     return accountRes
   },
 
   async getAccountNicknameDuplicate(nickname) {
-    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/nickname?nickname=${nickname}`)
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/validation/nickname?nickname=${nickname}`)
     return accountRes
   },
 
   async getAccountPhoneDuplicate(phone) {
-    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/phone?phone=${phone}`)
+    const accountRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/validation/phone?phone=${phone}`)
     return accountRes
   },
 
