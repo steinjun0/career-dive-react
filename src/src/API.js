@@ -395,9 +395,9 @@ export default {
     return userRes
   },
 
-  async patchConsultSchedule(scheduleId, startTime, endTime, mentorId, date) {
+  async patchConsultSchedule(scheduleId, startTime, endTime, mentorId) {
     const patchRes = await this.patchAxios(`${CAREER_DIVE_API_URL}/consult/schedule/${scheduleId}`,
-      { Date: date, StartTime: startTime, EndTime: endTime, MentorID: +mentorId })
+      { StartTime: startTime, EndTime: endTime, MentorID: +mentorId, RuleID: -1, })
     return patchRes
   },
 

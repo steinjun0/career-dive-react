@@ -284,24 +284,19 @@ const MentorCalendar = (props: { userId: number }) => {
         else if (state.calendarState === 'edit') {
             // day add
             state.tempSchedules!
-                .filter(schedule => schedule.ruleType === 'custom')
+                .filter((schedule: any) => schedule.ruleType === 'custom' && schedule.ruleDelete !== 'day')
                 .forEach(schedule => {
-                    dayTimes.push({
-                        Day: schedule.startTime.getDate(),
-                        StartEnds: [{
-                            StartTime: getHoursAndMinuteString(schedule.startTime),
-                            EndTime: getHoursAndMinuteString(schedule.endTime)
-                        }],
-                    })
+                    const startTime = getHoursAndMinuteString(schedule.startTime)
+                    const endTime = getHoursAndMinuteString(schedule.endTime)
+                    apiList.push(
+                        API.patchConsultSchedule(
+                            schedule.scheduleId,
+                            startTime,
+                            endTime,
+                            Number(localStorage.getItem('UserID'))
+                        )
+                    )
                 })
-
-            apiList.push(
-                API.postConsultSchedule(dayTimes,
-                    state.selectedDate!.getFullYear(),
-                    state.selectedDate!.getMonth() + 1,
-                    Number(localStorage.getItem('UserID'))
-                )
-            )
 
             // rule add/patch
             apiList.push(
@@ -341,7 +336,8 @@ const MentorCalendar = (props: { userId: number }) => {
                     })
             )
 
-            // rule delete
+            console.log('state.tempSchedules', state.tempSchedules)
+            // day/rule delete
             apiList.push(
                 ...state.tempSchedules!.map(function (schedule) {
                     const ruleDelete = (schedule as { startTime: Date; endTime: Date; ruleType: RuleType; ruleId: number; scheduleId: number; ruleDelete: 'rule' | 'day'; }).ruleDelete;
@@ -351,6 +347,7 @@ const MentorCalendar = (props: { userId: number }) => {
                             `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
                         );
                     } else if (ruleDelete === 'day') {
+                        console.log(schedule)
                         return API.deleteConsultSchedule(
                             schedule.scheduleId
                         );
@@ -396,8 +393,6 @@ const MentorCalendar = (props: { userId: number }) => {
     useEffect(() => {
         resetAll()
     }, [state.currentYearAndMonth])
-
-
 
 
     // useEffect(() => {
@@ -507,7 +502,7 @@ const MentorCalendar = (props: { userId: number }) => {
                                         onClick={() => {
                                             dispatch({ type: 'updateCalendarState', payload: 'view' })
                                             setTimeout(() => {
-                                                dispatch({ type: 'updateCalendarState', payload: "view" })
+                                                dispatch({ type: 'forceRendering' })
                                             }, 1);
                                         }}
                                     >
@@ -523,7 +518,7 @@ const MentorCalendar = (props: { userId: number }) => {
                                         onClick={() => {
                                             saveCalendar()
                                             setTimeout(() => {
-                                                dispatch({ type: 'updateCalendarState', payload: "view" })
+                                                dispatch({ type: 'forceRendering' })
                                             }, 1);
                                         }}
                                     >
@@ -597,8 +592,7 @@ const MentorCalendar = (props: { userId: number }) => {
                             }
                         )
                     }
-                    {
-                        ['add'].includes(state.calendarState) && state.selectedDate && state.newTime &&
+                    {['add'].includes(state.calendarState) && state.selectedDate && state.newTime &&
                         <TimeEditor
                             selectedDate={state.selectedDate}
                             startTime={state.newTime.startTime}
@@ -652,11 +646,8 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
     })
 
     const times: Date[] = Array(24).fill(0).map((e, i) => {
-        const temp = new Date(props.selectedDate)
-        temp.setHours(i)
-        return temp
+        return new Date(new Date(new Date(props.selectedDate).setMinutes(0)).setHours(i))
     })
-
     const [startTime, setStartTime] = useState<Date>(props.startTime ?? new Date(new Date(props.selectedDate).setHours(8)))
     const [endTime, setEndTime] = useState<Date>(props.endTime ?? new Date(new Date(props.selectedDate).setHours(23)))
     const [ruleType, setRuleType] = useState<typeof props.ruleType>(props.ruleType ?? 'week')
@@ -685,6 +676,8 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
 
     }, [startTime, endTime, ruleType])
 
+
+
     return <Flex style={{ justifyContent: 'space-between', alignItems: 'start' }}>
         <VerticalFlex style={{ gap: '8px', color: colorTextLight }}>
             <Flex style={{ alignItems: 'center', gap: '4px' }}>
@@ -694,7 +687,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         sx={longSelectStyle}
                         items={times}
                         texts={hours}
-                        initialValue={startTime}
+                        initialValue={new Date(new Date(startTime).setMinutes(0))}
                         onChange={(e: string) => {
                             setStartTime(new Date(e))
                         }} />
@@ -718,7 +711,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         sx={longSelectStyle}
                         items={times.slice(startTime?.getHours() + (startTime?.getMinutes() === 30 ? 1 : 0))}
                         texts={hours.slice(startTime?.getHours() + (startTime?.getMinutes() === 30 ? 1 : 0))}
-                        initialValue={endTime}
+                        initialValue={new Date(new Date(endTime).setMinutes(0))}
                         onChange={(e: Date) => {
                             setEndTime(new Date(e))
                         }} />
