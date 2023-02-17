@@ -64,6 +64,11 @@ interface IcalendarState {
     tempSchedules: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number, ruleDelete?: 'rule' | 'day' }[] | null
 }
 
+interface IDayTime {
+    Day: number,
+    StartEnds: { StartTime: string, EndTime: string, RuleType: RuleType, RuleID: number, ScheduleID: number }[]
+}
+
 
 function reducer(state: IcalendarState, action: ACTIONTYPE) {
 
@@ -117,7 +122,7 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
         case 'updateAvailableTimes': {
             return {
                 ...state,
-                selectedDate: state.selectedDate ?? state.availableDates[0] ?? null,
+                selectedDate: state.selectedDate ?? state.availableDates[0] ?? new Date(new Date().setMinutes(0)),
                 availableTimes: action.payload,
             }
         }
@@ -173,6 +178,191 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
     }
 }
 
+async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispatch: (value: ACTIONTYPE) => void }) {
+    const apiList = []
+
+    const dayTimes = [...Object.keys(state.availableTimes)
+        .map((date) => {
+            return {
+                Day: Number(date),
+                StartEnds: [...state.availableTimes[+date].filter((e) => {
+                    if (e.ruleType === 'custom')
+                        return true
+                    else
+                        return false
+                }).map((e) => {
+                    return {
+                        StartTime: getHoursAndMinuteString(e.startTime),
+                        EndTime: getHoursAndMinuteString(e.endTime),
+                    }
+                })],
+            }
+        })
+    ]
+    // 추가
+    if (state.calendarState === 'add') {
+        let apiCall: Promise<AxiosResponse> | null = null
+        if (state.newTime!.ruleType === 'custom') {
+            dayTimes.push({
+                Day: state.newTime!.startTime.getDate(),
+                StartEnds: [{
+                    StartTime: getHoursAndMinuteString(state.newTime!.startTime),
+                    EndTime: getHoursAndMinuteString(state.newTime!.endTime)
+                }],
+            })
+
+            apiList.push(
+                API.postConsultSchedule(dayTimes,
+                    state.selectedDate!.getFullYear(),
+                    state.selectedDate!.getMonth() + 1,
+                    Number(localStorage.getItem('UserID'))
+                )
+            )
+        } else {
+            if (state.newTime) {
+                const startTime = getHoursAndMinuteString(state.newTime.startTime)
+                const endTime = getHoursAndMinuteString(state.newTime.endTime)
+                const weekDay = state.newTime.startTime.getDay()
+                const type = state.newTime.ruleType
+
+                apiList.push(
+                    API.postConsultScheduleRule(
+                        startTime,
+                        endTime,
+                        weekDay,
+                        type,
+                        Number(localStorage.getItem('UserID')),
+                        `${state.newTime.startTime.getFullYear()}-${`${state.newTime.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${state.newTime.startTime.getDate()}`.padStart(2, '0')}`
+                    )
+                )
+            }
+        }
+
+    }
+    // 수정
+    else if (state.calendarState === 'edit') {
+        // patch day
+        state.tempSchedules!
+            .filter((schedule: any) => schedule.ruleType === 'custom' && schedule.ruleDelete !== 'day')
+            .forEach(schedule => {
+                const startTime = getHoursAndMinuteString(schedule.startTime)
+                const endTime = getHoursAndMinuteString(schedule.endTime)
+                apiList.push(
+                    API.patchConsultSchedule(
+                        schedule.scheduleId,
+                        startTime,
+                        endTime,
+                        Number(localStorage.getItem('UserID'))
+                    )
+                )
+            })
+
+        // patch rule 
+        apiList.push(
+            ...state.tempSchedules!
+                .filter(schedule => schedule.ruleType !== 'custom' && [null, undefined].includes((schedule as any).ruleDelete))
+                .map(schedule => {
+                    const startTime = getHoursAndMinuteString(schedule.startTime)
+                    const endTime = getHoursAndMinuteString(schedule.endTime)
+                    const weekDay = schedule.startTime.getDay()
+                    const type = schedule.ruleType
+                    // 원래 규칙이 아니었다면 add
+                    if (!state.availableTimes[state.selectedDate!.getDate()]
+                        .find(e => e.scheduleId === schedule.scheduleId)) {
+                        return API.postConsultScheduleRule(
+                            startTime,
+                            endTime,
+                            weekDay,
+                            type,
+                            Number(localStorage.getItem('UserID')),
+                            `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
+                        )
+                    }
+                    // 원래 규칙이었다면 patch
+                    else {
+                        return API.patchConsultScheduleRule(
+                            schedule.ruleId,
+                            startTime,
+                            endTime,
+                            weekDay,
+                            type,
+                            Number(localStorage.getItem('UserID')),
+                            `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
+                        )
+                    }
+
+                })
+        )
+
+        // day/rule delete
+        apiList.push(
+            ...state.tempSchedules!.map(function (schedule) {
+                const ruleDelete = (schedule as { startTime: Date; endTime: Date; ruleType: RuleType; ruleId: number; scheduleId: number; ruleDelete: 'rule' | 'day'; }).ruleDelete;
+                if (ruleDelete === 'rule') {
+                    return API.deleteConsultScheduleRule(
+                        schedule.ruleId,
+                        `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
+                    );
+                } else if (ruleDelete === 'day') {
+                    return API.deleteConsultSchedule(
+                        schedule.scheduleId
+                    );
+                }
+
+            })
+        )
+    }
+    Promise.all(apiList).then(() => {
+        API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
+            .then((res) => {
+                if (res.status === 200) {
+                    updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes, state, dispatch)
+                    dispatch({ type: 'updateCalendarState', payload: 'view' })
+                    resetAll(state, dispatch)
+                }
+            })
+    })
+}
+
+function updateAvailableTimes(year: number, month: number, dayTimes: IDayTime[], state: IcalendarState, dispatch: (value: ACTIONTYPE) => void) {
+    const tempTimes: IavailableTime = {}
+    for (let i = 0; i < dayTimes.length; i++) {
+        const dayTime = dayTimes[i]
+        if (!isPastDate(new Date(year, month - 1, dayTime.Day))) {
+            dispatch({ type: 'updateAvailableDates', payload: [new Date(year, month - 1, dayTime.Day)] })
+            for (let j = 0; j < dayTime.StartEnds.length; j++) {
+                const startEnd = dayTime.StartEnds[j]
+                if (tempTimes[dayTime.Day] === undefined)
+                    tempTimes[dayTime.Day] = []
+                tempTimes[dayTime.Day].push({
+                    startTime: new Date(year, month - 1, dayTime.Day, +startEnd.StartTime.slice(0, 2), +startEnd.StartTime.slice(3, 5)),
+                    endTime: new Date(year, month - 1, dayTime.Day, +startEnd.EndTime.slice(0, 2), +startEnd.EndTime.slice(3, 5)),
+                    ruleType: startEnd.RuleType,
+                    ruleId: startEnd.RuleID,
+                    scheduleId: startEnd.ScheduleID
+                })
+            }
+        }
+    }
+    dispatch({ type: 'updateAvailableTimes', payload: tempTimes })
+}
+
+function resetAll(state: IcalendarState, dispatch: (value: ACTIONTYPE) => void) {
+    // 선택 가능 날짜 데이터 받아오고, state 설정하기
+    dispatch({ type: 'resetAvailableDates' })
+    dispatch({ type: 'resetAvailableTimes' })
+
+    API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
+        .then((res) => {
+            if (res.status === 200) {
+                updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes, state, dispatch)
+                setTimeout(() => {
+                    dispatch({ type: 'forceRendering' })
+                }, 1);
+            }
+        })
+}
+
 const MentorCalendar = (props: { userId: number }) => {
     const initialState: IcalendarState =
     {
@@ -188,182 +378,8 @@ const MentorCalendar = (props: { userId: number }) => {
 
     const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
 
-    interface IDayTime {
-        Day: number,
-        StartEnds: { StartTime: string, EndTime: string, RuleType: RuleType, RuleID: number, ScheduleID: number }[]
-    }
-
-    function updateAvailableTimes(year: number, month: number, dayTimes: IDayTime[]) {
-        const tempTimes: IavailableTime = {}
-        for (let i = 0; i < dayTimes.length; i++) {
-            const dayTime = dayTimes[i]
-            if (!isPastDate(new Date(year, month - 1, dayTime.Day))) {
-                dispatch({ type: 'updateAvailableDates', payload: [new Date(year, month - 1, dayTime.Day)] })
-                for (let j = 0; j < dayTime.StartEnds.length; j++) {
-                    const startEnd = dayTime.StartEnds[j]
-                    if (tempTimes[dayTime.Day] === undefined)
-                        tempTimes[dayTime.Day] = []
-                    tempTimes[dayTime.Day].push({
-                        startTime: new Date(year, month - 1, dayTime.Day, +startEnd.StartTime.slice(0, 2), +startEnd.StartTime.slice(3, 5)),
-                        endTime: new Date(year, month - 1, dayTime.Day, +startEnd.EndTime.slice(0, 2), +startEnd.EndTime.slice(3, 5)),
-                        ruleType: startEnd.RuleType,
-                        ruleId: startEnd.RuleID,
-                        scheduleId: startEnd.ScheduleID
-                    })
-                }
-            }
-        }
-        dispatch({ type: 'updateAvailableTimes', payload: tempTimes })
-    }
-
     function addCurrentYearAndMonth(month: number) {
         dispatch({ type: 'updateCurrentYearAndMonth', payload: new Date(state.currentYearAndMonth.setMonth(state.currentYearAndMonth.getMonth() + month)) })
-    }
-
-    async function saveCalendar() {
-        const apiList = []
-
-        const dayTimes = [...Object.keys(state.availableTimes)
-            .map((date) => {
-                return {
-                    Day: Number(date),
-                    StartEnds: [...state.availableTimes[+date].filter((e) => {
-                        if (e.ruleType === 'custom')
-                            return true
-                        else
-                            return false
-                    }).map((e) => {
-                        return {
-                            StartTime: getHoursAndMinuteString(e.startTime),
-                            EndTime: getHoursAndMinuteString(e.endTime),
-                        }
-                    })],
-                }
-            })
-        ]
-        // 추가
-        if (state.calendarState === 'add') {
-            let apiCall: Promise<AxiosResponse> | null = null
-            if (state.newTime!.ruleType === 'custom') {
-                dayTimes.push({
-                    Day: state.newTime!.startTime.getDate(),
-                    StartEnds: [{
-                        StartTime: getHoursAndMinuteString(state.newTime!.startTime),
-                        EndTime: getHoursAndMinuteString(state.newTime!.endTime)
-                    }],
-                })
-
-                apiList.push(
-                    API.postConsultSchedule(dayTimes,
-                        state.selectedDate!.getFullYear(),
-                        state.selectedDate!.getMonth() + 1,
-                        Number(localStorage.getItem('UserID'))
-                    )
-                )
-            } else {
-                if (state.newTime) {
-                    const startTime = getHoursAndMinuteString(state.newTime.startTime)
-                    const endTime = getHoursAndMinuteString(state.newTime.endTime)
-                    const weekDay = state.newTime.startTime.getDay()
-                    const type = state.newTime.ruleType
-
-                    apiList.push(
-                        API.postConsultScheduleRule(
-                            startTime,
-                            endTime,
-                            weekDay,
-                            type,
-                            Number(localStorage.getItem('UserID')),
-                            `${state.newTime.startTime.getFullYear()}-${`${state.newTime.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${state.newTime.startTime.getDate()}`.padStart(2, '0')}`
-                        )
-                    )
-                }
-            }
-
-        }
-        // 수정
-        else if (state.calendarState === 'edit') {
-            // patch day
-            state.tempSchedules!
-                .filter((schedule: any) => schedule.ruleType === 'custom' && schedule.ruleDelete !== 'day')
-                .forEach(schedule => {
-                    const startTime = getHoursAndMinuteString(schedule.startTime)
-                    const endTime = getHoursAndMinuteString(schedule.endTime)
-                    apiList.push(
-                        API.patchConsultSchedule(
-                            schedule.scheduleId,
-                            startTime,
-                            endTime,
-                            Number(localStorage.getItem('UserID'))
-                        )
-                    )
-                })
-
-            // patch rule 
-            apiList.push(
-                ...state.tempSchedules!
-                    .filter(schedule => schedule.ruleType !== 'custom' && [null, undefined].includes((schedule as any).ruleDelete))
-                    .map(schedule => {
-                        const startTime = getHoursAndMinuteString(schedule.startTime)
-                        const endTime = getHoursAndMinuteString(schedule.endTime)
-                        const weekDay = schedule.startTime.getDay()
-                        const type = schedule.ruleType
-                        // 원래 규칙이 아니었다면 add
-                        if (!state.availableTimes[state.selectedDate!.getDate()]
-                            .find(e => e.scheduleId === schedule.scheduleId)) {
-                            return API.postConsultScheduleRule(
-                                startTime,
-                                endTime,
-                                weekDay,
-                                type,
-                                Number(localStorage.getItem('UserID')),
-                                `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
-                            )
-                        }
-                        // 원래 규칙이었다면 patch
-                        else {
-                            return API.patchConsultScheduleRule(
-                                schedule.ruleId,
-                                startTime,
-                                endTime,
-                                weekDay,
-                                type,
-                                Number(localStorage.getItem('UserID')),
-                                `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
-                            )
-                        }
-
-                    })
-            )
-
-            // day/rule delete
-            apiList.push(
-                ...state.tempSchedules!.map(function (schedule) {
-                    const ruleDelete = (schedule as { startTime: Date; endTime: Date; ruleType: RuleType; ruleId: number; scheduleId: number; ruleDelete: 'rule' | 'day'; }).ruleDelete;
-                    if (ruleDelete === 'rule') {
-                        return API.deleteConsultScheduleRule(
-                            schedule.ruleId,
-                            `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
-                        );
-                    } else if (ruleDelete === 'day') {
-                        return API.deleteConsultSchedule(
-                            schedule.scheduleId
-                        );
-                    }
-
-                })
-            )
-        }
-        Promise.all(apiList).then(() => {
-            API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
-                .then((res) => {
-                    if (res.status === 200) {
-                        updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
-                        dispatch({ type: 'updateCalendarState', payload: 'view' })
-                        resetAll()
-                    }
-                })
-        })
     }
 
     useEffect(() => {
@@ -371,25 +387,9 @@ const MentorCalendar = (props: { userId: number }) => {
         setTimeout(() => { dispatch({ type: 'forceRendering', }) }, 1);
     }, [])
 
-    function resetAll() {
-        // 선택 가능 날짜 데이터 받아오고, state 설정하기
-        dispatch({ type: 'resetAvailableDates' })
-        dispatch({ type: 'resetAvailableTimes' })
-
-        API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
-            .then((res) => {
-                if (res.status === 200) {
-                    updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes)
-                    setTimeout(() => {
-                        dispatch({ type: 'forceRendering' })
-                    }, 1);
-                }
-            })
-    }
-
     // availableDate,Times 설정
     useEffect(() => {
-        resetAll()
+        resetAll(state, dispatch)
     }, [state.currentYearAndMonth])
 
 
@@ -491,40 +491,8 @@ const MentorCalendar = (props: { userId: number }) => {
                     <Flex style={{ justifyContent: 'space-between', alignItems: 'center', height: '32px' }}>
                         <TextSubtitle1>상담 가능 시간대 설정</TextSubtitle1>
                         <Flex style={{ gap: '8px' }}>
-                            {['edit', 'add'].includes(state.calendarState) &&
-                                <>
-                                    <CustomButton
-                                        background_color={colorBackgroundGrayLight}
-                                        custom_color={colorTextLight}
-                                        style={{ padding: '7px', }}
-                                        onClick={() => {
-                                            dispatch({ type: 'updateCalendarState', payload: 'view' })
-                                            setTimeout(() => {
-                                                dispatch({ type: 'forceRendering' })
-                                            }, 1);
-                                        }}
-                                    >
-                                        <ShortcutOutlinedIcon
-                                            style={{ transform: 'scaleX(-1)' }}
-                                            fontSize={'small'}
-                                        />
-                                    </CustomButton>
-                                    <CustomButton
-                                        background_color={colorBackgroundCareerDiveBlue}
-                                        custom_color={colorCareerDiveBlue}
-                                        style={{ padding: '7px', }}
-                                        onClick={() => {
-                                            saveCalendar()
-                                            setTimeout(() => {
-                                                dispatch({ type: 'forceRendering' })
-                                            }, 1);
-                                        }}
-                                    >
-                                        <CheckIcon
-                                            fontSize={'small'}
-                                        />
-                                    </CustomButton>
-                                </>
+                            {['edit'].includes(state.calendarState) &&
+                                <BackAndSave state={state} dispatch={dispatch} saveCalendar={saveCalendar} />
                             }
                             {
                                 ['view'].includes(state.calendarState) &&
@@ -605,6 +573,42 @@ const MentorCalendar = (props: { userId: number }) => {
         </Card >
     );
 };
+
+function BackAndSave({ state, dispatch, saveCalendar }: { state: IcalendarState, dispatch: (value: ACTIONTYPE) => void, saveCalendar: Function }) {
+    return <Flex style={{ gap: 8 }}>
+        <CustomButton
+            background_color={colorBackgroundGrayLight}
+            custom_color={colorTextLight}
+            style={{ padding: '7px', }}
+            onClick={() => {
+                dispatch({ type: 'updateCalendarState', payload: 'view' })
+                setTimeout(() => {
+                    dispatch({ type: 'forceRendering' })
+                }, 1);
+            }}
+        >
+            <ShortcutOutlinedIcon
+                style={{ transform: 'scaleX(-1)' }}
+                fontSize={'small'}
+            />
+        </CustomButton>
+        <CustomButton
+            background_color={colorBackgroundCareerDiveBlue}
+            custom_color={colorCareerDiveBlue}
+            style={{ padding: '7px', }}
+            onClick={() => {
+                saveCalendar({ state, dispatch })
+                setTimeout(() => {
+                    dispatch({ type: 'forceRendering' })
+                }, 1);
+            }}
+        >
+            <CheckIcon
+                fontSize={'small'}
+            />
+        </CustomButton>
+    </Flex>
+}
 
 function TimeShower({ time }: { time: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number; scheduleId: number; } }) {
     return <TagLarge style={{ padding: '4px 12px', width: 'fit-content' }}>
@@ -740,7 +744,8 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                 </Flex>
             </Flex>
         </VerticalFlex>
-        <CustomButton
+        {props.state.calendarState === 'add' && <BackAndSave state={props.state} dispatch={props.dispatch} saveCalendar={saveCalendar} />}
+        {props.state.calendarState === 'edit' && <CustomButton
             background_color={colorBackgroundCareerDivePink}
             custom_color={colorCareerDivePink}
             style={{ padding: '7px', }}
@@ -764,7 +769,8 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                 fontSize={'small'}
             />
 
-        </CustomButton>
+        </CustomButton>}
+
         {isShowDeleteDropDown && <Flex style={{ position: 'relative', zIndex: 10 }}>
             <VerticalFlex style={{ color: colorCareerDivePink, position: 'absolute', zIndex: 10, top: '0px', right: '0px', width: '140px', padding: '8px', backgroundColor: 'white', border: '1px solid #eee', borderRadius: '8px' }}>
                 <Flex style={{ marginLeft: 'auto', marginBottom: 10, cursor: 'pointer' }} onClick={() => setIsShowDeleteDropDown(false)}><CloseIcon fontSize="small" /></Flex>
