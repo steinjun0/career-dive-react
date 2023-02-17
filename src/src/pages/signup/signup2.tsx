@@ -4,9 +4,10 @@ import { CustomButton } from "util/Custom/CustomButton";
 import { CustomCheckbox } from "util/Custom/CustomCheckbox";
 import CustomTextField from "util/ts/Custom/CustomTextField";
 import { colorBackgroundGrayMedium, colorCareerDiveBlue, colorTextLight, EmptyHeight, Flex, RowAlignCenterFlex, TextBody2, TextCaption, TextHeading6, VerticalFlex } from "util/styledComponent";
-import SignupTemplate from "./signup/SignupTemplate";
+import SignupTemplate from "./SignupTemplate";
 import *  as util from "util/ts/util";
 import API from "API";
+import { useNavigate } from "react-router-dom";
 
 const TermsButton = styled(Flex)({
   justifyContent: 'center',
@@ -21,6 +22,8 @@ const TermsButton = styled(Flex)({
 })
 
 export default function Signup2() {
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState<string>('')
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true)
   const [password, setPassword] = useState<string>('')
@@ -56,14 +59,16 @@ export default function Signup2() {
     } else if (!util.validateEmail(email)) {
       setEmailHelperText('올바른 이메일 형식을 입력해 주세요.')
     } else {
-      if (!await API.getAccountEmailDuplicate(email)) {
+      const res = await API.getAccountEmailDuplicate(email)
+      if (!res.data) {
         setEmailHelperText('이미 존재하는 이메일이에요.')
       } else {
         setIsEmailValid(true)
-        return
+        return true
       }
     }
     setIsEmailValid(false)
+    return false
   }
 
   function validatePassword() {
@@ -73,9 +78,11 @@ export default function Signup2() {
     } else if (!util.validatePassword(password)) {
       setPasswordHelperText('영문, 숫자, 특수문자를 혼합하여 8자 이상으로 설정해주세요.')
     } else {
-      return setIsPasswordValid(true)
+      setIsPasswordValid(true)
+      return true
     }
     setIsPasswordValid(false)
+    return false
   }
 
   useEffect(() => {
@@ -107,7 +114,7 @@ export default function Signup2() {
         />
       </section>
       <section style={{ marginTop: '0' }}>
-        <TextCaption style={{ marginLeft: '4px' }}>
+        <TextCaption style={{ marginLeft: '14px' }}>
           영문, 숫자, 특수문자 포함 8자 이상
         </TextCaption>
         <EmptyHeight height="12px" />
@@ -177,9 +184,12 @@ export default function Signup2() {
         style={{ marginTop: 24 }}
         disabled={!isCheckPersonalData || !isCheckUsingTerm || email === '' || password === '' || !isEmailValid || !isPasswordValid}
         height={'48px'}
-        onClick={() => {
-          validateEmail()
-          validatePassword()
+        onClick={async () => {
+          let emailTemp = await validateEmail()
+          let passwordTemp = validatePassword()
+          if (emailTemp && passwordTemp) {
+            navigate('/signup/phone')
+          }
         }}>
         다음
       </CustomButton>
