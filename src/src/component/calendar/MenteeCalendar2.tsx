@@ -267,7 +267,6 @@ const MenteeCalendar2 = (props:
         const tempFunc = async () => {
             const res = await API.getAccountMentorList()
             setTest(res)
-            console.log(res)
         }
         tempFunc()
     }, [])
