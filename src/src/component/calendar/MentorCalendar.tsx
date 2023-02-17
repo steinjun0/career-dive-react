@@ -546,7 +546,7 @@ const MentorCalendar = (props: { userId: number }) => {
                             }
                         </Flex>
                     </Flex>
-                    {['view'].includes(state.calendarState) &&
+                    {['view', 'add'].includes(state.calendarState) &&
                         state.selectedDate &&
                         state.availableTimes[state.selectedDate?.getDate()] &&
                         state.availableTimes[state.selectedDate?.getDate()].map(
