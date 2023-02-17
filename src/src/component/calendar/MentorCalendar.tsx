@@ -18,6 +18,7 @@ import ShortcutOutlinedIcon from '@mui/icons-material/ShortcutOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import SimpleSelect from "util/ts/SimpleSelect";
 import { AxiosResponse } from "axios";
+import CloseIcon from '@mui/icons-material/Close';
 
 const calendarAnimationStyle = {
     overflow: 'hidden',
@@ -282,7 +283,7 @@ const MentorCalendar = (props: { userId: number }) => {
         }
         // 수정
         else if (state.calendarState === 'edit') {
-            // day add
+            // patch day
             state.tempSchedules!
                 .filter((schedule: any) => schedule.ruleType === 'custom' && schedule.ruleDelete !== 'day')
                 .forEach(schedule => {
@@ -298,19 +299,18 @@ const MentorCalendar = (props: { userId: number }) => {
                     )
                 })
 
-            // rule add/patch
+            // patch rule 
             apiList.push(
                 ...state.tempSchedules!
-                    .filter(schedule => schedule.ruleType !== 'custom' && (schedule as any).ruleDelete === null)
+                    .filter(schedule => schedule.ruleType !== 'custom' && [null, undefined].includes((schedule as any).ruleDelete))
                     .map(schedule => {
                         const startTime = getHoursAndMinuteString(schedule.startTime)
                         const endTime = getHoursAndMinuteString(schedule.endTime)
                         const weekDay = schedule.startTime.getDay()
                         const type = schedule.ruleType
                         // 원래 규칙이 아니었다면 add
-                        if (state.availableTimes[state.selectedDate!.getDate()]
-                            .find(e => e.scheduleId === schedule.scheduleId)!
-                            .ruleType === 'custom') {
+                        if (!state.availableTimes[state.selectedDate!.getDate()]
+                            .find(e => e.scheduleId === schedule.scheduleId)) {
                             return API.postConsultScheduleRule(
                                 startTime,
                                 endTime,
@@ -336,7 +336,6 @@ const MentorCalendar = (props: { userId: number }) => {
                     })
             )
 
-            console.log('state.tempSchedules', state.tempSchedules)
             // day/rule delete
             apiList.push(
                 ...state.tempSchedules!.map(function (schedule) {
@@ -347,7 +346,6 @@ const MentorCalendar = (props: { userId: number }) => {
                             `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
                         );
                     } else if (ruleDelete === 'day') {
-                        console.log(schedule)
                         return API.deleteConsultSchedule(
                             schedule.scheduleId
                         );
@@ -765,40 +763,41 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
             <DeleteIcon
                 fontSize={'small'}
             />
-            {isShowDeleteDropDown && <Flex style={{ position: 'relative', zIndex: 10 }}>
-                <VerticalFlex style={{ position: 'absolute', zIndex: 10, top: '-17px', right: '-6px', width: '140px', padding: '8px', backgroundColor: 'white', border: '1px solid #eee', borderRadius: '8px' }}>
-                    <Flex style={{ marginLeft: 'auto', cursor: 'pointer' }} onClick={() => setIsShowDeleteDropDown(false)}>X</Flex>
-                    <Flex
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                            props.dispatch({
-                                type: 'removeSchedule',
-                                payload: {
-                                    scheduleId: props.scheduleId!,
-                                    ruleDelete: 'rule'
-                                }
-                            })
-                            setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
-                            setIsShowDeleteDropDown(false)
-                        }}>이후 모든 일정 삭제</Flex>
-                    <EmptyHeight height="8px" />
-                    <Flex
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                            props.dispatch({
-                                type: 'removeSchedule',
-                                payload: {
-                                    scheduleId: props.scheduleId!,
-                                    ruleDelete: 'day'
-                                }
-                            })
-                            setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
-                            setIsShowDeleteDropDown(false)
-                        }}>이 일정만 삭제</Flex>
-                </VerticalFlex>
-            </Flex>
-            }
+
         </CustomButton>
+        {isShowDeleteDropDown && <Flex style={{ position: 'relative', zIndex: 10 }}>
+            <VerticalFlex style={{ color: colorCareerDivePink, position: 'absolute', zIndex: 10, top: '0px', right: '0px', width: '140px', padding: '8px', backgroundColor: 'white', border: '1px solid #eee', borderRadius: '8px' }}>
+                <Flex style={{ marginLeft: 'auto', marginBottom: 10, cursor: 'pointer' }} onClick={() => setIsShowDeleteDropDown(false)}><CloseIcon fontSize="small" /></Flex>
+                <Flex
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                        props.dispatch({
+                            type: 'removeSchedule',
+                            payload: {
+                                scheduleId: props.scheduleId!,
+                                ruleDelete: 'rule'
+                            }
+                        })
+                        setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
+                        setIsShowDeleteDropDown(false)
+                    }}>이후 모든 일정 삭제</Flex>
+                <EmptyHeight height="8px" />
+                <Flex
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                        props.dispatch({
+                            type: 'removeSchedule',
+                            payload: {
+                                scheduleId: props.scheduleId!,
+                                ruleDelete: 'day'
+                            }
+                        })
+                        setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
+                        setIsShowDeleteDropDown(false)
+                    }}>이 일정만 삭제</Flex>
+            </VerticalFlex>
+        </Flex>
+        }
 
     </Flex>
 
