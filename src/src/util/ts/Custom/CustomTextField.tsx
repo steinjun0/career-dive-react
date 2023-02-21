@@ -1,4 +1,4 @@
-import { TextField, styled } from "@mui/material";
+import { TextField, styled, TextFieldProps } from "@mui/material";
 import { colorBackgroundGrayLight } from "util/styledComponent";
 import { ChangeEventHandler, CSSProperties } from "react";
 import React from "react";
@@ -26,38 +26,20 @@ const CustomTextFieldStyle = styled(TextField)((props: { height?: CSSProperties[
 }));
 
 export default function CustomTextField(
-  { onChange,
-    onBlur,
-    onFocus,
-    placeholder,
-    error = false,
-    helperText,
+  {
     height,
-    type = 'text'
+    ...rest
   }:
     {
-      onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>,
-      onBlur?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>,
-      onFocus?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>,
-      placeholder?: string,
-      error?: boolean,
-      helperText?: string,
       height?: CSSProperties['height'],
-      type?: string
-    }
+    } & TextFieldProps
 ) {
   return <CustomTextFieldStyle
-    onChange={onChange}
-    onBlur={onBlur}
-    onFocus={onFocus}
     variant="filled"
     fullWidth={true}
     size="small"
     height={height}
-    placeholder={placeholder}
-    error={error}
-    helperText={helperText}
-    type={type}
+    {...rest}
   />
 }
 
