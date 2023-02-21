@@ -28,6 +28,8 @@ export default function Signup2() {
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true)
   const [password, setPassword] = useState<string>('')
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true)
+  const [phoneNumber, setPhoneNumber] = useState<string>('')
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState<boolean>(true)
 
   const [isCheckUsingTerm, setIsCheckUsingTerm] = useState(false);
   const [isCheckPersonalData, setIsCheckPersonalData] = useState(false);
@@ -36,6 +38,7 @@ export default function Signup2() {
 
   const [emailHelperText, setEmailHelperText] = useState<string>('')
   const [passwordHelperText, setPasswordHelperText] = useState<string>('')
+  const [phoneNumberHelperText, setPhoneNumberHelperText] = useState<string>('')
 
 
   function toggleAll() {
@@ -85,6 +88,24 @@ export default function Signup2() {
     return false
   }
 
+  async function validatePhoneNumber() {
+    if (phoneNumber === '') {
+      setPhoneNumberHelperText('전화번호를 입력해주세요')
+    } else if (phoneNumber.length <= 6) {
+      setPhoneNumberHelperText('올바른 전화번호를 입력해 주세요.')
+    } else {
+      const res = await API.getAccountPhoneDuplicate(phoneNumber)
+      if (!res.data) {
+        setPhoneNumberHelperText('이미 존재하는 번호에요.')
+      } else {
+        setIsPhoneNumberValid(true)
+        return true
+      }
+    }
+    setIsPhoneNumberValid(false)
+    return false
+  }
+
   useEffect(() => {
     setIsEmailValid(true)
   }, [email])
@@ -94,6 +115,10 @@ export default function Signup2() {
   }, [password])
 
   useEffect(() => {
+    setIsPhoneNumberValid(true)
+  }, [phoneNumber])
+
+  useEffect(() => {
     if (isCheckUsingTerm && isCheckPersonalData && isCheckMarketing) {
       setIsCheckAll(true)
     } else {
@@ -101,7 +126,7 @@ export default function Signup2() {
     }
   }, [isCheckUsingTerm, isCheckPersonalData, isCheckMarketing])
 
-  return <SignupTemplate title="회원가입" step="1/3">
+  return <SignupTemplate title="회원가입" step="1/2">
     <VerticalFlex>
       <section style={{ height: 72 }}>
         <CustomTextField
@@ -113,7 +138,8 @@ export default function Signup2() {
           height="48px"
         />
       </section>
-      <section style={{ marginTop: '0' }}>
+
+      <section>
         <TextCaption style={{ marginLeft: '14px' }}>
           영문, 숫자, 특수문자 포함 8자 이상
         </TextCaption>
@@ -128,6 +154,33 @@ export default function Signup2() {
             helperText={!isPasswordValid ? passwordHelperText : undefined}
             height="48px"
             type="password"
+          />
+        </div>
+      </section>
+
+      <section>
+        <TextCaption style={{ marginLeft: '14px' }}>
+          입력하신 전화번호는 본인 인증 및 알림 용도로만 사용됩니다.
+        </TextCaption>
+        <EmptyHeight height="12px" />
+        <div style={{ height: 72 }}>
+          <CustomTextField
+            onKeyDown={(event) => {
+              const keyWhiteList = ['ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Home', 'End']
+              if (!keyWhiteList.includes(event.key) && isNaN(+event.key)) {
+                event.preventDefault()
+              }
+            }}
+            onChange={(event) => {
+              setPhoneNumber(event.target.value)
+            }}
+            onFocus={() => { validateEmail(); validatePassword() }}
+            onBlur={() => { validatePhoneNumber() }}
+            placeholder="휴대폰번호"
+            error={!isPhoneNumberValid}
+            helperText={!isPhoneNumberValid ? phoneNumberHelperText : undefined}
+            height="48px"
+            type="tel"
           />
         </div>
       </section>
@@ -180,15 +233,22 @@ export default function Signup2() {
         </Flex>
       </section>
 
+
       <CustomButton
         style={{ marginTop: 24 }}
-        disabled={!isCheckPersonalData || !isCheckUsingTerm || email === '' || password === '' || !isEmailValid || !isPasswordValid}
+        disabled={!isCheckPersonalData || !isCheckUsingTerm || email === '' || password === '' || !isEmailValid || !isPasswordValid || !isPhoneNumberValid}
         height={'48px'}
         onClick={async () => {
           let emailTemp = await validateEmail()
           let passwordTemp = validatePassword()
-          if (emailTemp && passwordTemp) {
-            navigate('/signup/phone')
+          let phoneNumberTemp = await validatePhoneNumber()
+          if (emailTemp && passwordTemp && phoneNumberTemp) {
+            localStorage.setItem('signupEmail', email)
+            localStorage.setItem('signupPassword', password)
+            localStorage.setItem('signupIsCheckMarketing', isCheckMarketing.toString())
+            localStorage.setItem('signupPhoneNumber', phoneNumber)
+
+            navigate('/signup/nickname')
           }
         }}>
         다음
