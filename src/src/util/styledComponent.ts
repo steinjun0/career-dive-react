@@ -167,7 +167,6 @@ export const ColumnAlignCenterFlex = styled(Flex)`
 export const RowAlignCenterFlex = styled(Flex)`
   flex-direction: row;
   align-items: center;
-  height: 100%;
 `;
 
 export const CenterFlex = styled(Flex)({
