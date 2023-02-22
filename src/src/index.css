@@ -15,7 +15,7 @@ code {
 }
 
 #root {
-  min-width: 1194px;
+  /* min-width: 1194px; */
   scroll-behavior: smooth;
 }
 
