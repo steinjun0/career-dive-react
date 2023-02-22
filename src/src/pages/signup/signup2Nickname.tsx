@@ -52,6 +52,7 @@ export default function Signup2Nickname() {
             onChange={(event) => {
               setNickname(event.target.value);
             }}
+            inputProps={{ maxLength: 10 }}
             onFocus={() => { }}
             onBlur={() => { validateNickname() }}
             placeholder="최대 10자"

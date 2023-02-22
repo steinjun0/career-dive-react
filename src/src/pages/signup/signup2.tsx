@@ -91,7 +91,7 @@ export default function Signup2() {
   async function validatePhoneNumber() {
     if (phoneNumber === '') {
       setPhoneNumberHelperText('전화번호를 입력해주세요')
-    } else if (phoneNumber.length <= 6) {
+    } else if (phoneNumber.length <= 10) {
       setPhoneNumberHelperText('올바른 전화번호를 입력해 주세요.')
     } else {
       const res = await API.getAccountPhoneDuplicate(phoneNumber)
