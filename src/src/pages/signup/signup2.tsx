@@ -1,4 +1,4 @@
-import { Divider, styled } from "@mui/material";
+import { Divider, styled, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import { CustomCheckbox } from "util/Custom/CustomCheckbox";
@@ -23,6 +23,7 @@ const TermsButton = styled(Flex)({
 
 export default function Signup2() {
   const navigate = useNavigate()
+  const theme = useTheme()
 
   const [email, setEmail] = useState<string>('')
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true)
@@ -127,112 +128,116 @@ export default function Signup2() {
   }, [isCheckUsingTerm, isCheckPersonalData, isCheckMarketing])
 
   return <SignupTemplate title="회원가입" step="1/2">
-    <VerticalFlex>
-      <section style={{ height: 72 }}>
-        <CustomTextField
-          onChange={(event) => { setEmail(event.target.value) }}
-          onBlur={(event) => { validateEmail() }}
-          placeholder="이메일"
-          error={!isEmailValid}
-          helperText={!isEmailValid ? emailHelperText : undefined}
-          height="48px"
-        />
-      </section>
-
-      <section>
-        <TextCaption style={{ marginLeft: '14px' }}>
-          영문, 숫자, 특수문자 포함 8자 이상
-        </TextCaption>
-        <EmptyHeight height="12px" />
-        <div style={{ height: 72 }}>
+    <VerticalFlex sx={{
+      justifyContent: 'start', height: '100%',
+      [theme.breakpoints.down('sm')]: { justifyContent: 'space-between' }
+    }}>
+      <VerticalFlex>
+        <section style={{ height: 72 }}>
           <CustomTextField
-            onChange={(event) => { setPassword(event.target.value) }}
-            onFocus={() => { validateEmail() }}
-            onBlur={() => { validatePassword() }}
-            placeholder="비밀번호"
-            error={!isPasswordValid}
-            helperText={!isPasswordValid ? passwordHelperText : undefined}
+            onChange={(event) => { setEmail(event.target.value) }}
+            onBlur={(event) => { validateEmail() }}
+            placeholder="이메일"
+            error={!isEmailValid}
+            helperText={!isEmailValid ? emailHelperText : undefined}
             height="48px"
-            type="password"
           />
-        </div>
-      </section>
+        </section>
 
-      <section>
-        <TextCaption style={{ marginLeft: '14px' }}>
-          입력하신 전화번호는 본인 인증 및 알림 용도로만 사용됩니다.
-        </TextCaption>
-        <EmptyHeight height="12px" />
-        <div style={{ height: 72 }}>
-          <CustomTextField
-            onKeyDown={(event) => {
-              const keyWhiteList = ['ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Home', 'End']
-              if (!keyWhiteList.includes(event.key) && isNaN(+event.key)) {
-                event.preventDefault()
-              }
-            }}
-            onChange={(event) => {
-              setPhoneNumber(event.target.value)
-            }}
-            onFocus={() => { validateEmail(); validatePassword() }}
-            onBlur={() => { validatePhoneNumber() }}
-            placeholder="휴대폰번호"
-            error={!isPhoneNumberValid}
-            helperText={!isPhoneNumberValid ? phoneNumberHelperText : undefined}
-            height="48px"
-            type="tel"
-          />
-        </div>
-      </section>
+        <section>
+          <TextCaption style={{ marginLeft: '14px' }}>
+            영문, 숫자, 특수문자 포함 8자 이상
+          </TextCaption>
+          <EmptyHeight height="12px" />
+          <div style={{ height: 72 }}>
+            <CustomTextField
+              onChange={(event) => { setPassword(event.target.value) }}
+              onFocus={() => { validateEmail() }}
+              onBlur={() => { validatePassword() }}
+              placeholder="비밀번호"
+              error={!isPasswordValid}
+              helperText={!isPasswordValid ? passwordHelperText : undefined}
+              height="48px"
+              type="password"
+            />
+          </div>
+        </section>
 
-      <section>
-        <Flex style={{ marginTop: '4px', justifyContent: 'space-between' }}>
-          <Flex>
-            <CustomCheckbox isChecked={isCheckUsingTerm} setIsChecked={setIsCheckUsingTerm} onClick={undefined} children={undefined} />
-            <TextBody2
-              style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }}
-              onClick={(e) => { setIsCheckUsingTerm(!isCheckUsingTerm) }}>
-              이용약관 <span style={{ color: colorCareerDiveBlue }}>(필수)</span>
-            </TextBody2>
+        <section>
+          <TextCaption style={{ marginLeft: '14px' }}>
+            입력하신 전화번호는 본인 인증 및 알림 용도로만 사용됩니다.
+          </TextCaption>
+          <EmptyHeight height="12px" />
+          <div style={{ height: 72 }}>
+            <CustomTextField
+              onKeyDown={(event) => {
+                const keyWhiteList = ['ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Home', 'End']
+                if (!keyWhiteList.includes(event.key) && isNaN(+event.key)) {
+                  event.preventDefault()
+                }
+              }}
+              onChange={(event) => {
+                setPhoneNumber(event.target.value)
+              }}
+              onFocus={() => { validateEmail(); validatePassword() }}
+              onBlur={() => { validatePhoneNumber() }}
+              placeholder="휴대폰번호"
+              error={!isPhoneNumberValid}
+              helperText={!isPhoneNumberValid ? phoneNumberHelperText : undefined}
+              height="48px"
+              type="tel"
+            />
+          </div>
+        </section>
+
+        <section>
+          <Flex style={{ marginTop: '4px', justifyContent: 'space-between' }}>
+            <Flex>
+              <CustomCheckbox isChecked={isCheckUsingTerm} setIsChecked={setIsCheckUsingTerm} onClick={undefined} children={undefined} />
+              <TextBody2
+                style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }}
+                onClick={(e) => { setIsCheckUsingTerm(!isCheckUsingTerm) }}>
+                이용약관 <span style={{ color: colorCareerDiveBlue }}>(필수)</span>
+              </TextBody2>
+            </Flex>
+            <TermsButton>
+              약관
+            </TermsButton>
           </Flex>
-          <TermsButton>
-            약관
-          </TermsButton>
-        </Flex>
-        <Flex style={{ marginTop: '12px', justifyContent: 'space-between' }}>
-          <Flex>
-            <CustomCheckbox isChecked={isCheckPersonalData} setIsChecked={setIsCheckPersonalData} onClick={undefined} children={undefined} />
-            <TextBody2
-              style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }}
-              onClick={(e) => { setIsCheckPersonalData(!isCheckPersonalData) }}>
-              개인 정보 활용 동의 <span style={{ color: colorCareerDiveBlue }}>(필수)</span>
-            </TextBody2>
+          <Flex style={{ marginTop: '12px', justifyContent: 'space-between' }}>
+            <Flex>
+              <CustomCheckbox isChecked={isCheckPersonalData} setIsChecked={setIsCheckPersonalData} onClick={undefined} children={undefined} />
+              <TextBody2
+                style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }}
+                onClick={(e) => { setIsCheckPersonalData(!isCheckPersonalData) }}>
+                개인 정보 활용 동의 <span style={{ color: colorCareerDiveBlue }}>(필수)</span>
+              </TextBody2>
+            </Flex>
+            <TermsButton>
+              약관
+            </TermsButton>
           </Flex>
-          <TermsButton>
-            약관
-          </TermsButton>
-        </Flex>
-        <Flex style={{ marginTop: '12px', justifyContent: 'space-between' }}>
-          <Flex>
-            <CustomCheckbox isChecked={isCheckMarketing} setIsChecked={setIsCheckMarketing} onClick={undefined} children={undefined} />
-            <TextBody2
-              style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }}
-              onClick={(e) => { setIsCheckMarketing(!isCheckMarketing) }}>
-              개인 정보 활용 동의 (선택)
-            </TextBody2>
+          <Flex style={{ marginTop: '12px', justifyContent: 'space-between' }}>
+            <Flex>
+              <CustomCheckbox isChecked={isCheckMarketing} setIsChecked={setIsCheckMarketing} onClick={undefined} children={undefined} />
+              <TextBody2
+                style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }}
+                onClick={(e) => { setIsCheckMarketing(!isCheckMarketing) }}>
+                개인 정보 활용 동의 (선택)
+              </TextBody2>
+            </Flex>
+            <TermsButton>
+              약관
+            </TermsButton>
           </Flex>
-          <TermsButton>
-            약관
-          </TermsButton>
-        </Flex>
 
-        <Divider style={{ margin: '12px 0', color: colorBackgroundGrayMedium }}></Divider>
-        <Flex>
-          <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} onClick={toggleAll} children={undefined} />
-          <TextBody2 style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }} onClick={(e) => { toggleAll() }}>전체 동의</TextBody2>
-        </Flex>
-      </section>
-
+          <Divider style={{ margin: '12px 0', color: colorBackgroundGrayMedium }}></Divider>
+          <Flex>
+            <CustomCheckbox isChecked={isCheckAll} setIsChecked={setIsCheckAll} onClick={toggleAll} children={undefined} />
+            <TextBody2 style={{ marginLeft: 4, color: colorTextLight, cursor: 'pointer' }} onClick={(e) => { toggleAll() }}>전체 동의</TextBody2>
+          </Flex>
+        </section>
+      </VerticalFlex>
 
       <CustomButton
         style={{ marginTop: 24 }}

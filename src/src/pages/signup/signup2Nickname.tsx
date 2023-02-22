@@ -1,14 +1,16 @@
+import { useTheme } from "@mui/material";
 import API from "API";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomButton } from "util/Custom/CustomButton";
-import { CenterFlex, TextCaption } from "util/styledComponent";
+import { CenterFlex, TextCaption, VerticalFlex } from "util/styledComponent";
 import CustomTextField from "util/ts/Custom/CustomTextField";
 import SignupTemplate from "./SignupTemplate";
 
 
 export default function Signup2Nickname() {
   const navigate = useNavigate()
+  const theme = useTheme();
 
   const [nickname, setNickname] = useState<string>('')
   const [nicknameIsValid, setNicknameIsValid] = useState<boolean>(true)
@@ -23,7 +25,6 @@ export default function Signup2Nickname() {
     const res = await API.getAccountNicknameDuplicate(nickname)
     const isDuplicate = !res.data
     if (isDuplicate) {
-      console.log('hi')
       setNicknameHelperText('이미 존재하는 닉네임이에요.')
     }
     else {
@@ -41,7 +42,12 @@ export default function Signup2Nickname() {
 
 
   return <SignupTemplate title="닉네임 설정" step="2/2">
-    <CenterFlex style={{ flexDirection: 'column' }}>
+    <VerticalFlex
+      sx={{
+        justifyContent: 'start', height: '100%',
+        [theme.breakpoints.down('sm')]: { justifyContent: 'space-between' }
+      }}
+    >
       <section style={{ marginTop: '0', width: '100%' }}>
         <TextCaption style={{}}>
           닉네임을 자유롭게 설정해보세요.
@@ -94,6 +100,6 @@ export default function Signup2Nickname() {
         height="50px">
         완료
       </CustomButton>
-    </CenterFlex>
+    </VerticalFlex>
   </SignupTemplate>
 }

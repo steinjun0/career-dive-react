@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import API from '../API.js'
-import { Grid, styled, } from "@mui/material";
+import { Grid, styled, useTheme, } from "@mui/material";
 
 import {
     FullHeightFullWidthWrapper,
@@ -25,10 +25,6 @@ import { CustomTextField } from 'util/Custom/CustomTextField.js';
 import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
 import { useNavigate } from 'react-router-dom';
-
-const LoginWrapper = styled(VerticalFlex)`
-  width: 100%;
-`
 
 const TextFieldWrapper = styled(Flex)`
   width: 100%;
@@ -63,6 +59,8 @@ const SignUpText = styled(TextSubtitle2)`
 
 function Login() {
     const navigate = useNavigate();
+    const theme = useTheme();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isAutoLogin, setIsAutoLogin] = useState(false);
@@ -102,79 +100,86 @@ function Login() {
         }
     }
     return (
-        <FullHeightFullWidthWrapper>
-            <MaxWidthDiv>
-                <Grid justifyContent="center" container spacing={'30px'} marginTop={0}>
-                    <Grid container item xs={4} md={4}>
-                        <LoginWrapper>
-                            <VerticalFlex>
-                                <TextHeading6>
-                                    로그인
-                                </TextHeading6>
-                                <TextFieldWrapper>
-                                    <CustomTextField
-                                        style={{ marginBottom: 24 }}
-                                        onChange={(event) => { setEmail(event.target.value) }}
-                                        onKeyPress={(event) => {
-                                            if (event.key === 'Enter') {
-                                                onClickLogin()
-                                                event.preventDefault();
-                                            }
-                                        }}
-                                        variant="filled"
-                                        InputProps={{ disableUnderline: true, }}
-                                        fullWidth={true}
-                                        margin="dense"
-                                        size="small"
-                                        hiddenLabel
-                                        placeholder="이메일"
-                                    />
-                                    <CustomPasswordTextField
-                                        style={{ marginBottom: 24 }}
-                                        password={password}
-                                        setPassword={setPassword}
-                                        onKeyPress={(event) => {
-                                            if (event.key === 'Enter') {
-                                                onClickLogin()
-                                                event.preventDefault();
-                                            }
-                                        }}
-                                    />
-                                </TextFieldWrapper>
-                                <SubButtonsWrapper>
-                                    <RowAlignCenterFlex>
-                                        <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
-                                        <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
-                                    </RowAlignCenterFlex>
+        <Flex
+            sx={{
+                width: '100%',
+                height: 'calc(100vh - 80px - 32px)',
+                alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box',
+                [theme.breakpoints.down('sm')]: { alignItems: 'start' }
+            }}
+        >
+            <VerticalFlex sx={{
+                width: '100%',
+                minWidth: '284px',
+                maxWidth: '378px',
+                [theme.breakpoints.down('sm')]: { justifyContent: 'space-between', height: '100%', margin: '16px' }
+            }}>
+                <VerticalFlex>
+                    <TextHeading6>
+                        로그인
+                    </TextHeading6>
+                    <TextFieldWrapper>
+                        <CustomTextField
+                            style={{ marginBottom: 24 }}
+                            onChange={(event) => { setEmail(event.target.value) }}
+                            onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    onClickLogin()
+                                    event.preventDefault();
+                                }
+                            }}
+                            variant="filled"
+                            InputProps={{ disableUnderline: true, }}
+                            fullWidth={true}
+                            margin="dense"
+                            size="small"
+                            hiddenLabel
+                            placeholder="이메일"
+                        />
+                        <CustomPasswordTextField
+                            style={{ marginBottom: 24 }}
+                            password={password}
+                            setPassword={setPassword}
+                            onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    onClickLogin()
+                                    event.preventDefault();
+                                }
+                            }}
+                        />
+                    </TextFieldWrapper>
+                    <SubButtonsWrapper>
+                        <RowAlignCenterFlex>
+                            <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
+                            <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
+                        </RowAlignCenterFlex>
+                        <Flex>
+                            <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 이메일을 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>이메일 찾기</SubButtons>
+                            <EmptyWidth width="16px"></EmptyWidth>
+                            <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 비밀번호를 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>비밀번호 찾기</SubButtons>
+                        </Flex>
+                    </SubButtonsWrapper>
+                    <EmptyHeight height={'24px'} />
+                </VerticalFlex>
 
-                                    <Flex>
-                                        <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 이메일을 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>이메일 찾기</SubButtons>
-                                        <EmptyWidth width="16px"></EmptyWidth>
-                                        <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 비밀번호를 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>비밀번호 찾기</SubButtons>
-                                    </Flex>
-                                </SubButtonsWrapper>
-                                <EmptyHeight height={'24px'} />
-                                <ButtonWrapper>
-                                    <CustomButton
-                                        height={'48px'}
-                                        onClick={onClickLogin}>
-                                        로그인
-                                    </CustomButton>
-                                </ButtonWrapper>
-                                <EmptyHeight height={'24px'} />
-                                <ColumnAlignCenterFlex>
-                                    <TextBody2>아직 회원이 아니신가요?</TextBody2>
-                                    <LinkNoDeco to='/signup'>
-                                        <SignUpText>회원가입</SignUpText>
-                                    </LinkNoDeco>
-
-                                </ColumnAlignCenterFlex>
-                            </VerticalFlex>
-                        </LoginWrapper>
-                    </Grid>
-                </Grid>
-            </MaxWidthDiv>
-        </FullHeightFullWidthWrapper >
+                <VerticalFlex>
+                    <ButtonWrapper>
+                        <CustomButton
+                            height={'48px'}
+                            onClick={onClickLogin}>
+                            로그인
+                        </CustomButton>
+                    </ButtonWrapper>
+                    <EmptyHeight height={'24px'} />
+                    <ColumnAlignCenterFlex>
+                        <TextBody2>아직 회원이 아니신가요?</TextBody2>
+                        <LinkNoDeco to='/signup'>
+                            <SignUpText>회원가입</SignUpText>
+                        </LinkNoDeco>
+                    </ColumnAlignCenterFlex>
+                </VerticalFlex>
+            </VerticalFlex>
+        </Flex >
 
     );
 }
