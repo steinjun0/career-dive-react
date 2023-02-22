@@ -36,6 +36,9 @@ import CareerInfoChange from "component/myPage/CareerInfoChange";
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish'
 import Search from 'pages/search'
 import Review from "pages/review/id";
+import Signup2 from 'pages/signup/signup2';
+import Signup2Phone from 'pages/signup/signup2Phone';
+import Signup2Nickname from 'pages/signup/signup2Nickname';
 
 const TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID; // 발급받은 추적ID를 환경 변수로 불러온다.
 ReactGA.initialize(TRACKING_ID);
@@ -91,7 +94,10 @@ ReactDOM.render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          {/* <Route path="/signup" element={<SignUp />} /> */}
+          <Route path="/signup" element={<Signup2 />} />
+          {/* <Route path="/signup/phone" element={<Signup2Phone />} /> */}
+          <Route path="/signup/nickname" element={<Signup2Nickname />} />
           <Route path="/mentor/:id" element={<Mentor />} />
           <Route path="/mentee/request/:id" element={<MentoringReservation />} />
           <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
