@@ -1,4 +1,4 @@
-import { Grid, styled } from "@mui/material";
+import { Grid, styled, useMediaQuery, useTheme } from "@mui/material";
 
 import {
   FullWidthWrapper,
@@ -9,14 +9,12 @@ import {
 } from "util/styledComponent";
 
 import MentorProfile from 'component/mentor/Profile'
-import MentorCalendar from 'component/calendar/Calendar'
 import HelpCategory from "component/mentor/HelpCategory";
 import Introduction from "component/mentor/Introduction";
 
 import { useEffect, useState } from "react";
 import API from 'API';
 import { useParams } from "react-router-dom";
-import MenteeCalendar from "../../component/calendar/MenteeCalendar";
 import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
 
 
@@ -28,13 +26,13 @@ const MetorProfileBanner = styled(CenterWidthWrapper)`
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
-  margin-top: 30px;
   margin-bottom: 154px;
 `;
 
 
 function Mentor() {
-
+  const theme = useTheme();
+  const downMd = useMediaQuery(theme.breakpoints.down('md'))
   const params = useParams();
 
   const [mentorData, setMentorData] = useState();
@@ -74,11 +72,11 @@ function Mentor() {
           </MetorProfileBanner>
         </MaxWidthDiv>
         <GrayBackground>
-          <MaxWidthDiv>
+          <Flex sx={{ padding: '0 30px', [theme.breakpoints.down('md')]: { padding: '0 16px' } }}>
             <CardsWrapper>
-              <Grid container spacing={'30px'} marginTop={0}>
-                <Grid container item xs={12} md={6}>
-                  <Grid item xs={12} >
+              <Grid container spacing={downMd ? '16px' : '30px'} marginTop={0} paddingTop={0}>
+                <Grid container item spacing={downMd ? '16px' : '30px'} xs={12} md={6} direction="column">
+                  <Grid item >
                     {mentorData && mentorData.ConsultContents ?
                       <HelpCategory
                         regularTags={[...mentorData.ConsultContents.filter((e) => e.Type === '커리어 상담').map((e) => e.Name)]}
@@ -88,16 +86,17 @@ function Mentor() {
                         regularTags={[]}
                         premiumTags={[]} />
                     }
-                    <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
-                    {/* <RatingAndReview></RatingAndReview> */}
                   </Grid>
+                  <Grid item>
+                    <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
+                  </Grid>
+                  {/* <Grid item xs={12}>
+                    <RatingAndReview></RatingAndReview>
+                  </Grid> */}
                 </Grid>
-
                 <Grid item xs={12} md={6}>
                   <Grid container item spacing={2}>
                     <Grid item xs={12}>
-                      {/* <MentorCalendar></MentorCalendar> */}
-                      {/* <MenteeCalendar userId={+params.id} startDate={null} /> */}
                       <MenteeCalendar2 userId={+params.id} startDate={null} />
                     </Grid>
                   </Grid>
@@ -105,7 +104,7 @@ function Mentor() {
               </Grid>
             </CardsWrapper>
 
-          </MaxWidthDiv>
+          </Flex>
         </GrayBackground>
       </FullWidthWrapper>
     </div >

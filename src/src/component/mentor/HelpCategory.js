@@ -17,7 +17,6 @@ import { TagLarge, TagMedium } from "util/Custom/CustomTag";
 
 
 const HelpCategoryWrapper = styled(Flex)`
-  margin-bottom: 30px;
 `
 const RegularLegend = styled('span')`
   color: ${colorCareerDiveBlue};
