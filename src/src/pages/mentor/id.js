@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import API from 'API';
 import { useParams } from "react-router-dom";
 import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
+import CustomToggleButton2 from "util/Custom/CustomToggleButton2";
+import { CustomButton } from "util/Custom/CustomButton";
 
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
@@ -32,7 +34,7 @@ const CardsWrapper = styled(Flex)`
 
 function Mentor() {
   const theme = useTheme();
-  const downMd = useMediaQuery(theme.breakpoints.down('md'))
+  const isDownMd = useMediaQuery(theme.breakpoints.down('md'))
   const params = useParams();
 
   const [mentorData, setMentorData] = useState();
@@ -74,8 +76,8 @@ function Mentor() {
         <GrayBackground>
           <Flex sx={{ padding: '0 30px', [theme.breakpoints.down('md')]: { padding: '0 16px' } }}>
             <CardsWrapper>
-              <Grid container spacing={downMd ? '16px' : '30px'} marginTop={0} paddingTop={0}>
-                <Grid container item spacing={downMd ? '16px' : '30px'} xs={12} md={6} direction="column">
+              <Grid container spacing={isDownMd ? '24px' : '30px'} marginTop={0} paddingTop={0}>
+                <Grid container item spacing={isDownMd ? '24px' : '30px'} xs={12} md={6} direction="column">
                   <Grid item >
                     {mentorData && mentorData.ConsultContents ?
                       <HelpCategory
@@ -107,6 +109,27 @@ function Mentor() {
           </Flex>
         </GrayBackground>
       </FullWidthWrapper>
+      {
+        isDownMd &&
+        <Flex
+          style={{
+            position: 'fixed',
+            zIndex: 10,
+            bottom: 0,
+            padding: '8px 16px',
+            heihgt: '84px',
+            backgroundColor: 'white',
+            width: '100vw',
+            filter: 'drop-shadow(0px -20px 40px rgba(130, 130, 130, 0.1))'
+          }}
+        >
+          <CustomToggleButton2></CustomToggleButton2>
+          <CustomButton style={{ width: '100%', marginLeft: '8px', marginRight: '32px' }}>
+            상담 신청
+          </CustomButton>
+        </Flex>
+      }
+
     </div >
   );
 }
