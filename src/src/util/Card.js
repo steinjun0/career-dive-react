@@ -18,7 +18,7 @@ const CardWrapper = styled(VerticalFlex)((props) => {
     backgroundColor: 'white',
     boxShadow: '10px 20px 40px rgba(130, 130, 130, 0.1)',
     width: '100%',
-    ['@media (max-width:899.95px)']: {
+    '@media (max-width:899.95px)': {
       padding: '16px'
     }
   }
@@ -38,7 +38,7 @@ const TitleHead = styled(RowAlignCenterFlex)`
 
 const TitleTail = styled(RowAlignCenterFlex)({
   marginLeft: 'auto',
-  ['@media (max-width:899.95px)']: {
+  '@media (max-width:899.95px)': {
     marginLeft: 0
   }
 })
