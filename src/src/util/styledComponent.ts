@@ -210,13 +210,16 @@ export const GrayBackground = styled(Flex)`
   min-height: calc(100vh - 500px);
 `;
 
-export const MaxWidthDiv = styled(Flex)`
-  flex-direction: column;
-  max-width: 1254px;
-  width: 100%;
-  padding: 0 30px;
-  box-sizing: border-box;
-`;
+export const MaxWidthDiv = styled(Flex)({
+  flexDirection: 'column',
+  maxWidth: '1254px',
+  width: '100%',
+  padding: '0 30px',
+  boxSizing: 'border-box',
+  '@media (max-width:899.95px)': { //md
+    padding: '0 16px'
+  }
+})
 
 export const EmptyHeight = styled(Flex) <{ height: CSSProperties["height"] }>`
   min-height: ${props => props.height};
