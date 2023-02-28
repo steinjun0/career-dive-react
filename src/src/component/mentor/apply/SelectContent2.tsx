@@ -21,9 +21,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { formatMoney, getParsedLocalStorage } from "util/ts/util";
 import React from "react";
 
-const SelectContentWrapper = styled(VerticalFlex)`
-  width: 534px;
-`;
+const SelectContentWrapper = styled(VerticalFlex)({
+  boxSizing: 'border-box',
+  maxWidth: '582px'
+})
+
 
 const consultContents = {
   '커리어 상담': ['직무 이야기', '업계 이야기', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '진로 상담', '사내 문화', '면접 팁', '기타'],

@@ -54,8 +54,8 @@ function MentorCard({
           </Flex>
         }
         no_divider="true"
-        min_width="228px"
-        max_width="228px"
+        min_width="276px"
+        max_width="276px"
         style={{
           minHeight: '346px'
         }}

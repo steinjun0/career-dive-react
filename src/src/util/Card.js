@@ -11,6 +11,7 @@ import {
 const CardWrapper = styled(VerticalFlex)((props) => {
   return {
     justifyContent: 'start',
+    boxSizing: 'border-box',
     minWidth: `${props.min_width}`,
     maxWidth: `${props.max_width}`,
     borderRadius: '8px',
