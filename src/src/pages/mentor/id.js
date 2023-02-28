@@ -73,52 +73,46 @@ function Mentor() {
         </MaxWidthDiv>
         <GrayBackground>
           <MaxWidthDiv>
-            <Flex>
-              <CardsWrapper>
-                <Grid container spacing={isDownMd ? '24px' : '30px'} marginTop={0} paddingTop={0}>
-                  <Grid container item spacing={isDownMd ? '24px' : '30px'} xs={12} md={6} direction="column">
-                    <Grid item >
-                      {mentorData && mentorData.ConsultContents ?
-                        <HelpCategory
-                          regularTags={[...mentorData.ConsultContents.filter((e) => e.Type === '커리어 상담').map((e) => e.Name)]}
-                          premiumTags={[...mentorData.ConsultContents.filter((e) => e.Type === '전형 준비').map((e) => e.Name)]} />
-                        :
-                        <HelpCategory
-                          regularTags={[]}
-                          premiumTags={[]} />
-                      }
-                    </Grid>
-                    <Grid item>
-                      <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
-                    </Grid>
-                    {/* <Grid item xs={12}>
+            <CardsWrapper>
+              <Grid container spacing={isDownMd ? '24px' : '30px'} marginTop={0} paddingTop={0}>
+                <Grid container item spacing={isDownMd ? '24px' : '30px'} xs={12} md={6} direction="column">
+                  <Grid item>
+                    {mentorData && mentorData.ConsultContents ?
+                      <HelpCategory
+                        regularTags={[...mentorData.ConsultContents.filter((e) => e.Type === '커리어 상담').map((e) => e.Name)]}
+                        premiumTags={[...mentorData.ConsultContents.filter((e) => e.Type === '전형 준비').map((e) => e.Name)]} />
+                      :
+                      <HelpCategory
+                        regularTags={[]}
+                        premiumTags={[]} />
+                    }
+                  </Grid>
+                  <Grid item>
+                    <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
+                  </Grid>
+                  {/* <Grid item xs={12}>
                     <RatingAndReview></RatingAndReview>
                   </Grid> */}
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Grid container item spacing={2}>
-                      <Grid item xs={12}>
-                        <MenteeCalendar2
-                          userId={+params.id}
-                          consultingTime={
-                            (getParsedLocalStorage('reservations') ?? null) &&
-                            (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
-                            getParsedLocalStorage('reservations')[+params.id]['consultingTime']
-                          }
-                          startDate={
-                            (getParsedLocalStorage('reservations') ?? null) &&
-                            (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
-                            (getParsedLocalStorage('reservations')[+params.id]['startTime'] ?? null) &&
-                            new Date(getParsedLocalStorage('reservations')[+params.id]['startTime'])
-                          }
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
                 </Grid>
-              </CardsWrapper>
+                <Grid item xs={12} md={6}>
 
-            </Flex>
+                  <MenteeCalendar2
+                    userId={+params.id}
+                    consultingTime={
+                      (getParsedLocalStorage('reservations') ?? null) &&
+                      (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
+                      getParsedLocalStorage('reservations')[+params.id]['consultingTime']
+                    }
+                    startDate={
+                      (getParsedLocalStorage('reservations') ?? null) &&
+                      (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
+                      (getParsedLocalStorage('reservations')[+params.id]['startTime'] ?? null) &&
+                      new Date(getParsedLocalStorage('reservations')[+params.id]['startTime'])
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </CardsWrapper>
           </MaxWidthDiv>
 
         </GrayBackground>

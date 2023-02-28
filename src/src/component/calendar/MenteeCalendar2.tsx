@@ -399,219 +399,221 @@ const MenteeCalendar2 = (props:
     }, [state.startTimeObj])
 
     return (
-        <Card
-            title='상담 가능 일정'
-            no_divider={false}
-            style={{ boxSizing: 'border-box' }}
-        >
-            <Flex style={{ justifyContent: 'center' }}>
-                <Flex style={{
-                    justifyContent: 'space-between', alignItems: 'center',
-                    marginTop: '16px', width: '100%'
-                }}>
-                    <IconButton
-                        sx={{
-                            backgroundColor: colorBackgroundGrayLight,
-                            borderRadius: '8px',
-                            height: '32px',
-                            width: '32px'
-                        }}
-                        disabled={state.currentYearAndMonth.getMonth() === new Date().getMonth()}
-                        onClick={() =>
-                            addCurrentYearAndMonth(-1)
-                        }
-                    >
-                        <ChevronLeftIcon sx={{ color: state.currentYearAndMonth.getMonth() === new Date().getMonth() ? colorTextDisabled : 'black' }} />
-                    </IconButton>
-                    <TextSubtitle2 style={{
-                        // backgroundColor: colorBackgroundGrayLight,
-                        padding: '4px 12px',
-                        borderRadius: '8px',
-                    }}>{koDtf.format(state.currentYearAndMonth)}</TextSubtitle2>
-                    <IconButton
-                        sx={{
-                            backgroundColor: colorBackgroundGrayLight,
-                            borderRadius: '8px',
-                            height: '32px',
-                            width: '32px'
-                        }}
-                        disabled={state.currentYearAndMonth.getMonth() >= new Date().getMonth() + 6}
-                        onClick={() => addCurrentYearAndMonth(1)}
-                    >
-                        <ChevronRightIcon sx={{ color: state.currentYearAndMonth.getMonth() >= new Date().getMonth() + 6 ? colorTextDisabled : 'black' }} />
-                    </IconButton>
-
-                </Flex>
-            </Flex>
-            <Flex style={{ flexWrap: 'wrap', borderBottom: `1px solid ${colorBackgroundGrayMedium}`, paddingBottom: '16px', marginTop: '16px' }}>
-                {['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
-                    return <Flex style={{ minWidth: '14.28%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1>{koDay}</TextSubtitle1> </Flex>
-                })}
-                {state.calendarDates.map((date: Date, i: number) => {
-                    const isSelected = (date: Date) => state.selectedDate && state.selectedDate.getDate() === date.getDate()
-                    const isAvailable = (date: Date) => state.availableDates.map((e: Date) => e.getTime()).includes(date.getTime())
-                    return date === null ?
-                        <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }} />
-                        :
-                        <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }}>
-                            <Flex
-                                onClick={() => {
-                                    if (isAvailable(date)) {
-                                        dispatch({ type: 'updateSelectedDate', payload: date })
-                                    }
-                                }}
-                                style={{
-                                    backgroundColor: isSelected(date) ? colorBackgroundCareerDiveBlue : 'transparent',
-                                    cursor: isAvailable(date) ? 'pointer' : '',
-                                    color: isPastDate(date) ? colorTextDisabled : colorTextLight,
-                                    width: '27px', height: '54px', borderRadius: 8,
-                                    justifyContent: 'center', alignItems: 'center',
-                                    flexDirection: 'column'
-                                }}>
-                                <TextBody2>{date.getDate()}</TextBody2>
-                                <CircleIcon sx={{ width: 10, height: 10, color: isAvailable(date) ? colorCareerDiveBlue : 'transparent' }} />
-                            </Flex>
-                        </Flex>
-                })}
-            </Flex>
-
-            <VerticalFlex
-                style={{
-                    height: state.calendarState !== 'view' ? 84 : 0, ...calendarAnimationStyle,
-                    paddingTop: '16px',
-                }}
+        <Flex>
+            <Card
+                title='상담 가능 일정'
+                no_divider={false}
             >
-                <TextSubtitle1>상담 시간</TextSubtitle1>
-                <TimeButtonWrapper
-                    value={state.consultingTime}
-                    exclusive
-                    onChange={(e, time) => {
-                        dispatch({ type: 'updateConultingTime', payload: time })
-                        setTimeout(() => {
-                            dispatch({ type: 'forceRendering' })
-                        }, 1);
+                <Flex style={{ justifyContent: 'center' }}>
+                    <Flex style={{
+                        justifyContent: 'space-between', alignItems: 'center',
+                        marginTop: '16px', width: '100%'
+                    }}>
+                        <IconButton
+                            sx={{
+                                backgroundColor: colorBackgroundGrayLight,
+                                borderRadius: '8px',
+                                height: '32px',
+                                width: '32px'
+                            }}
+                            disabled={state.currentYearAndMonth.getMonth() === new Date().getMonth()}
+                            onClick={() =>
+                                addCurrentYearAndMonth(-1)
+                            }
+                        >
+                            <ChevronLeftIcon sx={{ color: state.currentYearAndMonth.getMonth() === new Date().getMonth() ? colorTextDisabled : 'black' }} />
+                        </IconButton>
+                        <TextSubtitle2 style={{
+                            // backgroundColor: colorBackgroundGrayLight,
+                            padding: '4px 12px',
+                            borderRadius: '8px',
+                        }}>{koDtf.format(state.currentYearAndMonth)}</TextSubtitle2>
+                        <IconButton
+                            sx={{
+                                backgroundColor: colorBackgroundGrayLight,
+                                borderRadius: '8px',
+                                height: '32px',
+                                width: '32px'
+                            }}
+                            disabled={state.currentYearAndMonth.getMonth() >= new Date().getMonth() + 6}
+                            onClick={() => addCurrentYearAndMonth(1)}
+                        >
+                            <ChevronRightIcon sx={{ color: state.currentYearAndMonth.getMonth() >= new Date().getMonth() + 6 ? colorTextDisabled : 'black' }} />
+                        </IconButton>
+
+                    </Flex>
+                </Flex>
+                <Flex style={{ flexWrap: 'wrap', borderBottom: `1px solid ${colorBackgroundGrayMedium}`, paddingBottom: '16px', marginTop: '16px' }}>
+                    {['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
+                        return <Flex style={{ minWidth: '14.28%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1>{koDay}</TextSubtitle1> </Flex>
+                    })}
+                    {state.calendarDates.map((date: Date, i: number) => {
+                        const isSelected = (date: Date) => state.selectedDate && state.selectedDate.getDate() === date.getDate()
+                        const isAvailable = (date: Date) => state.availableDates.map((e: Date) => e.getTime()).includes(date.getTime())
+                        return date === null ?
+                            <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }} />
+                            :
+                            <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }}>
+                                <Flex
+                                    onClick={() => {
+                                        if (isAvailable(date)) {
+                                            dispatch({ type: 'updateSelectedDate', payload: date })
+                                        }
+                                    }}
+                                    style={{
+                                        backgroundColor: isSelected(date) ? colorBackgroundCareerDiveBlue : 'transparent',
+                                        cursor: isAvailable(date) ? 'pointer' : '',
+                                        color: isPastDate(date) ? colorTextDisabled : colorTextLight,
+                                        width: '27px', height: '54px', borderRadius: 8,
+                                        justifyContent: 'center', alignItems: 'center',
+                                        flexDirection: 'column'
+                                    }}>
+                                    <TextBody2>{date.getDate()}</TextBody2>
+                                    <CircleIcon sx={{ width: 10, height: 10, color: isAvailable(date) ? colorCareerDiveBlue : 'transparent' }} />
+                                </Flex>
+                            </Flex>
+                    })}
+                </Flex>
+
+                <VerticalFlex
+                    style={{
+                        height: state.calendarState !== 'view' ? 84 : 0, ...calendarAnimationStyle,
+                        paddingTop: '16px',
                     }}
                 >
+                    <TextSubtitle1>상담 시간</TextSubtitle1>
+                    <TimeButtonWrapper
+                        value={state.consultingTime}
+                        exclusive
+                        onChange={(e, time) => {
+                            dispatch({ type: 'updateConultingTime', payload: time })
+                            setTimeout(() => {
+                                dispatch({ type: 'forceRendering' })
+                            }, 1);
+                        }}
+                    >
 
-                    {
-                        state.startTimeObj && state.startTimeObj[20].AM.length + state.startTimeObj[20].PM.length > 0 &&
-                        <TimeButton value={20} aria-label="20min">
-                            <TextBody2>20분</TextBody2>
-                        </TimeButton>
-                    }
-                    {
-                        state.startTimeObj && state.startTimeObj[40].AM.length + state.startTimeObj[40].PM.length > 0 &&
-                        <TimeButton value={40} aria-label="40min">
-                            <TextBody2>40분</TextBody2>
-                        </TimeButton>
-                    }
-                    {
-                        startTimeLen === 0 &&
-                        <TextBody2 style={{ marginTop: 16, color: colorTextLight }}>상담 시간이 모두 예약 되었어요</TextBody2>
-                    }
-                </TimeButtonWrapper>
-            </VerticalFlex>
-
-            <TransitionFlex
-                style={{
-                    // height: ['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0,
-                    paddingLeft: '1px', paddingTop: '16px',
-                    ...calendarAnimationStyle
-                }}
-                height={['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0}
-            >
-                <VerticalFlex ref={timeSelectRef}>
-                    {
-                        state.startTimeObj && state.consultingTime && state.startTimeObj[state.consultingTime].AM.length > 0 &&
-                        <>
-                            <TextSubtitle1>오전</TextSubtitle1>
-                            <TimeButtonWrapper
-                                value={state.startTime ? state.startTime.getTime() : null}
-                                exclusive
-                                onChange={(e, time) => {
-                                    dispatch({ type: 'updateStartTime', payload: time ? new Date(time) : null })
-                                }}
-                            >
-                                {
-                                    state.startTimeObj[state.consultingTime].AM
-                                        .map((date: Date) => {
-                                            return <TimeButton
-                                                key={date.getTime()}
-                                                value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
-                                            </TimeButton>
-                                        })
-                                }
-                            </TimeButtonWrapper>
-                            <EmptyHeight height="16px" />
-                        </>
-                    }
-                    {state.startTimeObj && state.consultingTime && state.startTimeObj[state.consultingTime].PM.length > 0 &&
-                        <>
-                            <TextSubtitle1>오후</TextSubtitle1>
-                            <TimeButtonWrapper
-                                value={state.startTime ? state.startTime.getTime() : null}
-                                exclusive
-                                onChange={(e, time) => {
-                                    dispatch({ type: 'updateStartTime', payload: time ? new Date(time) : null })
-                                }}
-                            >
-                                {
-                                    state.startTimeObj[state.consultingTime].PM
-                                        .map((date: Date) => {
-                                            return <TimeButton
-                                                key={date.getTime()}
-                                                value={date.getTime()}><TextBody2>{getHoursAndMinuteString(new Date(new Date(date).setHours(date.getHours() - 12)))}</TextBody2>
-                                            </TimeButton>
-                                        })
-                                }
-                            </TimeButtonWrapper>
-                        </>
-                    }
-
+                        {
+                            state.startTimeObj && state.startTimeObj[20].AM.length + state.startTimeObj[20].PM.length > 0 &&
+                            <TimeButton value={20} aria-label="20min">
+                                <TextBody2>20분</TextBody2>
+                            </TimeButton>
+                        }
+                        {
+                            state.startTimeObj && state.startTimeObj[40].AM.length + state.startTimeObj[40].PM.length > 0 &&
+                            <TimeButton value={40} aria-label="40min">
+                                <TextBody2>40분</TextBody2>
+                            </TimeButton>
+                        }
+                        {
+                            startTimeLen === 0 &&
+                            <TextBody2 style={{ marginTop: 16, color: colorTextLight }}>상담 시간이 모두 예약 되었어요</TextBody2>
+                        }
+                    </TimeButtonWrapper>
                 </VerticalFlex>
-            </TransitionFlex>
-            <VerticalFlex
-                style={{
-                    height: state.calendarState === 'finish set' ? location.pathname.includes('request') ? 88 : 170 : 0,
-                    ...calendarAnimationStyle
-                }}
-            >
-                <EmptyHeight height="16px" />
-                <Divider />
-                <VerticalFlex style={{ paddingTop: '16px' }}>
-                    <TextSubtitle1>상담 진행 시간</TextSubtitle1>
-                    <EmptyHeight height="8px" />
-                    <TextSubtitle1 color={colorCareerDiveBlue}>{state.startTime && getKoreanTimeString(state.startTime)} ~ {state.startTime && getKoreanTimeString(addMinuteTs(state.startTime, state.consultingTime))}</TextSubtitle1>
-                    <EmptyHeight height="24px" />
-                    <CustomButton
-                        height='48px'
-                        width="100%"
-                        onClick={() => {
-                            const scheduleId = state.availableTimes[state.selectedDate!.getDate()]
-                                .find(
-                                    (e: IavailableTime) => {
-                                        return e.startTime.getTime() <= state.startTime!.getTime() && state.startTime!.getTime() <= e.endTime.getTime()
+
+                <TransitionFlex
+                    style={{
+                        // height: ['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0,
+                        paddingLeft: '1px', paddingTop: '16px',
+                        ...calendarAnimationStyle
+                    }}
+                    height={['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0}
+                >
+                    <VerticalFlex ref={timeSelectRef}>
+                        {
+                            state.startTimeObj && state.consultingTime && state.startTimeObj[state.consultingTime].AM.length > 0 &&
+                            <>
+                                <TextSubtitle1>오전</TextSubtitle1>
+                                <TimeButtonWrapper
+                                    value={state.startTime ? state.startTime.getTime() : null}
+                                    exclusive
+                                    onChange={(e, time) => {
+                                        dispatch({ type: 'updateStartTime', payload: time ? new Date(time) : null })
+                                    }}
+                                >
+                                    {
+                                        state.startTimeObj[state.consultingTime].AM
+                                            .map((date: Date) => {
+                                                return <TimeButton
+                                                    key={date.getTime()}
+                                                    value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
+                                                </TimeButton>
+                                            })
                                     }
-                                )!.scheduleId
+                                </TimeButtonWrapper>
+                                <EmptyHeight height="16px" />
+                            </>
+                        }
+                        {state.startTimeObj && state.consultingTime && state.startTimeObj[state.consultingTime].PM.length > 0 &&
+                            <>
+                                <TextSubtitle1>오후</TextSubtitle1>
+                                <TimeButtonWrapper
+                                    value={state.startTime ? state.startTime.getTime() : null}
+                                    exclusive
+                                    onChange={(e, time) => {
+                                        dispatch({ type: 'updateStartTime', payload: time ? new Date(time) : null })
+                                    }}
+                                >
+                                    {
+                                        state.startTimeObj[state.consultingTime].PM
+                                            .map((date: Date) => {
+                                                return <TimeButton
+                                                    key={date.getTime()}
+                                                    value={date.getTime()}><TextBody2>{getHoursAndMinuteString(new Date(new Date(date).setHours(date.getHours() - 12)))}</TextBody2>
+                                                </TimeButton>
+                                            })
+                                    }
+                                </TimeButtonWrapper>
+                            </>
+                        }
 
-                            updateReservation(
-                                +params.id!,
-                                [
-                                    { name: 'scheduleId', data: scheduleId },
-                                    { name: 'startTime', data: state.startTime },
-                                    { name: 'consultingTime', data: state.consultingTime }
-                                ]
-                            )
+                    </VerticalFlex>
+                </TransitionFlex>
+                <VerticalFlex
+                    style={{
+                        height: state.calendarState === 'finish set' ? location.pathname.includes('request') ? 88 : 170 : 0,
+                        ...calendarAnimationStyle
+                    }}
+                >
+                    <EmptyHeight height="16px" />
+                    <Divider />
+                    <VerticalFlex style={{ paddingTop: '16px' }}>
+                        <TextSubtitle1>상담 진행 시간</TextSubtitle1>
+                        <EmptyHeight height="8px" />
+                        <TextSubtitle1 color={colorCareerDiveBlue}>{state.startTime && getKoreanTimeString(state.startTime)} ~ {state.startTime && getKoreanTimeString(addMinuteTs(state.startTime, state.consultingTime))}</TextSubtitle1>
+                        <EmptyHeight height="24px" />
+                        <CustomButton
+                            height='48px'
+                            width="100%"
+                            onClick={() => {
+                                const scheduleId = state.availableTimes[state.selectedDate!.getDate()]
+                                    .find(
+                                        (e: IavailableTime) => {
+                                            return e.startTime.getTime() <= state.startTime!.getTime() && state.startTime!.getTime() <= e.endTime.getTime()
+                                        }
+                                    )!.scheduleId
 
-                            navigate(`/mentee/request/${params.id}`)
-                        }}>
-                        <TextSubtitle1>
-                            다음
-                        </TextSubtitle1>
-                    </CustomButton>
+                                updateReservation(
+                                    +params.id!,
+                                    [
+                                        { name: 'scheduleId', data: scheduleId },
+                                        { name: 'startTime', data: state.startTime },
+                                        { name: 'consultingTime', data: state.consultingTime }
+                                    ]
+                                )
+
+                                navigate(`/mentee/request/${params.id}`)
+                            }}>
+                            <TextSubtitle1>
+                                다음
+                            </TextSubtitle1>
+                        </CustomButton>
+                    </VerticalFlex>
                 </VerticalFlex>
-            </VerticalFlex>
-        </Card >
+            </Card >
+        </Flex>
+
     );
 };
 export default MenteeCalendar2

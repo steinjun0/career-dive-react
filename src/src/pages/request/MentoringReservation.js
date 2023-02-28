@@ -6,6 +6,7 @@ import {
   GrayBackground,
   MaxWidthDiv,
   Flex,
+  EmptyHeight,
 } from "util/styledComponent";
 
 import MentorProfile from 'component/mentor/Profile'
@@ -29,20 +30,8 @@ const MetorProfileBanner = styled(CenterWidthWrapper)`
 const CardsWrapper = styled(Flex)({
   justifyContent: 'space-between',
   marginTop: '30px',
-  marginBottom: '158px',
   maxWidth: '582px',
-  padding: '0 16px 16px 16px'
 })
-
-const CardsWrapper2 = styled(Flex)({
-  justifyContent: 'space-between',
-  marginTop: '-128px',
-  marginBottom: '128px',
-  maxWidth: '582px',
-  width: '100%'
-})
-
-
 
 function MentoringReservation() {
   const params = useParams();
@@ -84,7 +73,7 @@ function MentoringReservation() {
   return (
     <div>
       <FullWidthWrapper>
-        <div style={{ width: '100%', padding: '0 16px', boxSizing: 'border-box' }}>
+        <MaxWidthDiv>
           {mentorData &&
             <MentorProfile
               name={nickName}
@@ -92,32 +81,23 @@ function MentoringReservation() {
               id={mentorData.UserID}
               inService={mentorData.InService}
             />}
-        </div>
+        </MaxWidthDiv>
         <GrayBackground >
-          <CardsWrapper >
-            {/* <MentorCalendar setIsFinish={setIsFinish}>
-            </MentorCalendar> */}
-            {/* <MenteeCalendar
+          <MaxWidthDiv style={{ alignItems: 'center' }}>
+            <CardsWrapper >
+              {initialData !== undefined && <MenteeCalendar2
                 userId={+params.id}
-                startDate={new Date(2023, 1, 9, 12, 30)}
-                consultingTime={20}
+                startDate={initialData.startTime}
+                consultingTime={initialData.consultingTime}
                 setIsFinished={setIsFinish}
-              /> */}
-            {initialData !== undefined && <MenteeCalendar2
-              userId={+params.id}
-              startDate={initialData.startTime}
-              consultingTime={initialData.consultingTime}
-              setIsFinished={setIsFinish}
-            />}
+              />}
 
-          </CardsWrapper>
-          {
-            isFinish &&
-            <CardsWrapper2>
-              {/* {mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />} */}
-              {mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />}
-            </CardsWrapper2>
-          }
+            </CardsWrapper>
+            <EmptyHeight height={(!isFinish || !mentorData) ? '158px' : '30px'} />
+            {isFinish && mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />}
+            <EmptyHeight height={(!isFinish || !mentorData) ? '0' : '30px'} />
+
+          </MaxWidthDiv>
 
         </GrayBackground>
       </FullWidthWrapper>
