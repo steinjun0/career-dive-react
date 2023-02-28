@@ -1,9 +1,6 @@
-import { styled } from "@mui/material";
+import { styled, useMediaQuery, useTheme } from "@mui/material";
 import testMentorImage from "../../assets/img/logo/testProfileImage.png";
 import Button from "@mui/material/Button";
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-
-import EditCalendarIcon from "../../assets/icon/editCalendar.svg";
 
 import {
   RowAlignCenterFlex,
@@ -12,19 +9,19 @@ import {
   colorCareerDiveBlue,
   colorBackgroundGrayLight,
   colorCareerDivePink,
-  colorTextLight,
-  EmptyWidth,
   colorBackgroundCareerDiveBlue,
   EmptyHeight,
   TextHeading6,
   TextBody1,
-  TextSubtitle2,
   TextButton,
-  colorBackgroundCareerDivePink
+  colorBackgroundCareerDivePink,
+  Flex
 } from "util/styledComponent";
 import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TagLarge, TagMedium, TagSmall } from "util/Custom/CustomTag";
+import FavoriteButton from "./FavoriteButton";
+
 
 const MentorProfileWrapper = styled(RowAlignCenterFlex)`
   height: 200px;
@@ -93,21 +90,24 @@ const ApplyMentoringButton = styled(Button)`
   border-radius: 8px;
 `;
 
-function FavoriteButton({ isFavorite, setIsFavorite }) {
-  if (isFavorite) {
-    return (<FavoriteMentorButtonClicked disableElevation onClick={() => { setIsFavorite(false) }}>
-      <BookmarkBorderIcon style={{ color: colorCareerDivePink }} />
-    </FavoriteMentorButtonClicked>)
-  }
-  else {
-    return (<FavoriteMentorButton disableElevation onClick={() => { setIsFavorite(true) }}>
-      <BookmarkBorderIcon style={{ color: colorTextLight }} />
-    </FavoriteMentorButton>)
-  }
-}
+// function FavoriteButton({ isFavorite, setIsFavorite }) {
+//   if (isFavorite) {
+//     return (<FavoriteMentorButtonClicked disableElevation onClick={() => { setIsFavorite(false) }}>
+//       <BookmarkBorderIcon style={{ color: colorCareerDivePink }} />
+//     </FavoriteMentorButtonClicked>)
+//   }
+//   else {
+//     return (<FavoriteMentorButton disableElevation onClick={() => { setIsFavorite(true) }}>
+//       <BookmarkBorderIcon style={{ color: colorTextLight }} />
+//     </FavoriteMentorButton>)
+//   }
+// }
 
 
 function MentorProfile({ name = '', description = '', inService = true, id = -1 }) {
+  const theme = useTheme();
+  const isDownMd = useMediaQuery(theme.breakpoints.down('md'))
+
   const [isFavorite, setIsFavorite] = useState(false)
   const navigater = useNavigate();
   const params = useParams();
@@ -124,7 +124,28 @@ function MentorProfile({ name = '', description = '', inService = true, id = -1 
           <TagMedium style={{ padding: '0 8px' }} color={colorCareerDiveBlue} background_color={colorBackgroundCareerDiveBlue}><TextButton>현직자</TextButton></TagMedium> :
           <TagMedium style={{ padding: '0 8px' }} color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}><TextButton>경력자</TextButton></TagMedium>}
       </ProfileTexts>
-      {!JSON.parse(localStorage.getItem("IsMentorMode")) && <Buttons>
+
+
+      {!isDownMd && <Flex style={{
+        marginLeft: 'auto',
+        height: '40px',
+        justifyContent: 'space-between'
+      }}
+      >
+        <FavoriteButton
+          menteeId={+localStorage.getItem('UserID')}
+          mentorId={+params.id}
+        />
+        {!location.pathname.includes('mentee/request/') && <ApplyMentoringButton
+          disableElevation
+          style={{ marginLeft: 12 }}
+          onClick={() => { navigater(`/mentee/request/${id}`) }}
+        >
+          상담 신청
+        </ApplyMentoringButton>}
+      </Flex>}
+
+      {/* {!isDownMd && <Buttons>
         <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
 
         {!location.pathname.includes('mentee/request/') && <ApplyMentoringButton
@@ -134,7 +155,8 @@ function MentorProfile({ name = '', description = '', inService = true, id = -1 
         >
           상담 신청
         </ApplyMentoringButton>}
-      </Buttons>}
+      </Buttons>} */}
+
     </MentorProfileWrapper>
   );
 }

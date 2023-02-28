@@ -245,6 +245,11 @@ export default {
     return mentorListRes
   },
 
+  async getAccountFavoriteMentorList({ menteeId }) {
+    const mentorListRes = await this.getAxios(`${CAREER_DIVE_API_URL}/account/mentee/favoritesMentor/${menteeId}/list`)
+    return mentorListRes
+  },
+
 
   async postAccount({ email, password, nickname, phoneNumber }) {
     const res = await this.postAxios(`${CAREER_DIVE_API_URL}/account`, { Email: email, Password: password, Nickname: nickname, Phone: `${phoneNumber}` })
@@ -308,6 +313,16 @@ export default {
     return scheduleRes
   },
 
+  async postAccountTag(tags, mentorId) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/tag`, { Tags: tags, MentorID: +mentorId })
+    return scheduleRes
+  },
+
+  async postAccountMenteeFavoritesMentor({ menteeId, mentorId }) {
+    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/mentee/favoritesMentor`, { MentorID: +mentorId, MenteeID: +menteeId })
+    return scheduleRes
+  },
+
   async postConsult(
     { consultContentList,
       menteeId, mentorId,
@@ -337,11 +352,6 @@ export default {
   async postConsultFile(id, file) {
     const consultFileRes = await this.postAxiosFormData(`${CAREER_DIVE_API_URL}/consult/${id}/file`, file)
     return consultFileRes
-  },
-
-  async postAccountTag(tags, mentorId) {
-    const scheduleRes = await this.postAxios(`${CAREER_DIVE_API_URL}/account/tag`, { Tags: tags, MentorID: +mentorId })
-    return scheduleRes
   },
 
   async postAccountRenewSendbird() {
