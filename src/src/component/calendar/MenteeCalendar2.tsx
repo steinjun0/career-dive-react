@@ -228,12 +228,11 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                     calendarState: 'initializing'
                 }
             } else {
-
                 updateReservation(
                     state.mentorId,
                     [
                         { name: 'scheduleId', data: state.availableTimes[state.selectedDate!.getDate()] },
-                        { name: 'startTime', data: state.startTime },
+                        { name: 'startTime', data: action.payload },
                         { name: 'consultingTime', data: state.consultingTime }
                     ]
                 )
