@@ -14,10 +14,11 @@ import Introduction from "component/mentor/Introduction";
 
 import { useEffect, useState } from "react";
 import API from 'API';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
-import CustomToggleButton2 from "util/Custom/CustomToggleButton2";
 import { CustomButton } from "util/Custom/CustomButton";
+import FavoriteButton from "component/mentor/FavoriteButton";
+import { getParsedLocalStorage } from "util/ts/util";
 
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
@@ -36,6 +37,7 @@ function Mentor() {
   const theme = useTheme();
   const isDownMd = useMediaQuery(theme.breakpoints.down('md'))
   const params = useParams();
+  const navigater = useNavigate();
 
   const [mentorData, setMentorData] = useState();
   const [nickName, setNickName] = useState('');
@@ -55,10 +57,6 @@ function Mentor() {
     })
 
   }, [])
-
-  useEffect(() => {
-    // console.log('mentorData', mentorData)
-  }, [mentorData])
 
 
   return (
@@ -99,7 +97,19 @@ function Mentor() {
                 <Grid item xs={12} md={6}>
                   <Grid container item spacing={2}>
                     <Grid item xs={12}>
-                      <MenteeCalendar2 userId={+params.id} startDate={null} />
+                      <MenteeCalendar2
+                        userId={+params.id}
+                        consultingTime={
+                          (getParsedLocalStorage('reservations') ?? null) &&
+                          (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
+                          getParsedLocalStorage('reservations')[+params.id]['consultingTime']
+                        }
+                        startDate={
+                          (getParsedLocalStorage('reservations') ?? null) &&
+                          (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
+                          new Date(getParsedLocalStorage('reservations')[+params.id]['startTime'])
+                        }
+                      />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -123,8 +133,14 @@ function Mentor() {
             filter: 'drop-shadow(0px -20px 40px rgba(130, 130, 130, 0.1))'
           }}
         >
-          <CustomToggleButton2></CustomToggleButton2>
-          <CustomButton style={{ width: '100%', marginLeft: '8px', marginRight: '32px' }}>
+          <FavoriteButton
+            menteeId={+localStorage.getItem('UserID')}
+            mentorId={+params.id}
+          />
+          <CustomButton
+            style={{ width: '100%', marginLeft: '8px', marginRight: '32px' }}
+            onClick={() => { navigater(`/mentee/request/${+params.id}`) }}
+          >
             상담 신청
           </CustomButton>
         </Flex>

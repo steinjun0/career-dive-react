@@ -72,8 +72,6 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
     if (reservations !== null) {
       const reservation = reservations[+params.id!]
       if (reservation !== undefined) {
-        console.log('reservation', reservation)
-        console.log('test', new Date(reservation['startTime']))
         reservation['consultingTime'] && setConsultingTime(reservation['consultingTime'])
         reservation['consultCategory'] && setConsultCategory(reservation['consultCategory'])
         reservation['consultContent'] && setConsultContent(reservation['consultContent'])

@@ -64,9 +64,12 @@ function getSplitTimes(startTime: Date, endTime: Date): Date[] {
 // 1. props가 있다면 순서대로 누르는 것과 동일하게 진행한다.
 // 2. api를 통해서 해당 날짜의 일정을 받아와야한다.
 // 3. 만약 해당 날짜의 일정에 props로 받은 일정과 같은게 있다면 선택, 아니면 미선택
-
 interface IavailableTime {
-    [key: number]: { startTime: Date, endTime: Date, ruleType: string, ruleId: number, scheduleId: number }[]
+    startTime: Date, endTime: Date, ruleType: string, ruleId: number, scheduleId: number
+}
+
+interface IavailableTimes {
+    [key: number]: IavailableTime[]
 }
 interface IstartTimeObj { 20: { AM: Date[], PM: Date[] }, 40: { AM: Date[], PM: Date[] } }
 
@@ -78,7 +81,7 @@ type ACTIONTYPE =
     | { type: "updateSelectedDate"; payload: Date | null }
     | { type: "updateAvailableDates"; payload: Date[] }
     | { type: "resetAvailableDates", }
-    | { type: "updateAvailableTimes"; payload: IavailableTime }
+    | { type: "updateAvailableTimes"; payload: IavailableTimes }
     | { type: "resetAvailableTimes", }
     | { type: "updateStartTimeObj", payload: IstartTimeObj | null }
     | { type: "updateConultingTime", payload: 20 | 40 | null }
@@ -87,15 +90,15 @@ type ACTIONTYPE =
 interface IcalendarState {
     calendarDates: Date[], currentYearAndMonth: Date,
     selectedDate: Date | null, availableDates: Date[],
-    availableTimes: IavailableTime, startTimeObj: IstartTimeObj | null,
+    availableTimes: IavailableTimes, startTimeObj: IstartTimeObj | null,
     consultingTime: 20 | 40 | null, startTime: Date | null,
     calendarState: string | 'view' | 'setting consultingTime' | 'setting startTime' | 'finish set' | 'initializing',
+    mentorId: number
 }
 
 
 function reducer(state: IcalendarState, action: ACTIONTYPE) {
-    function getCalendarStart(newState: IcalendarState) {
-        // console.log(action.type)
+    function getCalendarStatus(newState: IcalendarState) {
         if (newState.selectedDate === null) {
             return 'view'
         } else if (newState.consultingTime === null) {
@@ -106,7 +109,9 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
             return 'finish set'
         }
     }
+    // console.log('action.type', action.type, state.calendarState)
     switch (action.type) {
+
         // case 'updateCalendarDates': {
         //     return { ...state, calendarDates: action.payload }
         // }
@@ -145,7 +150,7 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 consultingTime: null,
                 startTime: null,
                 startTimeObj: null,
-                calendarState: getCalendarStart({ ...state, selectedDate: action.payload, consultingTime: null, startTime: null, })
+                calendarState: getCalendarStatus({ ...state, selectedDate: action.payload, consultingTime: null, startTime: null, })
             }
         }
 
@@ -163,14 +168,14 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                     ...state,
                     selectedDate: state.selectedDate,
                     availableTimes: action.payload,
-                    calendarState: state.calendarState
+                    calendarState: 'initializing'
                 }
             } else {
                 return {
                     ...state,
                     selectedDate: state.availableDates[0] ?? null,
                     availableTimes: action.payload,
-                    calendarState: getCalendarStart({ ...state, selectedDate: state.availableDates[0] ?? null, })
+                    calendarState: getCalendarStatus({ ...state, selectedDate: state.availableDates[0] ?? null, })
                 }
             }
 
@@ -191,7 +196,7 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 return {
                     ...state,
                     startTimeObj: action.payload,
-                    // calendarState: getCalendarStart({ ...state, selectedDate: state.availableDates[0] ?? null })
+                    // calendarState: getCalendarStatus({ ...state, selectedDate: state.availableDates[0] ?? null })
                 }
             }
 
@@ -203,24 +208,44 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                     ...state,
                     consultingTime: state.consultingTime,
                     startTime: state.startTime,
-                    calendarState: getCalendarStart({ ...state, consultingTime: action.payload, startTime: null, })
+                    // calendarState: getCalendarStatus({ ...state, consultingTime: action.payload, startTime: null, })
                 }
             } else {
                 return {
                     ...state,
                     consultingTime: action.payload,
                     startTime: null,
-                    calendarState: getCalendarStart({ ...state, consultingTime: action.payload, startTime: null, })
+                    calendarState: getCalendarStatus({ ...state, consultingTime: action.payload, startTime: null, })
                 }
             }
 
 
         case 'updateStartTime':
-            return {
-                ...state,
-                startTime: action.payload,
-                calendarState: getCalendarStart({ ...state, startTime: action.payload, })
+            if (state.calendarState === 'initializing') {
+                return {
+                    ...state,
+                    startTime: action.payload,
+                    calendarState: 'initializing'
+                }
+            } else {
+
+                updateReservation(
+                    state.mentorId,
+                    [
+                        { name: 'scheduleId', data: state.availableTimes[state.selectedDate!.getDate()] },
+                        { name: 'startTime', data: state.startTime },
+                        { name: 'consultingTime', data: state.consultingTime }
+                    ]
+                )
+                return {
+                    ...state,
+                    startTime: action.payload,
+                    calendarState: getCalendarStatus({ ...state, startTime: action.payload })
+                }
+
             }
+
+
 
         case 'forceRendering': {
             return { ...state }
@@ -233,18 +258,19 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
 
 const MenteeCalendar2 = (props:
     { userId: number, startDate: Date | null, consultingTime: 20 | 40 | null, setIsFinished?: Dispatch<SetStateAction<boolean>> }) => {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const params = useParams()
     const initialState: IcalendarState =
     {
         calendarDates: [], currentYearAndMonth: props.startDate ? new Date(new Date(props.startDate).setDate(1)) : new Date(new Date().setDate(1)),
         selectedDate: props.startDate, availableDates: [],
         availableTimes: {}, startTimeObj: null,
         consultingTime: props.consultingTime, startTime: props.startDate,
-        calendarState: 'initializing'
+        calendarState: props.startDate ? 'initializing' : 'view',
+        mentorId: +params.id!
     }
 
-    const navigate = useNavigate()
-    const location = useLocation()
-    const params = useParams();
     const [state, dispatch] = useReducer(reducer, initialState)
     const [startTimeLen, setStartTimeLen] = useState<number>(0)
 
@@ -283,7 +309,7 @@ const MenteeCalendar2 = (props:
         }
 
         function updateAvailableTimes(year: number, month: number, dayTimes: IDayTime[]) {
-            const tempTimes: IavailableTime = {}
+            const tempTimes: IavailableTimes = {}
             for (let i = 0; i < dayTimes.length; i++) {
                 const dayTime = dayTimes[i]
                 if (!isPastDate(new Date(year, month - 1, dayTime.Day))) {
@@ -327,13 +353,13 @@ const MenteeCalendar2 = (props:
 
             const schedules = state.availableTimes[state.selectedDate.getDate()]
             if (schedules) {
-                const splitTimes = schedules.map(schedule => {
+                const splitTimes = schedules.map((schedule: IavailableTime) => {
                     return getSplitTimes(schedule.startTime, schedule.endTime)
-                        .map(date => {
+                        .map((date: Date) => {
                             return date
                         })
                 })
-                splitTimes.forEach(times => {
+                splitTimes.forEach((times: Date[]) => {
                     const timesAm = times
                         .filter(time => time.getHours() < 12)
                         .filter(time => ![...temp['20']['AM'], ...temp['40']['AM']].map(time => time.getTime()).includes(time.getTime()))
@@ -422,9 +448,9 @@ const MenteeCalendar2 = (props:
                 {['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
                     return <Flex style={{ minWidth: '14.28%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1>{koDay}</TextSubtitle1> </Flex>
                 })}
-                {state.calendarDates.map((date, i) => {
+                {state.calendarDates.map((date: Date, i: number) => {
                     const isSelected = (date: Date) => state.selectedDate && state.selectedDate.getDate() === date.getDate()
-                    const isAvailable = (date: Date) => state.availableDates.map(e => e.getTime()).includes(date.getTime())
+                    const isAvailable = (date: Date) => state.availableDates.map((e: Date) => e.getTime()).includes(date.getTime())
                     return date === null ?
                         <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }} />
                         :
@@ -509,7 +535,7 @@ const MenteeCalendar2 = (props:
                             >
                                 {
                                     state.startTimeObj[state.consultingTime].AM
-                                        .map(date => {
+                                        .map((date: Date) => {
                                             return <TimeButton
                                                 key={date.getTime()}
                                                 value={date.getTime()}><TextBody2>{getHoursAndMinuteString(date)}</TextBody2>
@@ -532,7 +558,7 @@ const MenteeCalendar2 = (props:
                             >
                                 {
                                     state.startTimeObj[state.consultingTime].PM
-                                        .map(date => {
+                                        .map((date: Date) => {
                                             return <TimeButton
                                                 key={date.getTime()}
                                                 value={date.getTime()}><TextBody2>{getHoursAndMinuteString(new Date(new Date(date).setHours(date.getHours() - 12)))}</TextBody2>
@@ -564,7 +590,7 @@ const MenteeCalendar2 = (props:
                         onClick={() => {
                             const scheduleId = state.availableTimes[state.selectedDate!.getDate()]
                                 .find(
-                                    e => {
+                                    (e: IavailableTime) => {
                                         return e.startTime.getTime() <= state.startTime!.getTime() && state.startTime!.getTime() <= e.endTime.getTime()
                                     }
                                 )!.scheduleId
