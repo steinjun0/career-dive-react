@@ -107,6 +107,7 @@ function Mentor() {
                         startDate={
                           (getParsedLocalStorage('reservations') ?? null) &&
                           (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
+                          (getParsedLocalStorage('reservations')[+params.id]['startTime'] ?? null) &&
                           new Date(getParsedLocalStorage('reservations')[+params.id]['startTime'])
                         }
                       />
