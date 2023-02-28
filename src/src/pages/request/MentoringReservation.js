@@ -22,21 +22,26 @@ const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
   flex-direction: column;
   align-items: center;
+  padding: 0 16px;
+  width: calc(100% - 32px);
 `;
 
-const CardsWrapper = styled(Flex)`
-  justify-content: space-between;
-  margin-top: 30px;
-  margin-bottom: 158px;
-  width: 582px;
-`;
+const CardsWrapper = styled(Flex)({
+  justifyContent: 'space-between',
+  marginTop: '30px',
+  marginBottom: '158px',
+  maxWidth: '582px',
+  padding: '0 16px 16px 16px'
+})
 
-const CardsWrapper2 = styled(Flex)`
-  justify-content: space-between;
-  margin-top: -128px;
-  margin-bottom: 128px;
-  width: 582px;
-`;
+const CardsWrapper2 = styled(Flex)({
+  justifyContent: 'space-between',
+  marginTop: '-128px',
+  marginBottom: '128px',
+  maxWidth: '582px',
+  width: '100%'
+})
+
 
 
 function MentoringReservation() {
@@ -63,7 +68,7 @@ function MentoringReservation() {
     })
     if (getParsedLocalStorage('reservations') && getParsedLocalStorage('reservations')[+params.id]) {
       setInitialData({
-        startTime: new Date(getParsedLocalStorage('reservations')[+params.id].startTime),
+        startTime: getParsedLocalStorage('reservations')[+params.id].startTime ? new Date(getParsedLocalStorage('reservations')[+params.id].startTime) : null,
         consultingTime: getParsedLocalStorage('reservations')[+params.id].consultingTime,
       })
     } else {
@@ -79,17 +84,15 @@ function MentoringReservation() {
   return (
     <div>
       <FullWidthWrapper>
-        <MaxWidthDiv>
-          <MetorProfileBanner>
-            {mentorData &&
-              <MentorProfile
-                name={nickName}
-                description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
-                id={mentorData.UserID}
-                inService={mentorData.InService}
-              />}
-          </MetorProfileBanner>
-        </MaxWidthDiv>
+        <div style={{ width: '100%', padding: '0 16px', boxSizing: 'border-box' }}>
+          {mentorData &&
+            <MentorProfile
+              name={nickName}
+              description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+              id={mentorData.UserID}
+              inService={mentorData.InService}
+            />}
+        </div>
         <GrayBackground >
           <CardsWrapper >
             {/* <MentorCalendar setIsFinish={setIsFinish}>
