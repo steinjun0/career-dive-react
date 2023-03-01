@@ -72,7 +72,6 @@ export function Card(props) {
           </TitleBottom>
         </Flex>
       </TitleWrapper>
-      {isDownMd && <Divider sx={{ borderColor: colorBackgroundGrayMedium, borderWidth: 0.5, width: 'calc(100% + 32px)', marginLeft: '-16px', margin: '16px 0 16px -16px' }} />}
       {
         isDownMd
         &&
