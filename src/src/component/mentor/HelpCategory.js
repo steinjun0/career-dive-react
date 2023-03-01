@@ -48,7 +48,7 @@ function HelpCategory({ regularTags = [], premiumTags = [] }) {
           </RowAlignCenterFlex>
         }>
         <EmptyHeight height='16px'></EmptyHeight>
-        {!isDownMd && <Flex style={{ flexWrap: 'wrap' }}>
+        <Flex style={{ flexWrap: 'wrap' }}>
           {regularTags && regularTags.map((tag, index) =>
             <Flex key={index} style={{ marginBottom: '8px' }}>
               <TagMedium
@@ -71,38 +71,8 @@ function HelpCategory({ regularTags = [], premiumTags = [] }) {
               <EmptyWidth width='8px'></EmptyWidth>
             </Flex>
           )}
-        </Flex>}
-        {
-          isDownMd &&
-          <VerticalFlex >
-            <Flex style={{ overflowX: 'scroll', marginBottom: '16px' }}>
-              {regularTags && regularTags.map((tag, index) =>
-                <Flex key={index} style={{ minWidth: 'fit-content' }}>
-                  <TagMedium
-                    color={colorCareerDiveBlue}
-                    background_color={colorBackgroundCareerDiveBlue}
-                  >
-                    <TextButton>{tag}</TextButton>
-                  </TagMedium>
-                  <EmptyWidth width='8px'></EmptyWidth>
-                </Flex>
-              )}
-            </Flex>
-            <Flex style={{ overflowX: 'scroll' }}>
-              {premiumTags && premiumTags.map((tag, index) =>
-                <Flex key={index} style={{ minWidth: 'fit-content' }}>
-                  <TagMedium
-                    color={colorCareerDivePink}
-                    background_color={colorBackgroundCareerDivePink}
-                  >
-                    <TextButton>{tag}</TextButton>
-                  </TagMedium>
-                  <EmptyWidth width='8px'></EmptyWidth>
-                </Flex>
-              )}
-            </Flex>
-          </VerticalFlex>
-        }
+        </Flex>
+
 
       </Card>
     </HelpCategoryWrapper>
