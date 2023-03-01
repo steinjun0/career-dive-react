@@ -21,10 +21,11 @@ import {
     TextSubtitle1,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton'
-import { CustomTextField } from 'util/Custom/CustomTextField.js';
 import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
 import { useNavigate } from 'react-router-dom';
+import CustomTextField from "util/ts/Custom/CustomTextField";
+import *  as util from "util/ts/util";
 
 const TextFieldWrapper = styled(Flex)`
   width: 100%;
@@ -64,6 +65,38 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isAutoLogin, setIsAutoLogin] = useState(false);
+
+    const [emailHelperText, setEmailHelperText] = useState('');
+    const [isEmailValid, setIsEmailValid] = useState(true);
+
+    const [passwordHelperText, setPasswordHelperText] = useState('');
+    const [isPasswordValid, setIsPasswordValid] = useState(true);
+
+    function validateEmail() {
+        if (email === '') {
+            console.log('hi')
+            setEmailHelperText('이메일을 입력해주세요')
+        } else if (!util.validateEmail(email)) {
+            setEmailHelperText('올바른 이메일 형식을 입력해 주세요.')
+        } else {
+            setIsEmailValid(true)
+            return true
+        }
+        setIsEmailValid(false)
+        return false
+    }
+
+    function validatePassword() {
+
+        if (password === '') {
+            setPasswordHelperText('비밀번호를 입력해 주세요.')
+        } else {
+            setIsPasswordValid(true)
+            return true
+        }
+        setIsPasswordValid(false)
+        return false
+    }
 
     useEffect(() => {
         const isAutoLoginLocalStorage = JSON.parse(localStorage.getItem('isAutoLogin'))
@@ -118,36 +151,38 @@ function Login() {
                     <TextHeading6>
                         로그인
                     </TextHeading6>
-                    <TextFieldWrapper>
+                    <VerticalFlex style={{ gap: '24px', marginTop: '36px', marginBottom: '24px' }}>
                         <CustomTextField
-                            style={{ marginBottom: 24 }}
                             onChange={(event) => { setEmail(event.target.value) }}
+                            onBlur={(event) => { validateEmail() }}
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
                                     onClickLogin()
                                     event.preventDefault();
                                 }
                             }}
-                            variant="filled"
-                            InputProps={{ disableUnderline: true, }}
-                            fullWidth={true}
-                            margin="dense"
-                            size="small"
-                            hiddenLabel
                             placeholder="이메일"
+                            error={!isEmailValid}
+                            helperText={!isEmailValid ? emailHelperText : undefined}
+                            height="48px"
                         />
-                        <CustomPasswordTextField
-                            style={{ marginBottom: 24 }}
-                            password={password}
-                            setPassword={setPassword}
+
+                        <CustomTextField
+                            onChange={(event) => { setPassword(event.target.value) }}
+                            onBlur={(event) => { validatePassword() }}
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
                                     onClickLogin()
                                     event.preventDefault();
                                 }
                             }}
+                            placeholder="비밀번호"
+                            error={!isPasswordValid}
+                            helperText={!isPasswordValid ? passwordHelperText : undefined}
+                            type='password'
+                            height="48px"
                         />
-                    </TextFieldWrapper>
+                    </VerticalFlex>
                     <SubButtonsWrapper>
                         <RowAlignCenterFlex>
                             <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
