@@ -163,6 +163,10 @@ interface IMarginSet {
   marginRight?: CSSProperties["marginRight"],
 }
 
+interface IHeightSet { height?: CSSProperties["height"], maxHeight?: CSSProperties["maxHeight"], minHeight?: CSSProperties["minHeight"]; }
+
+interface IWidthSet { width?: CSSProperties["width"], maxWidth?: CSSProperties["maxWidth"], minWidth?: CSSProperties["minWidth"]; }
+
 const getMarginSet = (props: IMarginSet) => ({
   margin: props.margin,
   marginTop: props.marginTop,
@@ -179,13 +183,24 @@ const getPaddingSet = (props: IPaddingSet) => ({
   paddingRight: props.paddingRight,
 });
 
+const getHeightSet = (props: IHeightSet) => ({ height: props.height, minHeight: props.maxHeight, maxHeight: props.maxHeight });
+const getWidthSet = (props: IWidthSet) => ({ width: props.width, minWidth: props.maxWidth, maxWidth: props.maxWidth });
+
 // container
-export const Flex = styled("div")((props: { gap?: CSSProperties["gap"]; } & IMarginSet & IPaddingSet) => ({
-  display: 'flex',
-  gap: props.gap,
-  ...getMarginSet(props),
-  ...getPaddingSet(props)
-}));
+export const Flex = styled("div")((props:
+  { gap?: CSSProperties["gap"], justifyContent?: CSSProperties["justifyContent"], alignItems?: CSSProperties["alignItems"]; } &
+  IHeightSet &
+  IWidthSet &
+  IMarginSet & IPaddingSet) => ({
+    display: 'flex',
+    gap: props.gap,
+    justifyContent: props.justifyContent,
+    alignItems: props.alignItems,
+    ...getMarginSet(props),
+    ...getPaddingSet(props),
+    ...getHeightSet(props),
+    ...getWidthSet(props)
+  }));
 
 export const VerticalFlex = styled(Flex)(() => ({
   flexDirection: 'column',
