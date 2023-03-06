@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import API from '../API.js'
 import { Grid, styled, useTheme, } from "@mui/material";
 
 import {
-    FullHeightFullWidthWrapper,
-    MaxWidthDiv,
     VerticalFlex,
     TextHeading6,
     Flex,
-    colorBackgroundGrayLight,
     TextBody2,
     RowAlignCenterFlex,
     colorTextLight,
@@ -20,24 +16,16 @@ import {
     TextSubtitle2,
     TextSubtitle1,
 } from "util/styledComponent";
-import { CustomButton } from 'util/Custom/CustomButton'
+import { CustomButton } from 'util/Custom/CustomButton';
 import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from "util/ts/Custom/CustomTextField";
-import *  as util from "util/ts/util";
+import { postAccountLogin } from 'apis/login';
+import { updateUserDataLocalStorage, useValidation, validateEmail, validatePassword } from 'services/login';
+import React from "react";
 
-const TextFieldWrapper = styled(Flex)`
-  width: 100%;
-  margin-top: 36px;
-  min-height: 118px;
-  flex-direction: column;
-  justify-content: start;
-  input{
-    color: black;
-    background-color: ${colorBackgroundGrayLight};
-  }
-`
+
 
 const SubButtonsWrapper = styled(RowAlignCenterFlex)`
   justify-content: space-between;
@@ -51,87 +39,60 @@ const SubButtons = styled(TextBody2)`
 
 const ButtonWrapper = styled(VerticalFlex)`
 //   margin-top: 20px;
-`
+`;
 
 const SignUpText = styled(TextSubtitle2)`
   text-decoration: underline;
   margin-top: 6px;
-`
+`;
 
 function Login() {
     const navigate = useNavigate();
     const theme = useTheme();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [isAutoLogin, setIsAutoLogin] = useState(false);
+    const [email, setEmail, emailHelperText, isEmailValid, updateEmailHelperText] = useValidation({
+        validationFunction: validateEmail,
+        emptyHelperText: '이메일을 입력해주세요',
+        invalidHelperText: '올바른 이메일 형식을 입력해 주세요.',
+    });
 
-    const [emailHelperText, setEmailHelperText] = useState('');
-    const [isEmailValid, setIsEmailValid] = useState(true);
+    const [password, setPassword, passwordHelperText, isPasswordValid, updatePasswordHelperText] = useValidation({
+        emptyHelperText: '비밀번호를 입력해 주세요.',
+    });
 
-    const [passwordHelperText, setPasswordHelperText] = useState('');
-    const [isPasswordValid, setIsPasswordValid] = useState(true);
-
-    function validateEmail() {
-        if (email === '') {
-            console.log('hi')
-            setEmailHelperText('이메일을 입력해주세요')
-        } else if (!util.validateEmail(email)) {
-            setEmailHelperText('올바른 이메일 형식을 입력해 주세요.')
-        } else {
-            setIsEmailValid(true)
-            return true
-        }
-        setIsEmailValid(false)
-        return false
-    }
-
-    function validatePassword() {
-
-        if (password === '') {
-            setPasswordHelperText('비밀번호를 입력해 주세요.')
-        } else {
-            setIsPasswordValid(true)
-            return true
-        }
-        setIsPasswordValid(false)
-        return false
-    }
 
     useEffect(() => {
-        const isAutoLoginLocalStorage = JSON.parse(localStorage.getItem('isAutoLogin'))
+        const isAutoLoginLocalStorage = JSON.parse(localStorage.getItem('isAutoLogin')!);
         if (isAutoLoginLocalStorage === true) {
-            setIsAutoLogin(true)
+            setIsAutoLogin(true);
         }
-    }, [])
+    }, []);
 
 
     const onClickLogin = async () => {
-        try {
-            const loginResponse = await API.postAccountLogin(email, password);
-            if (loginResponse.status === 200) {
-                window.localStorage.setItem('UserID', loginResponse.data['UserID'])
-                window.localStorage.setItem('AccessToken', loginResponse.data['AccessToken'])
-                window.localStorage.setItem('RefreshToken', loginResponse.data['RefreshToken'])
-                window.localStorage.setItem('SendbirdToken', loginResponse.data['SendbirdToken'])
-                window.localStorage.setItem('IsMentor', loginResponse.data['IsMentor'])
-                window.localStorage.setItem('Nickname', loginResponse.data['Nickname'])
-                window.localStorage.setItem('isAutoLogin', isAutoLogin)
-                if (loginResponse.data['IsMentor']) {
-                    window.localStorage.setItem('IsMentorMode', true)
-                    navigate('/mentor')
+        updateEmailHelperText();
+        updatePasswordHelperText();
+        if (isEmailValid && isPasswordValid) {
+            try {
+                const loginResponse = await postAccountLogin(email, password);
+                if (loginResponse.status === 200) {
+                    updateUserDataLocalStorage({ userData: loginResponse.data, isAutoLogin });
+                    if (loginResponse.data['IsMentor']) {
+                        navigate('/mentor');
+                    } else {
+                        navigate('/');
+                    }
                 } else {
-                    window.localStorage.setItem('IsMentorMode', false)
-                    navigate('/')
+                    alert(loginResponse.data.error); // 이렇게 복잡해야하는가?
                 }
-            } else {
-                alert(loginResponse.data.error) // 이렇게 복잡해야하는가?
+            }
+            catch {
+                alert('에러가 발생했습니다. 네트워크 환경을 확인해 주세요');
             }
         }
-        catch {
-            alert('에러가 발생했습니다. 네트워크 환경을 확인해 주세요')
-        }
-    }
+
+    };
     return (
         <Flex
             sx={{
@@ -153,11 +114,11 @@ function Login() {
                     </TextHeading6>
                     <VerticalFlex style={{ gap: '24px', marginTop: '36px', marginBottom: '24px' }}>
                         <CustomTextField
-                            onChange={(event) => { setEmail(event.target.value) }}
-                            onBlur={(event) => { validateEmail() }}
+                            onChange={(event) => { setEmail(event.target.value); }}
+                            onBlur={(event) => { updateEmailHelperText(); }}
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
-                                    onClickLogin()
+                                    onClickLogin();
                                     event.preventDefault();
                                 }
                             }}
@@ -168,11 +129,11 @@ function Login() {
                         />
 
                         <CustomTextField
-                            onChange={(event) => { setPassword(event.target.value) }}
-                            onBlur={(event) => { validatePassword() }}
+                            onChange={(event) => { setPassword(event.target.value); }}
+                            onBlur={(event) => { updatePasswordHelperText(); }}
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
-                                    onClickLogin()
+                                    onClickLogin();
                                     event.preventDefault();
                                 }
                             }}
@@ -185,8 +146,8 @@ function Login() {
                     </VerticalFlex>
                     <SubButtonsWrapper>
                         <RowAlignCenterFlex>
-                            <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} />
-                            <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { setIsAutoLogin(!isAutoLogin) }}>자동 로그인</SubButtons>
+                            <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} onClick={undefined} children={undefined} />
+                            <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { setIsAutoLogin(!isAutoLogin); }}>자동 로그인</SubButtons>
                         </RowAlignCenterFlex>
                         <Flex>
                             <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 이메일을 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>이메일 찾기</SubButtons>

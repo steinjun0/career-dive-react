@@ -9,7 +9,6 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 
 import Home from "./pages/mentee/home";
 import Login from "./pages/login";
-import Login2 from "./pages/login2";
 import SignUp from './pages/signup';
 import Mentor from "./pages/mentor/id";
 import MentoringReservation from './pages/request/MentoringReservation'
@@ -95,7 +94,6 @@ ReactDOM.render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/login2" element={<Login2 />} />
           {/* <Route path="/signup" element={<SignUp />} /> */}
           <Route path="/signup" element={<Signup2 />} />
           {/* <Route path="/signup/phone" element={<Signup2Phone />} /> */}
