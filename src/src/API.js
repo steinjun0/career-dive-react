@@ -44,6 +44,7 @@ const getValidError = exception => {
   return exception
 }
 export default {
+  CAREER_DIVE_API_URL,
   refreshUserData() {
     let accessToken = localStorage.getItem('AccessToken')
     if (accessToken !== null) {
