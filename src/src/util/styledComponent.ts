@@ -187,20 +187,9 @@ const getHeightSet = (props: IHeightSet) => ({ height: props.height, minHeight: 
 const getWidthSet = (props: IWidthSet) => ({ width: props.width, minWidth: props.maxWidth, maxWidth: props.maxWidth });
 
 // container
-export const Flex = styled("div")((props:
-  { gap?: CSSProperties["gap"], justifyContent?: CSSProperties["justifyContent"], alignItems?: CSSProperties["alignItems"]; } &
-  IHeightSet &
-  IWidthSet &
-  IMarginSet & IPaddingSet) => ({
-    display: 'flex',
-    gap: props.gap,
-    justifyContent: props.justifyContent,
-    alignItems: props.alignItems,
-    ...getMarginSet(props),
-    ...getPaddingSet(props),
-    ...getHeightSet(props),
-    ...getWidthSet(props)
-  }));
+export const Flex = styled("div")(() => ({
+  display: 'flex',
+}));
 
 export const VerticalFlex = styled(Flex)(() => ({
   flexDirection: 'column',

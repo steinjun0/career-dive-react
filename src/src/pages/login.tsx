@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Grid, styled, useTheme, } from "@mui/material";
+import { Backdrop, styled, useTheme, } from "@mui/material";
 
 import {
     VerticalFlex,
@@ -9,37 +9,25 @@ import {
     TextBody2,
     RowAlignCenterFlex,
     colorTextLight,
-    EmptyWidth,
     EmptyHeight,
-    ColumnAlignCenterFlex,
     LinkNoDeco,
     TextSubtitle2,
-    TextSubtitle1,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton';
-import { CustomPasswordTextField } from 'util/Custom/CustomPasswordTextField.js';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from "util/ts/Custom/CustomTextField";
 import { postAccountLogin } from 'apis/login';
-import { updateUserDataLocalStorage, useValidation, validateEmail, validatePassword } from 'services/login';
+import { updateUserDataLocalStorage, useValidation, validateEmail } from 'services/login';
 import React from "react";
 
 
-
-const SubButtonsWrapper = styled(RowAlignCenterFlex)`
-  justify-content: space-between;
-  height: 24px;
-`;
 
 const SubButtons = styled(TextBody2)`
   color: ${colorTextLight};
   cursor: pointer;
 `;
 
-const ButtonWrapper = styled(VerticalFlex)`
-//   margin-top: 20px;
-`;
 
 const SignUpText = styled(TextSubtitle2)`
   text-decoration: underline;
@@ -50,7 +38,6 @@ function Login() {
     const navigate = useNavigate();
     const theme = useTheme();
 
-    const [isAutoLogin, setIsAutoLogin] = useState(false);
     const [email, setEmail, emailHelperText, isEmailValid, updateEmailHelperText] = useValidation({
         validationFunction: validateEmail,
         emptyHelperText: '이메일을 입력해주세요',
@@ -62,6 +49,7 @@ function Login() {
     });
 
 
+    const [isAutoLogin, setIsAutoLogin] = useState(false);
     useEffect(() => {
         const isAutoLoginLocalStorage = JSON.parse(localStorage.getItem('isAutoLogin')!);
         if (isAutoLoginLocalStorage === true) {
@@ -112,7 +100,7 @@ function Login() {
                     <TextHeading6>
                         로그인
                     </TextHeading6>
-                    <VerticalFlex style={{ gap: '24px', marginTop: '36px', marginBottom: '24px' }}>
+                    <VerticalFlex sx={{ gap: '24px', marginTop: '36px', marginBottom: '24px' }}>
                         <CustomTextField
                             onChange={(event) => { setEmail(event.target.value); }}
                             onBlur={(event) => { updateEmailHelperText(); }}
@@ -144,35 +132,31 @@ function Login() {
                             height="48px"
                         />
                     </VerticalFlex>
-                    <SubButtonsWrapper>
+                    <Flex sx={{ height: "24px", justifyContent: "space-between" }} >
                         <RowAlignCenterFlex>
                             <CustomCheckbox isChecked={isAutoLogin} setIsChecked={setIsAutoLogin} onClick={undefined} children={undefined} />
                             <SubButtons style={{ marginLeft: 4 }} onClick={(e) => { setIsAutoLogin(!isAutoLogin); }}>자동 로그인</SubButtons>
                         </RowAlignCenterFlex>
-                        <Flex>
+                        <Flex sx={{ gap: "16px" }}>
                             <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 이메일을 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>이메일 찾기</SubButtons>
-                            <EmptyWidth width="16px"></EmptyWidth>
                             <SubButtons onClick={() => alert('아직 구현되지 않은 기능이에요😔 비밀번호를 찾으시려면, ‘커리어다이브 카카오 채널’로 문의 주시기 바랍니다!')}>비밀번호 찾기</SubButtons>
                         </Flex>
-                    </SubButtonsWrapper>
+                    </Flex>
                     <EmptyHeight height={'24px'} />
                 </VerticalFlex>
 
-                <VerticalFlex>
-                    <ButtonWrapper>
-                        <CustomButton
-                            height={'48px'}
-                            onClick={onClickLogin}>
-                            로그인
-                        </CustomButton>
-                    </ButtonWrapper>
-                    <EmptyHeight height={'24px'} />
-                    <ColumnAlignCenterFlex>
+                <VerticalFlex sx={{ gap: '24px' }}>
+                    <CustomButton
+                        height='48px'
+                        onClick={onClickLogin}>
+                        로그인
+                    </CustomButton>
+                    <VerticalFlex sx={{ alignItems: "center" }}>
                         <TextBody2>아직 회원이 아니신가요?</TextBody2>
                         <LinkNoDeco to='/signup'>
                             <SignUpText>회원가입</SignUpText>
                         </LinkNoDeco>
-                    </ColumnAlignCenterFlex>
+                    </VerticalFlex>
                 </VerticalFlex>
             </VerticalFlex>
         </Flex >
