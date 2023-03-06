@@ -1,26 +1,27 @@
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material";
+import { CSSProperties } from "react";
 
 // type
-export type cssLength = `${number | undefined}px` | `${number | undefined}%`
+
 
 // color
-export const colorCareerDiveBlue = "#698CFF";
-export const colorBackgroundCareerDiveBlue = "#698CFF1a";
-export const colorCareerDivePink = "#E25D7D";
-export const colorBackgroundCareerDivePink = "#E25D7D1a";
-export const colorBlueGray = '#CFD6E0';
-export const colorTextLight = "#5F6368";
-export const colorTextBody = "#191919";
-export const colorTextDisabled = "#D9D9D9";
-export const colorBackgroundGrayLight = "#F8F8F8";
-export const colorBackgroundGrayMedium = "#E6E6E6";
-export const colorBackgroundGrayDark = "#7C7C7C";
-export const colorSuccess = "#B4CE16";
+export const colorCareerDiveBlue: CSSProperties["color"] = "#698CFF";
+export const colorBackgroundCareerDiveBlue: CSSProperties["color"] = "#698CFF1a";
+export const colorCareerDivePink: CSSProperties["color"] = "#E25D7D";
+export const colorBackgroundCareerDivePink: CSSProperties["color"] = "#E25D7D1a";
+export const colorBlueGray: CSSProperties["color"] = '#CFD6E0';
+export const colorTextLight: CSSProperties["color"] = "#5F6368";
+export const colorTextBody: CSSProperties["color"] = "#191919";
+export const colorTextDisabled: CSSProperties["color"] = "#D9D9D9";
+export const colorBackgroundGrayLight: CSSProperties["color"] = "#F8F8F8";
+export const colorBackgroundGrayMedium: CSSProperties["color"] = "#E6E6E6";
+export const colorBackgroundGrayDark: CSSProperties["color"] = "#7C7C7C";
+export const colorSuccess: CSSProperties["color"] = "#B4CE16";
 
 
 // text
-export const TextHeading1 = styled(`h1`)`
+export const TextHeading1 = styled(`h1`) <{ color?: CSSProperties["color"] }>`
   font-size: 48px;
   font-weight: 700;
   line-height: 64px;
@@ -31,7 +32,7 @@ export const TextHeading1 = styled(`h1`)`
   overflow: inherit;
 `;
 
-export const TextHeading2 = styled(`h2`)`
+export const TextHeading2 = styled(`h2`) <{ color?: CSSProperties["color"] }>`
   font-size: 36px;
   font-weight: 700;
   line-height: 48px;
@@ -42,7 +43,7 @@ export const TextHeading2 = styled(`h2`)`
   overflow: inherit;
 `;
 
-export const TextHeading3 = styled(`h3`)`
+export const TextHeading3 = styled(`h3`) <{ color?: CSSProperties["color"] }>`
   font-size: 32px;
   font-weight: 700;
   line-height: 44px;
@@ -53,7 +54,7 @@ export const TextHeading3 = styled(`h3`)`
   overflow: inherit;
 `;
 
-export const TextHeading4 = styled(`h4`)`
+export const TextHeading4 = styled(`h4`) <{ color?: CSSProperties["color"] }>`
   font-size: 28px;
   font-weight: 700;
   line-height: 32px;
@@ -64,7 +65,7 @@ export const TextHeading4 = styled(`h4`)`
   overflow: inherit;
 `;
 
-export const TextHeading5 = styled(`h5`)`
+export const TextHeading5 = styled(`h5`) <{ color?: CSSProperties["color"] }>`
   font-size: 24px;
   font-weight: 700;
   line-height: 36px;
@@ -75,7 +76,7 @@ export const TextHeading5 = styled(`h5`)`
   overflow: inherit;
 `;
 
-export const TextHeading6 = styled(`h6`)`
+export const TextHeading6 = styled(`h6`) <{ color?: CSSProperties["color"] }>`
   font-size: 20px;
   font-weight: 700;
   line-height: 32px;
@@ -86,7 +87,7 @@ export const TextHeading6 = styled(`h6`)`
   overflow: inherit;
 `;
 
-export const TextBody1 = styled(`span`)`
+export const TextBody1 = styled(`span`) <{ color?: CSSProperties["color"] }>`
   font-size: 16px;
   line-height: 24px;
   color: ${props => props.color};
@@ -95,7 +96,7 @@ export const TextBody1 = styled(`span`)`
   overflow: inherit;
 `;
 
-export const TextBody2 = styled(`p`) <{ line_height: cssLength }>`
+export const TextBody2 = styled(`p`) <{ line_height?: CSSProperties["height"], color?: CSSProperties["color"] }>`
   font-size: 14px;
   line-height: ${props => props.line_height ? props.line_height : '24px'};
   font-weight: 400;
@@ -106,7 +107,7 @@ export const TextBody2 = styled(`p`) <{ line_height: cssLength }>`
   overflow: inherit;
 `;
 
-export const TextSubtitle1 = styled(`span`)`
+export const TextSubtitle1 = styled(`span`) <{ color?: CSSProperties["color"] }>`
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
@@ -116,7 +117,7 @@ export const TextSubtitle1 = styled(`span`)`
   overflow: inherit;
 `;
 
-export const TextSubtitle2 = styled(`span`)`
+export const TextSubtitle2 = styled(`span`) <{ color?: CSSProperties["color"] }>`
   font-size: 14px;
   font-weight: 700;
   line-height: 24px;
@@ -127,7 +128,7 @@ export const TextSubtitle2 = styled(`span`)`
 `;
 
 
-export const TextButton = styled(`span`)`
+export const TextButton = styled(`span`) <{ color?: CSSProperties["color"] }>`
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
@@ -137,7 +138,7 @@ export const TextButton = styled(`span`)`
   overflow: inherit;
 `;
 
-export const TextCaption = styled(`span`)`
+export const TextCaption = styled(`span`) <{ color?: CSSProperties["color"] }>`
   font-size: 12px;
   color: ${props => props.color ? props.color : colorTextBody};
   text-overflow: inherit;
@@ -166,8 +167,12 @@ export const ColumnAlignCenterFlex = styled(Flex)`
 export const RowAlignCenterFlex = styled(Flex)`
   flex-direction: row;
   align-items: center;
-  height: 100%;
 `;
+
+export const CenterFlex = styled(Flex)({
+  justifyContent: 'center',
+  alignItems: 'center'
+})
 
 export const FullWidthWrapper = styled(VerticalFlex)`
   justify-content: center;
@@ -205,23 +210,26 @@ export const GrayBackground = styled(Flex)`
   min-height: calc(100vh - 500px);
 `;
 
-export const MaxWidthDiv = styled(Flex)`
-  flex-direction: column;
-  max-width: 1254px;
-  width: 100%;
-  padding: 0 30px;
-  box-sizing: border-box;
-`;
+export const MaxWidthDiv = styled(Flex)({
+  flexDirection: 'column',
+  maxWidth: '1254px',
+  width: '100%',
+  padding: '0 30px',
+  boxSizing: 'border-box',
+  '@media (max-width:899.95px)': { //md
+    padding: '0 16px'
+  }
+})
 
-export const EmptyHeight = styled(Flex) <{ height: cssLength }>`
+export const EmptyHeight = styled(Flex) <{ height: CSSProperties["height"] }>`
   min-height: ${props => props.height};
 `
 
-export const EmptyWidth = styled(Flex) <{ width: cssLength }>`
+export const EmptyWidth = styled(Flex) <{ width: CSSProperties["width"] }>`
   min-width: ${props => props.width};
 `
 
-export const WidthFixerWrapper = styled(Flex) <{ width: cssLength, height: cssLength }>`
+export const WidthFixerWrapper = styled(Flex) <{ width: CSSProperties["width"], height: CSSProperties["height"] }>`
   min-width: ${props => props.width};
   min-height: ${props => props.height};
   

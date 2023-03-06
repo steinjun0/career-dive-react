@@ -12,16 +12,7 @@ export const getDifferenceMinutes = (startTime: string, finishTime: string) => {
 }
 
 export const addMinute = (beforeDate: Date, addingMin: number) => {
-
-  // const beforeDate = new Date(`2021/01/01 ${hourAndMin}`)
   const afterDate = new Date(beforeDate.getTime() + addingMin * 60000)
-
-  const hour: number = +`${'00' + afterDate.getHours()}`.slice(-2)
-  const min: number = +`${'00' + afterDate.getMinutes()}`.slice(-2)
-
-  if (isNaN(hour) || isNaN(min)) {
-    return ''
-  }
   return afterDate
 }
 
@@ -61,12 +52,15 @@ export const createDateFromHourMin = (date: Date, startTime: string, endTime: st
   return [addMinute(startDate, (startHour * 60 + startMin)), addMinute(endDate, (endHour * 60 + endMin))]
 }
 
-export const getDateString = (date: Date) => {
-  let year = date.getFullYear().toString().slice(2)
-  let month = (date.getMonth() + 1).toString().padStart(2, '0')
-  let dateStr = date.getDate().toString().padStart(2, '0')
+export const getDateString = (date: Date, type: 'short' | 'long') => {
+  let year = date.getFullYear().toString()
+  let month = (date.getMonth() + 1).toString()
+  let dateStr = date.getDate().toString()
 
-  return `${year}.${month}.${dateStr} (${getDayInKorean(date)})`
+  if (type === 'short')
+    return `${year.slice(2)}.${month.padStart(2, '0')}.${dateStr.padStart(2, '0')} (${getDayInKorean(date)})`
+  else if (type === 'long')
+    return `${year}년 ${month}월 ${dateStr}일(${getDayInKorean(date)})`
 }
 
 export const getKoreanTimeString = (date: Date) => {
@@ -85,7 +79,7 @@ export const getKoreanTimeString = (date: Date) => {
   return `${amOrPmString} ${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`
 }
 
-export const getMinuteString = (date: Date) => {
+export const getHoursAndMinuteString = (date: Date) => {
   return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }
 
@@ -135,7 +129,23 @@ export const formatMoney = (amount: any, decimalCount: any = 2, decimal: any = "
   }
 };
 
-export const updateReservation = (id: number, updateDataArray: { name: string, data: any }[]) => {
+export const getParsedLocalStorage = (name: string) => {
+  return localStorage.getItem(name) !== null ? JSON.parse(localStorage.getItem(name)!) : null
+}
+
+export type ReservationAttr =
+  'consultCategory' | 'consultContent' | 'consultingTime' |
+  'isFilePreOpen' | 'requestText' | 'startTime' | 'scheduleId'
+// export type ReservationObj = {
+//   name:'consultCategory': data:'커리어 상담' | '전형 준비',
+//   'consultContent'?: string[],
+//   'consultingTime'?: 20 | 40,
+//   'isFilePreOpen'?: '희망' | '비희망',
+//   'requestText'?: string,
+//   'startTime'?: Date
+// }
+
+export const updateReservation = (id: number, updateDataArray: { name: ReservationAttr, data: any }[]) => {
   let reservations = localStorage.getItem(`reservations`) === null ? null : JSON.parse(localStorage.getItem(`reservations`)!)
   let reservation: any = {}
   if (reservations !== null) {
@@ -215,3 +225,21 @@ export function checkUrlInclude(string: string) {
 //     return true
 //   }
 // }
+
+export function validateEmail(email: string) {
+  let regExpEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+  if (regExpEmail.test(email) == false) {
+    //이메일 형식이 알파벳+숫자@알파벳+숫자.알파벳+숫자 형식이 아닐경우            
+    return false;
+  };
+  return true;
+};
+
+export function validatePassword(password: string) {
+  let regExpPassword = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-]).{8,50}$/;
+  if (regExpPassword.test(password) == false) {
+    // password 형식이 숫자, 영어, 특수문자가 아닌경우
+    return false;
+  };
+  return true;
+}

@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import React, { FC, ReactNode } from "react";
+import React, { CSSProperties, FC, ReactNode } from "react";
 
 import {
   TextHeading6,
@@ -7,13 +7,12 @@ import {
   VerticalFlex,
   Flex,
   colorBackgroundGrayMedium,
-  cssLength
 } from "../styledComponent";
 // import { cssLength } from "./styledComponent";
 
 const CardWrapper = styled(VerticalFlex) <{
-  min_width?: cssLength,
-  max_width?: cssLength
+  min_width?: CSSProperties["minWidth"],
+  max_width?: CSSProperties["maxWidth"]
 }>`
   justify-content: start;
   min-width: ${props => `${props.min_width}`};
@@ -44,7 +43,7 @@ const TitleBottom = styled(RowAlignCenterFlex)`
 
 function Card(props: {
   style?: Object;
-  max_width?: cssLength; min_width?: cssLength;
+  max_width?: CSSProperties["maxWidth"]; min_width?: CSSProperties["minWidth"];
   no_divider: boolean;
   title?: ReactNode; titleHead?: ReactNode; titleTail?: ReactNode; titleBottom?: ReactNode; children?: ReactNode;
 }) {
