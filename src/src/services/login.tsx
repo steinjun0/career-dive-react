@@ -49,8 +49,10 @@ export function useValidation(
   const updateHelperText = useCallback(() => {
     if (emptyHelperText && value === '') {
       setHelperText(emptyHelperText);
+      setIsValueValid(false);
     } else if (invalidHelperText && validationFunction && !validationFunction(value)) {
       setHelperText(invalidHelperText);
+      setIsValueValid(false);
     } else {
       setHelperText('');
     }
@@ -60,14 +62,6 @@ export function useValidation(
     // updateHelperText();
     setIsValueValid(true);
   }, [value]);
-
-  useEffect(() => {
-    if (helperText === '') {
-      setIsValueValid(true);
-    } else {
-      setIsValueValid(false);
-    }
-  }, [helperText]);
 
   return [value, setValue, helperText, isValueValid, updateHelperText];
 
