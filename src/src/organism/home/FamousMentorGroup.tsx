@@ -1,10 +1,9 @@
 import { styled, useMediaQuery, useTheme } from "@mui/material";
-import * as accountAPI from "apis/account";
 import MentorCard from "component/mentor/MentorCard";
 import { IMentor } from "interfaces/mentor";
 import React, { useLayoutEffect } from "react";
 import { useEffect, useState } from "react";
-import { EmptyWidth, Flex, LinkNoDeco, RowAlignCenterFlex, VerticalFlex } from "util/styledComponent";
+import { Flex, LinkNoDeco, RowAlignCenterFlex, VerticalFlex } from "util/styledComponent";
 import useWindowSize from "util/useWindowSize";
 
 const TopWrapper = styled(RowAlignCenterFlex)`
@@ -24,31 +23,21 @@ const SellAll = styled("span")`
   margin-bottom: 30px;
 `;
 
-function JobCategoryGroup() {
-
-  const theme = useTheme()
-  const isDownMd = useMediaQuery(theme.breakpoints.down('md'));
+function useMaximumCardCount() {
   const { width, height } = useWindowSize()
-  const [mentorList, setMentorList] = useState<IMentor[]>([])
   const [maxCardCount, setMaxCardCount] = useState<number>(0)
-  useEffect(() => {
-    let isCancel = false
-    const apiCall = accountAPI.getAccountMentorList()
-    apiCall.then((res) => {
-      if (!isCancel)
-        setMentorList(res.data.Results)
-    })
-    return () => {
-      isCancel = true
-    }
-  }, [])
-
   useLayoutEffect(() => {
     if (width >= 1227) setMaxCardCount(4);
     else if (width >= 920) setMaxCardCount(3);
     else setMaxCardCount(2)
   }, [width])
+  return maxCardCount
+}
 
+function FamousMentorGroup(props: { mentors: IMentor[] }) {
+  const theme = useTheme()
+  const isDownMd = useMediaQuery(theme.breakpoints.down('md'));
+  const maxCardCount = useMaximumCardCount()
 
   return (
     <VerticalFlex>
@@ -58,7 +47,7 @@ function JobCategoryGroup() {
       </TopWrapper>
 
       <Flex sx={{ flexWrap: 'wrap', gap: '30px', justifyContent: 'space-around', minHeight: '394px', width: '100%' }}>
-        {mentorList && mentorList.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
+        {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
           return <MentorCard
             key={index}
             company={mentorData.company}
@@ -78,4 +67,4 @@ function JobCategoryGroup() {
   );
 }
 
-export default JobCategoryGroup;
+export default FamousMentorGroup;
