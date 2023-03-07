@@ -15,7 +15,7 @@ function EventCard({ children, ...props }: { children: ReactElement } & DOMAttri
             padding: 24,
             width: '100%', height: '160px',
             cursor: 'pointer',
-            boxShadow: '10px 20px 40px rgba(130, 130, 130, 0.1)'
+            boxShadow: '0px 0px 40px rgba(130, 130, 130, 0.1)',
         }}
     >
         {children}
