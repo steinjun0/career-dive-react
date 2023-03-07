@@ -25,3 +25,8 @@ code {
   width: 6px !important;
   height: 100px !important;
 }
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
