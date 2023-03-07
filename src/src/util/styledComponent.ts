@@ -19,6 +19,8 @@ export const colorBackgroundGrayMedium: CSSProperties["color"] = "#E6E6E6";
 export const colorBackgroundGrayDark: CSSProperties["color"] = "#7C7C7C";
 export const colorSuccess: CSSProperties["color"] = "#B4CE16";
 
+// style
+export const defaultBoxShadow = '0px 0px 40px rgba(130, 130, 130, 0.1)';
 
 // text
 export const TextHeading1 = styled(`h1`) <{ color?: CSSProperties["color"]; }>`
