@@ -202,7 +202,7 @@ const MenteeCalendar = (props:
         <Card
             title='상담 가능 일정'
             no_divider={false}
-            style={{ boxSizing: 'border-box' }}
+            sx={{ boxSizing: 'border-box' }}
         >
             <Flex style={{ justifyContent: 'center' }}>
                 <Flex style={{

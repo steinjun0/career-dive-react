@@ -403,7 +403,7 @@ const MentorCalendar = (props: { userId: number }) => {
         <Card
             title='상담 가능 일정'
             no_divider={false}
-            style={{ boxSizing: 'border-box', maxWidth: '400px' }}
+            sx={{ boxSizing: 'border-box', maxWidth: '400px' }}
         >
             <Flex style={{ justifyContent: 'center' }}>
                 <Flex style={{

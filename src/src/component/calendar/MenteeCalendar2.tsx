@@ -478,7 +478,7 @@ const MenteeCalendar2 = (props:
                 <VerticalFlex
                     style={{
                         height: state.calendarState !== 'view' ? 84 : 0, ...calendarAnimationStyle,
-                        paddingTop: '16px',
+                        marginTop: '16px',
                     }}
                 >
                     <TextSubtitle1>상담 시간</TextSubtitle1>
@@ -514,8 +514,7 @@ const MenteeCalendar2 = (props:
 
                 <TransitionFlex
                     style={{
-                        // height: ['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0,
-                        paddingLeft: '1px', paddingTop: '16px',
+                        paddingLeft: '1px', marginTop: '16px',
                         ...calendarAnimationStyle
                     }}
                     height={['setting startTime', 'finish set'].includes(state.calendarState) ? timeSelectRef.current?.scrollHeight! : 0}
