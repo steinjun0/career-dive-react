@@ -1,4 +1,5 @@
-import { styled } from "@mui/material";
+import { styled, StyledComponentProps } from "@mui/material";
+import { MUIStyledCommonProps } from "@mui/system";
 import React, { CSSProperties, FC, ReactNode } from "react";
 
 import {
@@ -42,13 +43,13 @@ const TitleBottom = styled(RowAlignCenterFlex)`
 `
 
 function Card(props: {
-  style?: Object;
+  sx?: Object;
   max_width?: CSSProperties["maxWidth"]; min_width?: CSSProperties["minWidth"];
   no_divider: boolean;
   title?: ReactNode; titleHead?: ReactNode; titleTail?: ReactNode; titleBottom?: ReactNode; children?: ReactNode;
 }) {
   return (
-    <CardWrapper style={props.style} max_width={props.min_width} min_width={props.min_width}>
+    <CardWrapper sx={props.sx} max_width={props.min_width} min_width={props.min_width} >
       <TitleWrapper no_divider={props.no_divider ? 'true' : 'false'}>
         <RowAlignCenterFlex>
           <TextHeading6>{props.title}</TextHeading6>
