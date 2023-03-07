@@ -1,6 +1,8 @@
 import { styled } from "@mui/material";
-import API from "API";
+import * as accountAPI from "apis/account";
 import MentorCard from "component/mentor/MentorCard";
+import { IMentor } from "interfaces/mentor";
+import React from "react";
 import { useEffect, useState } from "react";
 import { EmptyWidth, Flex, LinkNoDeco, RowAlignCenterFlex } from "util/styledComponent";
 import FamousMentorCard from "../../component/home/FamousMentorCard";
@@ -34,10 +36,10 @@ const SellAll = styled("span")`
 
 function JobCategoryGroup() {
 
-  const [mentorList, setMentorList] = useState()
+  const [mentorList, setMentorList] = useState<IMentor[]>([])
   useEffect(() => {
     let isCancel = false
-    const apiCall = API.getAccountMentorList()
+    const apiCall = accountAPI.getAccountMentorList()
     apiCall.then((res) => {
       if (!isCancel)
         setMentorList(res.data.Results)
@@ -56,18 +58,18 @@ function JobCategoryGroup() {
       </TopWrapper>
 
       <FamousMentorCardsWrapper>
-        {mentorList && mentorList.slice(0, 4).map((mentorData, index) => {
+        {mentorList && mentorList.slice(0, 4).map((mentorData: IMentor, index: number) => {
           return <Flex key={index}>
             <MentorCard
-              company={mentorData.CompName}
-              department={mentorData.DivisIsPub ? mentorData.DivisInComp : ''}
-              job={mentorData.JobInComp}
-              name={mentorData.Nickname}
-              inJob={mentorData.InService ? "현직자" : "경력자"}
-              duration={mentorData.TotEmpMonths}
+              company={mentorData.company}
+              department={mentorData.divisIsPub ? mentorData.department : ''}
+              job={mentorData.job}
+              name={mentorData.nickname}
+              inJob={mentorData.inJob ? "현직자" : "경력자"}
+              // duration={mentorData.duration}
               rating={4.5}
-              tags={mentorData.TagList.slice(0, 3)}
-              userId={mentorData.UserID}
+              tags={mentorData.tags.slice(0, 3)}
+              userId={mentorData.userId}
               isShowRating={false}
               isShowTag={true} />
             <EmptyWidth width={'30px'} />

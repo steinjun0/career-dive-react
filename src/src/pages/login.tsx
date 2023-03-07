@@ -17,7 +17,7 @@ import { CustomButton } from 'util/Custom/CustomButton';
 import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from "util/ts/Custom/CustomTextField";
-import { postAccountLogin } from 'apis/login';
+import * as loginAPI from 'apis/login';
 import { updateUserDataLocalStorage, useValidation, validateEmail } from 'services/login';
 import React from "react";
 
@@ -63,7 +63,7 @@ function Login() {
         updatePasswordHelperText();
         if (isEmailValid && isPasswordValid) {
             try {
-                const loginResponse = await postAccountLogin(email, password);
+                const loginResponse = await loginAPI.postAccountLogin(email, password);
                 if (loginResponse.status === 200) {
                     updateUserDataLocalStorage({ userData: loginResponse.data, isAutoLogin });
                     if (loginResponse.data['IsMentor']) {

@@ -3,6 +3,7 @@ import FamousMentorGroup from "organism/home/FamousMentorGroup";
 import BottomEventGroup from "organism/home/BottomEventGroup";
 
 import { GrayBackground, MaxWidthDiv, VerticalFlex } from "util/styledComponent";
+import React from "react";
 
 function App() {
   return (
