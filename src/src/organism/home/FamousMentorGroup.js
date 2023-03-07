@@ -3,7 +3,7 @@ import API from "API";
 import MentorCard from "component/mentor/MentorCard";
 import { useEffect, useState } from "react";
 import { EmptyWidth, Flex, LinkNoDeco, RowAlignCenterFlex } from "util/styledComponent";
-import FamousMentorCard from "./FamousMentorCard";
+import FamousMentorCard from "../../component/home/FamousMentorCard";
 
 const FamousMentorGroupWrapper = styled(RowAlignCenterFlex)`
   flex-direction: column;
