@@ -142,6 +142,7 @@ export const TextButton = styled(`span`) <{ color?: CSSProperties["color"]; }>`
 
 export const TextCaption = styled(`span`) <{ color?: CSSProperties["color"]; }>`
   font-size: 12px;
+  line-height: normal;
   color: ${props => props.color ? props.color : colorTextBody};
   text-overflow: inherit;
   white-space: inherit;
