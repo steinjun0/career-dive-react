@@ -29,7 +29,8 @@ function useMaximumCardCount() {
   useLayoutEffect(() => {
     if (width >= 1227) setMaxCardCount(4);
     else if (width >= 920) setMaxCardCount(3);
-    else setMaxCardCount(2)
+    else if (width >= 900) setMaxCardCount(2)
+    else setMaxCardCount(4)
   }, [width])
   return maxCardCount
 }
