@@ -24,10 +24,10 @@ function EventCard({ children, ...props }: { children: ReactElement } & DOMAttri
 
 function EventGroup(props: MUIStyledCommonProps) {
     const theme = useTheme()
-    const isDownMd = useMediaQuery(theme.breakpoints.down('md'));
+    const isDownSm = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <Flex sx={{ gap: '30px', flexDirection: isDownMd ? 'column' : 'row', ...props.sx }}>
+        <Flex sx={{ gap: '30px', flexDirection: isDownSm ? 'column' : 'row', ...props.sx }}>
             <EventCard onClick={() => window.open("https://www.notion.so/CBT-c57283dae1fe4602ad25f2b6ba0419aa")}>
                 <>
                     <VerticalFlex>

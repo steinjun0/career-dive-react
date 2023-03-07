@@ -51,12 +51,12 @@ function MentorCard({
   isShowTag = false
 }: IMentor & { isShowRating: boolean, isShowTag: boolean }) {
   const theme = useTheme()
-  const isDownMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isDownSm = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <LinkNoDeco to={"/mentor/" + userId}>
       {
-        isDownMd ?
+        isDownSm ?
           <VerticalFlex
             sx={{
               minHeight: '224px',

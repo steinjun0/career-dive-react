@@ -1,27 +1,11 @@
-import { styled, useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import MentorCard from "component/mentor/MentorCard";
 import { IMentor } from "interfaces/mentor";
 import React, { useLayoutEffect } from "react";
-import { useEffect, useState } from "react";
-import { Flex, LinkNoDeco, RowAlignCenterFlex, VerticalFlex } from "util/styledComponent";
+import { useState } from "react";
+import { colorCareerDiveBlue, Flex, LinkNoDeco, TextBody2, TextHeading6, TextSubtitle1, VerticalFlex } from "util/styledComponent";
 import useWindowSize from "util/useWindowSize";
 
-const TopWrapper = styled(RowAlignCenterFlex)`
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const Title = styled("span")`
-  font-weight: 700;
-  font-size: 24px;
-  margin-top: 55px;
-  margin-bottom: 30px;
-`;
-
-const SellAll = styled("span")`
-  margin-top: 55px;
-  margin-bottom: 30px;
-`;
 
 function useMaximumCardCount() {
   const { width, height } = useWindowSize()
@@ -37,17 +21,27 @@ function useMaximumCardCount() {
 
 function FamousMentorGroup(props: { mentors: IMentor[] }) {
   const theme = useTheme()
-  const isDownMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isDownSm = useMediaQuery(theme.breakpoints.down('sm'));
   const maxCardCount = useMaximumCardCount()
 
   return (
     <VerticalFlex>
-      <TopWrapper>
-        <Title>상담 가능한 멘토</Title>
-        <LinkNoDeco to={'/search'} style={{ zIndex: 2 }}><SellAll>전체보기</SellAll></LinkNoDeco>
-      </TopWrapper>
 
-      <Flex sx={{ flexWrap: 'wrap', gap: '30px', justifyContent: 'space-around', minHeight: '394px', width: '100%' }}>
+      {
+        isDownSm
+          ?
+          <Flex sx={{ justifyContent: 'space-between', alignItems: 'center', marginTop: '32px', marginBottom: '16px' }}>
+            <TextSubtitle1>상담 가능한 멘토</TextSubtitle1>
+            <LinkNoDeco to={'/search'} sx={{ color: colorCareerDiveBlue, zIndex: 2 }}><TextBody2>전체보기</TextBody2> </LinkNoDeco>
+          </Flex>
+          :
+          <Flex sx={{ justifyContent: 'space-between', alignItems: 'end', marginTop: '55px', marginBottom: '30px' }}>
+            <TextHeading6>상담 가능한 멘토</TextHeading6>
+            <LinkNoDeco to={'/search'} sx={{ zIndex: 2 }}>전체보기</LinkNoDeco>
+          </Flex>
+      }
+
+      <Flex sx={{ flexWrap: 'wrap', gap: isDownSm ? '16px' : '30px', justifyContent: 'space-around', minHeight: '394px', width: '100%' }}>
         {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
           return <MentorCard
             key={index}
