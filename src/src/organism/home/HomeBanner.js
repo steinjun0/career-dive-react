@@ -71,6 +71,7 @@ const BannerTitle = styled("span")`
   font-weight: 700;
   color: #212121;
   text-align: start;
+  margin-left: 16px;
 `;
 
 function HomeBanner() {

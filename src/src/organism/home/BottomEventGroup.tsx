@@ -2,6 +2,8 @@ import { colorCareerDiveBlue, colorTextLight, Flex, TextHeading5, VerticalFlex }
 import GuidelineMenteeBook from "assets/img/home/GuidelineMenteeBook.svg";
 import KakaotalkChannel from "assets/img/home/KakaotalkChannel.svg";
 import React, { DOMAttributes, ReactElement } from "react";
+import { StyledComponentProps } from '@mui/material';
+import { MUIStyledCommonProps } from '@mui/system';
 
 
 function EventCard({ children, ...props }: { children: ReactElement } & DOMAttributes<HTMLDivElement>) {
@@ -20,9 +22,9 @@ function EventCard({ children, ...props }: { children: ReactElement } & DOMAttri
     </Flex>
 }
 
-function BottomEventGroup() {
+function BottomEventGroup(props: MUIStyledCommonProps) {
     return (
-        <Flex sx={{ margin: '80px 0 160px 0', gap: '30px' }}>
+        <Flex sx={{ gap: '30px', ...props.sx }}>
             <EventCard onClick={() => window.open("https://www.notion.so/CBT-c57283dae1fe4602ad25f2b6ba0419aa")}>
                 <>
                     <VerticalFlex>

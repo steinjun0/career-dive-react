@@ -17,12 +17,14 @@ import {
 // import testMentorImage from "../../assets/img/testMentorImage.png";
 import testMentorImage from '../../assets/img/logo/testProfileImage.png';
 import Rating from "util/Rating";
-import { Card } from "util/Card";
+import Card from "util/ts/Card";
 import { TagLarge, TagMedium, TagSmall } from "util/Custom/CustomTag";
 import CustomRating from "util/Rating";
+import React from "react";
+import { IMentor } from "interfaces/mentor";
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
-function getJobDurationFormat(year) {
+function getJobDurationFormat(year: number) {
   if (year < 1)
     return '1년 미만'
   else if (1 <= year && year < 3)
@@ -37,14 +39,14 @@ function MentorCard({
   department = "부서명",
   job = "직무",
   inJob = "현직자",
-  duration = "",
-  name = "이름",
+  duration = 0,
+  nickname = "이름",
   rating = 4.5,
   userId = 0,
   tags = ['태그1', '태그2', '태그3'],
   isShowRating = true,
   isShowTag = false
-}) {
+}: IMentor & { isShowRating: boolean, isShowTag: boolean }) {
   return (
     <LinkNoDeco to={"/mentor/" + userId}>
       <Card
@@ -53,11 +55,11 @@ function MentorCard({
             <TextHeading6>{company}</TextHeading6>
           </Flex>
         }
-        no_divider="true"
-        min_width="276px"
-        max_width="276px"
-        style={{
-          minHeight: '346px'
+        no_divider={true}
+        sx={{
+          minHeight: '346px',
+          minWidth: '276px',
+          maxWidth: '276px'
         }}
       >
         <EmptyHeight height={'6px'} />
@@ -70,14 +72,14 @@ function MentorCard({
         <VerticalFlex style={{ alignItems: 'center' }}>
           <CircleImg width={'88px'} src={testMentorImage} />
           <EmptyHeight height={'24px'} />
-          <TextSubtitle1>{name}</TextSubtitle1>
+          <TextSubtitle1>{nickname}</TextSubtitle1>
           <EmptyHeight height={'8px'} />
           <TagMedium
             color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
             background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
             style={{ fontWeight: '500', padding: '4px 8px', boxSizing: 'border-box' }}>
 
-            {inJob} {duration !== '' ? `· ${getJobDurationFormat(+duration)}` : ''}
+            {inJob} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
           </TagMedium>
           <EmptyHeight height={'24px'} />
           {isShowRating && <CustomRating value={rating}></CustomRating>}
@@ -86,7 +88,7 @@ function MentorCard({
               {tags.slice(0, 3).map((e, i) =>
                 <TextBody2
                   key={i}
-                  style={{ marginRight: i !== (tags.length - 1) && '8px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
+                  style={{ marginRight: i !== (tags.length - 1) ? '8px' : '', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
                   line_height={'18px'}
                   color={colorTextLight}>
                   #{e}
