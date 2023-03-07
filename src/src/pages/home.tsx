@@ -1,6 +1,6 @@
 import HomeBanner from "organism/home/HomeBanner";
 import FamousMentorGroup from "organism/home/FamousMentorGroup";
-import BottomEventGroup from "organism/home/BottomEventGroup";
+import BottomEventGroup from "organism/home/EventGroup";
 import * as accountAPI from "apis/account";
 
 import { Flex, GrayBackground, MaxWidthDiv, VerticalFlex } from "util/styledComponent";

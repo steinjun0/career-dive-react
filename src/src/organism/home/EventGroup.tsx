@@ -22,7 +22,7 @@ function EventCard({ children, ...props }: { children: ReactElement } & DOMAttri
     </Flex>
 }
 
-function BottomEventGroup(props: MUIStyledCommonProps) {
+function EventGroup(props: MUIStyledCommonProps) {
     const theme = useTheme()
     const isDownMd = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -56,4 +56,4 @@ function BottomEventGroup(props: MUIStyledCommonProps) {
     );
 }
 
-export default BottomEventGroup;
+export default EventGroup;
