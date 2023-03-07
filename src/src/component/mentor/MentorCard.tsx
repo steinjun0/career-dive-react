@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { styled, useMediaQuery, useTheme } from "@mui/material";
 import {
   CircleImg,
   colorBackgroundCareerDiveBlue,
@@ -6,6 +6,7 @@ import {
   colorCareerDiveBlue,
   colorCareerDivePink,
   colorTextLight,
+  defaultBoxShadow,
   EmptyHeight,
   Flex,
   LinkNoDeco,
@@ -36,7 +37,7 @@ function getJobDurationFormat(year: number) {
 
 function MentorCard({
   company = "기업명",
-  department = "부서명",
+  department,
   job = "직무",
   inJob = "현직자",
   duration = 0,
@@ -47,61 +48,61 @@ function MentorCard({
   isShowRating = true,
   isShowTag = false
 }: IMentor & { isShowRating: boolean, isShowTag: boolean }) {
+  const theme = useTheme()
+  const isDownMd = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
     <LinkNoDeco to={"/mentor/" + userId}>
-      <Card
-        title={
-          <Flex>
-            <TextHeading6>{company}</TextHeading6>
-          </Flex>
-        }
-        no_divider={true}
-        sx={{
-          minHeight: '346px',
-          minWidth: '276px',
-          maxWidth: '276px'
-        }}
-      >
-        <EmptyHeight height={'6px'} />
-        {department !== '' && <TextBody2>{department}</TextBody2>}
-        {department !== '' && <EmptyHeight height={'6px'} />}
-        <TextBody2 style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{job}</TextBody2>
-        <EmptyHeight height={'28px'} />
-        {department === '' && <EmptyHeight height={'30px'} />}
+      {
+        isDownMd ?
+          <VerticalFlex>
 
-        <VerticalFlex style={{ alignItems: 'center' }}>
-          <CircleImg width={'88px'} src={testMentorImage} />
-          <EmptyHeight height={'24px'} />
-          <TextSubtitle1>{nickname}</TextSubtitle1>
-          <EmptyHeight height={'8px'} />
-          <TagMedium
-            color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
-            background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
-            style={{ fontWeight: '500', padding: '4px 8px', boxSizing: 'border-box' }}>
+          </VerticalFlex>
+          :
+          <VerticalFlex
+            sx={{
+              minHeight: '346px',
+              minWidth: '276px',
+              maxWidth: '276px',
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              padding: '24px',
+              boxShadow: defaultBoxShadow
+            }}
+          >
+            <TextHeading6 sx={{ marginBottom: '6px' }}>{company}</TextHeading6>
+            {department && <TextBody2 sx={{ marginBottom: '6px' }}>{department}</TextBody2>}
+            <TextBody2 sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: '28px' }}>{job}</TextBody2>
+            {!department && <EmptyHeight height={'30px'} />}
 
-            {inJob} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
-          </TagMedium>
-          <EmptyHeight height={'24px'} />
-          {isShowRating && <CustomRating value={rating}></CustomRating>}
-          {isShowTag && tags.length !== 0 ?
-            <Flex style={{ justifyContent: 'center', maxWidth: '100%' }}>
-              {tags.slice(0, 3).map((e, i) =>
-                <TextBody2
-                  key={i}
-                  style={{ marginRight: i !== (tags.length - 1) ? '8px' : '', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
-                  line_height={'18px'}
-                  color={colorTextLight}>
-                  #{e}
-                </TextBody2>)}
-            </Flex>
-            :
-            <EmptyHeight height="18px" />
-          }
-          <EmptyHeight height={'12px'} />
-        </VerticalFlex>
+            <VerticalFlex style={{ alignItems: 'center', paddingBottom: '12px' }}>
+              <CircleImg sx={{ width: '88px', marginBottom: '24px' }} src={testMentorImage} />
+              <TextSubtitle1 sx={{ marginBottom: '8px' }}>{nickname}</TextSubtitle1>
+              <TagMedium
+                color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
+                background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
+                sx={{ fontWeight: '500', padding: '4px 8px', boxSizing: 'border-box', marginBottom: '24px' }}>
+                {inJob} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
+              </TagMedium>
+              {isShowRating && <CustomRating value={rating}></CustomRating>}
+              {isShowTag && tags.length !== 0 ?
+                <Flex style={{ justifyContent: 'center', maxWidth: '100%' }}>
+                  {tags.slice(0, 3).map((e, i) =>
+                    <TextBody2
+                      key={i}
+                      style={{ marginRight: i !== (tags.length - 1) ? '8px' : '', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
+                      line_height={'18px'}
+                      color={colorTextLight}>
+                      #{e}
+                    </TextBody2>)}
+                </Flex>
+                :
+                <EmptyHeight height="18px" />
+              }
+            </VerticalFlex>
+          </VerticalFlex>
+      }
 
-
-      </Card>
     </LinkNoDeco>
   );
 }
