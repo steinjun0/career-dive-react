@@ -1,4 +1,4 @@
-import { colorCareerDiveBlue, colorTextLight, Flex, TextHeading5, VerticalFlex } from 'util/styledComponent'
+import { colorCareerDiveBlue, colorTextLight, defaultBoxShadow, Flex, TextHeading5, VerticalFlex } from 'util/styledComponent'
 import GuidelineMenteeBook from "assets/img/home/GuidelineMenteeBook.svg";
 import KakaotalkChannel from "assets/img/home/KakaotalkChannel.svg";
 import React, { DOMAttributes, ReactElement } from "react";
@@ -15,7 +15,7 @@ function EventCard({ children, ...props }: { children: ReactElement } & DOMAttri
             padding: 24,
             width: '100%', height: '160px',
             cursor: 'pointer',
-            boxShadow: '0px 0px 40px rgba(130, 130, 130, 0.1)',
+            boxShadow: defaultBoxShadow,
         }}
     >
         {children}

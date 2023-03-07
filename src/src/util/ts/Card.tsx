@@ -8,6 +8,7 @@ import {
   VerticalFlex,
   Flex,
   colorBackgroundGrayMedium,
+  defaultBoxShadow,
 } from "../styledComponent";
 // import { cssLength } from "./styledComponent";
 
@@ -16,7 +17,7 @@ const CardWrapper = styled(VerticalFlex)(() => ({
   borderRadius: '8px',
   padding: '24px',
   backgroundColor: 'white',
-  boxShadow: '0px 0px 40px rgba(130, 130, 130, 0.1)',
+  boxShadow: defaultBoxShadow,
   // filter: 'drop-shadow(0px 0px 40px rgba(130, 130, 130, 0.1))',
   width: '100%',
 }))
