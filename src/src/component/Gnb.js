@@ -1,4 +1,4 @@
-import { Divider, styled } from "@mui/material";
+import { Avatar, Divider, styled } from "@mui/material";
 import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth, colorBackgroundGrayMedium } from 'util/styledComponent';
 
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -32,11 +32,11 @@ const GnbWrapper = styled(RowAlignCenterFlex)`
     display:flex;
     flex-direction: row;
     justify-content: center;
-    height: 80px;
     width: 100%;
     max-width: 1194px;
     background-color: white;
-    padding: 0 30px;
+    margin: 0 30px;
+
   `;
 
 const CenterGnb = styled(RowAlignCenterFlex)`
@@ -327,7 +327,8 @@ function Gnb() {
                     setIsHideProfileMenu(!isMouseOnProfileMenuRef.current)
                   }, 300);
                 }}>
-                <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigater(`${isMentorMode ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
+                {/* <ProfileImg style={{ cursor: 'pointer' }} onClick={() => { navigater(`${isMentorMode ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" /> */}
+                <Avatar sx={{ cursor: 'pointer', width: 48, height: 48 }} onClick={() => { navigater(`${isMentorMode ? 'mentor' : 'mentee'}/mypage/profile`) }} src={testProfileImage} alt="" />
                 {isMentorMode ?
                   <ProfileMenu is_hide={String(isHideProfileMenu)}>
                     <LinkNoDeco to={`${'mentor'}/mypage/profile`}>
