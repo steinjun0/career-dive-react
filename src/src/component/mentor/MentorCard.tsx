@@ -11,8 +11,10 @@ import {
   Flex,
   LinkNoDeco,
   TextBody2,
+  TextCaption,
   TextHeading6,
   TextSubtitle1,
+  TextSubtitle2,
   VerticalFlex
 } from "util/styledComponent";
 // import testMentorImage from "../../assets/img/testMentorImage.png";
@@ -55,8 +57,32 @@ function MentorCard({
     <LinkNoDeco to={"/mentor/" + userId}>
       {
         isDownMd ?
-          <VerticalFlex>
+          <VerticalFlex
+            sx={{
+              minHeight: '224px',
+              minWidth: '156px',
+              maxWidth: '156px',
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              padding: '16px',
+            }}
+          >
+            <TextSubtitle2 sx={{ marginBottom: '2px' }}>{company}</TextSubtitle2>
+            {department && <TextCaption sx={{ marginBottom: '4px', color: colorTextLight }}>{department}</TextCaption>}
+            <TextCaption sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: '16px', color: colorTextLight }}>{job}</TextCaption>
+            {!department && <EmptyHeight height={'15px'} />}
 
+            <VerticalFlex style={{ alignItems: 'center' }}>
+              <CircleImg sx={{ width: '48px', marginBottom: '8px' }} src={testMentorImage} />
+              <TextSubtitle2 sx={{ marginBottom: '8px' }}>{nickname}</TextSubtitle2>
+              <TagSmall
+                color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
+                background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
+                sx={{ fontWeight: '500', padding: '4px 6px', marginBottom: '8px' }}>
+                {inJob} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
+              </TagSmall>
+
+            </VerticalFlex>
           </VerticalFlex>
           :
           <VerticalFlex

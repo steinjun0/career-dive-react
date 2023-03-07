@@ -24,7 +24,7 @@ function Search() {
                 company={mentorData.CompName}
                 department={mentorData.DivisIsPub ? mentorData.DivisInComp : ''}
                 job={mentorData.JobInComp}
-                name={mentorData.Nickname}
+                nickname={mentorData.Nickname}
                 tags={mentorData.TagList}
                 inJob={mentorData.InService ? "현직자" : "경력자"}
                 duration={mentorData.TotEmpMonths}
