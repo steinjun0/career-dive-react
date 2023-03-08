@@ -16,7 +16,7 @@ import MentoringApply from './pages/request/MentoringApply'
 import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer'
 import MentoringApplyViewerMentor from './pages/mentor/MentoringApplyViewer'
 
-import Gnb from "./component/Gnb";
+import Gnb from "./organism/Gnb";
 import Footer from "./component/Footer";
 import SessionList from "./pages/mentee/schedule";
 import MyPage from "./pages/mentee/myPage";
