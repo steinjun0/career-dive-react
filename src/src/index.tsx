@@ -1,18 +1,16 @@
-import React, { createContext, ReactNode, SetStateAction, useEffect, useState } from "react";
+import React, { createContext, ReactNode, SetStateAction, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, } from "react-router-dom";
 
 import Home from "./pages/home";
 import Login from "./pages/login";
-import SignUp from './pages/signup';
 import Mentor from "./pages/mentor/id";
 import MentoringReservation from './pages/request/MentoringReservation';
 import MentoringApply from './pages/request/MentoringApply';
 import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer';
-import MentoringApplyViewerMentor from './pages/mentor/MentoringApplyViewer';
 
 import Gnb from "./organism/Gnb";
 import Footer from "./component/Footer";
@@ -29,13 +27,11 @@ import SessionTs from "./pages/session/id";
 import MentorCalendar from "pages/mentor/Calendar";
 import MentorRegister from "pages/mentor/register";
 import MentorMyPage from "./pages/mentor/myPage";
-import CareerInfoChange from "component/myPage/CareerInfoChange";
 
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish';
 import Search from 'pages/search';
 import Review from "pages/review/id";
 import Signup2 from 'pages/signup/signup2';
-import Signup2Phone from 'pages/signup/signup2Phone';
 import Signup2Nickname from 'pages/signup/signup2Nickname';
 import BusniessScrollToTop from 'component/business/BusinessScrollToTop';
 import BusinessRouteChangeTracker from 'component/business/BusinessRouteChangeTracker';
