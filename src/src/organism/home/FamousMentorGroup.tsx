@@ -4,7 +4,7 @@ import { IMentor } from "interfaces/mentor";
 import React, { useLayoutEffect } from "react";
 import { useState } from "react";
 import { colorCareerDiveBlue, Flex, LinkNoDeco, TextBody2, TextHeading6, TextSubtitle1, VerticalFlex } from "util/styledComponent";
-import useWindowSize from "util/useWindowSize";
+import useWindowSize from "util/hooks/useWindowSize";
 
 
 function useMaximumCardCount() {
