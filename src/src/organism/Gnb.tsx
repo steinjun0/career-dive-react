@@ -8,13 +8,14 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import logoMentee from '../assets/img/logo/careerDiveLogoBeta.svg';
 import logoMentor from '../assets/img/logo/careerDiveMentorLogoBeta.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.png';
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import API from "API";
 import Login from "pages/login";
 import DropDownMenu from "component/DropDownMenu";
 import useCheckOverMouseOnElement from "util/hooks/useCheckOverMouseOnElement";
 import React from "react";
+import { IsMentorModeContext } from "index";
 
 
 const GnbFullWidthWrapper = styled('nav')({
@@ -250,11 +251,8 @@ const gnbDisableUrl = ['/session', '/review'];
 function Gnb() {
   const location = useLocation().pathname;
   const navigater = useNavigate();
-
-
   const [isLogin, setIsLogin] = useState(false);
-  const [isMentorMode, setIsMentorMode] = useState(false);
-
+  const { isMentorMode, setIsMentorMode } = useContext(IsMentorModeContext);
 
   useEffect(() => {
     async function checkToken() {
