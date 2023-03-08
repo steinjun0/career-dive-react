@@ -11,6 +11,7 @@ export const colorBackgroundCareerDiveBlue: CSSProperties["color"] = "#698CFF1a"
 export const colorCareerDivePink: CSSProperties["color"] = "#E25D7D";
 export const colorBackgroundCareerDivePink: CSSProperties["color"] = "#E25D7D1a";
 export const colorBlueGray: CSSProperties["color"] = '#CFD6E0';
+export const colorTextTitle: CSSProperties["color"] = '#000000';
 export const colorTextLight: CSSProperties["color"] = "#5F6368";
 export const colorTextBody: CSSProperties["color"] = "#191919";
 export const colorTextDisabled: CSSProperties["color"] = "#D9D9D9";
