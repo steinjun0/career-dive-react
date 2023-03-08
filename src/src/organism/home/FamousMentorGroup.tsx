@@ -8,21 +8,21 @@ import useWindowSize from "util/useWindowSize";
 
 
 function useMaximumCardCount() {
-  const { width, height } = useWindowSize()
-  const [maxCardCount, setMaxCardCount] = useState<number>(0)
+  const { width, height } = useWindowSize();
+  const [maxCardCount, setMaxCardCount] = useState<number>(0);
   useLayoutEffect(() => {
     if (width >= 1227) setMaxCardCount(4);
     else if (width >= 920) setMaxCardCount(3);
-    else if (width >= 900) setMaxCardCount(2)
-    else setMaxCardCount(4)
-  }, [width])
-  return maxCardCount
+    else if (width >= 900) setMaxCardCount(2);
+    else setMaxCardCount(4);
+  }, [width]);
+  return maxCardCount;
 }
 
-function FamousMentorGroup(props: { mentors: IMentor[] }) {
-  const theme = useTheme()
+function FamousMentorGroup(props: { mentors: IMentor[]; }) {
+  const theme = useTheme();
   const isDownHomeBreakPoint = useMediaQuery(theme.breakpoints.down(614));
-  const maxCardCount = useMaximumCardCount()
+  const maxCardCount = useMaximumCardCount();
 
   return (
     <VerticalFlex>
@@ -44,9 +44,8 @@ function FamousMentorGroup(props: { mentors: IMentor[] }) {
       {isDownHomeBreakPoint ?
         <Flex sx={{ gap: '16px', justifyContent: 'space-around', minHeight: '394px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
           {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
-            return <Flex sx={{ gridColumn: (index + 1) % 2, gridRow: ~~(index / 2) + 1 }}>
+            return <Flex key={index} sx={{ gridColumn: (index + 1) % 2, gridRow: ~~(index / 2) + 1 }}>
               <MentorCard
-                key={index}
                 company={mentorData.company}
                 department={mentorData.divisIsPub ? mentorData.department : ''}
                 job={mentorData.job}
@@ -58,7 +57,7 @@ function FamousMentorGroup(props: { mentors: IMentor[] }) {
                 userId={mentorData.userId}
                 isShowRating={false}
                 isShowTag={true} divisIsPub={false} />
-            </Flex>
+            </Flex>;
           })}
         </Flex>
         :
@@ -76,7 +75,7 @@ function FamousMentorGroup(props: { mentors: IMentor[] }) {
               tags={mentorData.tags.slice(0, 3)}
               userId={mentorData.userId}
               isShowRating={false}
-              isShowTag={true} divisIsPub={false} />)
+              isShowTag={true} divisIsPub={false} />);
           })}
         </Flex>}
     </VerticalFlex>
