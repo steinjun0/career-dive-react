@@ -21,14 +21,14 @@ function useMaximumCardCount() {
 
 function FamousMentorGroup(props: { mentors: IMentor[] }) {
   const theme = useTheme()
-  const isDownSm = useMediaQuery(theme.breakpoints.down('sm'));
+  const isDownHomeBreakPoint = useMediaQuery(theme.breakpoints.down(614));
   const maxCardCount = useMaximumCardCount()
 
   return (
     <VerticalFlex>
 
       {
-        isDownSm
+        isDownHomeBreakPoint
           ?
           <Flex sx={{ justifyContent: 'space-between', alignItems: 'center', marginTop: '32px', marginBottom: '16px' }}>
             <TextSubtitle1>상담 가능한 멘토</TextSubtitle1>
@@ -41,9 +41,27 @@ function FamousMentorGroup(props: { mentors: IMentor[] }) {
           </Flex>
       }
 
-      <Flex sx={{ flexWrap: 'wrap', gap: isDownSm ? '16px' : '30px', justifyContent: 'space-around', minHeight: '394px', width: '100%' }}>
+      {isDownHomeBreakPoint ? <Flex sx={{ gap: '16px', justifyContent: 'space-around', minHeight: '394px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
         {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
-          return <MentorCard
+          return <Flex sx={{ gridColumn: (index + 1) % 2, gridRow: ~~(index / 2) + 1 }}>
+            <MentorCard
+              key={index}
+              company={mentorData.company}
+              department={mentorData.divisIsPub ? mentorData.department : ''}
+              job={mentorData.job}
+              nickname={mentorData.nickname}
+              inJob={mentorData.inJob ? "현직자" : "경력자"}
+              duration={mentorData.duration}
+              rating={4.5}
+              tags={mentorData.tags.slice(0, 3)}
+              userId={mentorData.userId}
+              isShowRating={false}
+              isShowTag={true} divisIsPub={false} />
+          </Flex>
+        })}
+      </Flex> : <Flex sx={{ flexWrap: 'wrap', gap: '30px', justifyContent: 'space-around', minHeight: '394px', width: '100%' }}>
+        {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
+          return (<MentorCard
             key={index}
             company={mentorData.company}
             department={mentorData.divisIsPub ? mentorData.department : ''}
@@ -55,9 +73,9 @@ function FamousMentorGroup(props: { mentors: IMentor[] }) {
             tags={mentorData.tags.slice(0, 3)}
             userId={mentorData.userId}
             isShowRating={false}
-            isShowTag={true} divisIsPub={false} />
+            isShowTag={true} divisIsPub={false} />)
         })}
-      </Flex>
+      </Flex>}
     </VerticalFlex>
   );
 }
