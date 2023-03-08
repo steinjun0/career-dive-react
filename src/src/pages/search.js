@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import API from "API";
 
 function Search() {
+
   const [mentorList, setMentorList] = useState()
   useEffect(() => {
     API.getAccountMentorList().then((res) => {
@@ -13,11 +14,10 @@ function Search() {
     })
   }, [])
 
-
   return (
     <VerticalFlex>
       <GrayBackground style={{}}>
-        <Flex style={{ maxWidth: 1194 + 30, marginRight: -30, flexWrap: 'wrap', marginBottom: 60 }}>
+        <Flex style={{ flexWrap: 'wrap', justifyContent: 'space-around', marginBottom: 60, padding: 30 }}>
           {mentorList && [...mentorList].map((mentorData, index) => {
             return <Flex key={index} style={{ marginTop: 30, marginRight: 30 }}>
               <MentorCard
