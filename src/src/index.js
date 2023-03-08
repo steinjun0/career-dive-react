@@ -1,5 +1,3 @@
-import ReactGA from 'react-ga';
-
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
@@ -39,9 +37,8 @@ import Review from "pages/review/id";
 import Signup2 from 'pages/signup/signup2';
 import Signup2Phone from 'pages/signup/signup2Phone';
 import Signup2Nickname from 'pages/signup/signup2Nickname';
-
-const TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID; // 발급받은 추적ID를 환경 변수로 불러온다.
-ReactGA.initialize(TRACKING_ID);
+import BusniessScrollToTop from 'component/business/BusinessScrollToTop';
+import BusinessRouteChangeTracker from 'component/business/BusinessRouteChangeTracker';
 
 
 const theme = createTheme({
@@ -55,39 +52,13 @@ const theme = createTheme({
   }
 });
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-}
-
-function RouteChangeTracker() {
-  const location = useLocation();
-  const [initialized, setInitialized] = useState(false);
-
-  useEffect(() => {
-    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID);
-    setInitialized(true);
-  }, []);
-
-  useEffect(() => {
-    if (initialized) {
-      ReactGA.pageview(location.pathname + location.search);
-    }
-  }, [initialized, location]);
-
-  return null;
-}
 
 ReactDOM.render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
-      <ScrollToTop />
-      <RouteChangeTracker />
+      <BusniessScrollToTop />
+      <BusinessRouteChangeTracker />
       <Gnb />
       <EmptyHeight height={'80px'} />
       <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 220px)' }}>
