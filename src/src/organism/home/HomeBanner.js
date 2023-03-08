@@ -98,7 +98,7 @@ const BannerTitle = styled("span")({
   color: colorTextTitle,
   textAlign: 'start',
   marginLeft: '16px',
-  zIndex: '10',
+  zIndex: '2',
   backgroundColor: 'white',
   '@media (max-width:614px)': {
     marginTop: '63px',
