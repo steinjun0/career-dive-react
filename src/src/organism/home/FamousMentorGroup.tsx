@@ -41,10 +41,30 @@ function FamousMentorGroup(props: { mentors: IMentor[] }) {
           </Flex>
       }
 
-      {isDownHomeBreakPoint ? <Flex sx={{ gap: '16px', justifyContent: 'space-around', minHeight: '394px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
-        {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
-          return <Flex sx={{ gridColumn: (index + 1) % 2, gridRow: ~~(index / 2) + 1 }}>
-            <MentorCard
+      {isDownHomeBreakPoint ?
+        <Flex sx={{ gap: '16px', justifyContent: 'space-around', minHeight: '394px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
+          {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
+            return <Flex sx={{ gridColumn: (index + 1) % 2, gridRow: ~~(index / 2) + 1 }}>
+              <MentorCard
+                key={index}
+                company={mentorData.company}
+                department={mentorData.divisIsPub ? mentorData.department : ''}
+                job={mentorData.job}
+                nickname={mentorData.nickname}
+                inJob={mentorData.inJob ? "현직자" : "경력자"}
+                duration={mentorData.duration}
+                rating={4.5}
+                tags={mentorData.tags.slice(0, 3)}
+                userId={mentorData.userId}
+                isShowRating={false}
+                isShowTag={true} divisIsPub={false} />
+            </Flex>
+          })}
+        </Flex>
+        :
+        <Flex sx={{ flexWrap: 'wrap', gap: '30px', justifyContent: 'space-around', minHeight: '394px', width: '100%' }}>
+          {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
+            return (<MentorCard
               key={index}
               company={mentorData.company}
               department={mentorData.divisIsPub ? mentorData.department : ''}
@@ -56,26 +76,9 @@ function FamousMentorGroup(props: { mentors: IMentor[] }) {
               tags={mentorData.tags.slice(0, 3)}
               userId={mentorData.userId}
               isShowRating={false}
-              isShowTag={true} divisIsPub={false} />
-          </Flex>
-        })}
-      </Flex> : <Flex sx={{ flexWrap: 'wrap', gap: '30px', justifyContent: 'space-around', minHeight: '394px', width: '100%' }}>
-        {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
-          return (<MentorCard
-            key={index}
-            company={mentorData.company}
-            department={mentorData.divisIsPub ? mentorData.department : ''}
-            job={mentorData.job}
-            nickname={mentorData.nickname}
-            inJob={mentorData.inJob ? "현직자" : "경력자"}
-            duration={mentorData.duration}
-            rating={4.5}
-            tags={mentorData.tags.slice(0, 3)}
-            userId={mentorData.userId}
-            isShowRating={false}
-            isShowTag={true} divisIsPub={false} />)
-        })}
-      </Flex>}
+              isShowTag={true} divisIsPub={false} />)
+          })}
+        </Flex>}
     </VerticalFlex>
   );
 }
