@@ -31,13 +31,18 @@ const GnbFullWidthWrapper = styled('nav')({
 });
 
 const GnbWrapper = styled(RowAlignCenterFlex)({
+  position: 'fixed',
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
+  alignItems: 'center',
   width: '100%',
-  maxWidth: '1194px',
   backgroundColor: 'white',
-  margin: '0 30px',
+  padding: '0 30px',
+  height: '80px',
+  borderBottom: '1px solid #E0E0E0',
+  zIndex: 3,
+
 });
 
 
@@ -51,15 +56,10 @@ const CenterMenuStyle = styled('ul')({
   padding: 0,
   fontSize: '16px',
   fontWeight: 700,
-
   margin: 0,
   height: '100%',
-  maxWidth: '1194px',
-  backgroundColor: 'white',
+  color: colorTextBody,
 
-  li: {
-    color: colorTextBody,
-  },
 });
 
 const RightTopGnb = styled(RowAlignCenterFlex)({
@@ -79,15 +79,17 @@ const HomeLogo = styled('img')({
 });
 
 const GnbLi = styled('li')((props: { highlight: boolean; }) => ({
+  paddingTop: '4px',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  boxSizing: 'border-box',
   ...(props.highlight && {
-    color: colorCareerDiveBlue,
-    paddingTop: '4px',
+    color: `${colorCareerDiveBlue}`,
     borderBottom: `4px solid ${colorCareerDiveBlue}`,
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-  }),
+    height: '74px',
+    marginBottom: '-4px',
+  })
 }));
 
 
@@ -105,9 +107,11 @@ function CenterMenu({ items, url }: { items: { name: string, link: string; }[], 
         items.map(item => {
           return (
             // TODO: 기능 준비중입니다! 추후 삭제 필요
-            <LinkNoDeco to={item.link} onClick={(e) => { if (item.link === '') { e.preventDefault(); alert('기능 준비중입니다!'); } }}>
-              <GnbLi highlight={item.link === url}>{item.name}</GnbLi>
-            </LinkNoDeco>
+            <GnbLi highlight={item.link === url}>
+              <LinkNoDeco to={item.link} sx={{ color: 'inherit !important' }} onClick={(e) => { if (item.link === '') { e.preventDefault(); alert('기능 준비중입니다!'); } }}>
+                {item.name}
+              </LinkNoDeco>
+            </GnbLi>
           );
         })
       }
@@ -319,54 +323,52 @@ function Gnb() {
     <div>
       {
         !gnbDisableUrl.map((e) => location.includes(e)).includes(true) ?
-          <GnbFullWidthWrapper>
-            <GnbWrapper>
+          <GnbWrapper>
+            <Flex className="gnb-left" sx={{ width: '215px' }}>
+              <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
+                {isMentorMode ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
+              </LinkNoDeco>
+            </Flex>
 
-              <Flex className="gnb-left">
-                <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
-                  {isMentorMode ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
-                </LinkNoDeco>
-              </Flex>
+            <Flex className="gnb-center" sx={{ height: '100%' }}>
+              {
+                isLogin &&
+                  isMentorMode ?
+                  <CenterMenu
+                    items={
+                      [
+                        { name: '상담', link: '/mentor' },
+                        { name: '일정 등록', link: '/mentor/calendar' },
+                        { name: '실적', link: '' }
+                      ]
+                    }
+                    url={location}
+                  /> :
+                  <CenterMenu
+                    items={
+                      [
+                        { name: '내 상담', link: '/mentee/schedule' },
+                        { name: '찜한 멘토', link: '' },
+                        { name: '상담 후기', link: '' }
+                      ]
+                    }
+                    url={location}
+                  />
+              }
+            </Flex>
 
-              <Flex className="gnb-center">
-                {
-                  isLogin &&
-                    isMentorMode ?
-                    <CenterMenu
-                      items={
-                        [
-                          { name: '상담', link: '/mentor' },
-                          { name: '일정 등록', link: '/mentor/calendar' },
-                          { name: '실적', link: '' }
-                        ]
-                      }
-                      url={location}
-                    /> :
-                    <CenterMenu
-                      items={
-                        [
-                          { name: '내 상담', link: '/mentee/schedule' },
-                          { name: '찜한 멘토', link: '' },
-                          { name: '상담 후기', link: '' }
-                        ]
-                      }
-                      url={location}
-                    />
-                }
-              </Flex>
+            <Flex className="gnb-right" sx={{ width: '215px', justifyContent: 'end' }}>
+              {
+                isLogin ?
+                  isMentorMode ?
+                    <MentorRightMenu /> :
+                    <MenteeRightMenu /> :
+                  <NoLoginRightMenu />
+              }
+            </Flex>
 
-              <Flex className="gnb-right">
-                {
-                  isLogin ?
-                    isMentorMode ?
-                      <MentorRightMenu /> :
-                      <MenteeRightMenu /> :
-                    <NoLoginRightMenu />
-                }
-              </Flex>
-
-            </GnbWrapper>
-          </GnbFullWidthWrapper> :
+          </GnbWrapper>
+          :
           <div style={{ marginTop: -80 }}></div>
       }
     </div >
