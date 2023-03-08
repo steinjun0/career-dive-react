@@ -12,11 +12,11 @@ const DropDownMenuWrapper = styled(VerticalFlex)(() => ({
   color: colorTextLight,
 }));
 
-const HideWrapper = styled(VerticalFlex)((props: { is_hide: boolean, height: CSSProperties['height']; }) => ({
+const HideWrapper = styled(VerticalFlex)((props: { is_hide: 'true' | 'false', height: CSSProperties['height']; }) => ({
   transition: 'height 0.3s ease',
   overflowY: 'hidden',
   boxShadow: defaultBoxShadow,
-  height: props.is_hide ? '0px' : props.height
+  height: props.is_hide === 'true' ? '0px' : props.height
 }));
 
 export default function DropDownMenu(
@@ -30,11 +30,15 @@ export default function DropDownMenu(
   const menuRef = useRef<HTMLDivElement>(null);
 
   return (
-    <HideWrapper is_hide={props.isHide} height={menuRef.current?.scrollHeight}>
+    <HideWrapper is_hide={props.isHide ? 'true' : 'false'} height={menuRef.current?.scrollHeight} >
       <DropDownMenuWrapper ref={menuRef}>
-        {props.mainItems.map((item) => {
+        {props.mainItems.map((item, index) => {
           return (
-            <LinkNoDeco to={item.link} onClick={item.onClick}>
+            <LinkNoDeco
+              to={item.link}
+              key={index}
+              onClick={item.onClick}
+            >
               <TextSubtitle2
                 sx={{ overFlow: 'auto' }}
               >
@@ -44,10 +48,11 @@ export default function DropDownMenu(
           );
         })}
         <Divider style={{ color: colorBackgroundGrayMedium }}></Divider>
-        {props.subItems.map((item) => {
+        {props.subItems.map((item, index) => {
           return (
             <TextBody2
               sx={{ overflow: 'initial', cursor: 'pointer' }}
+              key={index}
               onClick={item.onClick}
             >
               {item.name}
@@ -55,7 +60,7 @@ export default function DropDownMenu(
           );
         })}
       </DropDownMenuWrapper>
-    </HideWrapper>
+    </HideWrapper >
 
   );
 }

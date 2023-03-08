@@ -78,13 +78,13 @@ const HomeLogo = styled('img')({
   height: '24px',
 });
 
-const GnbLi = styled('li')((props: { highlight: boolean; }) => ({
+const GnbLi = styled('li')((props: { highlight: 'true' | 'false'; }) => ({
   paddingTop: '4px',
   height: '100%',
   display: 'flex',
   alignItems: 'center',
   boxSizing: 'border-box',
-  ...(props.highlight && {
+  ...(props.highlight === 'true' && {
     color: `${colorCareerDiveBlue}`,
     borderBottom: `4px solid ${colorCareerDiveBlue}`,
     height: '74px',
@@ -104,10 +104,10 @@ function CenterMenu({ items, url }: { items: { name: string, link: string; }[], 
   return (
     <CenterMenuStyle>
       {
-        items.map(item => {
+        items.map((item, index) => {
           return (
             // TODO: 기능 준비중입니다! 추후 삭제 필요
-            <GnbLi highlight={item.link === url}>
+            <GnbLi key={index} highlight={item.link === url ? 'true' : 'false'}>
               <LinkNoDeco to={item.link} sx={{ color: 'inherit !important' }} onClick={(e) => { if (item.link === '') { e.preventDefault(); alert('기능 준비중입니다!'); } }}>
                 {item.name}
               </LinkNoDeco>
@@ -320,7 +320,7 @@ function Gnb() {
   }, [firstRender, navigater]);
 
   return (
-    <div>
+    <>
       {
         !gnbDisableUrl.map((e) => location.includes(e)).includes(true) ?
           <GnbWrapper>
@@ -371,7 +371,7 @@ function Gnb() {
           :
           <div style={{ marginTop: -80 }}></div>
       }
-    </div >
+    </ >
 
   );
 }
