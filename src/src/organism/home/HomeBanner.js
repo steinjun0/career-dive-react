@@ -98,6 +98,8 @@ const BannerTitle = styled("span")({
   color: colorTextTitle,
   textAlign: 'start',
   marginLeft: '16px',
+  zIndex: '10',
+  backgroundColor: 'white',
   '@media (max-width:614px)': {
     marginTop: '63px',
     fontSize: '20px',
@@ -155,8 +157,7 @@ function HomeBanner() {
         </SearchBar> */}
 
         <BannerTitle>
-          평소 만나고 싶던
-          <br />
+          평소 만나고 싶던 <br />
           현직자를 만나보세요.
         </BannerTitle>
 
