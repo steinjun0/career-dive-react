@@ -1,7 +1,7 @@
 import { Avatar, Divider, styled } from "@mui/material";
 import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth, colorBackgroundGrayMedium } from 'util/styledComponent';
 
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
@@ -14,6 +14,7 @@ import API from "API";
 import Login from "pages/login";
 import DropDownMenu from "component/DropDownMenu";
 import useCheckOverMouseOnElement from "util/hooks/useCheckOverMouseOnElement";
+import React from "react";
 
 
 const GnbFullWidthWrapper = styled('nav')({
@@ -39,11 +40,8 @@ const GnbWrapper = styled(RowAlignCenterFlex)({
   margin: '0 30px',
 });
 
-const CenterGnb = styled(RowAlignCenterFlex)({
-  position: 'absolute',
-});
 
-const CenterMenu = styled('ul')({
+const CenterMenuStyle = styled('ul')({
   display: 'flex',
   flexDirection: 'row',
   gap: '32px',
@@ -64,10 +62,6 @@ const CenterMenu = styled('ul')({
   },
 });
 
-const LeftTopGnb = styled(RowAlignCenterFlex)({
-  marginRight: 'auto',
-});
-
 const RightTopGnb = styled(RowAlignCenterFlex)({
   display: 'flex',
   flexDirection: 'row',
@@ -79,17 +73,13 @@ const RightTopGnb = styled(RowAlignCenterFlex)({
   backgroundColor: 'white',
 });
 
-const ProfileImg = styled(CircleImg)({
-  width: '48px',
-  height: '48px',
-});
 
 const HomeLogo = styled('img')({
   height: '24px',
 });
 
-const GnbLi = styled('li')((props) => ({
-  ...(props.present_link && {
+const GnbLi = styled('li')((props: { highlight: boolean; }) => ({
+  ...(props.highlight && {
     color: colorCareerDiveBlue,
     paddingTop: '4px',
     borderBottom: `4px solid ${colorCareerDiveBlue}`,
@@ -100,59 +90,29 @@ const GnbLi = styled('li')((props) => ({
   }),
 }));
 
-const ProfileMenu = styled(VerticalFlex)((props) => ({
-  transition: 'height 0.3s ease',
-  top: '54px',
-  right: 0,
-  height: props.is_hide === 'true' ? '0px' : '289px',
-  position: 'absolute',
-  width: '180px',
-  backgroundColor: '#fff',
-  boxSizing: 'content-box',
-  boxShadow: '10px 20px 40px rgba(130, 130, 130, 0.1)',
-  borderRadius: '8px',
-  padding: '0 24px',
-  gap: '16px',
-  color: colorTextLight,
-  overflow: 'hidden',
-}));
 
 const onClickLogout = () => {
   localStorage.clear();
   window.location.href = '/';
-}
+};
 
 
-function MentorCenterMenu({ url }) {
+
+function CenterMenu({ items, url }: { items: { name: string, link: string; }[], url: string; }) {
   return (
-    <CenterMenu>
-      <LinkNoDeco to={`/mentor`}>
-        <GnbLi present_link={`/mentor` === url}>상담</GnbLi>
-      </LinkNoDeco>
-      <LinkNoDeco to={`/mentor/calendar`}>
-        <GnbLi present_link={`/mentor/calendar` === url}>일정 등록</GnbLi>
-      </LinkNoDeco>
-      <LinkNoDeco to={`/mentor`}>
-        <GnbLi>실적</GnbLi>
-      </LinkNoDeco>
-    </CenterMenu>
-  )
-}
-
-function MenteeCenterMenu({ url }) {
-  return (
-    <CenterMenu>
-      <LinkNoDeco to={`/mentee/schedule`}>
-        <GnbLi present_link={`/mentee/schedule` === url}>내 상담</GnbLi>
-      </LinkNoDeco>
-      <LinkNoDeco to={`/mentee/schedule`}>
-        <GnbLi>찜한 멘토</GnbLi>
-      </LinkNoDeco>
-      <LinkNoDeco to={`/mentee/schedule`}>
-        <GnbLi>상담 후기</GnbLi>
-      </LinkNoDeco>
-    </CenterMenu>
-  )
+    <CenterMenuStyle>
+      {
+        items.map(item => {
+          return (
+            // TODO: 기능 준비중입니다! 추후 삭제 필요
+            <LinkNoDeco to={item.link} onClick={(e) => { if (item.link === '') { e.preventDefault(); alert('기능 준비중입니다!'); } }}>
+              <GnbLi highlight={item.link === url}>{item.name}</GnbLi>
+            </LinkNoDeco>
+          );
+        })
+      }
+    </CenterMenuStyle>
+  );
 }
 
 function NoLoginRightMenu() {
@@ -162,13 +122,13 @@ function NoLoginRightMenu() {
         <CustomButton height={'48px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
       </LinkNoDeco>
     </RightTopGnb>
-  )
+  );
 }
 
 function MentorRightMenu() {
   const navigater = useNavigate();
-  const menuRef = useRef(null)
-  const isOverMenu = useCheckOverMouseOnElement(menuRef)
+  const menuRef = useRef(null);
+  const isOverMenu = useCheckOverMouseOnElement(menuRef);
   return (
     <Flex>
       <CustomButton
@@ -179,8 +139,8 @@ function MentorRightMenu() {
         custom_color={colorCareerDiveBlue}
         onClick={
           () => {
-            localStorage.setItem('IsMentorMode', false)
-            navigater('/')
+            localStorage.setItem('IsMentorMode', 'false');
+            navigater('/');
           }
         }
       >
@@ -207,26 +167,26 @@ function MentorRightMenu() {
             isHide={!isOverMenu}
             mainItems={[
               { name: '멘토 프로필', link: 'mentor/mypage/profile' },
-              { name: '계정', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!') } },
-              { name: '대금 수령', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!') } },
+              { name: '계정', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!'); } },
+              { name: '대금 수령', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!'); } },
             ]}
             subItems={[
               { name: '도움말', link: '' },
-              { name: '로그아웃', link: '', onClick: () => { onClickLogout() } }
+              { name: '로그아웃', link: '', onClick: () => { onClickLogout(); } }
             ]}
           />
         </Flex>
       </Flex>
     </Flex>
 
-  )
+  );
 }
 
 
 function MenteeRightMenu() {
   const navigater = useNavigate();
-  const menuRef = useRef(null)
-  const isOverMenu = useCheckOverMouseOnElement(menuRef)
+  const menuRef = useRef(null);
+  const isOverMenu = useCheckOverMouseOnElement(menuRef);
   return (
     <Flex>
       <CustomButton
@@ -238,13 +198,13 @@ function MenteeRightMenu() {
         custom_color={colorCareerDiveBlue}
         onClick={
           () => {
-            localStorage.setItem('IsMentorMode', true)
-            navigater('/mentor')
+            localStorage.setItem('IsMentorMode', 'true');
+            navigater('/mentor');
           }
         }
       >
         <TextSubtitle2>
-          {JSON.parse(localStorage.getItem('IsMentor')) ? '멘토 모드' : '멘토 되기'}
+          {JSON.parse(localStorage.getItem('IsMentor')!) ? '멘토 모드' : '멘토 되기'}
         </TextSubtitle2>
       </CustomButton>
       <Flex
@@ -265,95 +225,95 @@ function MenteeRightMenu() {
             isHide={!isOverMenu}
             mainItems={[
               { name: '프로필', link: 'mentee/mypage/profile' },
-              { name: '계정', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!') } },
-              { name: '리뷰', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!') } },
-              { name: '결제 관리', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!') } },
+              { name: '계정', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!'); } },
+              { name: '리뷰', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!'); } },
+              { name: '결제 관리', link: '', onClick: (e) => { e.preventDefault(); alert('기능 준비중입니다!'); } },
             ]}
             subItems={[
               { name: '도움말', link: '' },
-              { name: '로그아웃', link: '', onClick: () => { onClickLogout() } }
+              { name: '로그아웃', link: '', onClick: () => { onClickLogout(); } }
             ]}
           />
         </Flex>
       </Flex>
     </Flex>
-  )
+  );
 }
 
 
-const gnbDisableUrl = ['/session', '/review']
+const gnbDisableUrl = ['/session', '/review'];
 
 function Gnb() {
   const location = useLocation().pathname;
   const navigater = useNavigate();
 
 
-  const [isLogin, setIsLogin] = useState(false)
-  const [isMentorMode, setIsMentorMode] = useState(false)
+  const [isLogin, setIsLogin] = useState(false);
+  const [isMentorMode, setIsMentorMode] = useState(false);
 
 
   useEffect(() => {
     async function checkToken() {
       const AccessToken = localStorage.getItem('AccessToken');
-      setIsMentorMode(JSON.parse(localStorage.getItem('IsMentorMode')))
+      setIsMentorMode(JSON.parse(localStorage.getItem('IsMentorMode')!));
 
-      let isAccessTokenValid = false
+      let isAccessTokenValid = false;
 
       if (AccessToken !== null) {
         const validResponse = await API.postAccountValid(AccessToken);
         if (validResponse.status === 200) {
-          isAccessTokenValid = true
+          isAccessTokenValid = true;
         }
       } else {
-        const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin'))
+        const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin')!);
         if (isAutoLogin === true) {
-          const RefreshToken = localStorage.getItem('RefreshToken')
+          const RefreshToken = localStorage.getItem('RefreshToken');
           if (RefreshToken !== null) {
             const refreshResponse = await API.postAccountRenew(RefreshToken);
             if (refreshResponse.status === 200) {
-              const newAccessToken = refreshResponse.data
-              localStorage.setItem('AccessToken', newAccessToken)
-              isAccessTokenValid = true
+              const newAccessToken = refreshResponse.data;
+              localStorage.setItem('AccessToken', newAccessToken);
+              isAccessTokenValid = true;
             }
           }
         }
       }
 
       if (isAccessTokenValid) {
-        setIsLogin(true)
+        setIsLogin(true);
       } else {
-        setIsLogin(false)
+        setIsLogin(false);
       }
 
     }
 
     checkToken();
 
-  }, [location])
+  }, [location]);
 
-  const [firstRender, setFirstRender] = useState(true)
+  const [firstRender, setFirstRender] = useState(true);
 
   useEffect(() => {
     if (firstRender && !gnbDisableUrl.map((e) => location.includes(e)).includes(true)) {
-      setFirstRender(false)
+      setFirstRender(false);
 
-      if (JSON.parse(localStorage.getItem('IsMentor'))) {
-        setIsMentorMode(true)
-        localStorage.setItem('IsMentorMode', true)
-        navigater('/mentor')
+      if (JSON.parse(localStorage.getItem('IsMentor')!)) {
+        setIsMentorMode(true);
+        localStorage.setItem('IsMentorMode', 'true');
+        navigater('/mentor');
       }
 
       if (location === '/mentor') {
-        if (!JSON.parse(localStorage.getItem('IsMentor'))) {
-          setIsMentorMode(false)
-          alert('멘토 등록을 진행해주세요')
-          navigater('/mentor/register')
+        if (!JSON.parse(localStorage.getItem('IsMentor')!)) {
+          setIsMentorMode(false);
+          alert('멘토 등록을 진행해주세요');
+          navigater('/mentor/register');
         }
       }
 
     }
 
-  }, [firstRender, navigater])
+  }, [firstRender, navigater]);
 
   return (
     <div>
@@ -372,8 +332,26 @@ function Gnb() {
                 {
                   isLogin &&
                     isMentorMode ?
-                    <MentorCenterMenu url={location} /> :
-                    <MenteeCenterMenu url={location} />
+                    <CenterMenu
+                      items={
+                        [
+                          { name: '상담', link: '/mentor' },
+                          { name: '일정 등록', link: '/mentor/calendar' },
+                          { name: '실적', link: '' }
+                        ]
+                      }
+                      url={location}
+                    /> :
+                    <CenterMenu
+                      items={
+                        [
+                          { name: '내 상담', link: '/mentee/schedule' },
+                          { name: '찜한 멘토', link: '' },
+                          { name: '상담 후기', link: '' }
+                        ]
+                      }
+                      url={location}
+                    />
                 }
               </Flex>
 
