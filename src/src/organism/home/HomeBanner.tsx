@@ -13,6 +13,7 @@ import SimpleMenu from "util/SimpleMenu";
 import BannerIdCard1 from "../../assets/img/home/BannerIDCard-1.png";
 import BannerIdCard2 from "../../assets/img/home/BannerIDCard-2.png";
 import BannerSearchIcon from "../../assets/icon/bannerSearch.svg";
+import React from "react";
 
 const HomeBannerFullWidthWrapper = styled(FullWidthWrapper)({
   backgroundColor: 'white',
@@ -47,7 +48,7 @@ const FirstBannerIdCard = styled("img")({
     right: '50px',
     width: '112px',
   }
-})
+});
 
 const SecondBannerIdCard = styled("img")({
   position: 'absolute',
@@ -105,7 +106,7 @@ const BannerTitle = styled("span")({
     fontSize: '20px',
     lineHeight: '26px'
   }
-})
+});
 
 
 
