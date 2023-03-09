@@ -13,7 +13,7 @@ import MentoringApply from './pages/request/MentoringApply';
 import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer';
 
 import Gnb from "./organism/Gnb";
-import Footer from "./component/Footer";
+import Footer from "./organism/Footer";
 import SessionList from "./pages/mentee/schedule";
 import MyPage from "./pages/mentee/myPage";
 import MentorHome from './pages/mentor/home';
