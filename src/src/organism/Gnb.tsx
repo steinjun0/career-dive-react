@@ -1,33 +1,18 @@
-import { Avatar, Divider, styled } from "@mui/material";
-import { RowAlignCenterFlex, CircleImg, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth, colorBackgroundGrayMedium } from 'util/styledComponent';
+import { Avatar, styled } from "@mui/material";
+import { RowAlignCenterFlex, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth, colorBackgroundGrayMedium } from 'util/styledComponent';
 
 import { useLocation, useNavigate } from 'react-router-dom';
-
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 import logoMentee from '../assets/img/logo/careerDiveLogoBeta.svg';
 import logoMentor from '../assets/img/logo/careerDiveMentorLogoBeta.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.png';
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import DropDownMenu from "component/DropDownMenu";
 import useCheckOverMouseOnElement from "util/hooks/useCheckOverMouseOnElement";
 import React from "react";
 import { AccountDataContext } from "index";
 
-
-const GnbFullWidthWrapper = styled('nav')({
-  position: 'fixed',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '80px',
-  width: '100%',
-  backgroundColor: 'white',
-  borderBottom: '1px solid #E0E0E0',
-  zIndex: 3,
-});
 
 const GnbWrapper = styled(RowAlignCenterFlex)({
   position: 'fixed',
@@ -72,7 +57,6 @@ const RightTopGnb = styled(RowAlignCenterFlex)({
   backgroundColor: 'white',
 });
 
-
 const HomeLogo = styled('img')({
   height: '24px',
 });
@@ -96,8 +80,6 @@ const onClickLogout = () => {
   localStorage.clear();
   window.location.href = '/';
 };
-
-
 
 function CenterMenu({ items, url }: { items: { name: string, link: string; }[], url: string; }) {
   return (
@@ -187,7 +169,6 @@ function MentorRightMenu() {
   );
 }
 
-
 function MenteeRightMenu() {
   const navigater = useNavigate();
   const menuRef = useRef(null);
@@ -256,7 +237,7 @@ const gnbDisableUrl = ['/session', '/review'];
 
 function Gnb() {
   const location = useLocation().pathname;
-  const { accountData, updateAccountData } = useContext(AccountDataContext);
+  const { accountData } = useContext(AccountDataContext);
   const { isLogin, isMentorMode } = accountData;
 
   return (

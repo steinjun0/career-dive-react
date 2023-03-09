@@ -4,7 +4,7 @@ import { AccountDataContext } from "index";
 import { useLocation } from "react-router-dom";
 
 export default function BusinessCheckToken() {
-    const { accountData, updateAccountData } = useContext(AccountDataContext);
+    const { updateAccountData } = useContext(AccountDataContext);
     const location = useLocation();
     useEffect(() => {
         async function checkToken() {
