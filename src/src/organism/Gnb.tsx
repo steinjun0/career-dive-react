@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import logoMentee from '../assets/img/logo/careerDiveLogoBeta.svg';
 import logoMentor from '../assets/img/logo/careerDiveMentorLogoBeta.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.png';
-import { ReactNode, SetStateAction, useContext, useEffect, useRef, useState, } from "react";
+import { SetStateAction, useContext, useEffect, useRef, useState, } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import DropDownMenu from "component/DropDownMenu";
 import useCheckOverMouseOnElement from "util/hooks/useCheckOverMouseOnElement";
@@ -176,10 +176,8 @@ function NoLoginRightMenu() {
 }
 
 function MentorRightMenu() {
-  const navigater = useNavigate();
   const menuRef = useRef(null);
   const isOverMenu = useCheckOverMouseOnElement(menuRef);
-  const { updateAccountData } = useContext(AccountDataContext);
   return (
     <Flex>
       <ModeButton />
@@ -218,10 +216,8 @@ function MentorRightMenu() {
 }
 
 function MenteeRightMenu() {
-  const navigater = useNavigate();
   const menuRef = useRef(null);
   const isOverMenu = useCheckOverMouseOnElement(menuRef);
-  const { accountData, updateAccountData } = useContext(AccountDataContext);
   return (
     <Flex>
       <ModeButton />
@@ -259,7 +255,7 @@ function MenteeRightMenu() {
   );
 }
 
-function MobileMenu({ items, url, setIsOpenMobileMenu }: { items: { name: string, link: string; }[], url: string, setIsOpenMobileMenu: React.Dispatch<SetStateAction<boolean>>; }) {
+function MobileMenuList({ items, url, setIsOpenMobileMenu }: { items: { name: string, link: string; }[], url: string, setIsOpenMobileMenu: React.Dispatch<SetStateAction<boolean>>; }) {
   // highlight={item.link === url ? 'true' : 'false'}
   return (
     <VerticalFlex sx={{ padding: '16px', gap: '16px', maxHeight: 'min-content' }}>
@@ -289,54 +285,16 @@ function MobileMenu({ items, url, setIsOpenMobileMenu }: { items: { name: string
   );
 }
 
-function MobileMentorMenu({ setIsOpenMobileMenu }: { setIsOpenMobileMenu: React.Dispatch<SetStateAction<boolean>>; }) {
-  const navigater = useNavigate();
+function MobileMenu({ items, setIsOpenMobileMenu }: { items: { name: string, link: string; }[], setIsOpenMobileMenu: React.Dispatch<SetStateAction<boolean>>; }) {
   const location = useLocation();
-  const { updateAccountData } = useContext(AccountDataContext);
   return (
     <>
-      <MobileMenu
-        items={
-          [
-            { name: '홈', link: '/' },
-            { name: '내 상담', link: '/mentee/schedule' },
-            { name: '찜한 멘토', link: '' },
-            { name: '상담 후기', link: '' }
-          ]
-        }
-        url={location.pathname}
-        setIsOpenMobileMenu={setIsOpenMobileMenu} />
-      <Flex sx={{ justifyContent: 'space-between' }}>
-        <ModeButton />
-
-        <LinkNoDeco to={'mentee/mypage/profile'}>
-          <Avatar sx={{ cursor: 'pointer', width: 48, height: 48 }} src={testProfileImage} alt="" />
-        </LinkNoDeco>
-      </Flex>
-    </>
-  );
-}
-
-function MobileMenteeMenu({ setIsOpenMobileMenu }: { setIsOpenMobileMenu: React.Dispatch<SetStateAction<boolean>>; }) {
-  const navigater = useNavigate();
-  const location = useLocation();
-  const { updateAccountData } = useContext(AccountDataContext);
-  return (
-    <>
-      <MobileMenu
-        items={
-          [
-            { name: '홈', link: '/' },
-            { name: '내 상담', link: '/mentee/schedule' },
-            { name: '찜한 멘토', link: '' },
-            { name: '상담 후기', link: '' }
-          ]
-        }
+      <MobileMenuList
+        items={items}
         url={location.pathname}
         setIsOpenMobileMenu={setIsOpenMobileMenu} />
       <Flex sx={{ justifyContent: 'space-between', padding: '16px' }}>
         <ModeButton />
-
         <LinkNoDeco to={'mentee/mypage/profile'}>
           <Avatar sx={{ cursor: 'pointer', width: 48, height: 48 }} src={testProfileImage} alt="" />
         </LinkNoDeco>
@@ -389,7 +347,28 @@ function Gnb() {
                   justifyContent: 'space-between'
                 }}
               >
-                <MobileMenteeMenu setIsOpenMobileMenu={setIsOpenMobileMenu} />
+                {
+                  isMentorMode ?
+                    <MobileMenu
+                      items={
+                        [
+                          { name: '상담', link: '/mentor' },
+                          { name: '일정 등록', link: '/mentor/calendar' },
+                          { name: '실적', link: '' }
+                        ]
+                      }
+                      setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
+                    <MobileMenu
+                      items={
+                        [
+                          { name: '홈', link: '/' },
+                          { name: '내 상담', link: '/mentee/schedule' },
+                          { name: '찜한 멘토', link: '' },
+                          { name: '상담 후기', link: '' }
+                        ]
+                      }
+                      setIsOpenMobileMenu={setIsOpenMobileMenu} />
+                }
               </VerticalFlex>
 
             </Flex> :
