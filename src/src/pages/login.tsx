@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { Backdrop, styled, useTheme, } from "@mui/material";
 
@@ -20,6 +20,7 @@ import CustomTextField from "util/ts/Custom/CustomTextField";
 import * as accountAPI from 'apis/account';
 import { updateUserDataLocalStorage, useValidation, validateEmail } from 'services/login';
 import React from "react";
+import { AccountDataContext } from 'index';
 
 
 
@@ -37,6 +38,7 @@ const SignUpText = styled(TextSubtitle2)`
 function Login() {
     const navigate = useNavigate();
     const theme = useTheme();
+    const { accountData, updateAccountData } = useContext(AccountDataContext);
 
     const [email, setEmail, emailHelperText, isEmailValid, updateEmailHelperText] = useValidation({
         validationFunction: validateEmail,
@@ -66,12 +68,16 @@ function Login() {
                 const loginResponse = await accountAPI.postAccountLogin(email, password);
                 if (loginResponse.status === 200) {
                     updateUserDataLocalStorage({ userData: loginResponse.data, isAutoLogin });
+                    updateAccountData('isLogin', true);
                     if (loginResponse.data['IsMentor']) {
+                        updateAccountData('isMentorMode', true);
                         navigate('/mentor');
                     } else {
+                        updateAccountData('isMentorMode', false);
                         navigate('/');
                     }
                 } else {
+                    updateAccountData('isLogin', false);
                     alert(loginResponse.data.error); // 이렇게 복잡해야하는가?
                 }
             }
