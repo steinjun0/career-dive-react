@@ -66,6 +66,9 @@ export const AccountDataContext =
 
 function App(props: { children: ReactNode; }) {
   const [accountData, setAccountData] = useState<IAccountData>({ isLogin: false, isMentorMode: false });
+  useEffect(() => {
+    localStorage.setItem('isMentorMode', accountData.isMentorMode.toString());
+  }, [accountData]);
 
   function updateAccountData(name: keyof IAccountData, value: any) {
     switch (name) {
