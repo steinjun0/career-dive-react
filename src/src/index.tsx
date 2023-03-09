@@ -37,6 +37,7 @@ import BusniessScrollToTop from 'services/businessComponent/BusinessScrollToTop'
 import BusinessRouteChangeTracker from 'services/businessComponent/BusinessRouteChangeTracker';
 import BusinessCheckToken from "services/businessComponent/BusinessCheckToken";
 import BusinessCheckMentor from "services/businessComponent/BusinessCheckMentor";
+import { useMediaQuery } from "@mui/material";
 
 
 const theme = createTheme({
@@ -86,6 +87,26 @@ function App(props: { children: ReactNode; }) {
   </AccountDataContext.Provider>;
 }
 
+function Page(props: { children: ReactNode; }) {
+  const isDown730 = useMediaQuery(theme.breakpoints.down(730));
+  const [gnbHeight, setGnbHeight] = useState<number>(80);
+  useEffect(() => {
+    if (isDown730) setGnbHeight(48);
+    else setGnbHeight(80);
+  }, [isDown730]);
+  return (
+    <VerticalFlex
+      sx={{
+        minHeight: `calc(100vh - ${gnbHeight}px - 220px)`,
+        paddingTop: `${gnbHeight}px`
+      }}
+    >
+      {props.children}
+    </VerticalFlex>
+  );
+
+}
+
 ReactDOM.render(
   <App>
     <BrowserRouter>
@@ -95,8 +116,7 @@ ReactDOM.render(
         <BusinessCheckToken />
         <BusinessCheckMentor />
         <Gnb />
-        <EmptyHeight height={'80px'} />
-        <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 220px)' }}>
+        <Page>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -137,7 +157,7 @@ ReactDOM.render(
 
 
           </Routes>
-        </VerticalFlex>
+        </Page>
         <Footer />
       </ThemeProvider>
     </BrowserRouter>
