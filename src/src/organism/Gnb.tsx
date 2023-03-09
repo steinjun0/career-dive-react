@@ -97,7 +97,7 @@ function ModeButton() {
     else {
       setButtonString('로그인');
     }
-  }, [location]);
+  }, [accountData]);
 
   function onClickButton() {
     if (isLogin) {
@@ -162,8 +162,6 @@ function CenterMenu({ items, url }: { items: { name: string, link: string; }[], 
     </CenterMenuStyle>
   );
 }
-
-
 
 function NoLoginRightMenu() {
   return (
@@ -341,34 +339,40 @@ function Gnb() {
               </IconButton>
               <VerticalFlex
                 sx={{
-                  position: 'fixed', zIndex: 3, top: '48px', transition: 'ease 0.3s all',
-                  height: isOpenMobileMenu ? 'calc(100vh - 48px)' : 0, width: '100%',
-                  backgroundColor: 'white', marginLeft: '-16px', overflow: 'hidden',
-                  justifyContent: 'space-between'
+                  height: '-webkit-fill-available', position: 'fixed', zIndex: 3,
+                  top: '48px', width: '100%', marginLeft: '-16px', overflow: 'hidden',
                 }}
               >
-                {
-                  isMentorMode ?
-                    <MobileMenu
-                      items={
-                        [
-                          { name: '상담', link: '/mentor' },
-                          { name: '일정 등록', link: '/mentor/calendar' },
-                          { name: '실적', link: '' }
-                        ]
-                      }
-                      setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
-                    <MobileMenu
-                      items={
-                        [
-                          { name: '홈', link: '/' },
-                          { name: '내 상담', link: '/mentee/schedule' },
-                          { name: '찜한 멘토', link: '' },
-                          { name: '상담 후기', link: '' }
-                        ]
-                      }
-                      setIsOpenMobileMenu={setIsOpenMobileMenu} />
-                }
+                <VerticalFlex
+                  sx={{
+                    height: isOpenMobileMenu ? '100%' : 0, transition: isOpenMobileMenu ? 'ease 0.3s all' : '',
+                    backgroundColor: 'white', overflow: 'hidden',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  {
+                    isMentorMode ?
+                      <MobileMenu
+                        items={
+                          [
+                            { name: '상담', link: '/mentor' },
+                            { name: '일정 등록', link: '/mentor/calendar' },
+                            { name: '실적', link: '' }
+                          ]
+                        }
+                        setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
+                      <MobileMenu
+                        items={
+                          [
+                            { name: '홈', link: '/' },
+                            { name: '내 상담', link: '/mentee/schedule' },
+                            { name: '찜한 멘토', link: '' },
+                            { name: '상담 후기', link: '' }
+                          ]
+                        }
+                        setIsOpenMobileMenu={setIsOpenMobileMenu} />
+                  }
+                </VerticalFlex>
               </VerticalFlex>
 
             </Flex> :
