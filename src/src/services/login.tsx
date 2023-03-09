@@ -1,4 +1,4 @@
-import { IPostAccountLoginRes } from "apis/login";
+import { IPostAccountLoginRes } from "apis/account";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 
 export function updateUserDataLocalStorage({ userData, isAutoLogin }: { userData: IPostAccountLoginRes, isAutoLogin: boolean; }) {
