@@ -15,7 +15,7 @@ import Login from "pages/login";
 import DropDownMenu from "component/DropDownMenu";
 import useCheckOverMouseOnElement from "util/hooks/useCheckOverMouseOnElement";
 import React from "react";
-import { IsMentorModeContext } from "index";
+import { AccountDataContext } from "index";
 
 
 const GnbFullWidthWrapper = styled('nav')({
@@ -251,13 +251,13 @@ const gnbDisableUrl = ['/session', '/review'];
 function Gnb() {
   const location = useLocation().pathname;
   const navigater = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
-  const { isMentorMode, setIsMentorMode } = useContext(IsMentorModeContext);
-
+  // const [isLogin, setIsLogin] = useState(false);
+  const { accountData, updateAccountData } = useContext(AccountDataContext);
+  const { isLogin, isMentorMode } = accountData;
   useEffect(() => {
     async function checkToken() {
       const AccessToken = localStorage.getItem('AccessToken');
-      setIsMentorMode(JSON.parse(localStorage.getItem('IsMentorMode')!));
+      updateAccountData('isMentorMode', JSON.parse(localStorage.getItem('IsMentorMode')!));
 
       let isAccessTokenValid = false;
 
@@ -282,9 +282,9 @@ function Gnb() {
       }
 
       if (isAccessTokenValid) {
-        setIsLogin(true);
+        updateAccountData('isLogin', true);
       } else {
-        setIsLogin(false);
+        updateAccountData('isLogin', false);
       }
 
     }
@@ -298,16 +298,15 @@ function Gnb() {
   useEffect(() => {
     if (firstRender && !gnbDisableUrl.map((e) => location.includes(e)).includes(true)) {
       setFirstRender(false);
-
       if (JSON.parse(localStorage.getItem('IsMentor')!)) {
-        setIsMentorMode(true);
+        updateAccountData('isMentorMode', true);
         localStorage.setItem('IsMentorMode', 'true');
         navigater('/mentor');
       }
 
       if (location === '/mentor') {
         if (!JSON.parse(localStorage.getItem('IsMentor')!)) {
-          setIsMentorMode(false);
+          updateAccountData('isMentorMode', false);
           alert('멘토 등록을 진행해주세요');
           navigater('/mentor/register');
         }
@@ -327,7 +326,6 @@ function Gnb() {
                 {isMentorMode ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
               </LinkNoDeco>
             </Flex>
-
             <Flex className="gnb-center" sx={{ height: '100%' }}>
               {
                 isLogin &&

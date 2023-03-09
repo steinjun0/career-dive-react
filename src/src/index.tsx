@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, SetStateAction, useState } from "react";
+import React, { createContext, ReactNode, SetStateAction, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
@@ -48,14 +48,37 @@ const theme = createTheme({
   }
 });
 
-export const IsMentorModeContext =
-  createContext<{ isMentorMode: boolean, setIsMentorMode: React.Dispatch<SetStateAction<boolean>>; }>({ isMentorMode: false, setIsMentorMode: () => false });
+
+interface IAccountData {
+  isMentorMode: boolean,
+  isLogin: boolean;
+}
+
+export const AccountDataContext =
+  createContext
+    <{ accountData: IAccountData, updateAccountData: (name: keyof IAccountData, value: any) => void; }>
+    ({
+      accountData: { isLogin: false, isMentorMode: false },
+      updateAccountData: (name, value) => { }
+    });
 
 function App(props: { children: ReactNode; }) {
-  const [isMentorMode, setIsMentorMode] = useState(false);
-  return <IsMentorModeContext.Provider value={{ isMentorMode, setIsMentorMode }}>
+  const [accountData, setAccountData] = useState<IAccountData>({ isLogin: false, isMentorMode: false });
+
+  function updateAccountData(name: keyof IAccountData, value: any) {
+    switch (name) {
+      case 'isLogin':
+        setAccountData((prev) => { return { ...prev, isLogin: value }; });
+        break;
+      case 'isMentorMode':
+        setAccountData((prev) => { return { ...prev, isMentorMode: value }; });
+        break;
+    }
+
+  }
+  return <AccountDataContext.Provider value={{ accountData, updateAccountData }}>
     {props.children}
-  </IsMentorModeContext.Provider>;
+  </AccountDataContext.Provider>;
 }
 
 ReactDOM.render(
