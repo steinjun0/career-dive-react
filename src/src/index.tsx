@@ -98,7 +98,10 @@ function Page(props: { children: ReactNode; }) {
     <VerticalFlex
       sx={{
         minHeight: `calc(100vh - ${gnbHeight}px - 220px)`,
-        paddingTop: `${gnbHeight}px`
+        paddingTop: `${gnbHeight}px`,
+        '& > *': {
+          minHeight: `calc(100vh - ${gnbHeight}px - 220px)`
+        }
       }}
     >
       {props.children}
