@@ -1,17 +1,19 @@
-import { Avatar, styled } from "@mui/material";
-import { RowAlignCenterFlex, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth, colorBackgroundGrayMedium } from 'util/styledComponent';
+import { Avatar, IconButton, styled, useMediaQuery, useTheme } from "@mui/material";
+import { RowAlignCenterFlex, LinkNoDeco, colorTextBody, colorCareerDiveBlue, colorBackgroundGrayLight, Flex, VerticalFlex, TextSubtitle2, TextBody2, colorTextLight, EmptyWidth, colorBackgroundGrayMedium, TextHeading6 } from 'util/styledComponent';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import logoMentee from '../assets/img/logo/careerDiveLogoBeta.svg';
 import logoMentor from '../assets/img/logo/careerDiveMentorLogoBeta.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.png';
-import { useContext, useRef, } from "react";
+import { SetStateAction, useContext, useEffect, useRef, useState, } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
 import DropDownMenu from "component/DropDownMenu";
 import useCheckOverMouseOnElement from "util/hooks/useCheckOverMouseOnElement";
 import React from "react";
 import { AccountDataContext } from "index";
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const GnbWrapper = styled(RowAlignCenterFlex)({
@@ -26,7 +28,6 @@ const GnbWrapper = styled(RowAlignCenterFlex)({
   height: '80px',
   borderBottom: '1px solid #E0E0E0',
   zIndex: 3,
-
 });
 
 
@@ -97,6 +98,36 @@ function CenterMenu({ items, url }: { items: { name: string, link: string; }[], 
         })
       }
     </CenterMenuStyle>
+  );
+}
+
+function MobileMenu({ items, url, setIsOpenMobileMenu }: { items: { name: string, link: string; }[], url: string, setIsOpenMobileMenu: React.Dispatch<SetStateAction<boolean>>; }) {
+  // highlight={item.link === url ? 'true' : 'false'}
+  return (
+    <VerticalFlex sx={{ margin: '16px', gap: '16px', maxHeight: 'min-content' }}>
+      {
+        items.map((item, index) => {
+          return (
+            // TODO: 기능 준비중입니다! 추후 삭제 필요
+            <LinkNoDeco
+              key={index}
+              to={item.link}
+              onClick={(e) => {
+                if (item.link === '') { e.preventDefault(); alert('기능 준비중입니다!'); }
+                else setIsOpenMobileMenu(false);
+              }}>
+              <TextHeading6
+                sx={
+                  item.link === url ? { textDecoration: 'underline', textDecorationColor: colorCareerDiveBlue, textUnderlineOffset: '4px' } : {}
+                }
+              >
+                {item.name}
+              </TextHeading6>
+            </LinkNoDeco>
+          );
+        })
+      }
+    </VerticalFlex>
   );
 }
 
@@ -239,61 +270,108 @@ function Gnb() {
   const location = useLocation().pathname;
   const { accountData } = useContext(AccountDataContext);
   const { isLogin, isMentorMode } = accountData;
+  const [isOpenMobileMenu, setIsOpenMobileMenu] = useState<boolean>(false);
+  const theme = useTheme();
+  const isDown730 = useMediaQuery(theme.breakpoints.down(730));
+
+  useEffect(() => {
+    setIsOpenMobileMenu(false);
+  }, [isDown730, location]);
+
 
   return (
     <>
       {
         !gnbDisableUrl.map((e) => location.includes(e)).includes(true) ?
-          <GnbWrapper>
-            <Flex className="gnb-left" sx={{ width: '215px' }}>
-              <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
-                {isMentorMode ? <HomeLogo src={logoMentor} alt="커리어 다이브" /> : <HomeLogo src={logoMentee} alt="커리어 다이브" />}
-              </LinkNoDeco>
-            </Flex>
-            <Flex className="gnb-center" sx={{ height: '100%' }}>
-              {
-                isLogin &&
-                  isMentorMode ?
-                  <CenterMenu
-                    items={
-                      [
-                        { name: '상담', link: '/mentor' },
-                        { name: '일정 등록', link: '/mentor/calendar' },
-                        { name: '실적', link: '' }
-                      ]
-                    }
-                    url={location}
-                  /> :
-                  <CenterMenu
-                    items={
-                      [
-                        { name: '내 상담', link: '/mentee/schedule' },
-                        { name: '찜한 멘토', link: '' },
-                        { name: '상담 후기', link: '' }
-                      ]
-                    }
-                    url={location}
-                  />
-              }
-            </Flex>
+          isDown730 ?
+            <Flex sx={{
+              position: 'fixed', zIndex: 10,
+              width: '100%', height: '48px',
+              backgroundColor: 'white',
+              borderBottom: `0.5px solid ${colorBackgroundGrayMedium}`,
+              justifyContent: 'space-between', alignItems: 'center',
+              padding: '0 16px'
+            }}>
+              <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '18px' }} />
+              <IconButton onClick={() => setIsOpenMobileMenu((prev) => !prev)}>
+                {
+                  isOpenMobileMenu ?
+                    <CloseIcon /> :
+                    <MenuIcon />
+                }
+              </IconButton>
+              <VerticalFlex
+                sx={{
+                  position: 'fixed', zIndex: 3, top: '48px', transition: 'ease 0.3s all',
+                  height: isOpenMobileMenu ? 'calc(100vh - 48px)' : 0, width: '100%',
+                  backgroundColor: 'white', marginLeft: '-16px', overflow: 'hidden',
+                }}
+              >
+                <MobileMenu
+                  items={
+                    [
+                      { name: '홈', link: '/' },
+                      { name: '내 상담', link: '/mentee/schedule' },
+                      { name: '찜한 멘토', link: '' },
+                      { name: '상담 후기', link: '' }
+                    ]
+                  }
+                  url={location}
+                  setIsOpenMobileMenu={setIsOpenMobileMenu} />
+              </VerticalFlex>
 
-            <Flex className="gnb-right" sx={{ width: '215px', justifyContent: 'end' }}>
-              {
-                isLogin ?
-                  isMentorMode ?
-                    <MentorRightMenu /> :
-                    <MenteeRightMenu /> :
-                  <NoLoginRightMenu />
-              }
-            </Flex>
+            </Flex> :
+            <GnbWrapper>
+              <Flex className="gnb-left" sx={{ width: '215px' }}>
+                <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
+                  <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '24px' }} />
+                </LinkNoDeco>
+              </Flex>
+              <Flex className="gnb-center" sx={{ height: '100%' }}>
+                {
+                  isLogin &&
+                    isMentorMode ?
+                    <CenterMenu
+                      items={
+                        [
+                          { name: '상담', link: '/mentor' },
+                          { name: '일정 등록', link: '/mentor/calendar' },
+                          { name: '실적', link: '' }
+                        ]
+                      }
+                      url={location}
+                    /> :
+                    <CenterMenu
+                      items={
+                        [
+                          { name: '내 상담', link: '/mentee/schedule' },
+                          { name: '찜한 멘토', link: '' },
+                          { name: '상담 후기', link: '' }
+                        ]
+                      }
+                      url={location}
+                    />
+                }
+              </Flex>
 
-          </GnbWrapper>
-          :
-          <div style={{ marginTop: -80 }}></div>
+              <Flex className="gnb-right" sx={{ width: '215px', justifyContent: 'end' }}>
+                {
+                  isLogin ?
+                    isMentorMode ?
+                      <MentorRightMenu /> :
+                      <MenteeRightMenu /> :
+                    <NoLoginRightMenu />
+                }
+              </Flex>
+
+            </GnbWrapper> :
+          isDown730 ?
+            <div style={{ marginTop: -48 }} /> :
+            <div style={{ marginTop: -80 }} />
       }
     </ >
 
   );
 }
 
-export default Gnb;
+export default Gnb;;
