@@ -1,4 +1,4 @@
-import { colorCareerDiveBlue, colorTextLight, defaultBoxShadow, Flex, TextHeading5, TextSubtitle1, VerticalFlex } from 'util/styledComponent'
+import { colorCareerDiveBlue, colorTextLight, defaultBoxShadow, Flex, TextHeading5, TextSubtitle1, VerticalFlex } from 'util/styledComponent';
 import GuidelineMenteeBook from "assets/img/home/GuidelineMenteeBook.svg";
 import KakaotalkChannel from "assets/img/home/KakaotalkChannel.svg";
 import React, { DOMAttributes, ReactElement } from "react";
@@ -6,7 +6,7 @@ import { useMediaQuery, useTheme } from '@mui/material';
 import { MUIStyledCommonProps } from '@mui/system';
 
 
-function EventCard({ children, ...props }: { children: ReactElement } & DOMAttributes<HTMLDivElement>) {
+function EventCard({ children, ...props }: { children: ReactElement; } & DOMAttributes<HTMLDivElement>) {
     return <Flex
         {...props}
         style={{
@@ -19,19 +19,19 @@ function EventCard({ children, ...props }: { children: ReactElement } & DOMAttri
         }}
     >
         {children}
-    </Flex>
+    </Flex>;
 }
 
 function EventGroup(props: MUIStyledCommonProps) {
-    const theme = useTheme()
-    const isDownHomeBreakPoint = useMediaQuery(theme.breakpoints.down(614));
+    const theme = useTheme();
+    const isDown614 = useMediaQuery(theme.breakpoints.down(614));
 
     return (
-        <Flex sx={{ gap: '30px', flexDirection: isDownHomeBreakPoint ? 'column' : 'row', ...props.sx }}>
+        <Flex sx={{ gap: '30px', flexDirection: isDown614 ? 'column' : 'row', ...props.sx }}>
             <EventCard onClick={() => window.open("https://www.notion.so/CBT-c57283dae1fe4602ad25f2b6ba0419aa")}>
                 <>
                     {
-                        isDownHomeBreakPoint ?
+                        isDown614 ?
                             <VerticalFlex>
                                 <TextSubtitle1 color={colorTextLight} sx={{ wordBreak: 'keep-all' }}>서비스 정책 및 가이드라인</TextSubtitle1>
                                 <TextSubtitle1 color={colorCareerDiveBlue}>멘티편</TextSubtitle1>
@@ -52,7 +52,7 @@ function EventGroup(props: MUIStyledCommonProps) {
             <EventCard onClick={() => window.open("https://pf.kakao.com/_xhHtxlxj")}>
                 <>
                     {
-                        isDownHomeBreakPoint ?
+                        isDown614 ?
                             <VerticalFlex>
                                 <TextSubtitle1 color={'#F3C72B'} sx={{ wordBreak: 'keep-all' }}>카카오톡 채널 문의</TextSubtitle1>
                             </VerticalFlex>
