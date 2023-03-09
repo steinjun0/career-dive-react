@@ -7,7 +7,6 @@ export default function BusinessCheckMentor() {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
-        console.log('hi');
         if (JSON.parse(localStorage.getItem('IsMentor')!)) {
             updateAccountData('isMentorMode', true);
             localStorage.setItem('IsMentorMode', 'true');
