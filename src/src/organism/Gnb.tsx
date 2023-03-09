@@ -339,7 +339,7 @@ function Gnb() {
               </IconButton>
               <VerticalFlex
                 sx={{
-                  height: '-webkit-fill-available', position: 'fixed', zIndex: 3,
+                  height: isOpenMobileMenu ? '-webkit-fill-available' : 0, position: 'fixed', zIndex: 3,
                   top: '48px', width: '100%', marginLeft: '-16px', overflow: 'hidden',
                 }}
               >
