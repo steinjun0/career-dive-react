@@ -134,6 +134,7 @@ function MentorRightMenu() {
   const navigater = useNavigate();
   const menuRef = useRef(null);
   const isOverMenu = useCheckOverMouseOnElement(menuRef);
+  const { updateAccountData } = useContext(AccountDataContext);
   return (
     <Flex>
       <CustomButton
@@ -144,6 +145,7 @@ function MentorRightMenu() {
         custom_color={colorCareerDiveBlue}
         onClick={
           () => {
+            updateAccountData('isMentorMode', false);
             localStorage.setItem('IsMentorMode', 'false');
             navigater('/');
           }
@@ -192,6 +194,7 @@ function MenteeRightMenu() {
   const navigater = useNavigate();
   const menuRef = useRef(null);
   const isOverMenu = useCheckOverMouseOnElement(menuRef);
+  const { updateAccountData } = useContext(AccountDataContext);
   return (
     <Flex>
       <CustomButton
@@ -203,6 +206,7 @@ function MenteeRightMenu() {
         custom_color={colorCareerDiveBlue}
         onClick={
           () => {
+            updateAccountData('isMentorMode', true);
             localStorage.setItem('IsMentorMode', 'true');
             navigater('/mentor');
           }
@@ -254,67 +258,28 @@ function Gnb() {
   // const [isLogin, setIsLogin] = useState(false);
   const { accountData, updateAccountData } = useContext(AccountDataContext);
   const { isLogin, isMentorMode } = accountData;
-  useEffect(() => {
-    async function checkToken() {
-      const AccessToken = localStorage.getItem('AccessToken');
-      updateAccountData('isMentorMode', JSON.parse(localStorage.getItem('IsMentorMode')!));
-
-      let isAccessTokenValid = false;
-
-      if (AccessToken !== null) {
-        const validResponse = await API.postAccountValid(AccessToken);
-        if (validResponse.status === 200) {
-          isAccessTokenValid = true;
-        }
-      } else {
-        const isAutoLogin = JSON.parse(localStorage.getItem('isAutoLogin')!);
-        if (isAutoLogin === true) {
-          const RefreshToken = localStorage.getItem('RefreshToken');
-          if (RefreshToken !== null) {
-            const refreshResponse = await API.postAccountRenew(RefreshToken);
-            if (refreshResponse.status === 200) {
-              const newAccessToken = refreshResponse.data;
-              localStorage.setItem('AccessToken', newAccessToken);
-              isAccessTokenValid = true;
-            }
-          }
-        }
-      }
-
-      if (isAccessTokenValid) {
-        updateAccountData('isLogin', true);
-      } else {
-        updateAccountData('isLogin', false);
-      }
-
-    }
-
-    checkToken();
-
-  }, [location]);
-
   const [firstRender, setFirstRender] = useState(true);
 
-  useEffect(() => {
-    if (firstRender && !gnbDisableUrl.map((e) => location.includes(e)).includes(true)) {
-      setFirstRender(false);
-      if (JSON.parse(localStorage.getItem('IsMentor')!)) {
-        updateAccountData('isMentorMode', true);
-        localStorage.setItem('IsMentorMode', 'true');
-        navigater('/mentor');
-      }
+  // useEffect(() => {
+  //   if (firstRender && !gnbDisableUrl.map((e) => location.includes(e)).includes(true)) {
+  //     setFirstRender(false);
+  //     if (JSON.parse(localStorage.getItem('IsMentor')!)) {
+  //       updateAccountData('isMentorMode', true);
+  //       localStorage.setItem('IsMentorMode', 'true');
+  //       navigater('/mentor');
+  //     }
 
-      if (location === '/mentor') {
-        if (!JSON.parse(localStorage.getItem('IsMentor')!)) {
-          updateAccountData('isMentorMode', false);
-          alert('멘토 등록을 진행해주세요');
-          navigater('/mentor/register');
-        }
-      }
+  //     if (location === '/mentor') {
+  //       if (!JSON.parse(localStorage.getItem('IsMentor')!)) {
+  //         updateAccountData('isMentorMode', false);
+  //         alert('멘토 등록을 진행해주세요');
+  //         navigater('/mentor/register');
+  //       }
+  //     }
 
-    }
+  //   }
 
-  }, [firstRender, navigater]);
+  // }, [firstRender, navigater]);
 
   return (
     <>

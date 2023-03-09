@@ -33,8 +33,10 @@ import Search from 'pages/search';
 import Review from "pages/review/id";
 import Signup2 from 'pages/signup/signup2';
 import Signup2Nickname from 'pages/signup/signup2Nickname';
-import BusniessScrollToTop from 'component/business/BusinessScrollToTop';
-import BusinessRouteChangeTracker from 'component/business/BusinessRouteChangeTracker';
+import BusniessScrollToTop from 'services/businessComponent/BusinessScrollToTop';
+import BusinessRouteChangeTracker from 'services/businessComponent/BusinessRouteChangeTracker';
+import BusinessCheckToken from "services/businessComponent/BusinessCheckToken";
+import BusinessCheckMentor from "services/businessComponent/BusinessCheckMentor";
 
 
 const theme = createTheme({
@@ -87,6 +89,8 @@ ReactDOM.render(
       <ThemeProvider theme={theme}>
         <BusniessScrollToTop />
         <BusinessRouteChangeTracker />
+        <BusinessCheckToken />
+        <BusinessCheckMentor />
         <Gnb />
         <EmptyHeight height={'80px'} />
         <VerticalFlex style={{ minHeight: 'calc(100vh - 80px - 220px)' }}>
