@@ -10,8 +10,6 @@ import logoMentor from '../assets/img/logo/careerDiveMentorLogoBeta.svg';
 import testProfileImage from '../assets/img/logo/testProfileImage.png';
 import { useContext, useEffect, useRef, useState } from "react";
 import { CustomButton } from "util/Custom/CustomButton";
-import API from "API";
-import Login from "pages/login";
 import DropDownMenu from "component/DropDownMenu";
 import useCheckOverMouseOnElement from "util/hooks/useCheckOverMouseOnElement";
 import React from "react";
@@ -194,7 +192,7 @@ function MenteeRightMenu() {
   const navigater = useNavigate();
   const menuRef = useRef(null);
   const isOverMenu = useCheckOverMouseOnElement(menuRef);
-  const { updateAccountData } = useContext(AccountDataContext);
+  const { accountData, updateAccountData } = useContext(AccountDataContext);
   return (
     <Flex>
       <CustomButton
@@ -208,7 +206,11 @@ function MenteeRightMenu() {
           () => {
             updateAccountData('isMentorMode', true);
             localStorage.setItem('IsMentorMode', 'true');
-            navigater('/mentor');
+            if (JSON.parse(localStorage.getItem('IsMentor')!)) {
+              navigater('/mentor');
+            } else {
+              navigater('/mentor/register');
+            }
           }
         }
       >
@@ -254,32 +256,8 @@ const gnbDisableUrl = ['/session', '/review'];
 
 function Gnb() {
   const location = useLocation().pathname;
-  const navigater = useNavigate();
-  // const [isLogin, setIsLogin] = useState(false);
   const { accountData, updateAccountData } = useContext(AccountDataContext);
   const { isLogin, isMentorMode } = accountData;
-  const [firstRender, setFirstRender] = useState(true);
-
-  // useEffect(() => {
-  //   if (firstRender && !gnbDisableUrl.map((e) => location.includes(e)).includes(true)) {
-  //     setFirstRender(false);
-  //     if (JSON.parse(localStorage.getItem('IsMentor')!)) {
-  //       updateAccountData('isMentorMode', true);
-  //       localStorage.setItem('IsMentorMode', 'true');
-  //       navigater('/mentor');
-  //     }
-
-  //     if (location === '/mentor') {
-  //       if (!JSON.parse(localStorage.getItem('IsMentor')!)) {
-  //         updateAccountData('isMentorMode', false);
-  //         alert('멘토 등록을 진행해주세요');
-  //         navigater('/mentor/register');
-  //       }
-  //     }
-
-  //   }
-
-  // }, [firstRender, navigater]);
 
   return (
     <>
