@@ -1,7 +1,6 @@
 import { Grid, styled } from "@mui/material";
 
 import {
-  FullWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
   Flex,

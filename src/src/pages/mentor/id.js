@@ -1,7 +1,6 @@
 import { Grid, styled, useMediaQuery, useTheme } from "@mui/material";
 
 import {
-  FullWidthWrapper,
   CenterWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
@@ -60,63 +59,59 @@ function Mentor() {
 
 
   return (
-    <div>
-      <FullWidthWrapper>
-        <MaxWidthDiv>
-          <MetorProfileBanner>
-            {mentorData && <MentorProfile
-              name={nickName}
-              description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
-              inService={mentorData.InService}
-              id={mentorData.UserID} />}
-          </MetorProfileBanner>
-        </MaxWidthDiv>
-        <GrayBackground>
-          <MaxWidthDiv>
-            <CardsWrapper>
-              <Grid container spacing={isDownMd ? '24px' : '30px'} marginTop={0} paddingTop={0}>
-                <Grid container item spacing={isDownMd ? '24px' : '30px'} xs={12} md={6} direction="column">
-                  <Grid item>
-                    {mentorData && mentorData.ConsultContents ?
-                      <HelpCategory
-                        regularTags={[...mentorData.ConsultContents.filter((e) => e.Type === '커리어 상담').map((e) => e.Name)]}
-                        premiumTags={[...mentorData.ConsultContents.filter((e) => e.Type === '전형 준비').map((e) => e.Name)]} />
-                      :
-                      <HelpCategory
-                        regularTags={[]}
-                        premiumTags={[]} />
-                    }
-                  </Grid>
-                  <Grid item>
-                    <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
-                  </Grid>
-                  {/* <Grid item xs={12}>
+    <GrayBackground>
+      <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
+        <MetorProfileBanner>
+          {mentorData && <MentorProfile
+            name={nickName}
+            description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+            inService={mentorData.InService}
+            id={mentorData.UserID} />}
+        </MetorProfileBanner>
+      </Flex>
+      <MaxWidthDiv>
+        <CardsWrapper>
+          <Grid container spacing={isDownMd ? '24px' : '30px'} marginTop={0} paddingTop={0}>
+            <Grid container item spacing={isDownMd ? '24px' : '30px'} xs={12} md={6} direction="column">
+              <Grid item>
+                {mentorData && mentorData.ConsultContents ?
+                  <HelpCategory
+                    regularTags={[...mentorData.ConsultContents.filter((e) => e.Type === '커리어 상담').map((e) => e.Name)]}
+                    premiumTags={[...mentorData.ConsultContents.filter((e) => e.Type === '전형 준비').map((e) => e.Name)]} />
+                  :
+                  <HelpCategory
+                    regularTags={[]}
+                    premiumTags={[]} />
+                }
+              </Grid>
+              <Grid item>
+                <Introduction introductionText={mentorData && mentorData.Introduction}></Introduction>
+              </Grid>
+              {/* <Grid item xs={12}>
                     <RatingAndReview></RatingAndReview>
                   </Grid> */}
-                </Grid>
-                <Grid item xs={12} md={6}>
+            </Grid>
+            <Grid item xs={12} md={6}>
 
-                  <MenteeCalendar2
-                    userId={+params.id}
-                    consultingTime={
-                      (getParsedLocalStorage('reservations') ?? null) &&
-                      (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
-                      getParsedLocalStorage('reservations')[+params.id]['consultingTime']
-                    }
-                    startDate={
-                      (getParsedLocalStorage('reservations') ?? null) &&
-                      (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
-                      (getParsedLocalStorage('reservations')[+params.id]['startTime'] ?? null) &&
-                      new Date(getParsedLocalStorage('reservations')[+params.id]['startTime'])
-                    }
-                  />
-                </Grid>
-              </Grid>
-            </CardsWrapper>
-          </MaxWidthDiv>
+              <MenteeCalendar2
+                userId={+params.id}
+                consultingTime={
+                  (getParsedLocalStorage('reservations') ?? null) &&
+                  (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
+                  getParsedLocalStorage('reservations')[+params.id]['consultingTime']
+                }
+                startDate={
+                  (getParsedLocalStorage('reservations') ?? null) &&
+                  (getParsedLocalStorage('reservations')[+params.id] ?? null) &&
+                  (getParsedLocalStorage('reservations')[+params.id]['startTime'] ?? null) &&
+                  new Date(getParsedLocalStorage('reservations')[+params.id]['startTime'])
+                }
+              />
+            </Grid>
+          </Grid>
+        </CardsWrapper>
+      </MaxWidthDiv>
 
-        </GrayBackground>
-      </FullWidthWrapper>
       {
         isDownMd &&
         <Flex
@@ -144,7 +139,7 @@ function Mentor() {
         </Flex>
       }
 
-    </div >
+    </GrayBackground >
   );
 }
 

@@ -1,19 +1,9 @@
 import { Grid, styled } from "@mui/material";
 
 import {
-  FullWidthWrapper,
-  GrayBackground,
   MaxWidthDiv,
   Flex,
-  RowAlignCenterFlex,
-  TextBody2,
-  EmptyHeight,
-  TextEllipsisContainer,
-  TextSubtitle1,
-  TextSubtitle2,
   TextHeading5,
-  TextHeading6,
-  colorCareerDiveBlue,
   VerticalFlex,
   colorTextLight,
   colorCareerDivePink

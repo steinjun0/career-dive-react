@@ -1,10 +1,7 @@
 import { styled, TextField } from "@mui/material";
 import {
   RowAlignCenterFlex,
-  FullWidthWrapper,
-  CenterWidthWrapper,
   Flex,
-  EmptyWidth,
   colorTextTitle,
 } from "util/styledComponent";
 
@@ -15,7 +12,8 @@ import BannerIdCard2 from "../../assets/img/home/BannerIDCard-2.png";
 import BannerSearchIcon from "../../assets/icon/bannerSearch.svg";
 import React from "react";
 
-const HomeBannerFullWidthWrapper = styled(FullWidthWrapper)({
+const HomeBannerFullWidthWrapper = styled(Flex)({
+  justifyContent: 'center',
   backgroundColor: 'white',
   height: '450px',
   '@media (max-width:614px)': {

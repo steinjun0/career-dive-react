@@ -8,7 +8,6 @@ import {
     colorTextLight,
     EmptyHeight,
     TextCaption,
-    FullWidthWrapper
 } from "util/styledComponent";
 
 import { CustomButton } from 'util/Custom/CustomButton'

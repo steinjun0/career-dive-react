@@ -1,7 +1,6 @@
 import { Grid, styled } from "@mui/material";
 
 import {
-  FullWidthWrapper,
   CenterWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
@@ -71,37 +70,35 @@ function MentoringReservation() {
 
 
   return (
-    <div>
-      <FullWidthWrapper>
-        <MaxWidthDiv>
-          {mentorData &&
+    <GrayBackground>
+      <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
+        {mentorData &&
+          <MetorProfileBanner>
             <MentorProfile
               name={nickName}
               description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
               id={mentorData.UserID}
               inService={mentorData.InService}
-            />}
-        </MaxWidthDiv>
-        <GrayBackground >
-          <MaxWidthDiv style={{ alignItems: 'center' }}>
-            <CardsWrapper >
-              {initialData !== undefined && <MenteeCalendar2
-                userId={+params.id}
-                startDate={initialData.startTime}
-                consultingTime={initialData.consultingTime}
-                setIsFinished={setIsFinish}
-              />}
+            />
+          </MetorProfileBanner>
+        }
+      </Flex>
+      <MaxWidthDiv style={{ alignItems: 'center' }}>
+        <CardsWrapper >
+          {initialData !== undefined && <MenteeCalendar2
+            userId={+params.id}
+            startDate={initialData.startTime}
+            consultingTime={initialData.consultingTime}
+            setIsFinished={setIsFinish}
+          />}
 
-            </CardsWrapper>
-            <EmptyHeight height={(!isFinish || !mentorData) ? '158px' : '30px'} />
-            {isFinish && mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />}
-            <EmptyHeight height={(!isFinish || !mentorData) ? '0' : '30px'} />
+        </CardsWrapper>
+        <EmptyHeight height={(!isFinish || !mentorData) ? '158px' : '30px'} />
+        {isFinish && mentorData && <SelectContent mentorConsultContents={mentorData.ConsultContents} />}
+        <EmptyHeight height={(!isFinish || !mentorData) ? '0' : '30px'} />
 
-          </MaxWidthDiv>
-
-        </GrayBackground>
-      </FullWidthWrapper>
-    </div>
+      </MaxWidthDiv>
+    </GrayBackground>
   );
 }
 

@@ -1,7 +1,6 @@
 import { Grid, styled } from "@mui/material";
 
 import {
-  FullWidthWrapper,
   CenterWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
@@ -63,39 +62,35 @@ function MentoringReservation() {
 
 
   return (
-    <div>
-      <FullWidthWrapper>
-        <MaxWidthDiv>
-          {/* <MetorProfileBanner>
+    <GrayBackground>
+      <MaxWidthDiv>
+        {/* <MetorProfileBanner>
             {mentorData && <MentorProfile
               name={mentorData.Nickname}
               description={`${mentorData.CompName} | ${mentorData.DivisIsPub ? mentorData.DivisInComp + ' |' : ''} ${mentorData.JobInComp}`}
               id={mentorData.UserID} />}
           </MetorProfileBanner> */}
-        </MaxWidthDiv>
-        <GrayBackground>
-          <CenterWidthWrapper>
-            <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                {/* <RequestView
+      </MaxWidthDiv>
+      <CenterWidthWrapper>
+        <Grid container spacing={'30px'} marginTop={0}>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {/* <RequestView
                   menteeIntroduce={menteeIntroduce}
                   requestContent={requestContent}
                   urlLink={urlLink} /> */}
-                {consultData !== undefined &&
-                  <RequestView
-                    consultData={consultData}
-                    menteeIntroduce={menteeData && menteeData.Introduction}
-                    urlLink={menteeData && menteeData.Link}
-                    style={{ width: '100%', padding: 24 }} />}
+            {consultData !== undefined &&
+              <RequestView
+                consultData={consultData}
+                menteeIntroduce={menteeData && menteeData.Introduction}
+                urlLink={menteeData && menteeData.Link}
+                style={{ width: '100%', padding: 24 }} />}
 
-              </Grid>
-            </Grid>
-            <CardsWrapper>
-            </CardsWrapper>
-          </CenterWidthWrapper>
-        </GrayBackground>
-      </FullWidthWrapper>
-    </div>
+          </Grid>
+        </Grid>
+        <CardsWrapper>
+        </CardsWrapper>
+      </CenterWidthWrapper>
+    </GrayBackground>
   );
 }
 
