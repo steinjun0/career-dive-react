@@ -316,7 +316,7 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
         API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
             .then((res) => {
                 if (res.status === 200) {
-                    updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes, state, dispatch);
+                    updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes ?? [], state, dispatch);
                     dispatch({ type: 'updateCalendarState', payload: 'view' });
                     resetAll(state, dispatch);
                 }
