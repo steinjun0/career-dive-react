@@ -3,23 +3,23 @@ import FamousMentorGroup from "organism/home/FamousMentorGroup";
 import BottomEventGroup from "organism/home/EventGroup";
 import * as accountAPI from "apis/account";
 
-import { Flex, GrayBackground, MaxWidthDiv, VerticalFlex } from "util/styledComponent";
+import { GrayBackground, VerticalFlex } from "util/styledComponent";
 import React, { useEffect, useState } from "react";
 import { IMentor } from "interfaces/mentor";
 
 function Home() {
-  const [mentors, setMentors] = useState<IMentor[]>([])
+  const [mentors, setMentors] = useState<IMentor[]>([]);
 
   useEffect(() => {
-    let isCancel = false
+    let isCancel = false;
     accountAPI.getAccountMentorList().then((res) => {
       if (!isCancel)
-        setMentors(res.data.Results)
-    })
+        setMentors(res.data.Results);
+    });
     return () => {
-      isCancel = true
-    }
-  }, [])
+      isCancel = true;
+    };
+  }, []);
 
   return (
     <VerticalFlex>

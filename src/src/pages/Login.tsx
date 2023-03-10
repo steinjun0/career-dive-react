@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 
-import { Backdrop, styled, useTheme, } from "@mui/material";
+import { styled, useTheme, } from "@mui/material";
 
 import {
     VerticalFlex,
