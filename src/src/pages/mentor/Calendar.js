@@ -20,12 +20,11 @@ const CardsWrapper = styled(Flex)`
 
 function MentorCalendarPage() {
   return (
-    <FullWidthWrapper>
-      <GrayBackground>
-        <MaxWidthDiv>
-          <CardsWrapper>
-            <MentorCalendar />
-            {/* <Grid container spacing={'30px'} marginTop={0} justifyContent="center">
+    <GrayBackground>
+      <MaxWidthDiv>
+        <CardsWrapper>
+          <MentorCalendar />
+          {/* <Grid container spacing={'30px'} marginTop={0} justifyContent="center">
               <Grid item xs={12} minWidth={582}>
                 <CalendarMentor></CalendarMentor>
               </Grid>
@@ -33,10 +32,9 @@ function MentorCalendarPage() {
                 <MentorCalendar />
               </Grid>
             </Grid> */}
-          </CardsWrapper>
-        </MaxWidthDiv>
-      </GrayBackground>
-    </FullWidthWrapper>
+        </CardsWrapper>
+      </MaxWidthDiv>
+    </GrayBackground>
   );
 }
 

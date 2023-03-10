@@ -45,59 +45,57 @@ function MyPage() {
   const isInAccountChange = () => location.pathname.includes('/account/change');
 
   return (
-    <FullWidthWrapper>
-      <GrayBackground>
-        <MaxWidthDiv>
-          <CardsWrapper>
-            <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={3}>
-                {
-                  !isInAccountChange() &&
+    <GrayBackground>
+      <MaxWidthDiv>
+        <CardsWrapper>
+          <Grid container spacing={'30px'} marginTop={0}>
+            <Grid item xs={3}>
+              {
+                !isInAccountChange() &&
+                <SideNavigationWrapper>
+                  <SideNavigation />
+                </SideNavigationWrapper>
+              }
+              {
+                isInAccountChange() &&
+                <div>
                   <SideNavigationWrapper>
-                    <SideNavigation />
+                    <LinkNoDeco to={'/mentee/mypage/account'}>
+                      <MoveBackButtonWrapper>
+                        <ChevronLeftIcon />
+                      </MoveBackButtonWrapper>
+                      <TextHeading6>마이페이지</TextHeading6>
+                    </LinkNoDeco>
                   </SideNavigationWrapper>
-                }
-                {
-                  isInAccountChange() &&
-                  <div>
-                    <SideNavigationWrapper>
-                      <LinkNoDeco to={'/mentee/mypage/account'}>
-                        <MoveBackButtonWrapper>
-                          <ChevronLeftIcon />
-                        </MoveBackButtonWrapper>
-                        <TextHeading6>마이페이지</TextHeading6>
-                      </LinkNoDeco>
-                    </SideNavigationWrapper>
-                  </div>
-                }
-              </Grid>
-              <Grid item xs={9}>
-                {
-                  params.subPage === 'profile' &&
-                  <div>
-                    <UserProfile />
-                    <MenteeIntroduce />
-                  </div>
-                }
-                {
-                  params.subPage === 'account' &&
-                  <div>
-                    <AccountInfo />
-                    {/* <ReceiveAgreement /> */}
-                  </div>
-                }
-                {
-                  isInAccountChange() &&
-                  <div>
-                    <AccountInfoChange />
-                  </div>
-                }
-              </Grid>
+                </div>
+              }
             </Grid>
-          </CardsWrapper>
-        </MaxWidthDiv>
-      </GrayBackground>
-    </FullWidthWrapper>
+            <Grid item xs={9}>
+              {
+                params.subPage === 'profile' &&
+                <div>
+                  <UserProfile />
+                  <MenteeIntroduce />
+                </div>
+              }
+              {
+                params.subPage === 'account' &&
+                <div>
+                  <AccountInfo />
+                  {/* <ReceiveAgreement /> */}
+                </div>
+              }
+              {
+                isInAccountChange() &&
+                <div>
+                  <AccountInfoChange />
+                </div>
+              }
+            </Grid>
+          </Grid>
+        </CardsWrapper>
+      </MaxWidthDiv>
+    </GrayBackground>
   );
 }
 

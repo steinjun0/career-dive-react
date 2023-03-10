@@ -84,92 +84,90 @@ function MyPage() {
 
   }, [])
   return (
-    <FullWidthWrapper>
-      <GrayBackground>
-        <MaxWidthDiv>
-          <CardsWrapper>
-            <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={3}>
-                {
-                  !isHidingSideNavigation() &&
+    <GrayBackground>
+      <MaxWidthDiv>
+        <CardsWrapper>
+          <Grid container spacing={'30px'} marginTop={0}>
+            <Grid item xs={3}>
+              {
+                !isHidingSideNavigation() &&
+                <SideNavigationWrapper>
+                  <SideNavigation />
+                </SideNavigationWrapper>
+              }
+              {
+                isHidingSideNavigation() &&
+                <div>
                   <SideNavigationWrapper>
-                    <SideNavigation />
-                  </SideNavigationWrapper>
-                }
-                {
-                  isHidingSideNavigation() &&
-                  <div>
-                    <SideNavigationWrapper>
-                      <LinkNoDeco to={`/${JSON.parse(localStorage.getItem('IsMentorMode')) ? 'mentor/mypage/profile' : 'mentee/mypage/account'}`}>
-                        <MoveBackButtonWrapper>
-                          <ChevronLeftIcon />
-                        </MoveBackButtonWrapper>
-                        <TextHeading6>마이페이지</TextHeading6>
-                      </LinkNoDeco>
-                    </SideNavigationWrapper>
-                  </div>
-                }
-              </Grid>
-              <Grid item xs={9}>
-                {
-                  params.subPage === 'profile' &&
-                  <div>
-                    <Grid container spacing={'30px'}>
-                      <Grid item xs={6}>
-                        <UserProfile />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <CareerInfo mentorData={mentorData} />
-                      </Grid>
-                    </Grid>
-                    {mentorData && <MentorIntroduce mentorData={mentorData} />}
-                    {mentorData && <ConsultRange mentorData={mentorData} />}
-                    <LinkNoDeco to={'/mentor/calendar'}>
-                      <Flex style={{
-                        backgroundColor: colorCareerDivePink,
-                        justifyContent: 'space-between', alignItems: 'center',
-                        height: '64px', padding: '30px', marginTop: '38px',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        width: '100%'
-                      }}
-                      >
-                        <VerticalFlex>
-                          <TextHeading6 color="white">일정 등록하러 가기</TextHeading6>
-                          <EmptyHeight height="8px" />
-                          <TextBody1 color="white">상담 일정을 등록해야만 상담을 진행할 수 있어요!</TextBody1>
-                        </VerticalFlex>
-                        <img src={ArrowCircleRightIcon} />
-                      </Flex>
+                    <LinkNoDeco to={`/${JSON.parse(localStorage.getItem('IsMentorMode')) ? 'mentor/mypage/profile' : 'mentee/mypage/account'}`}>
+                      <MoveBackButtonWrapper>
+                        <ChevronLeftIcon />
+                      </MoveBackButtonWrapper>
+                      <TextHeading6>마이페이지</TextHeading6>
                     </LinkNoDeco>
-
-                  </div>
-                }
-                {
-                  params.subPage === 'account' &&
-                  <div>
-                    <AccountInfo />
-                    {/* <ReceiveAgreement /> */}
-                  </div>
-                }
-                {
-                  isInAccountChange() &&
-                  <div>
-                    <AccountInfoChange />
-                  </div>
-                }
-                {
-                  location.pathname.includes('/mentor/mypage/career/change') &&
-                  <div>
-                    <CareerInfoChange />
-                  </div>
-                }
-              </Grid>
+                  </SideNavigationWrapper>
+                </div>
+              }
             </Grid>
-          </CardsWrapper>
-        </MaxWidthDiv>
-      </GrayBackground>
-    </FullWidthWrapper>
+            <Grid item xs={9}>
+              {
+                params.subPage === 'profile' &&
+                <div>
+                  <Grid container spacing={'30px'}>
+                    <Grid item xs={6}>
+                      <UserProfile />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <CareerInfo mentorData={mentorData} />
+                    </Grid>
+                  </Grid>
+                  {mentorData && <MentorIntroduce mentorData={mentorData} />}
+                  {mentorData && <ConsultRange mentorData={mentorData} />}
+                  <LinkNoDeco to={'/mentor/calendar'}>
+                    <Flex style={{
+                      backgroundColor: colorCareerDivePink,
+                      justifyContent: 'space-between', alignItems: 'center',
+                      height: '64px', padding: '30px', marginTop: '38px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      width: '100%'
+                    }}
+                    >
+                      <VerticalFlex>
+                        <TextHeading6 color="white">일정 등록하러 가기</TextHeading6>
+                        <EmptyHeight height="8px" />
+                        <TextBody1 color="white">상담 일정을 등록해야만 상담을 진행할 수 있어요!</TextBody1>
+                      </VerticalFlex>
+                      <img src={ArrowCircleRightIcon} />
+                    </Flex>
+                  </LinkNoDeco>
+
+                </div>
+              }
+              {
+                params.subPage === 'account' &&
+                <div>
+                  <AccountInfo />
+                  {/* <ReceiveAgreement /> */}
+                </div>
+              }
+              {
+                isInAccountChange() &&
+                <div>
+                  <AccountInfoChange />
+                </div>
+              }
+              {
+                location.pathname.includes('/mentor/mypage/career/change') &&
+                <div>
+                  <CareerInfoChange />
+                </div>
+              }
+            </Grid>
+          </Grid>
+        </CardsWrapper>
+      </MaxWidthDiv>
+    </GrayBackground>
   );
 }
 

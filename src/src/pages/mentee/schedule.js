@@ -32,30 +32,28 @@ function Schedule() {
 
 
   return (
-    <FullWidthWrapper>
-      <GrayBackground>
-        <MaxWidthDiv>
-          <CardsWrapper>
-            <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={12}>
-                <OnComingShedule consultList={onComingList}></OnComingShedule>
-              </Grid>
-              <Grid item xs={12}>
-                <ConsultList
-                  consultList={consultList}
-                  onCategoryChange={(category) => {
-                    API.getConsultMenteeList(localStorage.getItem('UserID'), category).then((res) => {
-                      if (res.status === 200) {
-                        setConsultList(res.data)
-                      }
-                    })
-                  }}></ConsultList>
-              </Grid>
+    <GrayBackground>
+      <MaxWidthDiv>
+        <CardsWrapper>
+          <Grid container spacing={'30px'} marginTop={0}>
+            <Grid item xs={12}>
+              <OnComingShedule consultList={onComingList}></OnComingShedule>
             </Grid>
-          </CardsWrapper>
-        </MaxWidthDiv>
-      </GrayBackground>
-    </FullWidthWrapper>
+            <Grid item xs={12}>
+              <ConsultList
+                consultList={consultList}
+                onCategoryChange={(category) => {
+                  API.getConsultMenteeList(localStorage.getItem('UserID'), category).then((res) => {
+                    if (res.status === 200) {
+                      setConsultList(res.data)
+                    }
+                  })
+                }}></ConsultList>
+            </Grid>
+          </Grid>
+        </CardsWrapper>
+      </MaxWidthDiv>
+    </GrayBackground>
   );
 }
 

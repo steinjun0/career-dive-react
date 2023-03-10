@@ -216,7 +216,6 @@ export const CenterFlex = styled(Flex)({
 });
 
 export const FullWidthWrapper = styled(VerticalFlex)`
-  justify-content: center;
   align-items: center;
   width: 100%;
 `;
@@ -248,7 +247,6 @@ export const GrayBackground = styled(Flex)`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  min-height: calc(100vh - 500px);
 `;
 
 export const MaxWidthDiv = styled(Flex)({
