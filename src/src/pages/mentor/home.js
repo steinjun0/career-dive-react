@@ -12,9 +12,6 @@ import {
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ConsultList from "component/consult/ConsultList";
 import ConsultingRequest from "component/consult/ConsultingRequest"
-import { Card } from "util/Card";
-import { ChevronRight } from "@material-ui/icons";
-import CalendarMentor from "component/calendar/CalendarMentor";
 import { useEffect, useState } from "react";
 import API from "API";
 import { useNavigate } from "react-router-dom";

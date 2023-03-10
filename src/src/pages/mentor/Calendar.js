@@ -7,7 +7,6 @@ import {
 } from "util/styledComponent";
 
 
-import CalendarMentor from "component/calendar/CalendarMentor";
 import MentorCalendar from "component/calendar/MentorCalendar";
 
 const CardsWrapper = styled(Flex)`

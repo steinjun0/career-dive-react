@@ -9,7 +9,7 @@ import {
 
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ScheduleList from "component/consult/ConsultList";
-import CalendarMentor from "component/calendar/CalendarMentor";
+import MentorCalendar from "component/calendar/MentorCalendar";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -36,7 +36,7 @@ function MentorSchedule() {
               <ScheduleList></ScheduleList>
             </Grid>
             <Grid item xs={6}>
-              <CalendarMentor></CalendarMentor>
+              <MentorCalendar></MentorCalendar>
             </Grid>
           </Grid>
         </CardsWrapper>

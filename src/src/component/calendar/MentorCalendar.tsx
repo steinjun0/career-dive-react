@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { colorBackgroundCareerDiveBlue, colorBackgroundCareerDivePink, colorBackgroundGrayLight, colorBackgroundGrayMedium, colorCareerDiveBlue, colorCareerDivePink, colorTextDisabled, colorTextLight, EmptyHeight, EmptyWidth, Flex, TextBody2, TextSubtitle1, TextSubtitle2, VerticalFlex } from "util/styledComponent";
 import Card from "../../util/ts/Card";
-import { getDatesOfMonth, isPastDate } from "./Calendar.service";
+import { getDatesOfMonth, isPastDate } from "../../services/calendar";
 import API from "API";
 import styled from "styled-components";
 import { IconButton, } from "@mui/material";
@@ -24,49 +24,49 @@ const calendarAnimationStyle = {
     overflow: 'hidden',
     transitionDelay: '0.0s',
     transition: 'all 0.2s ease'
-}
+};
 
-const TransitionFlex = styled(VerticalFlex) <{ height: number }>`
+const TransitionFlex = styled(VerticalFlex) <{ height: number; }>`
  height: ${props => props && props.height}px;
-`
-const ruleTypeConverter = { 'custom': '반복 없음', 'week': '매주 반복', 'day': '매일 반복' }
+`;
+const ruleTypeConverter = { 'custom': '반복 없음', 'week': '매주 반복', 'day': '매일 반복' };
 
 
-type RuleType = 'custom' | 'week' | 'day'
+type RuleType = 'custom' | 'week' | 'day';
 
 interface IavailableTime {
-    [key: number]: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number }[]
+    [key: number]: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number; }[];
 }
-interface IstartTimeObj { 20: { AM: Date[], PM: Date[] }, 40: { AM: Date[], PM: Date[] } }
+interface IstartTimeObj { 20: { AM: Date[], PM: Date[]; }, 40: { AM: Date[], PM: Date[]; }; }
 
 
 type ACTIONTYPE =
     // | { type: "updateCalendarDates"; payload: Date[] }
-    | { type: "updateCurrentYearAndMonth"; payload: Date }
-    | { type: "updateSelectedDate"; payload: Date | null }
-    | { type: "updateAvailableDates"; payload: Date[] }
+    | { type: "updateCurrentYearAndMonth"; payload: Date; }
+    | { type: "updateSelectedDate"; payload: Date | null; }
+    | { type: "updateAvailableDates"; payload: Date[]; }
     | { type: "resetAvailableDates", }
-    | { type: "updateAvailableTimes"; payload: IavailableTime }
+    | { type: "updateAvailableTimes"; payload: IavailableTime; }
     | { type: "resetAvailableTimes", }
-    | { type: "updateCalendarState", payload: 'view' | 'add' | 'edit' }
-    | { type: "addNewTime" }
-    | { type: "updateNewTime", payload: { startTime: Date, endTime: Date, ruleType: RuleType } }
-    | { type: "editSchedule", payload: { scheduleId: number, startTime: Date, endTime: Date, ruleType: RuleType, } }
-    | { type: "removeSchedule", payload: { scheduleId: number, ruleDelete: 'rule' | 'day' } }
-    | { type: "forceRendering" }
+    | { type: "updateCalendarState", payload: 'view' | 'add' | 'edit'; }
+    | { type: "addNewTime"; }
+    | { type: "updateNewTime", payload: { startTime: Date, endTime: Date, ruleType: RuleType; }; }
+    | { type: "editSchedule", payload: { scheduleId: number, startTime: Date, endTime: Date, ruleType: RuleType, }; }
+    | { type: "removeSchedule", payload: { scheduleId: number, ruleDelete: 'rule' | 'day'; }; }
+    | { type: "forceRendering"; };
 
 interface IcalendarState {
     calendarDates: Date[], currentYearAndMonth: Date,
     selectedDate: Date | null, availableDates: Date[],
     availableTimes: IavailableTime, startTimeObj: IstartTimeObj | null,
     calendarState: string | 'view' | 'add' | 'edit',
-    newTime: { startTime: Date, endTime: Date, ruleType: RuleType } | null,
-    tempSchedules: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number, ruleDelete?: 'rule' | 'day' }[] | null
+    newTime: { startTime: Date, endTime: Date, ruleType: RuleType; } | null,
+    tempSchedules: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number, scheduleId: number, ruleDelete?: 'rule' | 'day'; }[] | null;
 }
 
 interface IDayTime {
     Day: number,
-    StartEnds: { StartTime: string, EndTime: string, RuleType: RuleType, RuleID: number, ScheduleID: number }[]
+    StartEnds: { StartTime: string, EndTime: string, RuleType: RuleType, RuleID: number, ScheduleID: number; }[];
 }
 
 
@@ -74,9 +74,9 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
 
     switch (action.type) {
         case 'updateCurrentYearAndMonth': {
-            const temp = getDatesOfMonth(state.currentYearAndMonth)
-            const startDay = temp[0].getDay()
-            const endDay = temp[temp.length - 1].getDay()
+            const temp = getDatesOfMonth(state.currentYearAndMonth);
+            const startDay = temp[0].getDay();
+            const endDay = temp[temp.length - 1].getDay();
             return {
                 ...state,
                 calendarDates: [...Array(startDay).fill(null), ...temp, ...Array(6 - endDay).fill(null)],
@@ -85,21 +85,21 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 startTimeObj: null,
                 currentYearAndMonth: action.payload,
                 calendarState: 'view'
-            }
+            };
         }
 
         case 'updateCalendarState': {
-            let tempSchedules
+            let tempSchedules;
             if (action.payload === 'edit') {
-                tempSchedules = structuredClone(state.availableTimes[state.selectedDate!.getDate()])
+                tempSchedules = structuredClone(state.availableTimes[state.selectedDate!.getDate()]);
             } else {
-                tempSchedules = null
+                tempSchedules = null;
             }
             return {
                 ...state,
                 tempSchedules: tempSchedules,
                 calendarState: action.payload
-            }
+            };
         }
 
         case 'updateSelectedDate': {
@@ -108,15 +108,15 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 selectedDate: action.payload,
                 startTime: null,
                 startTimeObj: null,
-            }
+            };
         }
 
         case 'updateAvailableDates': {
-            return { ...state, availableDates: [...state.availableDates, ...action.payload] }
+            return { ...state, availableDates: [...state.availableDates, ...action.payload] };
         }
 
         case 'resetAvailableDates': {
-            return { ...state, availableDates: [] }
+            return { ...state, availableDates: [] };
         }
 
         case 'updateAvailableTimes': {
@@ -124,11 +124,11 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                 ...state,
                 selectedDate: state.selectedDate ?? state.availableDates[0] ?? new Date(new Date().setMinutes(0)),
                 availableTimes: action.payload,
-            }
+            };
         }
 
         case 'resetAvailableTimes': {
-            return { ...state, availableTimes: {} }
+            return { ...state, availableTimes: {} };
         }
 
         case 'addNewTime':
@@ -140,46 +140,46 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                     endTime: new Date(new Date(state.selectedDate!).setHours(23)),
                     ruleType: 'week' as RuleType
                 }
-            }
+            };
 
         case 'updateNewTime':
             return {
                 ...state,
                 calendarState: 'add',
                 newTime: action.payload,
-            }
+            };
 
         case 'editSchedule':
             const schedule = state.tempSchedules!
-                .find(e => e.scheduleId === action.payload.scheduleId)
-            schedule!.startTime = action.payload.startTime
-            schedule!.endTime = action.payload.endTime
-            schedule!.ruleType = action.payload.ruleType
+                .find(e => e.scheduleId === action.payload.scheduleId);
+            schedule!.startTime = action.payload.startTime;
+            schedule!.endTime = action.payload.endTime;
+            schedule!.ruleType = action.payload.ruleType;
             return {
                 ...state,
-            }
+            };
         case 'removeSchedule':
             // if (action.payload.ruleDelete === 'rule') {
-            state.tempSchedules!.find((schedule) => schedule.scheduleId === action.payload.scheduleId)!.ruleDelete = action.payload.ruleDelete
+            state.tempSchedules!.find((schedule) => schedule.scheduleId === action.payload.scheduleId)!.ruleDelete = action.payload.ruleDelete;
             // }
             // if (action.payload.ruleDelete === 'day') {
             //     state.tempSchedules = state.tempSchedules!.filter(schedule => schedule.scheduleId !== action.payload.scheduleId)
             // }
             return {
                 ...state,
-            }
+            };
         // for animation
         case 'forceRendering': {
-            return { ...state }
+            return { ...state };
         }
 
         default:
-            throw new Error()
+            throw new Error();
     }
 }
 
-async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispatch: (value: ACTIONTYPE) => void }) {
-    const apiList = []
+async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispatch: (value: ACTIONTYPE) => void; }) {
+    const apiList = [];
 
     const dayTimes = [...Object.keys(state.availableTimes)
         .map((date) => {
@@ -187,21 +187,21 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
                 Day: Number(date),
                 StartEnds: [...state.availableTimes[+date].filter((e) => {
                     if (e.ruleType === 'custom')
-                        return true
+                        return true;
                     else
-                        return false
+                        return false;
                 }).map((e) => {
                     return {
                         StartTime: getHoursAndMinuteString(e.startTime),
                         EndTime: getHoursAndMinuteString(e.endTime),
-                    }
+                    };
                 })],
-            }
+            };
         })
-    ]
+    ];
     // 추가
     if (state.calendarState === 'add') {
-        let apiCall: Promise<AxiosResponse> | null = null
+        let apiCall: Promise<AxiosResponse> | null = null;
         if (state.newTime!.ruleType === 'custom') {
             dayTimes.push({
                 Day: state.newTime!.startTime.getDate(),
@@ -209,7 +209,7 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
                     StartTime: getHoursAndMinuteString(state.newTime!.startTime),
                     EndTime: getHoursAndMinuteString(state.newTime!.endTime)
                 }],
-            })
+            });
 
             apiList.push(
                 API.postConsultSchedule(dayTimes,
@@ -217,13 +217,13 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
                     state.selectedDate!.getMonth() + 1,
                     Number(localStorage.getItem('UserID'))
                 )
-            )
+            );
         } else {
             if (state.newTime) {
-                const startTime = getHoursAndMinuteString(state.newTime.startTime)
-                const endTime = getHoursAndMinuteString(state.newTime.endTime)
-                const weekDay = state.newTime.startTime.getDay()
-                const type = state.newTime.ruleType
+                const startTime = getHoursAndMinuteString(state.newTime.startTime);
+                const endTime = getHoursAndMinuteString(state.newTime.endTime);
+                const weekDay = state.newTime.startTime.getDay();
+                const type = state.newTime.ruleType;
 
                 apiList.push(
                     API.postConsultScheduleRule(
@@ -234,7 +234,7 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
                         Number(localStorage.getItem('UserID')),
                         `${state.newTime.startTime.getFullYear()}-${`${state.newTime.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${state.newTime.startTime.getDate()}`.padStart(2, '0')}`
                     )
-                )
+                );
             }
         }
 
@@ -245,8 +245,8 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
         state.tempSchedules!
             .filter((schedule: any) => schedule.ruleType === 'custom' && schedule.ruleDelete !== 'day')
             .forEach(schedule => {
-                const startTime = getHoursAndMinuteString(schedule.startTime)
-                const endTime = getHoursAndMinuteString(schedule.endTime)
+                const startTime = getHoursAndMinuteString(schedule.startTime);
+                const endTime = getHoursAndMinuteString(schedule.endTime);
                 apiList.push(
                     API.patchConsultSchedule(
                         schedule.scheduleId,
@@ -254,18 +254,18 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
                         endTime,
                         Number(localStorage.getItem('UserID'))
                     )
-                )
-            })
+                );
+            });
 
         // patch rule 
         apiList.push(
             ...state.tempSchedules!
                 .filter(schedule => schedule.ruleType !== 'custom' && [null, undefined].includes((schedule as any).ruleDelete))
                 .map(schedule => {
-                    const startTime = getHoursAndMinuteString(schedule.startTime)
-                    const endTime = getHoursAndMinuteString(schedule.endTime)
-                    const weekDay = schedule.startTime.getDay()
-                    const type = schedule.ruleType
+                    const startTime = getHoursAndMinuteString(schedule.startTime);
+                    const endTime = getHoursAndMinuteString(schedule.endTime);
+                    const weekDay = schedule.startTime.getDay();
+                    const type = schedule.ruleType;
                     // 원래 규칙이 아니었다면 add
                     if (!state.availableTimes[state.selectedDate!.getDate()]
                         .find(e => e.scheduleId === schedule.scheduleId)) {
@@ -276,7 +276,7 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
                             type,
                             Number(localStorage.getItem('UserID')),
                             `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
-                        )
+                        );
                     }
                     // 원래 규칙이었다면 patch
                     else {
@@ -288,11 +288,11 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
                             type,
                             Number(localStorage.getItem('UserID')),
                             `${schedule.startTime.getFullYear()}-${`${schedule.startTime.getMonth() + 1}`.padStart(2, '0')}-${`${schedule.startTime.getDate()}`.padStart(2, '0')}`
-                        )
+                        );
                     }
 
                 })
-        )
+        );
 
         // day/rule delete
         apiList.push(
@@ -310,60 +310,60 @@ async function saveCalendar({ state, dispatch }: { state: IcalendarState, dispat
                 }
 
             })
-        )
+        );
     }
     Promise.all(apiList).then(() => {
         API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
             .then((res) => {
                 if (res.status === 200) {
-                    updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes, state, dispatch)
-                    dispatch({ type: 'updateCalendarState', payload: 'view' })
-                    resetAll(state, dispatch)
+                    updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes, state, dispatch);
+                    dispatch({ type: 'updateCalendarState', payload: 'view' });
+                    resetAll(state, dispatch);
                 }
-            })
-    })
+            });
+    });
 }
 
 function updateAvailableTimes(year: number, month: number, dayTimes: IDayTime[], state: IcalendarState, dispatch: (value: ACTIONTYPE) => void) {
-    const tempTimes: IavailableTime = {}
+    const tempTimes: IavailableTime = {};
     for (let i = 0; i < dayTimes.length; i++) {
-        const dayTime = dayTimes[i]
+        const dayTime = dayTimes[i];
         if (!isPastDate(new Date(year, month - 1, dayTime.Day))) {
-            dispatch({ type: 'updateAvailableDates', payload: [new Date(year, month - 1, dayTime.Day)] })
+            dispatch({ type: 'updateAvailableDates', payload: [new Date(year, month - 1, dayTime.Day)] });
             for (let j = 0; j < dayTime.StartEnds.length; j++) {
-                const startEnd = dayTime.StartEnds[j]
+                const startEnd = dayTime.StartEnds[j];
                 if (tempTimes[dayTime.Day] === undefined)
-                    tempTimes[dayTime.Day] = []
+                    tempTimes[dayTime.Day] = [];
                 tempTimes[dayTime.Day].push({
                     startTime: new Date(year, month - 1, dayTime.Day, +startEnd.StartTime.slice(0, 2), +startEnd.StartTime.slice(3, 5)),
                     endTime: new Date(year, month - 1, dayTime.Day, +startEnd.EndTime.slice(0, 2), +startEnd.EndTime.slice(3, 5)),
                     ruleType: startEnd.RuleType,
                     ruleId: startEnd.RuleID,
                     scheduleId: startEnd.ScheduleID
-                })
+                });
             }
         }
     }
-    dispatch({ type: 'updateAvailableTimes', payload: tempTimes })
+    dispatch({ type: 'updateAvailableTimes', payload: tempTimes });
 }
 
 function resetAll(state: IcalendarState, dispatch: (value: ACTIONTYPE) => void) {
     // 선택 가능 날짜 데이터 받아오고, state 설정하기
-    dispatch({ type: 'resetAvailableDates' })
-    dispatch({ type: 'resetAvailableTimes' })
+    dispatch({ type: 'resetAvailableDates' });
+    dispatch({ type: 'resetAvailableTimes' });
 
     API.getConsultSchedule(state.currentYearAndMonth.getFullYear(), state.currentYearAndMonth.getMonth() + 1, localStorage.getItem('UserID'))
         .then((res) => {
             if (res.status === 200) {
-                updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes, state, dispatch)
+                updateAvailableTimes(res.data.Year, res.data.Month, res.data.DayTimes, state, dispatch);
                 setTimeout(() => {
-                    dispatch({ type: 'forceRendering' })
+                    dispatch({ type: 'forceRendering' });
                 }, 1);
             }
-        })
+        });
 }
 
-const MentorCalendar = (props: { userId: number }) => {
+const MentorCalendar = (props: { userId: number; }) => {
     const initialState: IcalendarState =
     {
         calendarDates: [], currentYearAndMonth: new Date(new Date().setDate(1)),
@@ -371,26 +371,26 @@ const MentorCalendar = (props: { userId: number }) => {
         availableTimes: {}, startTimeObj: null,
         calendarState: 'view', newTime: null,
         tempSchedules: null
-    }
+    };
 
-    const [state, dispatch] = useReducer(reducer, initialState)
-    const bottomDivRef = useRef<HTMLDivElement>(null)
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const bottomDivRef = useRef<HTMLDivElement>(null);
 
-    const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' })
+    const koDtf = Intl.DateTimeFormat("ko", { year: 'numeric', month: 'narrow' });
 
     function addCurrentYearAndMonth(month: number) {
-        dispatch({ type: 'updateCurrentYearAndMonth', payload: new Date(state.currentYearAndMonth.setMonth(state.currentYearAndMonth.getMonth() + month)) })
+        dispatch({ type: 'updateCurrentYearAndMonth', payload: new Date(state.currentYearAndMonth.setMonth(state.currentYearAndMonth.getMonth() + month)) });
     }
 
     useEffect(() => {
-        dispatch({ type: 'updateCurrentYearAndMonth', payload: state.currentYearAndMonth })
-        setTimeout(() => { dispatch({ type: 'forceRendering', }) }, 1);
-    }, [])
+        dispatch({ type: 'updateCurrentYearAndMonth', payload: state.currentYearAndMonth });
+        setTimeout(() => { dispatch({ type: 'forceRendering', }); }, 1);
+    }, []);
 
     // availableDate,Times 설정
     useEffect(() => {
-        resetAll(state, dispatch)
-    }, [state.currentYearAndMonth])
+        resetAll(state, dispatch);
+    }, [state.currentYearAndMonth]);
 
 
     // useEffect(() => {
@@ -446,11 +446,11 @@ const MentorCalendar = (props: { userId: number }) => {
             </Flex>
             <Flex style={{ flexWrap: 'wrap', borderBottom: `1px solid ${colorBackgroundGrayMedium}`, paddingBottom: '16px', marginTop: '16px' }}>
                 {['일', '월', '화', '수', '목', '금', '토'].map((koDay, i) => {
-                    return <Flex style={{ minWidth: '14.28%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1>{koDay}</TextSubtitle1> </Flex>
+                    return <Flex style={{ minWidth: '14.28%', justifyContent: 'center', alignItems: 'center', height: '44px', marginBottom: '10px' }} key={i}> <TextSubtitle1>{koDay}</TextSubtitle1> </Flex>;
                 })}
                 {state.calendarDates.map((date, i) => {
-                    const isSelected = (date: Date) => state.selectedDate && state.selectedDate.getDate() === date.getDate()
-                    const isAvailable = (date: Date) => state.availableDates.map(e => e.getTime()).includes(date.getTime())
+                    const isSelected = (date: Date) => state.selectedDate && state.selectedDate.getDate() === date.getDate();
+                    const isAvailable = (date: Date) => state.availableDates.map(e => e.getTime()).includes(date.getTime());
                     return date === null ?
                         <Flex key={i} style={{ minWidth: '14.28%', justifyContent: 'center', marginBottom: '10px' }} />
                         :
@@ -458,9 +458,9 @@ const MentorCalendar = (props: { userId: number }) => {
                             <Flex
                                 onClick={() => {
                                     if (!isPastDate(date) && state.calendarState === 'view') {
-                                        dispatch({ type: 'updateSelectedDate', payload: date })
+                                        dispatch({ type: 'updateSelectedDate', payload: date });
 
-                                        setTimeout(() => { dispatch({ type: 'forceRendering', }) }, 1);
+                                        setTimeout(() => { dispatch({ type: 'forceRendering', }); }, 1);
                                     }
                                 }}
                                 style={{
@@ -474,7 +474,7 @@ const MentorCalendar = (props: { userId: number }) => {
                                 <TextBody2>{date.getDate()}</TextBody2>
                                 <CircleIcon sx={{ width: 10, height: 10, color: isAvailable(date) ? colorCareerDiveBlue : 'transparent' }} />
                             </Flex>
-                        </Flex>
+                        </Flex>;
                 })}
             </Flex>
             <VerticalFlex
@@ -504,7 +504,7 @@ const MentorCalendar = (props: { userId: number }) => {
                                     custom_color={colorTextLight}
                                     style={{ padding: '7px', }}
                                     onClick={() => {
-                                        dispatch({ type: 'updateCalendarState', payload: 'edit' })
+                                        dispatch({ type: 'updateCalendarState', payload: 'edit' });
                                     }}
                                 >
                                     <ModeEditOutlineOutlinedIcon
@@ -519,7 +519,7 @@ const MentorCalendar = (props: { userId: number }) => {
                         state.availableTimes[state.selectedDate?.getDate()] &&
                         state.availableTimes[state.selectedDate?.getDate()].map(
                             (time, i) => {
-                                return <TimeShower time={time} key={i} />
+                                return <TimeShower time={time} key={i} />;
                             }
                         )
                     }
@@ -530,7 +530,7 @@ const MentorCalendar = (props: { userId: number }) => {
                             width='fit-content'
                             padding="4px 8px 4px 12px"
                             onClick={() => {
-                                dispatch({ type: 'addNewTime' })
+                                dispatch({ type: 'addNewTime' });
                             }}
                         >
                             <TextSubtitle2>추가</TextSubtitle2>
@@ -540,9 +540,9 @@ const MentorCalendar = (props: { userId: number }) => {
                     }
                     {['edit'].includes(state.calendarState) &&
                         state.tempSchedules!.map(
-                            (time: { startTime: Date, endTime: Date, ruleType: RuleType, scheduleId: number, ruleDelete?: 'day' | 'rule' }, i: number) => {
+                            (time: { startTime: Date, endTime: Date, ruleType: RuleType, scheduleId: number, ruleDelete?: 'day' | 'rule'; }, i: number) => {
                                 if (time.ruleDelete) {
-                                    return null
+                                    return null;
                                 } else {
                                     return <TimeEditor
                                         key={i}
@@ -552,7 +552,7 @@ const MentorCalendar = (props: { userId: number }) => {
                                         ruleType={time.ruleType}
                                         scheduleId={time.scheduleId}
                                         state={state}
-                                        dispatch={dispatch} />
+                                        dispatch={dispatch} />;
                                 }
 
                             }
@@ -574,16 +574,16 @@ const MentorCalendar = (props: { userId: number }) => {
     );
 };
 
-function BackAndSave({ state, dispatch, saveCalendar }: { state: IcalendarState, dispatch: (value: ACTIONTYPE) => void, saveCalendar: Function }) {
+function BackAndSave({ state, dispatch, saveCalendar }: { state: IcalendarState, dispatch: (value: ACTIONTYPE) => void, saveCalendar: Function; }) {
     return <Flex style={{ gap: 8 }}>
         <CustomButton
             background_color={colorBackgroundGrayLight}
             custom_color={colorTextLight}
             style={{ padding: '7px', }}
             onClick={() => {
-                dispatch({ type: 'updateCalendarState', payload: 'view' })
+                dispatch({ type: 'updateCalendarState', payload: 'view' });
                 setTimeout(() => {
-                    dispatch({ type: 'forceRendering' })
+                    dispatch({ type: 'forceRendering' });
                 }, 1);
             }}
         >
@@ -597,9 +597,9 @@ function BackAndSave({ state, dispatch, saveCalendar }: { state: IcalendarState,
             custom_color={colorCareerDiveBlue}
             style={{ padding: '7px', }}
             onClick={() => {
-                saveCalendar({ state, dispatch })
+                saveCalendar({ state, dispatch });
                 setTimeout(() => {
-                    dispatch({ type: 'forceRendering' })
+                    dispatch({ type: 'forceRendering' });
                 }, 1);
             }}
         >
@@ -607,21 +607,21 @@ function BackAndSave({ state, dispatch, saveCalendar }: { state: IcalendarState,
                 fontSize={'small'}
             />
         </CustomButton>
-    </Flex>
+    </Flex>;
 }
 
-function TimeShower({ time }: { time: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number; scheduleId: number; } }) {
+function TimeShower({ time }: { time: { startTime: Date, endTime: Date, ruleType: RuleType, ruleId: number; scheduleId: number; }; }) {
     return <TagLarge style={{ padding: '4px 12px', width: 'fit-content' }}>
         <TextBody2>{getKoreanTimeString(time.startTime)}</TextBody2>
         &nbsp;~&nbsp;
         <TextBody2>{getKoreanTimeString(time.endTime)}</TextBody2>
         <EmptyWidth width="4px" /> · <EmptyWidth width="4px" />
         <TextBody2>{ruleTypeConverter[time.ruleType]}</TextBody2>
-    </TagLarge>
+    </TagLarge>;
 }
 
 
-function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Date, ruleType?: RuleType, scheduleId?: number, state: IcalendarState, dispatch: (value: ACTIONTYPE) => void }) {
+function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Date, ruleType?: RuleType, scheduleId?: number, state: IcalendarState, dispatch: (value: ACTIONTYPE) => void; }) {
     const longSelectStyle = {
         fontSize: '14px',
         color: colorTextLight, padding: 0, borderRadius: '8px !important',
@@ -631,7 +631,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
             { padding: '4px 12px !important', display: 'flex', justifyContent: 'center' },
         '.MuiSelect-icon':
             { visibility: 'hidden' }
-    }
+    };
 
     const shortSelectStyle = {
         fontSize: '14px', color: colorTextLight,
@@ -639,20 +639,20 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
         backgroundColor: colorBackgroundGrayLight, width: '100%',
         '.MuiSelect-select':
             { padding: '4px 12px', display: 'flex', justifyContent: 'center' },
-    }
+    };
 
     const hours = Array(24).fill(0).map((e, i) => {
-        const AMPM = i < 12 ? '오전' : i === 12 ? '낮' : '오후'
-        const hour = `${i >= 13 ? i - 12 : i}`.padStart(2, '0')
-        return `${AMPM} ${hour}`
-    })
+        const AMPM = i < 12 ? '오전' : i === 12 ? '낮' : '오후';
+        const hour = `${i >= 13 ? i - 12 : i}`.padStart(2, '0');
+        return `${AMPM} ${hour}`;
+    });
 
     const times: Date[] = Array(24).fill(0).map((e, i) => {
-        return new Date(new Date(new Date(props.selectedDate).setMinutes(0)).setHours(i))
-    })
-    const [startTime, setStartTime] = useState<Date>(props.startTime ?? new Date(new Date(props.selectedDate).setHours(8)))
-    const [endTime, setEndTime] = useState<Date>(props.endTime ?? new Date(new Date(props.selectedDate).setHours(23)))
-    const [ruleType, setRuleType] = useState<typeof props.ruleType>(props.ruleType ?? 'week')
+        return new Date(new Date(new Date(props.selectedDate).setMinutes(0)).setHours(i));
+    });
+    const [startTime, setStartTime] = useState<Date>(props.startTime ?? new Date(new Date(props.selectedDate).setHours(8)));
+    const [endTime, setEndTime] = useState<Date>(props.endTime ?? new Date(new Date(props.selectedDate).setHours(23)));
+    const [ruleType, setRuleType] = useState<typeof props.ruleType>(props.ruleType ?? 'week');
     const [isShowDeleteDropDown, setIsShowDeleteDropDown] = useState<boolean>(false);
     useEffect(() => {
         if (props.state.calendarState === 'add') {
@@ -663,7 +663,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                     endTime: endTime,
                     ruleType: ruleType!
                 }
-            })
+            });
         } else if (props.state.calendarState === 'edit') {
             props.dispatch({
                 type: 'editSchedule',
@@ -673,10 +673,10 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                     endTime: endTime,
                     ruleType: ruleType!
                 }
-            })
+            });
         }
 
-    }, [startTime, endTime, ruleType])
+    }, [startTime, endTime, ruleType]);
 
 
 
@@ -691,7 +691,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         texts={hours}
                         initialValue={new Date(new Date(startTime).setMinutes(0))}
                         onChange={(e: string) => {
-                            setStartTime(new Date(e))
+                            setStartTime(new Date(e));
                         }} />
                 </Flex>
                 <TextBody2>:</TextBody2>
@@ -702,7 +702,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         texts={startTime?.getHours() === 23 ? ['00'] : ['00', '30']}
                         initialValue={startTime?.getMinutes() === 0 ? '00' : '30'}
                         onChange={(e: '00' | '30') => {
-                            setStartTime(new Date(new Date(startTime).setMinutes(+e)))
+                            setStartTime(new Date(new Date(startTime).setMinutes(+e)));
                         }} />
                 </Flex>
             </Flex>
@@ -715,7 +715,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         texts={hours.slice(startTime?.getHours() + (startTime?.getMinutes() === 30 ? 1 : 0))}
                         initialValue={new Date(new Date(endTime).setMinutes(0))}
                         onChange={(e: Date) => {
-                            setEndTime(new Date(e))
+                            setEndTime(new Date(e));
                         }} />
                 </Flex>
                 <TextBody2>:</TextBody2>
@@ -726,7 +726,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         texts={startTime?.getHours() === endTime.getHours() ? ['30'] : ['00', '30']}
                         initialValue={endTime?.getMinutes() === 0 ? '00' : '30'}
                         onChange={(e: '00' | '30') => {
-                            setEndTime(new Date(new Date(endTime).setMinutes(+e)))
+                            setEndTime(new Date(new Date(endTime).setMinutes(+e)));
                         }} />
                 </Flex>
             </Flex>
@@ -739,7 +739,7 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                         texts={['매주', '매일', '없음']}
                         initialValue={ruleType ?? 'week'}
                         onChange={(e: typeof props.ruleType) => {
-                            setRuleType(e)
+                            setRuleType(e);
                         }} />
                 </Flex>
             </Flex>
@@ -757,10 +757,10 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                             scheduleId: props.scheduleId!,
                             ruleDelete: 'day'
                         }
-                    })
-                    setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
+                    });
+                    setTimeout(() => { props.dispatch({ type: 'forceRendering', }); }, 1);
                 } else {
-                    setIsShowDeleteDropDown(true)
+                    setIsShowDeleteDropDown(true);
                 }
 
             }}
@@ -783,9 +783,9 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                                 scheduleId: props.scheduleId!,
                                 ruleDelete: 'rule'
                             }
-                        })
-                        setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
-                        setIsShowDeleteDropDown(false)
+                        });
+                        setTimeout(() => { props.dispatch({ type: 'forceRendering', }); }, 1);
+                        setIsShowDeleteDropDown(false);
                     }}>이후 모든 일정 삭제</Flex>
                 <EmptyHeight height="8px" />
                 <Flex
@@ -797,15 +797,15 @@ function TimeEditor(props: { selectedDate: Date, startTime?: Date, endTime?: Dat
                                 scheduleId: props.scheduleId!,
                                 ruleDelete: 'day'
                             }
-                        })
-                        setTimeout(() => { props.dispatch({ type: 'forceRendering', }) }, 1);
-                        setIsShowDeleteDropDown(false)
+                        });
+                        setTimeout(() => { props.dispatch({ type: 'forceRendering', }); }, 1);
+                        setIsShowDeleteDropDown(false);
                     }}>이 일정만 삭제</Flex>
             </VerticalFlex>
         </Flex>
         }
 
-    </Flex>
+    </Flex>;
 
 }
-export default MentorCalendar
+export default MentorCalendar;
