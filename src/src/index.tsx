@@ -127,7 +127,7 @@ ReactDOM.render(
             <Route path="/signup" element={<Signup2 />} />
             {/* <Route path="/signup/phone" element={<Signup2Phone />} /> */}
             <Route path="/signup/nickname" element={<Signup2Nickname />} />
-            <Route path="/mentor/:id" element={<Mentor />} />
+            <Route path="/mentee/mentor/:id" element={<Mentor />} />
             <Route path="/mentee/request/:id" element={<MentoringReservation />} />
             <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
             <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />

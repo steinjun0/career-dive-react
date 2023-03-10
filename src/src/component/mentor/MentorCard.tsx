@@ -29,11 +29,11 @@ import { IMentor } from "interfaces/mentor";
 
 function getJobDurationFormat(year: number) {
   if (year < 1)
-    return '1년 미만'
+    return '1년 미만';
   else if (1 <= year && year < 3)
-    return '1~3년'
+    return '1~3년';
   else if (year >= 3)
-    return '3년 이상'
+    return '3년 이상';
 
 }
 
@@ -49,15 +49,15 @@ function MentorCard({
   tags = ['태그1', '태그2', '태그3'],
   isShowRating = true,
   isShowTag = false
-}: IMentor & { isShowRating: boolean, isShowTag: boolean }) {
-  const theme = useTheme()
+}: IMentor & { isShowRating: boolean, isShowTag: boolean; }) {
+  const theme = useTheme();
   const isDownSm = useMediaQuery(theme.breakpoints.down(614));
 
   return (
     <>
       {
         isDownSm ?
-          <LinkNoDeco to={"/mentor/" + userId} sx={{ width: '100%' }}>
+          <LinkNoDeco to={"/mentee/mentor/" + userId} sx={{ width: '100%' }}>
             <VerticalFlex
               sx={{
                 minHeight: '224px',
@@ -87,7 +87,7 @@ function MentorCard({
             </VerticalFlex>
           </LinkNoDeco>
           :
-          <LinkNoDeco to={"/mentor/" + userId}>
+          <LinkNoDeco to={"/mentee/mentor/" + userId}>
             <VerticalFlex
               sx={{
                 minHeight: '346px',
