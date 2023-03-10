@@ -1,9 +1,9 @@
-import { Divider, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import React, { ReactElement } from "react";
-import { CenterFlex, colorTextLight, RowAlignCenterFlex, TextCaption, TextHeading6, VerticalFlex } from "util/styledComponent";
+import { colorTextLight, RowAlignCenterFlex, TextCaption, TextHeading6, VerticalFlex } from "util/styledComponent";
 
-export default function SignupTemplate({ title, step, children }: { title: string, step: string, children: ReactElement }) {
-  const theme = useTheme()
+export default function SignupTemplate({ title, step, children }: { title: string, step: string, children: ReactElement; }) {
+  const theme = useTheme();
 
   return <VerticalFlex
     sx={{
@@ -24,5 +24,5 @@ export default function SignupTemplate({ title, step, children }: { title: strin
       </RowAlignCenterFlex>
       {children}
     </VerticalFlex>
-  </VerticalFlex>
+  </VerticalFlex>;
 }

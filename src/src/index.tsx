@@ -31,8 +31,8 @@ import MentorMyPage from "./pages/mentor/myPage";
 import MentoringRequestFinish from 'pages/request/MentoringRequestFinish';
 import Search from 'pages/search';
 import Review from "pages/review/id";
-import Signup2 from 'pages/signup/signup2';
-import Signup2Nickname from 'pages/signup/signup2Nickname';
+import Signup from 'pages/signup/Signup';
+import SignupNickname from 'pages/signup/SignupNickname';
 import BusniessScrollToTop from 'services/businessComponent/BusinessScrollToTop';
 import BusinessRouteChangeTracker from 'services/businessComponent/BusinessRouteChangeTracker';
 import BusinessCheckToken from "services/businessComponent/BusinessCheckToken";
@@ -123,10 +123,8 @@ ReactDOM.render(
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            {/* <Route path="/signup" element={<SignUp />} /> */}
-            <Route path="/signup" element={<Signup2 />} />
-            {/* <Route path="/signup/phone" element={<Signup2Phone />} /> */}
-            <Route path="/signup/nickname" element={<Signup2Nickname />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup/nickname" element={<SignupNickname />} />
             <Route path="/mentee/mentor/:id" element={<Mentor />} />
             <Route path="/mentee/request/:id" element={<MentoringReservation />} />
             <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
