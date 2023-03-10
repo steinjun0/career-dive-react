@@ -351,23 +351,31 @@ function Gnb() {
                   }}
                 >
                   {
-                    isMentorMode ?
-                      <MobileMenu
-                        items={
-                          [
-                            { name: '상담', link: '/mentor' },
-                            { name: '일정 등록', link: '/mentor/calendar' },
-                            { name: '실적', link: '' }
-                          ]
-                        }
-                        setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
+                    isLogin ?
+                      isMentorMode ?
+                        <MobileMenu
+                          items={
+                            [
+                              { name: '상담', link: '/mentor' },
+                              { name: '일정 등록', link: '/mentor/calendar' },
+                              { name: '실적', link: '' }
+                            ]
+                          }
+                          setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
+                        <MobileMenu
+                          items={
+                            [
+                              { name: '홈', link: '/' },
+                              { name: '내 상담', link: '/mentee/schedule' },
+                              { name: '찜한 멘토', link: '' },
+                              { name: '상담 후기', link: '' }
+                            ]
+                          }
+                          setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
                       <MobileMenu
                         items={
                           [
                             { name: '홈', link: '/' },
-                            { name: '내 상담', link: '/mentee/schedule' },
-                            { name: '찜한 멘토', link: '' },
-                            { name: '상담 후기', link: '' }
                           ]
                         }
                         setIsOpenMobileMenu={setIsOpenMobileMenu} />
