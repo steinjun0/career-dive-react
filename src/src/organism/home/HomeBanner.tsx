@@ -27,7 +27,6 @@ const HomeBannerWrapper = styled(Flex)({
   maxWidth: '1194px',
   width: '100%',
   position: 'relative',
-  height: '640px',
   overflowX: 'clip',
 });
 
