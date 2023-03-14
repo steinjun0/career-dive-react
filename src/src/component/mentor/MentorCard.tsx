@@ -57,7 +57,7 @@ function MentorCard({
     <>
       {
         isDownSm ?
-          <LinkNoDeco to={"/mentee/mentor/" + userId} sx={{ width: '100%' }}>
+          <LinkNoDeco to={"/mentee/mentor/" + userId} sx={{ width: '100%', cursor: 'pointer' }}>
             <VerticalFlex
               sx={{
                 minHeight: '224px',
