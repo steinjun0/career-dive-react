@@ -11,7 +11,7 @@ import {
   TextSubtitle2,
   VerticalFlex,
 } from "util/styledComponent";
-import { Card } from "util/Card";
+import Card from "util/ts/Card";
 import { styled } from "@mui/material";
 import { getDayInKorean, updateReservation } from "util/util";
 import { CustomToggleButtonGroup } from "util/Custom/CustomToggleButtonGroup";
@@ -21,9 +21,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { formatMoney, getParsedLocalStorage } from "util/ts/util";
 import React from "react";
 
-const SelectContentWrapper = styled(VerticalFlex)`
-  width: 534px;
-`;
+const SelectContentWrapper = styled(VerticalFlex)({
+  boxSizing: 'border-box',
+  maxWidth: '582px',
+  width: '100%'
+})
+
 
 const consultContents = {
   '커리어 상담': ['직무 이야기', '업계 이야기', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '진로 상담', '사내 문화', '면접 팁', '기타'],
@@ -72,8 +75,6 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
     if (reservations !== null) {
       const reservation = reservations[+params.id!]
       if (reservation !== undefined) {
-        console.log('reservation', reservation)
-        console.log('test', new Date(reservation['startTime']))
         reservation['consultingTime'] && setConsultingTime(reservation['consultingTime'])
         reservation['consultCategory'] && setConsultCategory(reservation['consultCategory'])
         reservation['consultContent'] && setConsultContent(reservation['consultContent'])
@@ -96,12 +97,13 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
   return (
     <SelectContentWrapper>
       <Card
-        no_divider={'false'}
+        no_divider={false}
         title={`${mentoringDate && mentoringDate.getFullYear()}년
                 ${mentoringDate && mentoringDate.getMonth() + 1}월
                 ${mentoringDate && mentoringDate.getDate()}일
                 (${mentoringDate && getDayInKorean(mentoringDate)})`}
         max_width={'582px'}
+        sx={{ width: '100%' }}
       >
         <EmptyHeight height='16px'></EmptyHeight>
         <TextSubtitle1 id='category'>
@@ -196,7 +198,7 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
 
       {(consultContent.length > 0 && (consultCategory === '커리어 상담' ? isFilePreOpen !== undefined : true)) && <Card
         title='결제 금액'
-        no_divider='true'>
+        no_divider={true}>
         <EmptyHeight height={'8px'} />
 
         <TextBody2 color={colorTextLight}>

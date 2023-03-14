@@ -1,10 +1,8 @@
 import { Grid, styled } from "@mui/material";
 
 import {
-  FullWidthWrapper,
   CenterWidthWrapper,
   GrayBackground,
-  MaxWidthDiv,
   Flex
 } from "util/styledComponent";
 
@@ -20,6 +18,8 @@ const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;
   flex-direction: row;
   align-items: center;
+  background-color: white;
+  width: '100%';
 `;
 
 const CardsWrapper = styled(Flex)`
@@ -42,34 +42,30 @@ function MentoringReservation() {
   }, [])
 
   return (
-    <div>
-      <FullWidthWrapper>
-        <MaxWidthDiv>
-          <MetorProfileBanner>
-            {mentorData && <MentorProfile
-              name={mentorData.Nickname}
-              description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
-              id={mentorData.UserID}
-              inService={mentorData.InService}
-            />}
-          </MetorProfileBanner>
-        </MaxWidthDiv>
-        <GrayBackground>
-          <CenterWidthWrapper>
-            <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    <GrayBackground sx={{ overflow: 'visible' }}>
+      <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
+        <MetorProfileBanner>
+          {mentorData && <MentorProfile
+            name={mentorData.Nickname}
+            description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+            id={mentorData.UserID}
+            inService={mentorData.InService}
+          />}
+        </MetorProfileBanner>
+      </Flex>
+      <CenterWidthWrapper>
+        <Grid container spacing={'30px'} marginTop={0}>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
-                <Request type={params.type} />
-                {/* {params.type === 'careerConsult' && <RequestBasic />}
+            <Request type={params.type} />
+            {/* {params.type === 'careerConsult' && <RequestBasic />}
                 {params.type === 'prepare' && <RequestPremium />} */}
-              </Grid>
-            </Grid>
-            <CardsWrapper>
-            </CardsWrapper>
-          </CenterWidthWrapper>
-        </GrayBackground>
-      </FullWidthWrapper>
-    </div>
+          </Grid>
+        </Grid>
+        <CardsWrapper>
+        </CardsWrapper>
+      </CenterWidthWrapper>
+    </GrayBackground>
   );
 }
 

@@ -1,7 +1,6 @@
 import { Grid, styled } from "@mui/material";
 
 import {
-  FullWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
   Flex,
@@ -10,7 +9,7 @@ import {
 
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ScheduleList from "component/consult/ConsultList";
-import CalendarMentor from "component/calendar/CalendarMentor";
+import MentorCalendar from "component/calendar/MentorCalendar";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -25,26 +24,24 @@ const dummyData = ['매드로봇님이 상담을 요청하였습니다.',
 
 function MentorSchedule() {
   return (
-    <FullWidthWrapper>
-      <GrayBackground>
-        <MaxWidthDiv>
-          <CardsWrapper>
-            <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={12}>
-                <OnComingShedule></OnComingShedule>
-              </Grid>
-
-              <Grid item xs={12}>
-                <ScheduleList></ScheduleList>
-              </Grid>
-              <Grid item xs={6}>
-                <CalendarMentor></CalendarMentor>
-              </Grid>
+    <GrayBackground>
+      <MaxWidthDiv>
+        <CardsWrapper>
+          <Grid container spacing={'30px'} marginTop={0}>
+            <Grid item xs={12}>
+              <OnComingShedule></OnComingShedule>
             </Grid>
-          </CardsWrapper>
-        </MaxWidthDiv>
-      </GrayBackground>
-    </FullWidthWrapper>
+
+            <Grid item xs={12}>
+              <ScheduleList></ScheduleList>
+            </Grid>
+            <Grid item xs={6}>
+              <MentorCalendar></MentorCalendar>
+            </Grid>
+          </Grid>
+        </CardsWrapper>
+      </MaxWidthDiv>
+    </GrayBackground>
   );
 }
 

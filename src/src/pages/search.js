@@ -1,14 +1,10 @@
-import HomeBanner from "component/home/HomeBanner";
-import JobCategoryGroup from "component/home/JobCategoryGroup";
-import FamousMentorGroup from "component/home/FamousMentorGroup";
-import BottomEventGroup from "component/home/BottomEventGroup";
-
 import { Flex, GrayBackground, MaxWidthDiv, VerticalFlex } from "util/styledComponent";
 import MentorCard from "component/mentor/MentorCard";
 import { useEffect, useState } from "react";
 import API from "API";
 
 function Search() {
+
   const [mentorList, setMentorList] = useState()
   useEffect(() => {
     API.getAccountMentorList().then((res) => {
@@ -18,18 +14,17 @@ function Search() {
     })
   }, [])
 
-
   return (
     <VerticalFlex>
       <GrayBackground style={{}}>
-        <Flex style={{ maxWidth: 1194 + 30, marginRight: -30, flexWrap: 'wrap', marginBottom: 60 }}>
+        <Flex style={{ flexWrap: 'wrap', justifyContent: 'space-around', marginBottom: 60, padding: 30 }}>
           {mentorList && [...mentorList].map((mentorData, index) => {
             return <Flex key={index} style={{ marginTop: 30, marginRight: 30 }}>
               <MentorCard
                 company={mentorData.CompName}
                 department={mentorData.DivisIsPub ? mentorData.DivisInComp : ''}
                 job={mentorData.JobInComp}
-                name={mentorData.Nickname}
+                nickname={mentorData.Nickname}
                 tags={mentorData.TagList}
                 inJob={mentorData.InService ? "현직자" : "경력자"}
                 duration={mentorData.TotEmpMonths}

@@ -40,7 +40,7 @@ const ConsultCardLeft = styled(Flex)`
   background-color: ${colorBackgroundGrayLight};
   padding: 10px;
   align-items: center;
-  width: 28px;
+  width: 48px;
 `;
 
 const ConsultCardRight = styled(VerticalFlex)`

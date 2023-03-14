@@ -1,14 +1,12 @@
 import { Grid, styled } from "@mui/material";
 
 import {
-  FullWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
   Flex,
 } from "util/styledComponent";
 
 
-import CalendarMentor from "component/calendar/CalendarMentor";
 import MentorCalendar from "component/calendar/MentorCalendar";
 
 const CardsWrapper = styled(Flex)`
@@ -20,12 +18,11 @@ const CardsWrapper = styled(Flex)`
 
 function MentorCalendarPage() {
   return (
-    <FullWidthWrapper>
-      <GrayBackground>
-        <MaxWidthDiv>
-          <CardsWrapper>
-            <MentorCalendar />
-            {/* <Grid container spacing={'30px'} marginTop={0} justifyContent="center">
+    <GrayBackground>
+      <MaxWidthDiv>
+        <CardsWrapper>
+          <MentorCalendar />
+          {/* <Grid container spacing={'30px'} marginTop={0} justifyContent="center">
               <Grid item xs={12} minWidth={582}>
                 <CalendarMentor></CalendarMentor>
               </Grid>
@@ -33,10 +30,9 @@ function MentorCalendarPage() {
                 <MentorCalendar />
               </Grid>
             </Grid> */}
-          </CardsWrapper>
-        </MaxWidthDiv>
-      </GrayBackground>
-    </FullWidthWrapper>
+        </CardsWrapper>
+      </MaxWidthDiv>
+    </GrayBackground>
   );
 }
 

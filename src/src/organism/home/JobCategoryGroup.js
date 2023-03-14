@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import { RowAlignCenterFlex } from 'util/styledComponent'
-import JobCategoryCard from './JobCategoryCard'
+import JobCategoryCard from '../../component/home/JobCategoryCard'
 
 import design from '../../assets/icon/jobCategory/design.svg'
 import dev from '../../assets/icon/jobCategory/dev.svg'

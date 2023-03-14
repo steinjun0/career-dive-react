@@ -1,19 +1,9 @@
 import { Grid, styled } from "@mui/material";
 
 import {
-  FullWidthWrapper,
-  GrayBackground,
   MaxWidthDiv,
   Flex,
-  RowAlignCenterFlex,
-  TextBody2,
-  EmptyHeight,
-  TextEllipsisContainer,
-  TextSubtitle1,
-  TextSubtitle2,
   TextHeading5,
-  TextHeading6,
-  colorCareerDiveBlue,
   VerticalFlex,
   colorTextLight,
   colorCareerDivePink
@@ -22,9 +12,6 @@ import {
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ConsultList from "component/consult/ConsultList";
 import ConsultingRequest from "component/consult/ConsultingRequest"
-import { Card } from "util/Card";
-import { ChevronRight } from "@material-ui/icons";
-import CalendarMentor from "component/calendar/CalendarMentor";
 import { useEffect, useState } from "react";
 import API from "API";
 import { useNavigate } from "react-router-dom";
@@ -55,58 +42,56 @@ function MentorHome() {
   }, [])
 
   return (
-    <FullWidthWrapper>
-      <GrayBackground>
-        <MaxWidthDiv>
-          <CardsWrapper>
-            <Grid container spacing={'30px'} marginTop={0}>
-              <Grid item xs={6}>
-                <OnComingShedule consultList={onComingList}></OnComingShedule>
-              </Grid>
-              <Grid item xs={6}>
-                <Flex style={{
-                  justifyContent: 'space-between',
-                  backgroundColor: 'white', borderRadius: 8,
-                  padding: 24,
-                  height: '184px',
-                  cursor: 'pointer',
-                  boxShadow: '10px 20px 40px rgba(130, 130, 130, 0.1)'
-                }}
-                  onClick={
-                    () => {
-                      window.open('https://www.notion.so/CBT-30539442ad874299a12b6e727de3a506#a1ad0076d52e456fa46601d031fa34b3')
-                    }
-                  }
-                >
-                  <VerticalFlex>
-                    <TextHeading5 color={colorTextLight}>서비스 정책 및 가이드라인</TextHeading5>
-                    <TextHeading5 color={colorCareerDivePink}>멘토편</TextHeading5>
-                  </VerticalFlex>
-                  <VerticalFlex
-                    style={{ justifyContent: 'end' }}>
-                    <img src={GuideLineMentorBook} alt="" />
-                  </VerticalFlex>
-                </Flex>
-              </Grid>
-              <Grid item xs={12}>
-                <ConsultingRequest reservationList={reservationList}></ConsultingRequest>
-              </Grid>
-              <Grid item xs={12}>
-                <ConsultList
-                  consultList={consultList}
-                  onCategoryChange={(category) => {
-                    API.getConsultMentorList(localStorage.getItem('UserID'), category).then((res) => {
-                      if (res.status === 200) {
-                        setConsultList(res.data)
-                      }
-                    })
-                  }}></ConsultList>
-              </Grid>
+    <VerticalFlex sx={{ backgroundColor: '#f8f8f8', alignItems: 'center' }}>
+      <MaxWidthDiv>
+        <CardsWrapper>
+          <Grid container spacing={'30px'} marginTop={0}>
+            <Grid item xs={6}>
+              <OnComingShedule consultList={onComingList}></OnComingShedule>
             </Grid>
-          </CardsWrapper>
-        </MaxWidthDiv>
-      </GrayBackground>
-    </FullWidthWrapper>
+            <Grid item xs={6}>
+              <Flex style={{
+                justifyContent: 'space-between',
+                backgroundColor: 'white', borderRadius: 8,
+                padding: 24,
+                height: '184px',
+                cursor: 'pointer',
+                boxShadow: '10px 20px 40px rgba(130, 130, 130, 0.1)'
+              }}
+                onClick={
+                  () => {
+                    window.open('https://www.notion.so/CBT-30539442ad874299a12b6e727de3a506#a1ad0076d52e456fa46601d031fa34b3')
+                  }
+                }
+              >
+                <VerticalFlex>
+                  <TextHeading5 color={colorTextLight}>서비스 정책 및 가이드라인</TextHeading5>
+                  <TextHeading5 color={colorCareerDivePink}>멘토편</TextHeading5>
+                </VerticalFlex>
+                <VerticalFlex
+                  style={{ justifyContent: 'end' }}>
+                  <img src={GuideLineMentorBook} alt="" />
+                </VerticalFlex>
+              </Flex>
+            </Grid>
+            <Grid item xs={12}>
+              <ConsultingRequest reservationList={reservationList}></ConsultingRequest>
+            </Grid>
+            <Grid item xs={12}>
+              <ConsultList
+                consultList={consultList}
+                onCategoryChange={(category) => {
+                  API.getConsultMentorList(localStorage.getItem('UserID'), category).then((res) => {
+                    if (res.status === 200) {
+                      setConsultList(res.data)
+                    }
+                  })
+                }}></ConsultList>
+            </Grid>
+          </Grid>
+        </CardsWrapper>
+      </MaxWidthDiv>
+    </VerticalFlex>
   );
 }
 

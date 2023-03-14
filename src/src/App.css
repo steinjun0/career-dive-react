@@ -1,8 +1,9 @@
 @import './assets/fonts/font.css';
 
+
+
 .App {
   text-align: center;
-  min-width: 1194px;
   overflow-x: scroll;
 }
 

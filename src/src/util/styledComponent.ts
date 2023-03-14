@@ -11,6 +11,7 @@ export const colorBackgroundCareerDiveBlue: CSSProperties["color"] = "#698CFF1a"
 export const colorCareerDivePink: CSSProperties["color"] = "#E25D7D";
 export const colorBackgroundCareerDivePink: CSSProperties["color"] = "#E25D7D1a";
 export const colorBlueGray: CSSProperties["color"] = '#CFD6E0';
+export const colorTextTitle: CSSProperties["color"] = '#000000';
 export const colorTextLight: CSSProperties["color"] = "#5F6368";
 export const colorTextBody: CSSProperties["color"] = "#191919";
 export const colorTextDisabled: CSSProperties["color"] = "#D9D9D9";
@@ -19,9 +20,11 @@ export const colorBackgroundGrayMedium: CSSProperties["color"] = "#E6E6E6";
 export const colorBackgroundGrayDark: CSSProperties["color"] = "#7C7C7C";
 export const colorSuccess: CSSProperties["color"] = "#B4CE16";
 
+// style
+export const defaultBoxShadow = '0px 0px 40px rgba(130, 130, 130, 0.1)';
 
 // text
-export const TextHeading1 = styled(`h1`) <{ color?: CSSProperties["color"] }>`
+export const TextHeading1 = styled(`h1`) <{ color?: CSSProperties["color"]; }>`
   font-size: 48px;
   font-weight: 700;
   line-height: 64px;
@@ -32,7 +35,7 @@ export const TextHeading1 = styled(`h1`) <{ color?: CSSProperties["color"] }>`
   overflow: inherit;
 `;
 
-export const TextHeading2 = styled(`h2`) <{ color?: CSSProperties["color"] }>`
+export const TextHeading2 = styled(`h2`) <{ color?: CSSProperties["color"]; }>`
   font-size: 36px;
   font-weight: 700;
   line-height: 48px;
@@ -43,7 +46,7 @@ export const TextHeading2 = styled(`h2`) <{ color?: CSSProperties["color"] }>`
   overflow: inherit;
 `;
 
-export const TextHeading3 = styled(`h3`) <{ color?: CSSProperties["color"] }>`
+export const TextHeading3 = styled(`h3`) <{ color?: CSSProperties["color"]; }>`
   font-size: 32px;
   font-weight: 700;
   line-height: 44px;
@@ -54,7 +57,7 @@ export const TextHeading3 = styled(`h3`) <{ color?: CSSProperties["color"] }>`
   overflow: inherit;
 `;
 
-export const TextHeading4 = styled(`h4`) <{ color?: CSSProperties["color"] }>`
+export const TextHeading4 = styled(`h4`) <{ color?: CSSProperties["color"]; }>`
   font-size: 28px;
   font-weight: 700;
   line-height: 32px;
@@ -65,7 +68,7 @@ export const TextHeading4 = styled(`h4`) <{ color?: CSSProperties["color"] }>`
   overflow: inherit;
 `;
 
-export const TextHeading5 = styled(`h5`) <{ color?: CSSProperties["color"] }>`
+export const TextHeading5 = styled(`h5`) <{ color?: CSSProperties["color"]; }>`
   font-size: 24px;
   font-weight: 700;
   line-height: 36px;
@@ -76,7 +79,7 @@ export const TextHeading5 = styled(`h5`) <{ color?: CSSProperties["color"] }>`
   overflow: inherit;
 `;
 
-export const TextHeading6 = styled(`h6`) <{ color?: CSSProperties["color"] }>`
+export const TextHeading6 = styled(`h6`) <{ color?: CSSProperties["color"]; }>`
   font-size: 20px;
   font-weight: 700;
   line-height: 32px;
@@ -87,7 +90,7 @@ export const TextHeading6 = styled(`h6`) <{ color?: CSSProperties["color"] }>`
   overflow: inherit;
 `;
 
-export const TextBody1 = styled(`span`) <{ color?: CSSProperties["color"] }>`
+export const TextBody1 = styled(`span`) <{ color?: CSSProperties["color"]; }>`
   font-size: 16px;
   line-height: 24px;
   color: ${props => props.color};
@@ -96,7 +99,7 @@ export const TextBody1 = styled(`span`) <{ color?: CSSProperties["color"] }>`
   overflow: inherit;
 `;
 
-export const TextBody2 = styled(`p`) <{ line_height?: CSSProperties["height"], color?: CSSProperties["color"] }>`
+export const TextBody2 = styled(`p`) <{ line_height?: CSSProperties["height"], color?: CSSProperties["color"]; }>`
   font-size: 14px;
   line-height: ${props => props.line_height ? props.line_height : '24px'};
   font-weight: 400;
@@ -107,7 +110,7 @@ export const TextBody2 = styled(`p`) <{ line_height?: CSSProperties["height"], c
   overflow: inherit;
 `;
 
-export const TextSubtitle1 = styled(`span`) <{ color?: CSSProperties["color"] }>`
+export const TextSubtitle1 = styled(`span`) <{ color?: CSSProperties["color"]; }>`
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
@@ -117,7 +120,7 @@ export const TextSubtitle1 = styled(`span`) <{ color?: CSSProperties["color"] }>
   overflow: inherit;
 `;
 
-export const TextSubtitle2 = styled(`span`) <{ color?: CSSProperties["color"] }>`
+export const TextSubtitle2 = styled(`span`) <{ color?: CSSProperties["color"]; }>`
   font-size: 14px;
   font-weight: 700;
   line-height: 24px;
@@ -128,7 +131,7 @@ export const TextSubtitle2 = styled(`span`) <{ color?: CSSProperties["color"] }>
 `;
 
 
-export const TextButton = styled(`span`) <{ color?: CSSProperties["color"] }>`
+export const TextButton = styled(`span`) <{ color?: CSSProperties["color"]; }>`
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
@@ -138,8 +141,9 @@ export const TextButton = styled(`span`) <{ color?: CSSProperties["color"] }>`
   overflow: inherit;
 `;
 
-export const TextCaption = styled(`span`) <{ color?: CSSProperties["color"] }>`
+export const TextCaption = styled(`span`) <{ color?: CSSProperties["color"]; }>`
   font-size: 12px;
+  line-height: normal;
   color: ${props => props.color ? props.color : colorTextBody};
   text-overflow: inherit;
   white-space: inherit;
@@ -147,16 +151,53 @@ export const TextCaption = styled(`span`) <{ color?: CSSProperties["color"] }>`
 `;
 
 
+interface IPaddingSet {
+  padding?: CSSProperties["padding"],
+  paddingTop?: CSSProperties["paddingTop"],
+  paddingBottom?: CSSProperties["paddingBottom"],
+  paddingLeft?: CSSProperties["paddingLeft"],
+  paddingRight?: CSSProperties["paddingRight"],
+}
 
+interface IMarginSet {
+  margin?: CSSProperties["margin"],
+  marginTop?: CSSProperties["marginTop"],
+  marginBottom?: CSSProperties["marginBottom"],
+  marginLeft?: CSSProperties["marginLeft"],
+  marginRight?: CSSProperties["marginRight"],
+}
+
+interface IHeightSet { height?: CSSProperties["height"], maxHeight?: CSSProperties["maxHeight"], minHeight?: CSSProperties["minHeight"]; }
+
+interface IWidthSet { width?: CSSProperties["width"], maxWidth?: CSSProperties["maxWidth"], minWidth?: CSSProperties["minWidth"]; }
+
+const getMarginSet = (props: IMarginSet) => ({
+  margin: props.margin,
+  marginTop: props.marginTop,
+  marginBottom: props.marginBottom,
+  marginLeft: props.marginLeft,
+  marginRight: props.marginRight,
+});
+
+const getPaddingSet = (props: IPaddingSet) => ({
+  padding: props.padding,
+  paddingTop: props.paddingTop,
+  paddingBottom: props.paddingBottom,
+  paddingLeft: props.paddingLeft,
+  paddingRight: props.paddingRight,
+});
+
+const getHeightSet = (props: IHeightSet) => ({ height: props.height, minHeight: props.maxHeight, maxHeight: props.maxHeight });
+const getWidthSet = (props: IWidthSet) => ({ width: props.width, minWidth: props.maxWidth, maxWidth: props.maxWidth });
 
 // container
-export const Flex = styled("div")`
-  display: flex;
-`;
+export const Flex = styled("div")(() => ({
+  display: 'flex',
+}));
 
-export const VerticalFlex = styled(Flex)`
-  flex-direction: column;
-`;
+export const VerticalFlex = styled(Flex)(() => ({
+  flexDirection: 'column',
+}));
 
 export const ColumnAlignCenterFlex = styled(Flex)`
   flex-direction: column;
@@ -167,16 +208,14 @@ export const ColumnAlignCenterFlex = styled(Flex)`
 export const RowAlignCenterFlex = styled(Flex)`
   flex-direction: row;
   align-items: center;
-  height: 100%;
 `;
 
 export const CenterFlex = styled(Flex)({
   justifyContent: 'center',
   alignItems: 'center'
-})
+});
 
 export const FullWidthWrapper = styled(VerticalFlex)`
-  justify-content: center;
   align-items: center;
   width: 100%;
 `;
@@ -208,38 +247,40 @@ export const GrayBackground = styled(Flex)`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  min-height: calc(100vh - 500px);
 `;
 
-export const MaxWidthDiv = styled(Flex)`
-  flex-direction: column;
-  max-width: 1254px;
-  width: 100%;
-  padding: 0 30px;
-  box-sizing: border-box;
-`;
+export const MaxWidthDiv = styled(Flex)({
+  flexDirection: 'column',
+  maxWidth: '1254px',
+  width: '100%',
+  padding: '0 30px',
+  boxSizing: 'border-box',
+  '@media (max-width:899.95px)': { //md
+    padding: '0 16px'
+  }
+});
 
-export const EmptyHeight = styled(Flex) <{ height: CSSProperties["height"] }>`
+export const EmptyHeight = styled(Flex) <{ height: CSSProperties["height"]; }>`
   min-height: ${props => props.height};
-`
+`;
 
-export const EmptyWidth = styled(Flex) <{ width: CSSProperties["width"] }>`
+export const EmptyWidth = styled(Flex) <{ width: CSSProperties["width"]; }>`
   min-width: ${props => props.width};
-`
+`;
 
-export const WidthFixerWrapper = styled(Flex) <{ width: CSSProperties["width"], height: CSSProperties["height"] }>`
+export const WidthFixerWrapper = styled(Flex) <{ width: CSSProperties["width"], height: CSSProperties["height"]; }>`
   min-width: ${props => props.width};
   min-height: ${props => props.height};
   
   max-width: ${props => props.width};
   max-height: ${props => props.height};
-`
+`;
 
 export const TextEllipsisContainer = styled(Flex)`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-`
+`;
 
 
 // components
