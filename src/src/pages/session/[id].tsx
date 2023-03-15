@@ -17,15 +17,15 @@ import {
   ReflexContainer,
   ReflexSplitter,
   ReflexElement
-} from 'react-reflex'
+} from 'react-reflex';
 
-import 'react-reflex/styles.css'
+import 'react-reflex/styles.css';
 import styled from "styled-components";
 import { Button } from "@mui/material";
-import { CustomButton } from 'util/Custom/CustomButton'
+import { CustomButton } from '../../util/Custom/CustomButton';
 import { useNavigate, useParams } from "react-router-dom";
-import API from "API"
-import { addMinuteTs, createDateFromHourMinTs } from "util/util";
+import API from "../../API";
+import { addMinuteTs, createDateFromHourMinTs } from "../../util/util";
 import React from "react";
 
 
@@ -37,49 +37,49 @@ const ProfileImg = styled(CircleImg)`
 `;
 
 function Session() {
-  const params = useParams()
-  const navigater = useNavigate()
+  const params = useParams();
+  const navigater = useNavigate();
   // (window.RTCPeerConnection) ? alert('supported') : alert('not supported')
 
   const isMentorInRef = useRef<boolean>(false);
   const isMenteeInRef = useRef<boolean>(false);
   // TODO
   // callRef 'no call' -> null로 변경
-  const [call, setCall] = useState<any>(null)
-  const callRef = useRef<any>(null)
-  const [consultData, setConsultData] = useState()
-  const [isMicOn, setIsMicOn] = useState(false)
-  const [isScreenSharing, setIsScreenSharing] = useState(false)
-  const [isLocalScreenShowing, setIsLocalScreenShowing] = useState(false)
-  const [isRemoteScreenShowing, setIsRemoteScreenShowing] = useState(false)
-  const [isScreenShowing, setIsScreenShowing] = useState(false)
-  const [isSelectingMonitor, setIsSelectingMonitor] = useState(false)
+  const [call, setCall] = useState<any>(null);
+  const callRef = useRef<any>(null);
+  const [consultData, setConsultData] = useState();
+  const [isMicOn, setIsMicOn] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [isLocalScreenShowing, setIsLocalScreenShowing] = useState(false);
+  const [isRemoteScreenShowing, setIsRemoteScreenShowing] = useState(false);
+  const [isScreenShowing, setIsScreenShowing] = useState(false);
+  const [isSelectingMonitor, setIsSelectingMonitor] = useState(false);
 
 
-  const [menteeData, setMenteeData] = useState<any>()
-  const [mentorData, setMentorData] = useState<any>()
+  const [menteeData, setMenteeData] = useState<any>();
+  const [mentorData, setMentorData] = useState<any>();
 
-  const endDateRef = useRef<Date>()
-  const startDateRef = useRef<Date>()
-  const [leftTime, setLeftTime] = useState<number>()
-  const intervalIdRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const endDateRef = useRef<Date>();
+  const startDateRef = useRef<Date>();
+  const [leftTime, setLeftTime] = useState<number>();
+  const intervalIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // useEffect로 trigger하기 위해서 useState, useRef를 둘 다 사용한다.
   const [isReadyToCall, setIsReadyToCall] = useState<boolean>(false);
   const isQuitPageRef = useRef<boolean>(false);
 
-  const isMentorMode: boolean = JSON.parse(localStorage.getItem('IsMentorMode')!)
-  const userId: number = +localStorage.getItem("UserID")!
+  const isMentorMode: boolean = JSON.parse(localStorage.getItem('IsMentorMode')!);
+  const userId: number = +localStorage.getItem("UserID")!;
 
   const calleeIdRef = useRef<number | null>(null);
   const mentorIdRef = useRef<number | null>(null);
   const menteeIdRef = useRef<number | null>(null);
 
-  function checkTimer({ consultId }: { consultId: number }) {
+  function checkTimer({ consultId }: { consultId: number; }) {
     if (endDateRef.current && startDateRef.current) {
-      let tempLeftTime = endDateRef.current.getTime() - new Date().getTime()
+      let tempLeftTime = endDateRef.current.getTime() - new Date().getTime();
       // const passTime = new Date().getTime() - startDateRef.current.getTime()
-      setLeftTime(tempLeftTime)
+      setLeftTime(tempLeftTime);
       // const passHour = ~~(passTime / 1000 / 60 / 60)
       // const passMin = ~~(passTime / 1000 / 60)
       // const passSec = ~~(passTime / 1000 % 60)
@@ -119,25 +119,25 @@ function Session() {
       // } else 
       if (endDateRef.current <= new Date()) {
         // API.patchConsultDone(res.data.ID)
-        isQuitPageRef.current = true
+        isQuitPageRef.current = true;
         if (callRef.current !== null) {
           API.postCallDone(callRef.current._callId).then(() => {
-            intervalIdRef.current && clearInterval(intervalIdRef.current)
-            if (callRef.current !== null) API.Sendbird.stopCalling(callRef.current)
-            alert('상담 종료시간이 지났습니다.')
+            intervalIdRef.current && clearInterval(intervalIdRef.current);
+            if (callRef.current !== null) API.Sendbird.stopCalling(callRef.current);
+            alert('상담 종료시간이 지났습니다.');
             if (isMentorMode) {
-              navigater(`/mentor`)
+              navigater(`/mentor`);
             } else {
-              navigater(`/review/${params.id}`)
+              navigater(`/review/${params.id}`);
             }
-          })
+          });
         } else {
-          intervalIdRef.current && clearInterval(intervalIdRef.current)
-          alert('상담 종료시간이 지났습니다.')
+          intervalIdRef.current && clearInterval(intervalIdRef.current);
+          alert('상담 종료시간이 지났습니다.');
           if (isMentorMode) {
-            navigater(`/mentor`)
+            navigater(`/mentor`);
           } else {
-            navigater(`/review/${params.id}`)
+            navigater(`/review/${params.id}`);
           }
         }
 
@@ -147,44 +147,44 @@ function Session() {
   }
 
   function setDefaultConsultData(apiRes: any) {
-    setConsultData(apiRes.data)
+    setConsultData(apiRes.data);
 
     if (+apiRes.data.MenteeID === userId) {
-      calleeIdRef.current = apiRes.data.MentorID
+      calleeIdRef.current = apiRes.data.MentorID;
     } else {
-      calleeIdRef.current = apiRes.data.MenteeID
+      calleeIdRef.current = apiRes.data.MenteeID;
     }
-    menteeIdRef.current = apiRes.data.MenteeID
-    mentorIdRef.current = apiRes.data.MentorID
+    menteeIdRef.current = apiRes.data.MenteeID;
+    mentorIdRef.current = apiRes.data.MentorID;
 
     API.getAccountMentee(menteeIdRef.current).then((res) => {
       if (res.status === 200) {
-        setMenteeData(res.data)
+        setMenteeData(res.data);
       }
-    })
+    });
 
 
     API.getAccountMentor(mentorIdRef.current).then((res) => {
       if (res.status === 200) {
-        setMentorData(res.data)
+        setMentorData(res.data);
       }
-    })
+    });
 
-    let [tempStartDate, tempEndDate]: Date[] = createDateFromHourMinTs(apiRes.data.Date, apiRes.data.StartTime, apiRes.data.EndTime)
-    tempEndDate = addMinuteTs(tempEndDate, 5) // 여유 시간 5분 추가
-    endDateRef.current = tempEndDate
-    startDateRef.current = tempStartDate
+    let [tempStartDate, tempEndDate]: Date[] = createDateFromHourMinTs(apiRes.data.Date, apiRes.data.StartTime, apiRes.data.EndTime);
+    tempEndDate = addMinuteTs(tempEndDate, 5); // 여유 시간 5분 추가
+    endDateRef.current = tempEndDate;
+    startDateRef.current = tempStartDate;
 
-    checkTimer({ consultId: +apiRes.ID })
+    checkTimer({ consultId: +apiRes.ID });
 
-    setIsReadyToCall(true)
+    setIsReadyToCall(true);
 
     // noshow logic 제거
 
     const tempIntervalId = setInterval(() => {
-      checkTimer({ consultId: +apiRes.ID })
+      checkTimer({ consultId: +apiRes.ID });
     }, 1000);
-    intervalIdRef.current = tempIntervalId
+    intervalIdRef.current = tempIntervalId;
   }
 
 
@@ -197,9 +197,9 @@ function Session() {
 
     API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
-        setDefaultConsultData(res)
+        setDefaultConsultData(res);
       }
-    })
+    });
     // getConsultData();
 
     // window.addEventListener('beforeunload',
@@ -210,55 +210,55 @@ function Session() {
     // )
 
     window.onunload = () => {
-      console.log('unload!!!!!!')
-      console.log('call', callRef.current)
-      callRef.current && API.Sendbird.stopCalling(callRef.current)
-      intervalIdRef.current && clearInterval(intervalIdRef.current)
-    }
+      console.log('unload!!!!!!');
+      console.log('call', callRef.current);
+      callRef.current && API.Sendbird.stopCalling(callRef.current);
+      intervalIdRef.current && clearInterval(intervalIdRef.current);
+    };
 
     return () => {
-      console.log('clearInterval', intervalIdRef.current)
-      console.log('callRef.current', callRef.current)
-      callRef.current && API.Sendbird.stopCalling(callRef.current)
-      intervalIdRef.current && clearInterval(intervalIdRef.current)
-    }
-  }, [])
+      console.log('clearInterval', intervalIdRef.current);
+      console.log('callRef.current', callRef.current);
+      callRef.current && API.Sendbird.stopCalling(callRef.current);
+      intervalIdRef.current && clearInterval(intervalIdRef.current);
+    };
+  }, []);
 
   useEffect(() => {
-    console.log('isReadyToCall', isReadyToCall)
+    console.log('isReadyToCall', isReadyToCall);
     if (isReadyToCall) {
       const createCall = async () => {
         // 1. setting for call
         // API.Sendbird.useMedia()
-        API.Sendbird.initSendbird()
-        const isAuthSuccess = await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
-        console.log('isAuthSuccess', isAuthSuccess)
+        API.Sendbird.initSendbird();
+        const isAuthSuccess = await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"));
+        console.log('isAuthSuccess', isAuthSuccess);
         if (!isAuthSuccess) {
-          const res = await API.postAccountRenewSendbird()
+          const res = await API.postAccountRenewSendbird();
           if (res.status === 200) {
-            localStorage.setItem("SendbirdToken", res.data.token)
+            localStorage.setItem("SendbirdToken", res.data.token);
           }
-          const isLastAuthSuccess = await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"))
+          const isLastAuthSuccess = await API.Sendbird.checkAuth(userId, localStorage.getItem("SendbirdToken"));
           if (!isLastAuthSuccess) {
-            alert('유저 정보가 인증되지 못하였습니다. 다시 로그아웃 후, 다시 로그인 해주세요. (확인 버튼 클릭시 로그인 화면으로 이동합니다)')
+            alert('유저 정보가 인증되지 못하였습니다. 다시 로그아웃 후, 다시 로그인 해주세요. (확인 버튼 클릭시 로그인 화면으로 이동합니다)');
             localStorage.clear();
-            navigater(`/login`)
-            return
+            navigater(`/login`);
+            return;
           }
         }
 
-        await API.Sendbird.connectWebSocket()
-        API.Sendbird.addEventHandler()
+        await API.Sendbird.connectWebSocket();
+        API.Sendbird.addEventHandler();
         // 2. receive a call
         API.Sendbird.receiveACall(
           {
-            onReceiveACall: ({ call: callProps }: { call: any }) => {
-              setCall(() => callProps)
-              callRef.current = callProps
+            onReceiveACall: ({ call: callProps }: { call: any; }) => {
+              setCall(() => callProps);
+              callRef.current = callProps;
               isMenteeInRef.current = true;
-              isMentorInRef.current = true
-              API.postCallStart(callProps._callId)
-              setIsMicOn(false)
+              isMentorInRef.current = true;
+              API.postCallStart(callProps._callId);
+              setIsMicOn(false);
             },
             onEstablished: () => { },
             onEnded: () => {
@@ -266,24 +266,24 @@ function Session() {
                 isMenteeInRef.current = false;
               }
               else {
-                isMentorInRef.current = false
+                isMentorInRef.current = false;
               }
             }
           }
-        )
+        );
         // 3. wait for receive a call listener can get Signal
         // 4. make a call
         const makeACall = () => {
           if (callRef.current === null && !isQuitPageRef.current) {
             // there isn't a ringing
-            console.log("there isn't a ringing", calleeIdRef.current)
+            console.log("there isn't a ringing", calleeIdRef.current);
             API.Sendbird.makeACall(
               {
                 calleeId: calleeIdRef.current,
-                onMakeACall: ({ call: callProps }: { call: any }) => {
-                  setCall(() => callProps)
-                  callRef.current = callProps
-                  callProps.stopVideo()
+                onMakeACall: ({ call: callProps }: { call: any; }) => {
+                  setCall(() => callProps);
+                  callRef.current = callProps;
+                  callProps.stopVideo();
                   API.postCallNew(
                     {
                       calleeId: calleeIdRef.current,
@@ -291,35 +291,35 @@ function Session() {
                       consultId: +!params.id,
                       callId: callProps._callId
                     }
-                  )
+                  );
                 },
                 onConnected: () => {
-                  isMentorInRef.current = true
+                  isMentorInRef.current = true;
                   isMenteeInRef.current = true;
-                  setIsMicOn(false)
+                  setIsMicOn(false);
                 },
                 onEnded: () => {
-                  console.log('onEnd from onMakeACall')
-                  callRef.current = null
-                  makeACall()
+                  console.log('onEnd from onMakeACall');
+                  callRef.current = null;
+                  makeACall();
                   if (isMentorMode) {
                     isMenteeInRef.current = false;
                   }
                   else {
-                    isMentorInRef.current = false
+                    isMentorInRef.current = false;
                   }
                 }
               }
-            )
+            );
           }
-        }
+        };
         setTimeout(() => {
-          makeACall()
-        }, 2000)
-      }
-      createCall()
+          makeACall();
+        }, 2000);
+      };
+      createCall();
     }
-  }, [isReadyToCall])
+  }, [isReadyToCall]);
 
 
 
@@ -391,9 +391,9 @@ function Session() {
                     } else {
                       call.unmuteMicrophone();
                     }
-                    setIsMicOn(!isMicOn)
+                    setIsMicOn(!isMicOn);
                   } else {
-                    alert('통화가 연결 되지 않았습니다! 상대방을 기다리거나 새로고침 해주세요.')
+                    alert('통화가 연결 되지 않았습니다! 상대방을 기다리거나 새로고침 해주세요.');
                   }
 
                 }}>
@@ -406,29 +406,29 @@ function Session() {
                     if (isScreenSharing) {
                       call.stopVideo();
                       call.stopScreenShare();
-                      setIsScreenSharing(false)
-                      setIsScreenShowing(false)
-                      setIsLocalScreenShowing(false)
-                      setIsRemoteScreenShowing(false)
+                      setIsScreenSharing(false);
+                      setIsScreenShowing(false);
+                      setIsLocalScreenShowing(false);
+                      setIsRemoteScreenShowing(false);
                     } else {
                       const res = await call.startScreenShare();
                       call.startVideo();
-                      setIsScreenSharing(true)
-                      setIsScreenShowing(true)
-                      setIsLocalScreenShowing(true)
-                      setIsRemoteScreenShowing(false)
+                      setIsScreenSharing(true);
+                      setIsScreenShowing(true);
+                      setIsLocalScreenShowing(true);
+                      setIsRemoteScreenShowing(false);
                     }
                   } catch (error: any) {
-                    console.log('error', error.code, error)
+                    console.log('error', error.code, error);
                     if (error.code === 1800628) {
-                      alert('화면 공유를 취소했거나, 권한을 주지 않았습니다.')
+                      alert('화면 공유를 취소했거나, 권한을 주지 않았습니다.');
                     } else if (error.code === 1800621) {
-                      alert('통화가 아직 연결되지 않았습니다. 몇 초 뒤에 다시 시도하거나, 새로고침 해주세요')
+                      alert('통화가 아직 연결되지 않았습니다. 몇 초 뒤에 다시 시도하거나, 새로고침 해주세요');
                     } else if (error.toString() === "The browser doesn't support screen share.") {
-                      alert('브라우저가 화면 공유를 지원하지 않습니다.')
+                      alert('브라우저가 화면 공유를 지원하지 않습니다.');
                     }
                     else {
-                      alert('통화가 연결되지 않았습니다! 상대방이 들어오지 않았다면 기다려주세요.')
+                      alert('통화가 연결되지 않았습니다! 상대방이 들어오지 않았다면 기다려주세요.');
                     }
 
                   }
@@ -443,7 +443,7 @@ function Session() {
                     borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px'
                   }}
                     onClick={async () => {
-                      setIsSelectingMonitor(!isSelectingMonitor)
+                      setIsSelectingMonitor(!isSelectingMonitor);
                     }}>
                     <img src={ScreenCheckIcon} alt={'screenCheck'} width='20px' />
                     <EmptyWidth width={'8px'} />
@@ -454,9 +454,9 @@ function Session() {
                   <EmptyWidth width={'8px'} />
                   <Button style={{ backgroundColor: isRemoteScreenShowing ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px' }}
                     onClick={async () => {
-                      setIsScreenShowing(true)
-                      setIsLocalScreenShowing(false)
-                      setIsRemoteScreenShowing(true)
+                      setIsScreenShowing(true);
+                      setIsLocalScreenShowing(false);
+                      setIsRemoteScreenShowing(true);
                     }}>
                     <img src={OppositeScreenIcon} alt={'oppositeScreen'} width='20px' />
                     <EmptyWidth width={'8px'} />
@@ -468,9 +468,9 @@ function Session() {
                   <EmptyWidth width={'8px'} />
                   <Button style={{ backgroundColor: isLocalScreenShowing ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px' }}
                     onClick={async () => {
-                      setIsScreenShowing(true)
-                      setIsLocalScreenShowing(true)
-                      setIsRemoteScreenShowing(false)
+                      setIsScreenShowing(true);
+                      setIsLocalScreenShowing(true);
+                      setIsRemoteScreenShowing(false);
                     }}>
                     <img src={MyScreenIcon} alt={'oppositeScreen'} width='20px' />
                     <EmptyWidth width={'8px'} />
@@ -481,9 +481,9 @@ function Session() {
                   <EmptyWidth width={'8px'} />
                   <Button style={{ backgroundColor: !isScreenShowing ? colorBackgroundCareerDiveBlue : colorBackgroundGrayLight, borderRadius: '24px', minWidth: '48px', height: '40px', padding: '0 12px' }}
                     onClick={async () => {
-                      setIsScreenShowing(false)
-                      setIsLocalScreenShowing(false)
-                      setIsRemoteScreenShowing(false)
+                      setIsScreenShowing(false);
+                      setIsLocalScreenShowing(false);
+                      setIsRemoteScreenShowing(false);
                     }}>
                     <RestartAltIcon fontSize="small" />
                     <EmptyWidth width={'8px'} />
@@ -504,14 +504,14 @@ function Session() {
             </Flex>
             <CustomButton custom_color={colorCareerDivePink} background_color={colorBackgroundCareerDivePink}
               onClick={async () => {
-                await API.Sendbird.stopCalling(callRef.current)
+                await API.Sendbird.stopCalling(callRef.current);
                 API.postCallDone(call._callId).then(() => {
                   if (isMentorMode) {
-                    navigater(`/mentor`)
+                    navigater(`/mentor`);
                   } else {
-                    navigater(`/review/${params.id}`)
+                    navigater(`/review/${params.id}`);
                   }
-                })
+                });
               }}
             > 상담 종료 </CustomButton>
           </Flex>

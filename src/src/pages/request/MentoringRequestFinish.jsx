@@ -9,6 +9,7 @@ import {
 } from "util/styledComponent";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useNavigate } from "react-router-dom";
+import React from 'react'
 
 function MentoringRequestFinish() {
   const navigate = useNavigate();

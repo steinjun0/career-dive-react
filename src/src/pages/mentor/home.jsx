@@ -12,8 +12,8 @@ import {
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ConsultList from "component/consult/ConsultList";
 import ConsultingRequest from "component/consult/ConsultingRequest"
-import { useEffect, useState } from "react";
-import API from "API";
+import React, { useEffect, useState } from "react";
+import API from "API.js";
 import { useNavigate } from "react-router-dom";
 import GuideLineMentorBook from "assets/img/home/GuidelineMentorBook.svg"
 

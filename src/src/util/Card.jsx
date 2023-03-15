@@ -7,6 +7,7 @@ import {
   Flex,
   colorBackgroundGrayMedium,
 } from "./styledComponent";
+import React from 'react'
 
 const CardWrapper = styled(VerticalFlex)((props) => {
   return {

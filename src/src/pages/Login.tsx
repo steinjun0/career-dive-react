@@ -14,7 +14,7 @@ import {
     TextSubtitle2,
 } from "util/styledComponent";
 import { CustomButton } from 'util/Custom/CustomButton';
-import { CustomCheckbox } from 'util/Custom/CustomCheckbox.js';
+import { CustomCheckbox } from 'util/Custom/CustomCheckbox';
 import { useNavigate } from 'react-router-dom';
 import CustomTextField from "util/ts/Custom/CustomTextField";
 import * as accountAPI from 'apis/account';

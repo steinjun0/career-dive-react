@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 import { CSSProperties } from "react";
 import { colorBackgroundGrayLight, colorTextLight, RowAlignCenterFlex } from '../styledComponent';
 
-export const TagSmall = styled(RowAlignCenterFlex) <{ background_color?: CSSProperties["color"] }>`
+export const TagSmall = styled(RowAlignCenterFlex) <{ background_color?: CSSProperties["color"]; }>`
   background-color: ${props => props.background_color ? props.background_color : colorBackgroundGrayLight};
   color: ${props => props.color ? props.color : colorTextLight};
   border-radius: 4px;
@@ -11,7 +11,7 @@ export const TagSmall = styled(RowAlignCenterFlex) <{ background_color?: CSSProp
   height: 20px;
 `;
 
-export const TagMedium = styled(RowAlignCenterFlex) <{ background_color?: CSSProperties["color"] }>`
+export const TagMedium = styled(RowAlignCenterFlex) <{ background_color?: CSSProperties["color"]; }>`
   background-color: ${props => props.background_color ? props.background_color : colorBackgroundGrayLight};
   color: ${props => props.color ? props.color : colorTextLight};
   border-radius: 6px;
@@ -20,7 +20,7 @@ export const TagMedium = styled(RowAlignCenterFlex) <{ background_color?: CSSPro
   height: 28px;
 `;
 
-export const TagLarge = styled(RowAlignCenterFlex) <{ background_color?: CSSProperties["color"] }>`
+export const TagLarge = styled(RowAlignCenterFlex) <{ background_color?: CSSProperties["color"]; }>`
   background-color: ${props => props.background_color ? props.background_color : colorBackgroundGrayLight};
   color: ${props => props.color ? props.color : colorTextLight};
   border-radius: 6px;

@@ -1,5 +1,5 @@
 import { Flex, GrayBackground, TextHeading2, TextHeading5, VerticalFlex, colorCareerDiveBlue, TextHeading3, TextHeading6, EmptyHeight, colorBackgroundGrayMedium, TextBody2, EmptyWidth } from "util/styledComponent";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import API from "API";
 import { Card } from "util/Card";
 import CustomRating from "util/Rating";

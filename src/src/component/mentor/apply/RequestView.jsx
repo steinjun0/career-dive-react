@@ -22,7 +22,7 @@ import {
 } from "util/styledComponent";
 import { Card } from "util/Card";
 import { TagLarge } from "util/Custom/CustomTag";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { addMinute, createDateFromHourMin, getAMOrPM, getDayInKorean } from "util/util";
 
 const RequestCardWrapper = styled(Flex)`
