@@ -10,9 +10,9 @@ import MentorProfile from 'component/mentor/Profile'
 import Request from "component/mentor/apply/Request";
 import RequestBasic from "component/mentor/apply/RequestBasic";
 import RequestPremium from "component/mentor/apply/RequestPremium";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import API from "API";
+import API from "API.js";
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;

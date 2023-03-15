@@ -10,6 +10,7 @@ import {
 
 import MentorProfile from 'component/mentor/Profile'
 import RequestView from "component/mentor/apply/RequestView";
+import React from 'react'
 
 const MetorProfileBanner = styled(CenterWidthWrapper)`
   height: 200px;

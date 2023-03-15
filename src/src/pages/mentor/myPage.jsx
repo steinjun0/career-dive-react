@@ -25,8 +25,8 @@ import CareerInfo from "component/myPage/CareerInfo";
 import MentorIntroduce from "component/myPage/MentorIntroduce";
 import CareerInfoChange from "component/myPage/CareerInfoChange";
 import ConsultRange from "component/myPage/ConsultRange";
-import { useEffect, useState } from "react";
-import API from "API";
+import React, { useEffect, useState } from "react";
+import API from "API.js";
 
 import ArrowCircleRightIcon from 'assets/icon/arrowCircleRight.svg';
 

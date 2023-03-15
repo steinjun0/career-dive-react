@@ -17,6 +17,7 @@ import AccountInfoChange from 'component/myPage/AccountInfoChange'
 
 import { useLocation, useParams } from "react-router-dom";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import React from 'react'
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;

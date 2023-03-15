@@ -12,8 +12,8 @@ import {
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ConsultList from "component/consult/ConsultList";
 import ConsultingRequest from "component/consult/ConsultingRequest"
-import { useEffect, useState } from "react";
-import API from "API";
+import React, { useEffect, useState } from "react";
+import API from "API.js";
 import { useNavigate } from "react-router-dom";
 import GuideLineMentorBook from "assets/img/home/GuidelineMentorBook.svg"
 
@@ -32,13 +32,16 @@ function MentorHome() {
   const [consultList, setConsultList] = useState([])
   const [reservationList, setReservationList] = useState([])
   const [onComingList, setOnComingList] = useState([])
-  useEffect(async () => {
-    const res = await API.getConsultMentorList(localStorage.getItem('UserID'), '')
-    if (res.status === 200) {
-      setConsultList(res.data)
-      res.data && setReservationList(res.data.filter((e) => e.Status === 'created'))
-      res.data && setOnComingList(res.data.filter((e) => e.Status === 'approved'))
-    }
+  useEffect(() => {
+    API.getConsultMentorList(localStorage.getItem('UserID'), '').then((res) => {
+      try {
+        setConsultList(res.data)
+        res.data && setReservationList(res.data.filter((e) => e.Status === 'created'))
+        res.data && setOnComingList(res.data.filter((e) => e.Status === 'approved'))
+      } catch (error) {
+
+      }
+    })
   }, [])
 
   return (

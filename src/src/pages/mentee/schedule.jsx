@@ -8,8 +8,8 @@ import {
 
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ConsultList from "component/consult/ConsultList";
-import { useEffect, useState } from "react";
-import API from "API";
+import React, { useEffect, useState } from "react";
+import API from "API"
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;

@@ -11,7 +11,7 @@ import MentorProfile from 'component/mentor/Profile'
 import HelpCategory from "component/mentor/HelpCategory";
 import Introduction from "component/mentor/Introduction";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import API from 'API';
 import { useNavigate, useParams } from "react-router-dom";
 import MenteeCalendar2 from "component/calendar/MenteeCalendar2";

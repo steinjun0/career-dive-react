@@ -10,8 +10,8 @@ import {
 
 import MentorProfile from 'component/mentor/Profile'
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import API from "API";
+import React, { useEffect, useState } from "react";
+import API from "API.js";
 import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
 import { getParsedLocalStorage } from "util/ts/util";
 import SelectContent from "component/mentor/apply/SelectContent2";
