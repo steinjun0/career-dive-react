@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, SetStateAction, useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import "./index.css";
 
 import reportWebVitals from "./reportWebVitals";
@@ -110,7 +110,10 @@ function Page(props: { children: ReactNode; }) {
 
 }
 
-ReactDOM.render(
+const container = document.getElementById('app');
+const root = createRoot(container!);
+
+root.render(
   <App>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
@@ -163,9 +166,6 @@ ReactDOM.render(
       </ThemeProvider>
     </BrowserRouter>
   </App>
-
-  ,
-  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

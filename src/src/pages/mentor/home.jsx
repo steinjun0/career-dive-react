@@ -32,13 +32,16 @@ function MentorHome() {
   const [consultList, setConsultList] = useState([])
   const [reservationList, setReservationList] = useState([])
   const [onComingList, setOnComingList] = useState([])
-  useEffect(async () => {
-    const res = await API.getConsultMentorList(localStorage.getItem('UserID'), '')
-    if (res.status === 200) {
-      setConsultList(res.data)
-      res.data && setReservationList(res.data.filter((e) => e.Status === 'created'))
-      res.data && setOnComingList(res.data.filter((e) => e.Status === 'approved'))
-    }
+  useEffect(() => {
+    API.getConsultMentorList(localStorage.getItem('UserID'), '').then((res) => {
+      try {
+        setConsultList(res.data)
+        res.data && setReservationList(res.data.filter((e) => e.Status === 'created'))
+        res.data && setOnComingList(res.data.filter((e) => e.Status === 'approved'))
+      } catch (error) {
+
+      }
+    })
   }, [])
 
   return (
