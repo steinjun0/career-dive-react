@@ -1,0 +1,1 @@
+type TConsultStatus = 'approved' | 'created' | 'rejected' | 'done' | 'mentor_noshow' | 'mentee_noshow' | 'noshow';

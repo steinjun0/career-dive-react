@@ -31,7 +31,7 @@ const ScheduleListWrapper = styled(Flex)`
 // `;
 
 
-function ConsultList({ consultList, onCategoryChange = () => { } }) {
+function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
 
   const navigater = useNavigate();
   const location = useLocation();
