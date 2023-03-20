@@ -9,7 +9,8 @@ import {
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ConsultList from "component/consult/ConsultList";
 import React, { useEffect, useState } from "react";
-import API from "API";
+import * as apiConsult from "apis/consult";
+import { IConsult, TConsultStatus } from "interfaces/consult";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -17,17 +18,53 @@ const CardsWrapper = styled(Flex)`
 `;
 
 function Schedule() {
-  const [consultList, setConsultList] = useState([]);
-  const [reservationList, setReservationList] = useState([]);
-  const [onComingList, setOnComingList] = useState([]);
+  const [consultList, setConsultList] = useState<IConsult[]>([]);
+  const [reservationList, setReservationList] = useState<IConsult[]>([]);
+  const [onComingList, setOnComingList] = useState<IConsult[]>([]);
+  const [status, setStatus] = useState<TConsultStatus | ''>('');
+
   useEffect(() => {
-    API.getConsultMenteeList(localStorage.getItem('UserID'), '')
-      .then((res) => {
-        setConsultList(res.data);
-        setReservationList(res.data.filter((e: { Status: TConsultStatus; }) => e.Status === 'created'));
-        setOnComingList(res.data.filter((e: { Status: TConsultStatus; }) => e.Status === 'approved'));
-      });
-  }, []);
+    if (localStorage.getItem('UserID') !== null) {
+      apiConsult.getConsultMenteeList(+localStorage.getItem('UserID')!, '')
+        .then((res) => {
+          const parsedConsultList: IConsult[] = res.data.map((apiRes) => {
+            const startTime = new Date(apiRes.Date);
+            startTime.setHours(+apiRes.StartTime.slice(0, apiRes.StartTime.indexOf(':')));
+            startTime.setMinutes(+apiRes.StartTime.slice(apiRes.StartTime.indexOf(':') + 1));
+            const endTime = new Date(apiRes.Date);
+            endTime.setHours(+apiRes.EndTime.slice(0, apiRes.EndTime.indexOf(':')));
+            endTime.setMinutes(+apiRes.EndTime.slice(apiRes.EndTime.indexOf(':') + 1));
+
+            const consult: IConsult = {
+              id: apiRes.ID,
+              date: new Date(apiRes.Date),
+              startTime: startTime,
+              endTime: endTime,
+              menteeId: apiRes.MenteeId,
+              status: apiRes.Status,
+              consultContentList: apiRes.ConsultContentList.map((apiContent) => {
+                return {
+                  id: apiContent.ID,
+                  name: apiContent.Name,
+                  type: apiContent.Type
+                };
+              }),
+              company: apiRes.CompName,
+              divisIsPub: apiRes.DivisIsPub,
+              job: apiRes.JobInComp,
+              nickname: apiRes.Nickname,
+              inJob: apiRes.InService,
+              duration: apiRes.TotEmpMonths,
+            };
+            return consult;
+          });
+
+          setConsultList(parsedConsultList);
+          setReservationList(parsedConsultList.filter((e) => e.status === 'created'));
+          setOnComingList(parsedConsultList.filter((e) => e.status === 'approved'));
+        });
+    }
+  }, [status]);
 
 
   return (
@@ -41,13 +78,14 @@ function Schedule() {
             <Grid item xs={12}>
               <ConsultList
                 consultList={consultList}
-                onCategoryChange={(status: TConsultStatus) => {
-                  API.getConsultMenteeList(localStorage.getItem('UserID'), status)
-                    .then((res) => {
-                      if (res.status === 200) {
-                        setConsultList(res.data);
-                      }
-                    });
+                onCategoryChange={(newStatus: TConsultStatus) => {
+                  setStatus(newStatus);
+                  // API.getConsultMenteeList(localStorage.getItem('UserID'), status)
+                  //   .then((res) => {
+                  //     if (res.status === 200) {
+                  //       setConsultList(res.data);
+                  //     }
+                  //   });
                 }}></ConsultList>
             </Grid>
           </Grid>
