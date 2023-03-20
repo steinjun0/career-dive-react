@@ -1,5 +1,5 @@
 import { Divider, Grid, styled } from "@mui/material";
-import ConsultMenteeCard from 'component/consult/ConsultMenteeCard.js'
+import ConsultMenteeCard from 'component/consult/ConsultMenteeCardTs'
 import {
   Flex,
   TextBody2,
