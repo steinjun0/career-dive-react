@@ -13,26 +13,17 @@ export interface IMentorAPI {
     TagList: string[],
     UserID: number,
 }
-export async function getAccountMentorList(): Promise<AxiosResponse & { data: IMentor[]; }> {
+
+interface IGetAccountMentorAPI {
+    data: IMentor[];
+}
+
+export async function getAccountMentorList(): Promise<AxiosResponse & IGetAccountMentorAPI> {
     const mentorListRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/list?PageSize=1000`);
-    mentorListRes.data.Results = mentorListRes.data.Results.map((e: IMentorAPI): IMentor => {
-        return {
-            company: e.CompName,
-            department: e.DivisInComp,
-            divisIsPub: e.DivisIsPub,
-            duration: e.TotEmpMonths,
-            inJob: e.InService,
-            job: e.JobInComp,
-            nickname: e.Nickname,
-            rating: 4.5,
-            tags: e.TagList,
-            userId: e.UserID
-        };
-    });
     return mentorListRes;
 }
 
-export interface IPostAccountLoginRes {
+export interface ILoginAPI {
     "UserID": number,
     "AccessToken": string,
     "RefreshToken": string,
@@ -40,7 +31,10 @@ export interface IPostAccountLoginRes {
     "IsMentor": boolean,
     "Nickname": string,
 }
-export async function postAccountLogin(email: string, password: string): Promise<AxiosResponse & { data: IPostAccountLoginRes; }> {
+interface IPostAccountLoginAPI {
+    data: ILoginAPI;
+}
+export async function postAccountLogin(email: string, password: string): Promise<AxiosResponse & IPostAccountLoginAPI> {
     const res = await API.postAxios(`${API.CAREER_DIVE_API_URL}/account/login`, { email, password });
     return res;
 }

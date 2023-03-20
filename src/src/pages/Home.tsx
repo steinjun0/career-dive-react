@@ -2,6 +2,7 @@ import HomeBanner from "organism/home/HomeBanner";
 import FamousMentorGroup from "organism/home/FamousMentorGroup";
 import BottomEventGroup from "organism/home/EventGroup";
 import * as accountAPI from "apis/account";
+import { IMentorAPI } from "apis/account";
 
 import { GrayBackground, VerticalFlex } from "util/styledComponent";
 import React, { useEffect, useState } from "react";
@@ -13,8 +14,23 @@ function Home() {
   useEffect(() => {
     let isCancel = false;
     accountAPI.getAccountMentorList().then((res) => {
-      if (!isCancel)
-        setMentors(res.data.Results);
+      if (!isCancel) {
+        const mentors = res.data.Results.map((e: IMentorAPI): IMentor => {
+          return {
+            company: e.CompName,
+            department: e.DivisInComp,
+            divisIsPub: e.DivisIsPub,
+            duration: e.TotEmpMonths,
+            inJob: e.InService,
+            job: e.JobInComp,
+            nickname: e.Nickname,
+            rating: 4.5,
+            tags: e.TagList,
+            userId: e.UserID
+          };
+        });
+        setMentors(mentors);
+      }
     });
     return () => {
       isCancel = true;
