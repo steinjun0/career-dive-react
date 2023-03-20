@@ -23,17 +23,17 @@ export async function getAccountMentorList(): Promise<AxiosResponse & IGetAccoun
     return mentorListRes;
 }
 
-export interface ILoginAPI {
-    "UserID": number,
-    "AccessToken": string,
-    "RefreshToken": string,
-    "SendbirdToken": string,
-    "IsMentor": boolean,
-    "Nickname": string,
+export interface IPostAccountLoginAPI {
+    data: {
+        "UserID": number,
+        "AccessToken": string,
+        "RefreshToken": string,
+        "SendbirdToken": string,
+        "IsMentor": boolean,
+        "Nickname": string,
+    };
 }
-interface IPostAccountLoginAPI {
-    data: ILoginAPI;
-}
+
 export async function postAccountLogin(email: string, password: string): Promise<AxiosResponse & IPostAccountLoginAPI> {
     const res = await API.postAxios(`${API.CAREER_DIVE_API_URL}/account/login`, { email, password });
     return res;
