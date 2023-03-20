@@ -156,8 +156,8 @@ function OnComingShedule({ consultList }: { consultList: IConsult[]; }) {
                         onEnterSession({
                           navigater,
                           date: consult.date,
-                          startTime: consult.startTime,
-                          endTime: consult.endTime,
+                          startTime: consult.startTime, // TODO: 내부 타입 맞춰줘야함
+                          endTime: consult.endTime, // TODO: 내부 타입 맞춰줘야함
                           consultId: consult.id,
                           consultStatus: consult.status
                         });
