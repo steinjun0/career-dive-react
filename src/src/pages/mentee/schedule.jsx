@@ -20,13 +20,13 @@ function Schedule() {
   const [consultList, setConsultList] = useState([])
   const [reservationList, setReservationList] = useState([])
   const [onComingList, setOnComingList] = useState([])
-  useEffect(async () => {
-    const res = await API.getConsultMenteeList(localStorage.getItem('UserID'), '')
-    if (res.status === 200) {
+  useEffect(() => {
+    const res = API.getConsultMenteeList(localStorage.getItem('UserID'), '')
+    res.then(() => {
       setConsultList(res.data)
       setReservationList(res.data.filter((e) => e.Status === 'created'))
       setOnComingList(res.data.filter((e) => e.Status === 'approved'))
-    }
+    })
   }, [])
 
 
