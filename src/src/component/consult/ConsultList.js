@@ -118,16 +118,16 @@ function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
                         <ConsultMenteeCard
                           consult={consult}
                           requestFormOnClick={() => {
-                            navigater(`/mentee/schedule/${consult.ID}`)
+                            navigater(`/mentee/schedule/${consult.id}`)
                           }}
                           enterOnClick={() => {
                             onEnterSession({
                               navigater,
-                              date: consult.Date,
-                              consultStatus: consult.Status,
-                              startTime: consult.StartTime,
-                              endTime: consult.EndTime,
-                              consultId: consult.ID
+                              date: consult.date,
+                              consultStatus: consult.status,
+                              startTime: consult.startTime,
+                              endTime: consult.endTime,
+                              consultId: consult.id
                             })
                           }}
                         />
