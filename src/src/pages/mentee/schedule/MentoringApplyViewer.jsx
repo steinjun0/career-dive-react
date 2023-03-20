@@ -35,29 +35,25 @@ function MentoringReservation() {
   const [menteeData, setMenteeData] = useState()
   const [mentorData, setMentorData] = useState()
 
-  useEffect(async () => {
-    let menteeId
-    let mentorId
-    await API.getConsult(params.id).then((res) => {
+  useEffect(() => {
+    API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
         setConsultData(res.data)
-        menteeId = res.data.MenteeID
-        mentorId = res.data.MentorID
+        const menteeId = res.data.MenteeID
+        const mentorId = res.data.MentorID
+        API.getAccountMentee(menteeId).then((res) => {
+          if (res.status === 200) {
+            setMenteeData(res.data)
+          }
+        })
+
+        API.getAccountMentor(mentorId).then((res) => {
+          if (res.status === 200) {
+            setMentorData(res.data)
+          }
+        })
       }
     })
-
-    API.getAccountMentee(menteeId).then((res) => {
-      if (res.status === 200) {
-        setMenteeData(res.data)
-      }
-    })
-
-    API.getAccountMentor(mentorId).then((res) => {
-      if (res.status === 200) {
-        setMentorData(res.data)
-      }
-    })
-
   }, [])
 
 
