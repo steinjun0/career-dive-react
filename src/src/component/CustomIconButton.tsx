@@ -66,7 +66,7 @@ export function ExpandingIconButton(
         ref={buttonRef}
       >
         <Flex
-          style={{ marginRight: '8px' }}
+          style={{ marginRight: '8px', minWidth: '24px', minHeight: '24px' }}
         >
           <Icon
             sx={{
