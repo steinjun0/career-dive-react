@@ -9,7 +9,7 @@ import {
     colorBackgroundGrayLight,
     TextHeading6,
 } from "util/styledComponent";
-import { ExpandingIconButton } from 'component/CustomIconButton';
+import { ExpandingIconButton } from 'component/ExpandingIconButton';
 
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";

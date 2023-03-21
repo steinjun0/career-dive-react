@@ -3,7 +3,7 @@ import { CSSProperties } from "@mui/styled-engine";
 import React, { ComponentPropsWithoutRef, DOMAttributes, useRef } from "react";
 import { useState } from "react";
 import { colorBackgroundGrayLight, TextSubtitle1, Flex, colorTextLight } from "util/styledComponent";
-const CustomIconButtonStyle = styled(Button)(
+const ExpandingIconButtonStyle = styled(Button)(
   (
     {
       background_color = colorBackgroundGrayLight,
@@ -55,7 +55,7 @@ export function ExpandingIconButton(
       }}
       {...prop}
     >
-      <CustomIconButtonStyle
+      <ExpandingIconButtonStyle
         background_color={color}
         text_color={textColor}
         hover_background_color={hoverColor}
@@ -84,7 +84,7 @@ export function ExpandingIconButton(
         >
           {text}
         </TextSubtitle1>
-      </CustomIconButtonStyle>
+      </ExpandingIconButtonStyle>
     </Flex>
   );
 }

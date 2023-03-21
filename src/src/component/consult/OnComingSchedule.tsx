@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { onEnterSession } from "./consult";
 import React from "react";
 import { IConsult } from "interfaces/consult";
-import { ExpandingIconButton } from "component/CustomIconButton";
+import { ExpandingIconButton } from "component/ExpandingIconButton";
 
 const ScheduleCardWrapper = styled(Flex)`
   width: 100%;
