@@ -14,7 +14,7 @@ import Introduction from "component/mentor/Introduction";
 import React, { useEffect, useState } from "react";
 import API from 'API';
 import { useNavigate, useParams } from "react-router-dom";
-import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
+import MenteeCalendar from "component/calendar/MenteeCalendar";
 import { CustomButton } from "util/Custom/CustomButton";
 import FavoriteButton from "component/mentor/FavoriteButton";
 import { getParsedLocalStorage } from "util/ts/util";
@@ -93,7 +93,7 @@ function Mentor() {
             </Grid>
             <Grid item xs={12} md={6}>
 
-              <MenteeCalendar2
+              <MenteeCalendar
                 userId={+params.id}
                 consultingTime={
                   (getParsedLocalStorage('reservations') ?? null) &&
