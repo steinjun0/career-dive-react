@@ -1,5 +1,5 @@
 import { Divider, Grid, styled } from "@mui/material";
-import ConsultMenteeCard from 'component/consult/ConsultMenteeCardTs'
+import ConsultMenteeCard from 'component/consult/ConsultMenteeCard'
 import {
   Flex,
   TextBody2,
@@ -19,7 +19,9 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "API";
 import ConsultMentorCard from "./ConsultMentorCard";
-import { onEnterSession } from "component/consult/consult"
+import { onEnterSession } from "services/consult";
+import { onEnterSession as onEnterSessionJs } from "./consult";
+
 
 const ScheduleListWrapper = styled(Flex)`
   width: 100%;
@@ -104,7 +106,7 @@ function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
                             navigater(`/mentee/schedule/${consult.ID}`)
                           }}
                           enterOnClick={() => {
-                            onEnterSession({
+                            onEnterSessionJs({
                               navigater,
                               date: consult.Date,
                               consultStatus: consult.Status,
@@ -121,14 +123,7 @@ function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
                             navigater(`/mentee/schedule/${consult.id}`)
                           }}
                           enterOnClick={() => {
-                            onEnterSession({
-                              navigater,
-                              date: consult.date,
-                              consultStatus: consult.status,
-                              startTime: consult.startTime,
-                              endTime: consult.endTime,
-                              consultId: consult.id
-                            })
+                            onEnterSession(consult)
                           }}
                         />
                       }
