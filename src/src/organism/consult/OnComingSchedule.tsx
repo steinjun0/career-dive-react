@@ -21,7 +21,7 @@ import { getDateString, getKoreanTimeString } from "util/util";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { IConsult } from "interfaces/consult";
-import { ExpandingIconButton } from "component/ExpandingIconButton";
+import { ExpandingIconButton } from "component/button/ExpandingIconButton";
 import { onEnterSession } from "services/consult";
 
 const ScheduleCardWrapper = styled(Flex)`
