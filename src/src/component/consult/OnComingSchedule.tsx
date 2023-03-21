@@ -14,25 +14,19 @@ import {
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
-import { CustomIconButton } from "util/Custom/CustomIconButton";
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";
 import PhoneIcon from "assets/icon/PhoneIcon";
-import { addMinute, getAMOrPM, getDateString, getDayInKorean, getKoreanTimeString, getMinuteString } from "util/util";
+import { getDateString, getKoreanTimeString } from "util/util";
 import { useNavigate } from "react-router-dom";
-import { onEnterSession } from "./consult";
 import React from "react";
 import { IConsult } from "interfaces/consult";
 import { ExpandingIconButton } from "component/ExpandingIconButton";
+import { onEnterSession } from "services/consult";
 
 const ScheduleCardWrapper = styled(Flex)`
   width: 100%;
   height: 100%;
-`;
-
-const SchedulesWrapper = styled(VerticalFlex)`
-  width: 100%;
-  margin-top: 20px;
 `;
 
 const ScheduleWrapper = styled(RowAlignCenterFlex)`
@@ -130,41 +124,15 @@ function OnComingShedule({ consultList }: { consultList: IConsult[]; }) {
                     />
                     <EmptyWidth width='12px'></EmptyWidth>
 
-                    {/* <CustomIconButton
-                      Icon={PhoneIcon}
-                      text='상담 입장'
-                      width='112px'
-                      hover_color={colorCareerDiveBlue}
-                      text_color={'#fff'}
-                      onClick={() => {
-                        onEnterSession({
-                          navigater,
-                          date: consult.Date,
-                          startTime: consult.StartTime,
-                          endTime: consult.EndTime,
-                          consultId: consult.ID,
-                          consultStatus: consult.Status
-                        });
-                      }}
-                    ></CustomIconButton> */}
                     <ExpandingIconButton
                       Icon={PhoneIcon}
                       text={"상담 입장"}
                       hoverColor={colorCareerDiveBlue}
                       hoverTextColor={'white'}
                       onClick={() => {
-                        onEnterSession({
-                          navigater,
-                          date: consult.date,
-                          startTime: consult.startTime, // TODO: 내부 타입 맞춰줘야함
-                          endTime: consult.endTime, // TODO: 내부 타입 맞춰줘야함
-                          consultId: consult.id,
-                          consultStatus: consult.status
-                        });
+                        onEnterSession(consult);
                       }}
                     />
-                    {/* <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
-                  <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton> */}
                   </Buttons>
 
                 </ScheduleWrapper>);
