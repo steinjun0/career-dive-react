@@ -9,12 +9,10 @@ import {
   colorCareerDivePink
 } from "util/styledComponent";
 
-import OnComingShedule from "component/consult/OnComingSchedule";
-import ConsultList from "organism/ConsultList";
-import ConsultingRequest from "component/consult/ConsultingRequest";
+import OnComingShedule from "organism/consult/OnComingSchedule";
+import ConsultList from "organism/consult/ConsultList";
+import ConsultingRequest from "organism/consult/ConsultingRequest";
 import React, { useEffect, useState } from "react";
-import API from "API.js";
-import { useNavigate } from "react-router-dom";
 import GuideLineMentorBook from "assets/img/home/GuidelineMentorBook.svg";
 import { IConsult, TConsultStatus } from "interfaces/consult";
 import * as apiConsult from "apis/consult";
@@ -86,7 +84,9 @@ function MentorHome() {
                 consultList={consultList}
                 onCategoryChange={(newStatus: TConsultStatus) => {
                   setStatus(newStatus);
-                }}></ConsultList>
+                }}
+                type='mentor'
+              />
             </Grid>
           </Grid>
         </CardsWrapper>
