@@ -22,6 +22,7 @@ const ExpandingIconButtonStyle = styled(Button)(
     transition: 'all 0.3s ease-out',
     backgroundColor: background_color,
     color: text_color,
+    borderRadius: '8px',
     '&:hover': {
       backgroundColor: hover_background_color,
       color: hover_text_color,
@@ -78,7 +79,7 @@ export function ExpandingIconButton(
         <TextSubtitle1
           sx={{
             transition: 'all 0.3s ease-out',
-            color: isHover ? hoverTextColor : colorTextLight,
+            color: isHover ? hoverTextColor : textColor,
             minWidth: 'fit-content'
           }}
         >
