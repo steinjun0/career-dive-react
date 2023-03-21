@@ -9,23 +9,16 @@ import {
   TextSubtitle1,
   TextSubtitle2,
   colorCareerDiveBlue,
-  EmptyWidth,
   colorCareerDivePink,
   colorSuccess,
 } from "util/styledComponent";
-import { CustomButton } from 'util/Custom/CustomButton';
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
-import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
-import { CustomIconButton } from "util/Custom/CustomIconButton";
 import RequestFormIcon from "assets/icon/RequestFormIcon";
-import EditCalendarIcon from "assets/icon/EditCalendarIcon";
 import CircleDecline from "assets/icon/CircleDecline";
 import CircleAccept from "assets/icon/CircleAccept";
-import CalendarCancel from "assets/icon/schedule/CalendarCancel";
-import CalendarSuccess from "assets/icon/schedule/CalendarSuccess";
-import { addMinute, getAMOrPM, getDayInKorean, getMinuteString } from "util/util";
+import { getDayInKorean } from "util/util";
 import { useNavigate } from "react-router-dom";
 import API from "API";
 import React from "react";

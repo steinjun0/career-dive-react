@@ -5,33 +5,20 @@ import {
   TextBody2,
   colorCareerDiveBlue,
   EmptyHeight,
-  LinkNoDeco,
   TextBody1,
   colorBackgroundGrayMedium,
   VerticalFlex,
 } from "util/styledComponent";
 import { Card } from "util/Card";
 
-import testMentorImage from "../../assets/img/testMentorImage.png";
-import ChevronRight from '@mui/icons-material/ChevronRight';
-
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import API from "API";
-import ConsultMentorCard from "./ConsultMentorCardTs";
+import ConsultMentorCard from "./ConsultMentorCard";
 import { onEnterSession } from "services/consult";
-import { onEnterSession as onEnterSessionJs } from "./consult";
-
 
 const ScheduleListWrapper = styled(Flex)`
   width: 100%;
 `;
-
-// const ScheduleCard = styled(VerticalFlex)`
-//   border: 1px solid ${colorBlueGray};
-//   border-radius: 8px;
-// `;
-
 
 function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
 
@@ -62,13 +49,7 @@ function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
 
   return (
     <ScheduleListWrapper>
-      <Card no_divider={'true'} title={'내 상담 내역'}
-      // titleHead={
-      //   <LinkNoDeco to={'/mentor/schedule'}>
-      //     <ChevronRight fontSize="medium" />
-      //   </LinkNoDeco>
-      // }
-      >
+      <Card no_divider={'true'} title={'내 상담 내역'}>
 
         <VerticalFlex>
           <EmptyHeight height={'12px'} />
@@ -105,6 +86,9 @@ function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
                           requestFormOnClick={() => {
                             navigater(`/mentee/schedule/${consult.id}`)
                           }}
+                          changeOnClick={() => {
+                            alert('기능 준비중입니다!')
+                          }}
                           enterOnClick={() => {
                             onEnterSession(consult)
                           }
@@ -114,6 +98,9 @@ function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
                           consult={consult}
                           requestFormOnClick={() => {
                             navigater(`/mentee/schedule/${consult.id}`)
+                          }}
+                          changeOnClick={() => {
+                            alert('기능 준비중입니다!')
                           }}
                           enterOnClick={() => {
                             onEnterSession(consult)
