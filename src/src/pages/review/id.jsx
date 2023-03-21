@@ -28,22 +28,23 @@ function Review() {
     '대화 매너가 좋아요'
   ])
   const params = useParams()
-  useEffect(async () => {
-    let mentorId
-    await API.getConsult(params.id).then((res) => {
+  useEffect(() => {
+    API.getConsult(params.id).then((res) => {
       if (res.status === 200) {
         setConsultData(res.data)
         console.log('res.data', res.data)
-        mentorId = res.data.MentorID
+        const mentorId = res.data.MentorID
+
+        API.getAccountMentor(mentorId).then((res) => {
+          if (res.status === 200) {
+            setMentorData(res.data)
+            console.log('res.data', res.data)
+          }
+        })
       }
     })
 
-    API.getAccountMentor(mentorId).then((res) => {
-      if (res.status === 200) {
-        setMentorData(res.data)
-        console.log('res.data', res.data)
-      }
-    })
+
   }, [])
   useEffect(() => {
     console.log('checkListValue', checkListValue)

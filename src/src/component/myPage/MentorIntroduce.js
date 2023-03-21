@@ -90,14 +90,15 @@ function MentorIntroduce({ mentorData }) {
     return await API.postAccountTag(convertedTagList, localStorage.getItem('UserID'))
   }
 
-  useEffect(async () => {
-    let tags = await getMentorTag(mentorData.Tags)
-    setTagList(typeof tags === 'object' ? tags : [])
-    setIntroduceText(mentorData.Introduction)
+  useEffect(() => {
+    getMentorTag(mentorData.Tags).then((tags) => {
+      setTagList(typeof tags === 'object' ? tags : [])
+      setIntroduceText(mentorData.Introduction)
 
-    if (mentorData.Introduction === '') {
-      setIsEditing(true)
-    }
+      if (mentorData.Introduction === '') {
+        setIsEditing(true)
+      }
+    })
   }, [])
 
   useEffect(() => {

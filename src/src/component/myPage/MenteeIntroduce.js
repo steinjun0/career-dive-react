@@ -64,15 +64,17 @@ function MenteeIntroduce() {
   const [urlLink, setUrlLink] = useState()
   const [uploadingFiles, setUploadingFiles] = useState([])
 
-  useEffect(async () => {
-    const menteeRes = await API.getAccountMentee(localStorage.getItem('UserID'))
-    if (menteeRes.status === 200) {
-      setIntroduceText(menteeRes.data.Introduction)
-      setUrlLink(menteeRes.data.Link)
-      if (menteeRes.data.Introduction === '') {
-        setIsEditing(true)
+  useEffect(() => {
+    API.getAccountMentee(localStorage.getItem('UserID')).then((res) => {
+      if (res.status === 200) {
+        setIntroduceText(res.data.Introduction)
+        setUrlLink(res.data.Link)
+        if (res.data.Introduction === '') {
+          setIsEditing(true)
+        }
       }
-    }
+    })
+
   }, [])
 
 

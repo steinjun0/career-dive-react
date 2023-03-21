@@ -1,7 +1,7 @@
-import { IPostAccountLoginRes } from "apis/account";
+import { IPostAccountLoginAPI } from "apis/account";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 
-export function updateUserDataLocalStorage({ userData, isAutoLogin }: { userData: IPostAccountLoginRes, isAutoLogin: boolean; }) {
+export function updateUserDataLocalStorage({ userData, isAutoLogin }: { userData: IPostAccountLoginAPI['data'], isAutoLogin: boolean; }) {
   window.localStorage.setItem('UserID', userData['UserID'].toString());
   window.localStorage.setItem('AccessToken', userData['AccessToken']);
   window.localStorage.setItem('RefreshToken', userData['RefreshToken']);

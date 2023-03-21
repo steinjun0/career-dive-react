@@ -14,22 +14,19 @@ import {
 import { Card } from "util/Card";
 
 import testMentorImage from "../../assets/img/testMentorImage.png";
-import { CustomIconButton } from "util/Custom/CustomIconButton";
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";
 import PhoneIcon from "assets/icon/PhoneIcon";
-import { addMinute, getAMOrPM, getDateString, getDayInKorean, getKoreanTimeString, getMinuteString } from "util/util";
+import { getDateString, getKoreanTimeString } from "util/util";
 import { useNavigate } from "react-router-dom";
-import { onEnterSession } from "./consult";
+import React from "react";
+import { IConsult } from "interfaces/consult";
+import { ExpandingIconButton } from "component/ExpandingIconButton";
+import { onEnterSession } from "services/consult";
 
 const ScheduleCardWrapper = styled(Flex)`
   width: 100%;
   height: 100%;
-`;
-
-const SchedulesWrapper = styled(VerticalFlex)`
-  width: 100%;
-  margin-top: 20px;
 `;
 
 const ScheduleWrapper = styled(RowAlignCenterFlex)`
@@ -60,8 +57,8 @@ const Buttons = styled(RowAlignCenterFlex)`
 
 const testImage = testMentorImage;
 
-function OnComingShedule({ consultList }) {
-  const navigater = useNavigate()
+function OnComingShedule({ consultList }: { consultList: IConsult[]; }) {
+  const navigater = useNavigate();
   return (
     <ScheduleCardWrapper>
       <Card no_divider={'true'} title={'다가오는 일정'}>
@@ -75,10 +72,7 @@ function OnComingShedule({ consultList }) {
         {consultList &&
           consultList
             .filter((consult) => {
-              let endTempDate = new Date(consult.Date)
-              endTempDate.setHours(+consult.EndTime.slice(0, 2))
-              endTempDate.setMinutes(+consult.EndTime.slice(3))
-              return endTempDate >= new Date()
+              return consult.endTime >= new Date();
             })
             .slice(0, 3)
             .map((consult, index) => {
@@ -86,65 +80,59 @@ function OnComingShedule({ consultList }) {
                 <ScheduleWrapper key={index} style={{ marginTop: '20px' }}>
 
                   <ScheduleDateAndTime>
-                    <TextBody2>{getDateString(new Date(consult.Date))}</TextBody2>
+                    <TextBody2>{getDateString(consult.date)}</TextBody2>
                     <TextSubtitle1>
-                      {+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) <= 12
+                      {getKoreanTimeString(consult.startTime)}
+                      {/* {+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) <= 12
                         ?
                         `${getAMOrPM(consult.StartTime)} ${getMinuteString(new Date('2023-01-01 ' + consult.StartTime))}`
                         :
-                        `${getAMOrPM(consult.StartTime)} ${getMinuteString(addMinute(new Date('2023-01-01 ' + consult.StartTime), -720))}`}</TextSubtitle1>
+                        `${getAMOrPM(consult.StartTime)} ${getMinuteString(addMinute(new Date('2023-01-01 ' + consult.StartTime), -720))}`} */}
+                    </TextSubtitle1>
                   </ScheduleDateAndTime>
 
                   <ProfileWrapper>
                     <ProfileImg src={testImage}></ProfileImg>
                     <Flex>
-                      {consult.CompName !== '' && <TextSubtitle2>{`${consult.CompName} · `}</TextSubtitle2>}
-                      {consult.JobInComp !== '' && <TextSubtitle2>{`${consult.JobInComp} · `}</TextSubtitle2>}
-                      <TextBody2>{consult.Nickname}</TextBody2>
+                      {consult.company !== '' && <TextSubtitle2>{`${consult.company} · `}</TextSubtitle2>}
+                      {consult.job !== '' && <TextSubtitle2>{`${consult.job} · `}</TextSubtitle2>}
+                      <TextBody2>{consult.nickname}</TextBody2>
                     </Flex>
                   </ProfileWrapper>
 
                   <Buttons>
-                    <CustomIconButton
+
+                    <ExpandingIconButton
                       Icon={RequestFormIcon}
-                      text='요청서'
-                      width='92px'
-                      hover_color={colorCareerDiveBlue}
-                      text_color={'#fff'}
+                      text={"요청서"}
+                      hoverColor={colorCareerDiveBlue}
+                      hoverTextColor={'white'}
                       onClick={() => {
-                        navigater(`/mentee/schedule/${consult.ID}`)
+                        navigater(`/mentee/schedule/${consult.id}`);
                       }}
-                    >
-                    </CustomIconButton>
+                    />
                     <EmptyWidth width='12px'></EmptyWidth>
 
-                    <CustomIconButton
+                    <ExpandingIconButton
                       Icon={EditCalendarIcon}
-                      text='예약 변경'
-                      width='112px'
-                      hover_color={colorCareerDiveBlue}
-                      text_color={'#fff'}></CustomIconButton>
+                      text={"예약 변경"}
+                      hoverColor={colorCareerDiveBlue}
+                      hoverTextColor={'white'}
+                      onClick={() => {
+                        alert('기능 준비중입니다!');
+                      }}
+                    />
                     <EmptyWidth width='12px'></EmptyWidth>
 
-                    <CustomIconButton
+                    <ExpandingIconButton
                       Icon={PhoneIcon}
-                      text='상담 입장'
-                      width='112px'
-                      hover_color={colorCareerDiveBlue}
-                      text_color={'#fff'}
+                      text={"상담 입장"}
+                      hoverColor={colorCareerDiveBlue}
+                      hoverTextColor={'white'}
                       onClick={() => {
-                        onEnterSession({
-                          navigater,
-                          date: consult.Date,
-                          startTime: consult.StartTime,
-                          endTime: consult.EndTime,
-                          consultId: consult.ID,
-                          consultStatus: consult.Status
-                        })
+                        onEnterSession(consult);
                       }}
-                    ></CustomIconButton>
-                    {/* <CustomButton background_color={'#f4f4f4'} custom_color={'#848484'} >예약 관리</CustomButton>
-                  <CustomButton startIcon={<CallOutlinedIcon />}>상담 입장</CustomButton> */}
+                    />
                   </Buttons>
 
                 </ScheduleWrapper>);

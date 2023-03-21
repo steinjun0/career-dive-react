@@ -70,11 +70,10 @@ function UserProfile() {
     }
   }
 
-  useEffect(async () => {
-    const res = await API.getAccount(localStorage.getItem('UserID'))
-    if (res.status === 200) {
+  useEffect(() => {
+    API.getAccount(localStorage.getItem('UserID')).then((res) => {
       setNickName(res.data.Nickname)
-    }
+    })
   }, [])
 
   return (
