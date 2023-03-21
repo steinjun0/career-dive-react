@@ -8,6 +8,9 @@ import {
   colorCareerDiveBlue,
   colorBackgroundGrayLight,
   TextHeading6,
+  colorCareerDivePink,
+  colorBackgroundCareerDivePink,
+  colorBackgroundCareerDiveBlue,
 } from "util/styledComponent";
 import { ExpandingIconButton } from 'component/ExpandingIconButton';
 
@@ -22,6 +25,7 @@ import React from "react";
 import { IConsult } from "interfaces/consult";
 import { IMentor } from "interfaces/mentor";
 import { getDateString, getKoreanTimeString } from "util/ts/util";
+import { TagMedium } from "util/Custom/CustomTag";
 
 
 const ConsultCardWrapper = styled(Flex)`
@@ -72,32 +76,43 @@ function ConsultMentorCard(
       </ConsultCardLeft>
 
       <VerticalFlex sx={{ padding: '24px', gap: '10px' }}>
-        <TextHeading6 >
-          {consult.company}
-        </TextHeading6>
+        <TextSubtitle2>
+          {consult.nickname}
+        </TextSubtitle2>
         <VerticalFlex >
-          <Flex sx={{ marginBottom: '4px' }}>
-            <TextSubtitle2>
-              {consult.job}
-            </TextSubtitle2>
-            <TextBody2 style={{ margin: '0 4px' }}>
-              ·
-            </TextBody2>
-            <TextBody2>
-              {consult.nickname}
-            </TextBody2>
-          </Flex>
-
-          <Flex style={{ gap: '4px' }}>
-            <TextBody2>
-              {getDateString(consult.date, 'short')}
-            </TextBody2>
-            <TextSubtitle2>
-              {/* {getAMOrPM(consult.startTime)} {+consult.startTime.slice(0, 2) > 12 ? (+consult.startTime.slice(0, 2) - 12).toString().padStart(2, '0') : consult.startTime.slice(0, 2)}:{consult.startTime.slice(3)} */}
-              {getKoreanTimeString(consult.startTime)}
-            </TextSubtitle2>
-          </Flex>
+          <TextBody2>
+            {getDateString(consult.date, 'short')}
+          </TextBody2>
+          <TextHeading6>
+            {getKoreanTimeString(consult.startTime)}
+          </TextHeading6>
         </VerticalFlex>
+        <Flex>
+          {
+            consult.consultContentList
+              .slice(0, 3)
+              .map((e, i) => {
+                if (e.type === '전형 준비') {
+                  return <TagMedium
+                    key={i}
+                    style={{ marginRight: 8, padding: '0 8px', fontSize: '14px' }}
+                    color={colorCareerDivePink}
+                    background_color={colorBackgroundCareerDivePink}>
+                    {e.name}
+                  </TagMedium>;
+                }
+                else {
+                  return <TagMedium
+                    key={i}
+                    style={{ marginRight: 8, padding: '0 8px', fontSize: '14px' }}
+                    color={colorCareerDiveBlue}
+                    background_color={colorBackgroundCareerDiveBlue}>
+                    {e.name}
+                  </TagMedium>;
+                }
+              })
+          }
+        </Flex>
         <Flex sx={{ gap: '12px' }}>
           <ExpandingIconButton
             Icon={RequestFormIcon}

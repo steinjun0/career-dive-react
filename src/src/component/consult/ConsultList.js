@@ -18,7 +18,7 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "API";
-import ConsultMentorCard from "./ConsultMentorCard";
+import ConsultMentorCard from "./ConsultMentorCardTs";
 import { onEnterSession } from "services/consult";
 import { onEnterSession as onEnterSessionJs } from "./consult";
 
@@ -103,17 +103,10 @@ function ConsultList({ consultList, onCategoryChange = (value) => { } }) {
                         <ConsultMentorCard
                           consult={consult}
                           requestFormOnClick={() => {
-                            navigater(`/mentee/schedule/${consult.ID}`)
+                            navigater(`/mentee/schedule/${consult.id}`)
                           }}
                           enterOnClick={() => {
-                            onEnterSessionJs({
-                              navigater,
-                              date: consult.Date,
-                              consultStatus: consult.Status,
-                              startTime: consult.StartTime,
-                              endTime: consult.EndTime,
-                              consultId: consult.ID
-                            })
+                            onEnterSession(consult)
                           }
                           }
                         /> :
