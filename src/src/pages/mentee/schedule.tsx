@@ -28,35 +28,7 @@ function Schedule() {
       apiConsult.getConsultMenteeList(+localStorage.getItem('UserID')!, '')
         .then((res) => {
           const parsedConsultList: IConsult[] = res.data.map((apiRes) => {
-            const startTime = new Date(apiRes.Date);
-            startTime.setHours(+apiRes.StartTime.slice(0, apiRes.StartTime.indexOf(':')));
-            startTime.setMinutes(+apiRes.StartTime.slice(apiRes.StartTime.indexOf(':') + 1));
-            const endTime = new Date(apiRes.Date);
-            endTime.setHours(+apiRes.EndTime.slice(0, apiRes.EndTime.indexOf(':')));
-            endTime.setMinutes(+apiRes.EndTime.slice(apiRes.EndTime.indexOf(':') + 1));
-
-            const consult: IConsult = {
-              id: apiRes.ID,
-              date: new Date(apiRes.Date),
-              startTime: startTime,
-              endTime: endTime,
-              menteeId: apiRes.MenteeId,
-              status: apiRes.Status,
-              consultContentList: apiRes.ConsultContentList.map((apiContent) => {
-                return {
-                  id: apiContent.ID,
-                  name: apiContent.Name,
-                  type: apiContent.Type
-                };
-              }),
-              company: apiRes.CompName,
-              divisIsPub: apiRes.DivisIsPub,
-              job: apiRes.JobInComp,
-              nickname: apiRes.Nickname,
-              inJob: apiRes.InService,
-              duration: apiRes.TotEmpMonths,
-            };
-            return consult;
+            return apiConsult.convertIConsultAPI2IConsult(apiRes);
           });
 
           setConsultList(parsedConsultList);
@@ -80,12 +52,6 @@ function Schedule() {
                 consultList={consultList}
                 onCategoryChange={(newStatus: TConsultStatus) => {
                   setStatus(newStatus);
-                  // API.getConsultMenteeList(localStorage.getItem('UserID'), status)
-                  //   .then((res) => {
-                  //     if (res.status === 200) {
-                  //       setConsultList(res.data);
-                  //     }
-                  //   });
                 }}></ConsultList>
             </Grid>
           </Grid>
