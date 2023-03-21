@@ -7,7 +7,7 @@ import {
 } from "util/styledComponent";
 
 import OnComingShedule from "component/consult/OnComingSchedule";
-import ConsultList from "component/consult/ConsultList";
+import ConsultList from "organism/ConsultList";
 import React, { useEffect, useState } from "react";
 import * as apiConsult from "apis/consult";
 import { IConsult, TConsultStatus } from "interfaces/consult";

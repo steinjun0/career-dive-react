@@ -50,10 +50,10 @@ function ConsultMentorCard(
   { consult, requestFormOnClick, changeOnClick, enterOnClick }
     :
     {
-      consult: IConsult & IMentor,
-      requestFormOnClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {},
-      changeOnClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {},
-      enterOnClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {},
+      consult: IConsult,
+      requestFormOnClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
+      changeOnClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
+      enterOnClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
     }
 ) {
   let categoryIcon;

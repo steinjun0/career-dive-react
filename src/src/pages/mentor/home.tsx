@@ -10,7 +10,7 @@ import {
 } from "util/styledComponent";
 
 import OnComingShedule from "component/consult/OnComingSchedule";
-import ConsultList from "component/consult/ConsultList";
+import ConsultList from "organism/ConsultList";
 import ConsultingRequest from "component/consult/ConsultingRequest";
 import React, { useEffect, useState } from "react";
 import API from "API.js";
