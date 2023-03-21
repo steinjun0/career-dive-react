@@ -259,7 +259,7 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
     }
 }
 
-const MenteeCalendar2 = (props:
+const MenteeCalendar = (props:
     { userId: number, startDate: Date | null, consultingTime: 20 | 40 | null, setIsFinished?: Dispatch<SetStateAction<boolean>>; }) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -619,4 +619,4 @@ const MenteeCalendar2 = (props:
 
     );
 };
-export default MenteeCalendar2;
+export default MenteeCalendar;
