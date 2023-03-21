@@ -11,38 +11,39 @@ import {
 
 import OnComingShedule from "component/consult/OnComingSchedule";
 import ConsultList from "component/consult/ConsultList";
-import ConsultingRequest from "component/consult/ConsultingRequest"
+import ConsultingRequest from "component/consult/ConsultingRequest";
 import React, { useEffect, useState } from "react";
 import API from "API.js";
 import { useNavigate } from "react-router-dom";
-import GuideLineMentorBook from "assets/img/home/GuidelineMentorBook.svg"
+import GuideLineMentorBook from "assets/img/home/GuidelineMentorBook.svg";
+import { IConsult, TConsultStatus } from "interfaces/consult";
+import * as apiConsult from "apis/consult";
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-bottom: 154px;
 `;
 
-const dummyData = ['매드로봇님이 상담을 요청하였습니다.',
-  '공부가싫어님이 상담을 요청하였습니다.',
-  '멘토 여러분의 정보가 이제 블록체인으로 암호화 되어 보다 안전하게 이용 가능합니다! ellipsis testtesttest',
-  '커리어다이브 클로즈드 베타 오픈 이벤트 🤙​']
-
 function MentorHome() {
-  const navigater = useNavigate();
-  const [consultList, setConsultList] = useState([])
-  const [reservationList, setReservationList] = useState([])
-  const [onComingList, setOnComingList] = useState([])
-  useEffect(() => {
-    API.getConsultMentorList(localStorage.getItem('UserID'), '').then((res) => {
-      try {
-        setConsultList(res.data)
-        res.data && setReservationList(res.data.filter((e) => e.Status === 'created'))
-        res.data && setOnComingList(res.data.filter((e) => e.Status === 'approved'))
-      } catch (error) {
+  const [consultList, setConsultList] = useState<IConsult[]>([]);
+  const [reservationList, setReservationList] = useState<IConsult[]>([]);
+  const [onComingList, setOnComingList] = useState<IConsult[]>([]);
+  const [status, setStatus] = useState<TConsultStatus | ''>('');
 
-      }
-    })
-  }, [])
+  useEffect(() => {
+    if (localStorage.getItem('UserID') !== null) {
+      apiConsult.getConsultMenteeList(+localStorage.getItem('UserID')!, '')
+        .then((res) => {
+          const parsedConsultList: IConsult[] = res.data.map((apiRes) => {
+            return apiConsult.convertIConsultAPI2IConsult(apiRes);
+          });
+
+          setConsultList(parsedConsultList);
+          setReservationList(parsedConsultList.filter((e) => e.status === 'created'));
+          setOnComingList(parsedConsultList.filter((e) => e.status === 'approved'));
+        });
+    }
+  }, [status]);
 
   return (
     <VerticalFlex sx={{ backgroundColor: '#f8f8f8', alignItems: 'center' }}>
@@ -63,7 +64,7 @@ function MentorHome() {
               }}
                 onClick={
                   () => {
-                    window.open('https://www.notion.so/CBT-30539442ad874299a12b6e727de3a506#a1ad0076d52e456fa46601d031fa34b3')
+                    window.open('https://www.notion.so/CBT-30539442ad874299a12b6e727de3a506#a1ad0076d52e456fa46601d031fa34b3');
                   }
                 }
               >
@@ -83,12 +84,8 @@ function MentorHome() {
             <Grid item xs={12}>
               <ConsultList
                 consultList={consultList}
-                onCategoryChange={(category) => {
-                  API.getConsultMentorList(localStorage.getItem('UserID'), category).then((res) => {
-                    if (res.status === 200) {
-                      setConsultList(res.data)
-                    }
-                  })
+                onCategoryChange={(newStatus: TConsultStatus) => {
+                  setStatus(newStatus);
                 }}></ConsultList>
             </Grid>
           </Grid>
