@@ -20,7 +20,6 @@ import MentorHome from './pages/mentor/home';
 import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MentorSchedule from "pages/mentor/Schedule";
 import Sendbird from "pages/Sendbird";
 // import Session from "./pages/session/id";
 import SessionTs from "./pages/session/[id]";
@@ -146,7 +145,6 @@ root.render(
             <Route path="/mentor/mypage/career/change" element={<MentorMyPage />} />
             <Route path="/mentor/mypage" element={<Navigate replace to="/mentor/mypage/profile" />} />
             <Route path="/mentor" element={<MentorHome />} />
-            <Route path="/mentor/schedule" element={<MentorSchedule />} />
             <Route path="/mentor/calendar" element={<MentorCalendar />} />
 
             {/* <Route path="/mentor/sessionList/form/:id" element={<MentoringApplyViewerMentor />} /> */}
