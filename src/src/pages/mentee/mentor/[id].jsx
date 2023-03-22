@@ -7,7 +7,7 @@ import {
   Flex
 } from "util/styledComponent";
 
-import MentorProfile from 'component/mentor/Profile'
+import MentorProfile from 'organism/mentor/Profile'
 import HelpCategory from "component/mentor/HelpCategory";
 import Introduction from "component/mentor/Introduction";
 
@@ -16,7 +16,7 @@ import API from 'API';
 import { useNavigate, useParams } from "react-router-dom";
 import MenteeCalendar from "component/calendar/MenteeCalendar";
 import { CustomButton } from "util/Custom/CustomButton";
-import FavoriteButton from "component/mentor/FavoriteButton";
+// import FavoriteButton from "component/mentor/FavoriteButton";
 import { getParsedLocalStorage } from "util/ts/util";
 
 
@@ -112,7 +112,7 @@ function Mentor() {
         </CardsWrapper>
       </MaxWidthDiv>
 
-      {
+      {/* {
         isDownMd &&
         <Flex
           style={{
@@ -137,7 +137,7 @@ function Mentor() {
             상담 신청
           </CustomButton>
         </Flex>
-      }
+      } */}
 
     </GrayBackground >
   );

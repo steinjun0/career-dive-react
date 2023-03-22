@@ -8,7 +8,7 @@ import {
   EmptyHeight,
 } from "util/styledComponent";
 
-import MentorProfile from 'component/mentor/Profile'
+import MentorProfile from 'organism/mentor/Profile'
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import API from "API.js";
