@@ -13,12 +13,6 @@ import { useParams } from "react-router-dom";
 import API from "API.js";
 import React from 'react'
 
-const MetorProfileBanner = styled(CenterWidthWrapper)`
-  height: 200px;
-  flex-direction: row;
-  align-items: center;
-`;
-
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
   margin-top: 30px;

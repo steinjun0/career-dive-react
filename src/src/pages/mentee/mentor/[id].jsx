@@ -15,16 +15,8 @@ import React, { useEffect, useState } from "react";
 import API from 'API';
 import { useNavigate, useParams } from "react-router-dom";
 import MenteeCalendar from "component/calendar/MenteeCalendar";
-import { CustomButton } from "util/Custom/CustomButton";
-// import FavoriteButton from "component/mentor/FavoriteButton";
 import { getParsedLocalStorage } from "util/ts/util";
 
-
-const MetorProfileBanner = styled(CenterWidthWrapper)`
-  height: 200px;
-  flex-direction: row;
-  align-items: center;
-`;
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;

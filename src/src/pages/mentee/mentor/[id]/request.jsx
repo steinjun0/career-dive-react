@@ -1,7 +1,6 @@
-import { Grid, styled } from "@mui/material";
+import { styled } from "@mui/material";
 
 import {
-  CenterWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
   Flex,
@@ -15,14 +14,6 @@ import API from "API.js";
 import MenteeCalendar from "component/calendar/MenteeCalendar";
 import { getParsedLocalStorage } from "util/ts/util";
 import SelectContent from "component/mentor/apply/SelectContent2";
-
-const MetorProfileBanner = styled(CenterWidthWrapper)`
-  height: 200px;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 16px;
-  width: calc(100% - 32px);
-`;
 
 const CardsWrapper = styled(Flex)({
   justifyContent: 'space-between',

@@ -1,4 +1,4 @@
-import { Grid, styled } from "@mui/material";
+import { Grid } from "@mui/material";
 
 import {
   CenterWidthWrapper,
@@ -12,22 +12,6 @@ import Request from "component/mentor/apply/Request";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "API.js";
-
-const MetorProfileBanner = styled(CenterWidthWrapper)`
-  height: 200px;
-  flex-direction: row;
-  align-items: center;
-  background-color: white;
-  width: '100%';
-`;
-
-const CardsWrapper = styled(Flex)`
-  justify-content: space-between;
-  margin-top: 30px;
-  margin-bottom: 158px;
-  width: 582px;
-`;
-
 
 function MentoringReservation() {
   const params = useParams()
