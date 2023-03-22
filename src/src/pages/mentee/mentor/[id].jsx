@@ -103,34 +103,6 @@ function Mentor() {
           </Grid>
         </CardsWrapper>
       </MaxWidthDiv>
-
-      {/* {
-        isDownMd &&
-        <Flex
-          style={{
-            position: 'fixed',
-            zIndex: 10,
-            bottom: 0,
-            padding: '8px 16px',
-            heihgt: '84px',
-            backgroundColor: 'white',
-            width: '100vw',
-            filter: 'drop-shadow(0px -20px 40px rgba(130, 130, 130, 0.1))'
-          }}
-        >
-          <FavoriteButton
-            menteeId={+localStorage.getItem('UserID')}
-            mentorId={+params.id}
-          />
-          <CustomButton
-            style={{ width: '100%', marginLeft: '8px', marginRight: '32px' }}
-            onClick={() => { navigater(`/mentee/mentor/${params.id}/request`) }}
-          >
-            상담 신청
-          </CustomButton>
-        </Flex>
-      } */}
-
     </GrayBackground >
   );
 }
