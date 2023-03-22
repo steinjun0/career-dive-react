@@ -301,9 +301,7 @@ function MobileMenu({ items, setIsOpenMobileMenu }: { items: { name: string, lin
   );
 }
 
-const gnbDisableUrl = ['/session', '/review'];
-
-function Gnb() {
+function MobileGnb() {
   const location = useLocation();
   const { accountData } = useContext(AccountDataContext);
   const { isLogin, isMentorMode } = accountData;
@@ -315,119 +313,134 @@ function Gnb() {
     setIsOpenMobileMenu(false);
   }, [isDown730, location]);
 
+  return <Flex sx={{
+    position: 'fixed', zIndex: 10,
+    width: '100%', height: '48px',
+    backgroundColor: 'white',
+    borderBottom: `0.5px solid ${colorBackgroundGrayMedium}`,
+    justifyContent: 'space-between', alignItems: 'center',
+    padding: '0 16px'
+  }}>
+    <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '18px' }} />
+    <IconButton onClick={() => setIsOpenMobileMenu((prev) => !prev)}>
+      {
+        isOpenMobileMenu ?
+          <CloseIcon /> :
+          <MenuIcon />
+      }
+    </IconButton>
+    <VerticalFlex
+      sx={{
+        height: isOpenMobileMenu ? '-webkit-fill-available' : 0, position: 'fixed', zIndex: 3,
+        top: '48px', width: '100%', marginLeft: '-16px', overflow: 'hidden',
+      }}
+    >
+      <VerticalFlex
+        sx={{
+          height: isOpenMobileMenu ? '100%' : 0, transition: isOpenMobileMenu ? 'ease 0.3s all' : '',
+          backgroundColor: 'white', overflow: 'hidden',
+          justifyContent: 'space-between'
+        }}
+      >
+        {
+          isLogin ?
+            isMentorMode ?
+              <MobileMenu
+                items={
+                  [
+                    { name: '상담', link: '/mentor' },
+                    { name: '일정 등록', link: '/mentor/calendar' },
+                    { name: '실적', link: '' }
+                  ]
+                }
+                setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
+              <MobileMenu
+                items={
+                  [
+                    { name: '홈', link: '/' },
+                    { name: '내 상담', link: '/mentee/schedule' },
+                    { name: '찜한 멘토', link: '' },
+                    { name: '상담 후기', link: '' }
+                  ]
+                }
+                setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
+            <MobileMenu
+              items={
+                [
+                  { name: '홈', link: '/' },
+                ]
+              }
+              setIsOpenMobileMenu={setIsOpenMobileMenu} />
+        }
+      </VerticalFlex>
+    </VerticalFlex>
+  </Flex>;
+}
+
+function PcGnb() {
+  const location = useLocation();
+  const { accountData } = useContext(AccountDataContext);
+  const { isLogin, isMentorMode } = accountData;
+  console.log('isLogin', isLogin);
+  return <GnbWrapper>
+    <Flex className="gnb-left" sx={{ width: '215px' }}>
+      <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
+        <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '24px' }} />
+      </LinkNoDeco>
+    </Flex>
+    <Flex className="gnb-center" sx={{ height: '100%' }}>
+      {
+        isLogin &&
+          isMentorMode ?
+          <CenterMenu
+            items={
+              [
+                { name: '상담', link: '/mentor' },
+                { name: '일정 등록', link: '/mentor/calendar' },
+                { name: '실적', link: '' }
+              ]
+            }
+            url={location.pathname}
+          /> :
+          <CenterMenu
+            items={
+              [
+                { name: '내 상담', link: '/mentee/schedule' },
+                { name: '찜한 멘토', link: '' },
+                { name: '상담 후기', link: '' }
+              ]
+            }
+            url={location.pathname}
+          />
+      }
+    </Flex>
+
+    <Flex className="gnb-right" sx={{ width: '215px', justifyContent: 'end' }}>
+      {
+        isLogin ?
+          isMentorMode ?
+            <MentorRightMenu /> :
+            <MenteeRightMenu /> :
+          <NoLoginRightMenu />
+      }
+    </Flex>
+
+  </GnbWrapper>;
+}
+
+const gnbDisableUrl = ['/session', '/review'];
+function Gnb() {
+  const location = useLocation();
+  const theme = useTheme();
+  const isDown730 = useMediaQuery(theme.breakpoints.down(730));
 
   return (
     <>
       {
         !gnbDisableUrl.map((e) => location.pathname.includes(e)).includes(true) ?
           isDown730 ?
-            <Flex sx={{
-              position: 'fixed', zIndex: 10,
-              width: '100%', height: '48px',
-              backgroundColor: 'white',
-              borderBottom: `0.5px solid ${colorBackgroundGrayMedium}`,
-              justifyContent: 'space-between', alignItems: 'center',
-              padding: '0 16px'
-            }}>
-              <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '18px' }} />
-              <IconButton onClick={() => setIsOpenMobileMenu((prev) => !prev)}>
-                {
-                  isOpenMobileMenu ?
-                    <CloseIcon /> :
-                    <MenuIcon />
-                }
-              </IconButton>
-              <VerticalFlex
-                sx={{
-                  height: isOpenMobileMenu ? '-webkit-fill-available' : 0, position: 'fixed', zIndex: 3,
-                  top: '48px', width: '100%', marginLeft: '-16px', overflow: 'hidden',
-                }}
-              >
-                <VerticalFlex
-                  sx={{
-                    height: isOpenMobileMenu ? '100%' : 0, transition: isOpenMobileMenu ? 'ease 0.3s all' : '',
-                    backgroundColor: 'white', overflow: 'hidden',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  {
-                    isLogin ?
-                      isMentorMode ?
-                        <MobileMenu
-                          items={
-                            [
-                              { name: '상담', link: '/mentor' },
-                              { name: '일정 등록', link: '/mentor/calendar' },
-                              { name: '실적', link: '' }
-                            ]
-                          }
-                          setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
-                        <MobileMenu
-                          items={
-                            [
-                              { name: '홈', link: '/' },
-                              { name: '내 상담', link: '/mentee/schedule' },
-                              { name: '찜한 멘토', link: '' },
-                              { name: '상담 후기', link: '' }
-                            ]
-                          }
-                          setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
-                      <MobileMenu
-                        items={
-                          [
-                            { name: '홈', link: '/' },
-                          ]
-                        }
-                        setIsOpenMobileMenu={setIsOpenMobileMenu} />
-                  }
-                </VerticalFlex>
-              </VerticalFlex>
-
-            </Flex> :
-            <GnbWrapper>
-              <Flex className="gnb-left" sx={{ width: '215px' }}>
-                <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
-                  <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '24px' }} />
-                </LinkNoDeco>
-              </Flex>
-              <Flex className="gnb-center" sx={{ height: '100%' }}>
-                {
-                  isLogin &&
-                    isMentorMode ?
-                    <CenterMenu
-                      items={
-                        [
-                          { name: '상담', link: '/mentor' },
-                          { name: '일정 등록', link: '/mentor/calendar' },
-                          { name: '실적', link: '' }
-                        ]
-                      }
-                      url={location.pathname}
-                    /> :
-                    <CenterMenu
-                      items={
-                        [
-                          { name: '내 상담', link: '/mentee/schedule' },
-                          { name: '찜한 멘토', link: '' },
-                          { name: '상담 후기', link: '' }
-                        ]
-                      }
-                      url={location.pathname}
-                    />
-                }
-              </Flex>
-
-              <Flex className="gnb-right" sx={{ width: '215px', justifyContent: 'end' }}>
-                {
-                  isLogin ?
-                    isMentorMode ?
-                      <MentorRightMenu /> :
-                      <MenteeRightMenu /> :
-                    <NoLoginRightMenu />
-                }
-              </Flex>
-
-            </GnbWrapper> :
+            <MobileGnb /> :
+            <PcGnb /> :
           isDown730 ?
             <div style={{ marginTop: -48 }} /> :
             <div style={{ marginTop: -80 }} />
@@ -437,4 +450,4 @@ function Gnb() {
   );
 }
 
-export default Gnb;;
+export default Gnb;
