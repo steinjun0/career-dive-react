@@ -391,27 +391,29 @@ function PcGnb() {
     <Flex className="gnb-center" sx={{ height: '100%' }}>
       {
         isLogin &&
+        (
           isMentorMode ?
-          <CenterMenu
-            items={
-              [
-                { name: '상담', link: '/mentor' },
-                { name: '일정 등록', link: '/mentor/calendar' },
-                { name: '실적', link: '' }
-              ]
-            }
-            url={location.pathname}
-          /> :
-          <CenterMenu
-            items={
-              [
-                { name: '내 상담', link: '/mentee/schedule' },
-                { name: '찜한 멘토', link: '' },
-                { name: '상담 후기', link: '' }
-              ]
-            }
-            url={location.pathname}
-          />
+            <CenterMenu
+              items={
+                [
+                  { name: '상담', link: '/mentor' },
+                  { name: '일정 등록', link: '/mentor/calendar' },
+                  { name: '실적', link: '' }
+                ]
+              }
+              url={location.pathname}
+            /> :
+            <CenterMenu
+              items={
+                [
+                  { name: '내 상담', link: '/mentee/schedule' },
+                  { name: '찜한 멘토', link: '' },
+                  { name: '상담 후기', link: '' }
+                ]
+              }
+              url={location.pathname}
+            />
+        )
       }
     </Flex>
 
