@@ -167,7 +167,14 @@ function NoLoginRightMenu() {
   return (
     <RightTopGnb>
       <LinkNoDeco to={'/login'}>
-        <CustomButton height={'48px'} background_color={colorBackgroundGrayLight} custom_color={colorCareerDiveBlue}>로그인</CustomButton>
+        <CustomButton
+          height={'48px'}
+          background_color={colorBackgroundGrayLight}
+          custom_color={colorCareerDiveBlue}>
+          <TextSubtitle2>
+            로그인
+          </TextSubtitle2>
+        </CustomButton>
       </LinkNoDeco>
     </RightTopGnb>
   );
@@ -303,6 +310,7 @@ function MobileMenu({ items, setIsOpenMobileMenu }: { items: { name: string, lin
 
 function MobileGnb() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { accountData } = useContext(AccountDataContext);
   const { isLogin, isMentorMode } = accountData;
   const [isOpenMobileMenu, setIsOpenMobileMenu] = useState<boolean>(false);
@@ -322,13 +330,26 @@ function MobileGnb() {
     padding: '0 16px'
   }}>
     <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '18px' }} />
-    <IconButton onClick={() => setIsOpenMobileMenu((prev) => !prev)}>
-      {
-        isOpenMobileMenu ?
-          <CloseIcon /> :
-          <MenuIcon />
-      }
-    </IconButton>
+    {
+      isLogin ?
+        <IconButton onClick={() => setIsOpenMobileMenu((prev) => !prev)}>
+          {
+            isOpenMobileMenu ?
+              <CloseIcon /> :
+              <MenuIcon />
+          }
+        </IconButton>
+        :
+        <CustomButton
+          background_color={colorBackgroundGrayLight}
+          custom_color={colorCareerDiveBlue}
+          onClick={() => { navigate('/login'); }}
+        >
+          <TextSubtitle2>
+            로그인
+          </TextSubtitle2>
+        </CustomButton>
+    }
     <VerticalFlex
       sx={{
         height: isOpenMobileMenu ? '-webkit-fill-available' : 0, position: 'fixed', zIndex: 3,
@@ -343,7 +364,8 @@ function MobileGnb() {
         }}
       >
         {
-          isLogin ?
+          isLogin &&
+          (
             isMentorMode ?
               <MobileMenu
                 items={
@@ -363,14 +385,8 @@ function MobileGnb() {
                     { name: '상담 후기', link: '' }
                   ]
                 }
-                setIsOpenMobileMenu={setIsOpenMobileMenu} /> :
-            <MobileMenu
-              items={
-                [
-                  { name: '홈', link: '/' },
-                ]
-              }
-              setIsOpenMobileMenu={setIsOpenMobileMenu} />
+                setIsOpenMobileMenu={setIsOpenMobileMenu} />
+          )
         }
       </VerticalFlex>
     </VerticalFlex>
@@ -381,7 +397,6 @@ function PcGnb() {
   const location = useLocation();
   const { accountData } = useContext(AccountDataContext);
   const { isLogin, isMentorMode } = accountData;
-  console.log('isLogin', isLogin);
   return <GnbWrapper>
     <Flex className="gnb-left" sx={{ width: '215px' }}>
       <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
@@ -447,8 +462,7 @@ function Gnb() {
             <div style={{ marginTop: -48 }} /> :
             <div style={{ marginTop: -80 }} />
       }
-    </ >
-
+    </>
   );
 }
 
