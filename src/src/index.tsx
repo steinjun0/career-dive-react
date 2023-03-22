@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Mentor from "./pages/mentee/mentor/[id]";
 import MentoringReservation from './pages/mentee/mentor/[id]/request';
-import MentoringApply from './pages/request/MentoringApply';
+import MentoringForm from './pages/mentee/mentor/[id]/form';
 import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer';
 
 import Gnb from "./organism/Gnb";
@@ -129,7 +129,7 @@ root.render(
             <Route path="/signup/nickname" element={<SignupNickname />} />
             <Route path="/mentee/mentor/:id" element={<Mentor />} />
             <Route path="/mentee/mentor/:id/request" element={<MentoringReservation />} />
-            <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
+            <Route path="/mentee/request/:id/form/:type" element={<MentoringForm />} />
             <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />
             {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}
             <Route path="/mentee/schedule/:id" element={<MentoringApplyViewer />} />

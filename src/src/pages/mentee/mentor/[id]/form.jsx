@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "API.js";
 
-function MentoringReservation() {
+function MentoringForm() {
   const params = useParams()
   const [mentorData, setMentorData] = useState()
   useEffect(() => {
@@ -51,4 +51,4 @@ function MentoringReservation() {
   );
 }
 
-export default MentoringReservation;
+export default MentoringForm;
