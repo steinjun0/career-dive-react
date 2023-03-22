@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate, } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Mentor from "./pages/mentee/mentor/[id]";
-import MentoringReservation from './pages/request/MentoringReservation';
+import MentoringReservation from './pages/mentee/request/[id]';
 import MentoringApply from './pages/request/MentoringApply';
 import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer';
 
@@ -128,7 +128,7 @@ root.render(
             <Route path="/signup" element={<Signup />} />
             <Route path="/signup/nickname" element={<SignupNickname />} />
             <Route path="/mentee/mentor/:id" element={<Mentor />} />
-            <Route path="/mentee/request/:id" element={<MentoringReservation />} />
+            <Route path="/mentee/mentor/:id/request" element={<MentoringReservation />} />
             <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
             <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />
             {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}

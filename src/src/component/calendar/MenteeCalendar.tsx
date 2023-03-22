@@ -606,7 +606,7 @@ const MenteeCalendar = (props:
                                     ]
                                 );
 
-                                navigate(`/mentee/request/${params.id}`);
+                                navigate(`/mentee/mentor/${params.id}/request`);
                             }}>
                             <TextSubtitle1>
                                 다음

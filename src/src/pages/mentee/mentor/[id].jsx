@@ -132,7 +132,7 @@ function Mentor() {
           />
           <CustomButton
             style={{ width: '100%', marginLeft: '8px', marginRight: '32px' }}
-            onClick={() => { navigater(`/mentee/request/${+params.id}`) }}
+            onClick={() => { navigater(`/mentee/mentor/${params.id}/request`) }}
           >
             상담 신청
           </CustomButton>

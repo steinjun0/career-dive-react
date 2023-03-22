@@ -136,27 +136,14 @@ function MentorProfile({ name = '', description = '', inService = true, id = -1 
           menteeId={+localStorage.getItem('UserID')}
           mentorId={+params.id}
         />
-        {!location.pathname.includes('mentee/request/') && <ApplyMentoringButton
+        {!location.pathname.includes('request') && <ApplyMentoringButton
           disableElevation
           style={{ marginLeft: 12 }}
-          onClick={() => { navigater(`/mentee/request/${id}`) }}
+          onClick={() => { navigater(`/mentee/mentor/${id}/request`) }}
         >
           상담 신청
         </ApplyMentoringButton>}
       </Flex>}
-
-      {/* {!isDownMd && <Buttons>
-        <FavoriteButton isFavorite={isFavorite} setIsFavorite={setIsFavorite}></FavoriteButton>
-
-        {!location.pathname.includes('mentee/request/') && <ApplyMentoringButton
-          disableElevation
-          style={{ marginLeft: 12 }}
-          onClick={() => { navigater(`/mentee/request/${id}`) }}
-        >
-          상담 신청
-        </ApplyMentoringButton>}
-      </Buttons>} */}
-
     </MentorProfileWrapper>
   );
 }

@@ -205,7 +205,7 @@ function Request() {
       }
     } else {
       alert('누락된 정보가 있습니다. 다시 시도해주세요')
-      navigate(`/mentee/request/${params.id}`)
+      navigate(`/mentee/mentor/${params.id}/request`)
     }
 
   }
