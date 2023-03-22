@@ -5,7 +5,7 @@ import { getDatesOfMonth, isPastDate, monthList } from "../../services/calendar"
 import API from "API";
 import styled from "styled-components";
 import { Button, Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { addMinute, getHoursAndMinuteString, getKoreanTimeString, updateReservation } from "util/ts/util";
+import { addMinute, getHoursAndMinuteString, getKoreanTimeString, removeReservation, updateReservation } from "util/ts/util";
 import { addMinuteTs } from "util/util";
 import { CustomButton } from "util/Custom/CustomButton";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -228,24 +228,32 @@ function reducer(state: IcalendarState, action: ACTIONTYPE) {
                     calendarState: 'initializing'
                 };
             } else {
-                const scheduleId = state.availableTimes[state.selectedDate!.getDate()]
-                    .find((schedule) => {
-                        return schedule.startTime.getTime() <= action.payload!.getTime() && action.payload!.getTime() <= schedule.endTime.getTime();
-                    })!.scheduleId;
-                updateReservation(
-                    state.mentorId,
-                    [
-                        { name: 'scheduleId', data: scheduleId },
-                        { name: 'startTime', data: action.payload },
-                        { name: 'consultingTime', data: state.consultingTime }
-                    ]
-                );
-                return {
-                    ...state,
-                    startTime: action.payload,
-                    calendarState: getCalendarStatus({ ...state, startTime: action.payload })
-                };
-
+                if (action.payload === null) {
+                    removeReservation(state.mentorId);
+                    return {
+                        ...state,
+                        startTime: null,
+                        calendarState: getCalendarStatus({ ...state, startTime: null })
+                    };
+                } else {
+                    const scheduleId = state.availableTimes[state.selectedDate!.getDate()]
+                        .find((schedule) => {
+                            return schedule.startTime.getTime() <= action.payload!.getTime() && action.payload!.getTime() <= schedule.endTime.getTime();
+                        })!.scheduleId;
+                    updateReservation(
+                        state.mentorId,
+                        [
+                            { name: 'scheduleId', data: scheduleId },
+                            { name: 'startTime', data: action.payload },
+                            { name: 'consultingTime', data: state.consultingTime }
+                        ]
+                    );
+                    return {
+                        ...state,
+                        startTime: action.payload,
+                        calendarState: getCalendarStatus({ ...state, startTime: action.payload })
+                    };
+                }
             }
 
 
