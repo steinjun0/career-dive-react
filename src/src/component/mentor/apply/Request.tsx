@@ -170,16 +170,21 @@ function Request(props: { type: 'careerConsult' | 'prepare'; }) {
       <Card
         title={
           startTime
-            ? <span>{getDateString(startTime, 'long')} <span style={{ color: consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink }}>{getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}</span></span>
+            ?
+            <Flex sx={{ flexWrap: 'wrap', columnGap: '8px' }}>
+              <span>{getDateString(startTime, 'long')}</span>
+              <span style={{ color: consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink }}>
+                {getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}
+              </span>
+            </Flex>
             :
             ''}
         titleBottom={
           <VerticalFlex>
             <EmptyHeight height='16px' />
-            <Flex>
+            <Flex sx={{ flexWrap: 'wrap', gap: '8px' }}>
               <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
               {isFilePreOpen === '희망' && <CategoryTag category={consultCategory} style={{ marginLeft: 8 }}><TextBody2>이력서 검토</TextBody2></CategoryTag>}
-              <EmptyWidth width='8px' />
               {consultContents && consultContents.map((value, index) => (
                 <Flex key={index}>
                   <TagLarge color={colorTextLight}
