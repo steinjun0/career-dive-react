@@ -51,17 +51,17 @@ function MentoringReservation() {
             id={mentorData.UserID} />}
         </MaxWidthDiv>
       </Flex>
-      <CenterWidthWrapper>
-        <Grid container spacing={'30px'} marginTop={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <CenterWidthWrapper sx={{ marginBottom: '158px' }}>
+        <MaxWidthDiv>
+          <Grid container spacing={'30px'} marginTop={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
-            <Request type={params.type} />
-            {/* {params.type === 'careerConsult' && <RequestBasic />}
+              <Request type={params.type} />
+              {/* {params.type === 'careerConsult' && <RequestBasic />}
                 {params.type === 'prepare' && <RequestPremium />} */}
+            </Grid>
           </Grid>
-        </Grid>
-        <CardsWrapper>
-        </CardsWrapper>
+        </MaxWidthDiv>
       </CenterWidthWrapper>
     </GrayBackground>
   );
