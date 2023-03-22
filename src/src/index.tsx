@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate, } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Mentor from "./pages/mentee/mentor/[id]";
-import MentoringReservation from './pages/mentee/request/[id]';
+import MentoringReservation from './pages/mentee/mentor/[id]/request';
 import MentoringApply from './pages/request/MentoringApply';
 import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer';
 
