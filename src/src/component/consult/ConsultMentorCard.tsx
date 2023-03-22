@@ -12,7 +12,7 @@ import {
   colorBackgroundCareerDivePink,
   colorBackgroundCareerDiveBlue,
 } from "util/styledComponent";
-import { ExpandingIconButton } from 'component/ExpandingIconButton';
+import { ExpandingIconButton } from 'component/button/ExpandingIconButton';
 
 import RequestFormIcon from "assets/icon/RequestFormIcon";
 import EditCalendarIcon from "assets/icon/EditCalendarIcon";

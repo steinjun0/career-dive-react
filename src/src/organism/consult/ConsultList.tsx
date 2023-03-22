@@ -13,13 +13,13 @@ import { Card } from "util/Card";
 
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ConsultMentorCard from "../component/consult/ConsultMentorCard";
+import ConsultMentorCard from "../../component/consult/ConsultMentorCard";
 import { onEnterSession } from "services/consult";
 import React from "react";
 import { IConsult } from "interfaces/consult";
 
 
-function ConsultList({ consultList, onCategoryChange = (value) => { } }: { consultList: IConsult[], onCategoryChange: (value: any) => void; }) {
+function ConsultList({ consultList, onCategoryChange = (value) => { }, type }: { consultList: IConsult[], onCategoryChange: (value: any) => void, type: 'mentee' | 'mentor'; }) {
 
   const navigater = useNavigate();
   const location = useLocation();
@@ -75,7 +75,7 @@ function ConsultList({ consultList, onCategoryChange = (value) => { } }: { consu
             consultList.map((consult, index) => {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  {location.pathname.includes('mentor') ?
+                  {type === 'mentor' ?
                     <ConsultMentorCard
                       consult={consult}
                       requestFormOnClick={(event) => {

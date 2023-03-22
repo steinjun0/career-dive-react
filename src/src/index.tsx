@@ -7,9 +7,9 @@ import { BrowserRouter, Routes, Route, Navigate, } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Mentor from "./pages/mentor/id";
-import MentoringReservation from './pages/request/MentoringReservation';
-import MentoringApply from './pages/request/MentoringApply';
+import Mentor from "./pages/mentee/mentor/[id]";
+import MentoringReservation from './pages/mentee/mentor/[id]/request';
+import MentoringForm from './pages/mentee/mentor/[id]/form';
 import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer';
 
 import Gnb from "./organism/Gnb";
@@ -27,7 +27,7 @@ import MentorCalendar from "pages/mentor/Calendar";
 import MentorRegister from "pages/mentor/register";
 import MentorMyPage from "./pages/mentor/myPage";
 
-import MentoringRequestFinish from 'pages/request/MentoringRequestFinish';
+import MentoringRequestFinish from 'pages/mentee/mentor/[id]/request/finish';
 import Search from 'pages/search';
 import Review from "pages/review/id";
 import Signup from 'pages/signup/Signup';
@@ -128,8 +128,8 @@ root.render(
             <Route path="/signup" element={<Signup />} />
             <Route path="/signup/nickname" element={<SignupNickname />} />
             <Route path="/mentee/mentor/:id" element={<Mentor />} />
-            <Route path="/mentee/request/:id" element={<MentoringReservation />} />
-            <Route path="/mentee/request/form/:type/:id" element={<MentoringApply />} />
+            <Route path="/mentee/mentor/:id/request" element={<MentoringReservation />} />
+            <Route path="/mentee/request/:id/form/:type" element={<MentoringForm />} />
             <Route path="/mentee/request/finish" element={<MentoringRequestFinish />} />
             {/* TODO: type변수 설정해야함, [generalType1,generalType2,premium] */}
             <Route path="/mentee/schedule/:id" element={<MentoringApplyViewer />} />

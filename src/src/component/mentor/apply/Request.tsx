@@ -7,7 +7,7 @@ import { CustomButton } from "util/Custom/CustomButton";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addMinute, getAMOrPM, getDateString, getDayInKorean, getKoreanTimeString, removeReservation, updateReservation } from "util/ts/util";
-import UploadIcon from 'assets/icon/UploadIcon'
+import UploadIcon from 'assets/icon/UploadIcon';
 import Dropzone, { FileWithPath } from "react-dropzone";
 import API from "API";
 import { colorBackgroundCareerDiveBlue, colorBackgroundCareerDivePink, colorBackgroundGrayLight, colorCareerDiveBlue, colorCareerDivePink, colorTextLight, EmptyHeight, EmptyWidth, Flex, TextBody2, TextCaption, TextSubtitle1, VerticalFlex } from "util/styledComponent";
@@ -36,28 +36,28 @@ const FileDropzoneContent = styled(Flex)`
 
 const getCategoryColor = (category: '커리어 상담' | '전형 준비') => {
   if (category === '커리어 상담') {
-    return colorCareerDiveBlue
+    return colorCareerDiveBlue;
   } else if (category === '전형 준비') {
-    return colorCareerDivePink
+    return colorCareerDivePink;
   } else {
-    return colorTextLight
+    return colorTextLight;
   }
-}
+};
 
 const getCategoryBackgroundColor = (category: '커리어 상담' | '전형 준비') => {
   if (category === '커리어 상담') {
-    return colorBackgroundCareerDiveBlue
+    return colorBackgroundCareerDiveBlue;
   } else if (category === '전형 준비') {
-    return colorBackgroundCareerDivePink
+    return colorBackgroundCareerDivePink;
   } else {
-    return colorBackgroundGrayLight
+    return colorBackgroundGrayLight;
   }
-}
+};
 
-const CategoryTag = styled(TagLarge) <{ category: '커리어 상담' | '전형 준비' }>`
+const CategoryTag = styled(TagLarge) <{ category: '커리어 상담' | '전형 준비'; }>`
   color:${props => getCategoryColor(props.category)};
   background-color:${props => getCategoryBackgroundColor(props.category)};
-`
+`;
 
 // const getConsultingRangeInKorean = (consultingStartTime, consultingTime) => {
 //   const consultingStartTimeDate = new Date(`2023-01-02 ${consultingStartTime}`);
@@ -72,60 +72,60 @@ const CategoryTag = styled(TagLarge) <{ category: '커리어 상담' | '전형 �
 
 const maxLength = 600;
 
-function Request(props: { type: 'careerConsult' | 'prepare' }) {
-  const navigate = useNavigate()
+function Request(props: { type: 'careerConsult' | 'prepare'; }) {
+  const navigate = useNavigate();
 
-  const consultCategory = props.type === 'careerConsult' ? '커리어 상담' : '전형 준비'
+  const consultCategory = props.type === 'careerConsult' ? '커리어 상담' : '전형 준비';
 
-  const [consultContents, setConsultContents] = useState<string[]>([])
-  const [startTime, setStartTime] = useState<Date>()
-  const [consultingTime, setConsultingTime] = useState<number>(20)
-  const [requestText, setRequestText] = useState<string>('')
-  const [isFilePreOpen, setIsFilePreOpen] = useState<'희망' | '비희망'>()
-  const [uploadingFiles, setUploadingFiles] = useState<File[]>([])
+  const [consultContents, setConsultContents] = useState<string[]>([]);
+  const [startTime, setStartTime] = useState<Date>();
+  const [consultingTime, setConsultingTime] = useState<number>(20);
+  const [requestText, setRequestText] = useState<string>('');
+  const [isFilePreOpen, setIsFilePreOpen] = useState<'희망' | '비희망'>();
+  const [uploadingFiles, setUploadingFiles] = useState<File[]>([]);
 
-  const params = useParams()
+  const params = useParams();
 
   useEffect(() => {
     try {
       if (params.id === undefined)
-        throw Error
-      const reservation = getParsedLocalStorage('reservations')[+params.id]
+        throw Error;
+      const reservation = getParsedLocalStorage('reservations')[+params.id];
 
-      setStartTime(new Date(reservation['startTime']))
-      setConsultContents(reservation['consultContent'])
-      setConsultingTime(reservation['consultingTime'])
-      reservation['requestText'] && setRequestText(reservation['requestText'])
+      setStartTime(new Date(reservation['startTime']));
+      setConsultContents(reservation['consultContent']);
+      setConsultingTime(reservation['consultingTime']);
+      reservation['requestText'] && setRequestText(reservation['requestText']);
 
-      setIsFilePreOpen(reservation['isFilePreOpen'])
+      setIsFilePreOpen(reservation['isFilePreOpen']);
 
     } catch (error) {
-      console.log(error)
-      alert('누락된 상담 내용 정보가 있습니다.')
+      console.log(error);
+      alert('누락된 상담 내용 정보가 있습니다.');
     }
-  }, [])
+  }, []);
 
   async function onClickApplyButton() {
     if (isFilePreOpen === '희망' && uploadingFiles.length <= 0) {
-      const isContinue = window.confirm('첨부파일 없이 계속 하시겠습니까?')
+      const isContinue = window.confirm('첨부파일 없이 계속 하시겠습니까?');
       if (!isContinue) {
-        return
+        return;
       }
     }
 
-    const reservations = getParsedLocalStorage('reservations')
+    const reservations = getParsedLocalStorage('reservations');
     if (reservations !== null && params.id && startTime) {
-      const reservation = reservations[params.id]
-      console.log('reservation', reservation)
-      const consultingEndTimeDate = addMinute(startTime, consultingTime)
-      const consultingStartTime = `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}`
-      const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`
+      const reservation = reservations[params.id];
+      console.log('reservation', reservation);
+      const consultingEndTimeDate = addMinute(startTime, consultingTime);
+      const consultingStartTime = `${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}`;
+      const consultingEndTime = `${consultingEndTimeDate.getHours().toString().padStart(2, '0')}:${consultingEndTimeDate.getMinutes().toString().padStart(2, '0')}`;
       const postConsultObject = {
         consultContentList: [...reservation['consultContent'].map((e: string) => {
           return {
             Name: e,
             Type: reservation['consultCategory']
-          }
+          };
         })],
         menteeId: +localStorage.getItem("UserID")!,
         mentorId: +params.id,
@@ -135,33 +135,33 @@ function Request(props: { type: 'careerConsult' | 'prepare' }) {
         startTime: consultingStartTime,
         endTime: consultingEndTime,
         type: reservation['consultCategory']
-      }
+      };
 
-      const consultRes = await API.postConsult(postConsultObject)
+      const consultRes = await API.postConsult(postConsultObject);
 
       if (consultRes.status === 200) {
         if (isFilePreOpen === '희망' && uploadingFiles.length > 0) {
-          const consultId = consultRes.data.ID
+          const consultId = consultRes.data.ID;
 
           uploadingFiles.forEach(async (e) => {
-            let formData = new FormData()
-            formData.append('file', e)
-            const consultFileRes = await API.postConsultFile(consultId, formData)
+            let formData = new FormData();
+            formData.append('file', e);
+            const consultFileRes = await API.postConsultFile(consultId, formData);
 
             if (consultFileRes.status !== 200) {
-              alert('네트워크 오류로 파일 업로드에 실패했습니다. 다시 시도해주세요')
-              return
+              alert('네트워크 오류로 파일 업로드에 실패했습니다. 다시 시도해주세요');
+              return;
             }
-          })
+          });
         }
-        removeReservation(+params.id)
-        navigate('/mentee/request/finish')
+        removeReservation(+params.id);
+        navigate('/mentee/request/finish');
       } else {
-        alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요')
+        alert('네트워크 오류로 상담신청에 실패했습니다. 다시 시도해주세요');
       }
     } else {
-      alert('누락된 정보가 있습니다. 다시 시도해주세요')
-      navigate(`/mentee/request/${params.id}`)
+      alert('누락된 정보가 있습니다. 다시 시도해주세요');
+      navigate(`/mentee/mentor/${params.id}/request`);
     }
   }
 
@@ -170,16 +170,21 @@ function Request(props: { type: 'careerConsult' | 'prepare' }) {
       <Card
         title={
           startTime
-            ? <span>{getDateString(startTime, 'long')} <span style={{ color: consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink }}>{getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}</span></span>
+            ?
+            <Flex sx={{ flexWrap: 'wrap', columnGap: '8px' }}>
+              <span>{getDateString(startTime, 'long')}</span>
+              <span style={{ color: consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink }}>
+                {getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}
+              </span>
+            </Flex>
             :
             ''}
         titleBottom={
           <VerticalFlex>
             <EmptyHeight height='16px' />
-            <Flex>
+            <Flex sx={{ flexWrap: 'wrap', gap: '8px' }}>
               <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
               {isFilePreOpen === '희망' && <CategoryTag category={consultCategory} style={{ marginLeft: 8 }}><TextBody2>이력서 검토</TextBody2></CategoryTag>}
-              <EmptyWidth width='8px' />
               {consultContents && consultContents.map((value, index) => (
                 <Flex key={index}>
                   <TagLarge color={colorTextLight}
@@ -205,17 +210,17 @@ function Request(props: { type: 'careerConsult' | 'prepare' }) {
         <CustomTextArea
           defaultValue={requestText}
           onFocus={(event) => {
-            event.target.placeholder = ''
+            event.target.placeholder = '';
           }}
           onBlur={(event) => {
-            event.target.placeholder = '희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다.'
+            event.target.placeholder = '희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다.';
           }}
           onChange={(event) => {
-            const updatingData: { name: 'requestText', data: string }[] = [
+            const updatingData: { name: 'requestText', data: string; }[] = [
               { name: 'requestText', data: event.target.value },
-            ]
-            setRequestText(event.target.value)
-            updateReservation(+params.id!, updatingData)
+            ];
+            setRequestText(event.target.value);
+            updateReservation(+params.id!, updatingData);
           }}
           maxLength={maxLength}
           placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
@@ -235,14 +240,14 @@ function Request(props: { type: 'careerConsult' | 'prepare' }) {
           <EmptyHeight height='8px' />
           <Dropzone onDrop={(acceptedFiles: File[]) => {
             if (uploadingFiles.length + acceptedFiles.length > 2) {
-              alert('업로드 파일은 최대 2개입니다.')
-              return
+              alert('업로드 파일은 최대 2개입니다.');
+              return;
             }
-            const temp: File[] = []
+            const temp: File[] = [];
             acceptedFiles.forEach(file => {
-              temp.push(file)
-            })
-            setUploadingFiles([...uploadingFiles, ...temp])
+              temp.push(file);
+            });
+            setUploadingFiles([...uploadingFiles, ...temp]);
           }}>
             {({ getRootProps, getInputProps }) => (
               <section>
@@ -261,17 +266,17 @@ function Request(props: { type: 'careerConsult' | 'prepare' }) {
                 style={{ cursor: 'pointer' }}
                 color={colorCareerDivePink}
                 onClick={() => {
-                  const temp = JSON.parse(JSON.stringify(uploadingFiles))
-                  temp.splice(temp.indexOf(items), 1)
-                  setUploadingFiles(temp)
+                  const temp = JSON.parse(JSON.stringify(uploadingFiles));
+                  temp.splice(temp.indexOf(items), 1);
+                  setUploadingFiles(temp);
                 }}>삭제</TextBody2>
-            </Flex>
+            </Flex>;
           })}
         </VerticalFlex>}
 
         <ApplyButton
           onClick={() => {
-            onClickApplyButton()
+            onClickApplyButton();
           }
           }>
           <TextSubtitle1>
@@ -283,7 +288,7 @@ function Request(props: { type: 'careerConsult' | 'prepare' }) {
     </RequestCardWrapper >
 
 
-  </VerticalFlex >)
+  </VerticalFlex >);
 }
 
 export default Request;

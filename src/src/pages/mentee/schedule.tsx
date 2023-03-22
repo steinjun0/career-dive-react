@@ -6,8 +6,8 @@ import {
   Flex
 } from "util/styledComponent";
 
-import OnComingShedule from "component/consult/OnComingSchedule";
-import ConsultList from "organism/ConsultList";
+import OnComingShedule from "organism/consult/OnComingSchedule";
+import ConsultList from "organism/consult/ConsultList";
 import React, { useEffect, useState } from "react";
 import * as apiConsult from "apis/consult";
 import { IConsult, TConsultStatus } from "interfaces/consult";
@@ -52,7 +52,9 @@ function Schedule() {
                 consultList={consultList}
                 onCategoryChange={(newStatus: TConsultStatus) => {
                   setStatus(newStatus);
-                }}></ConsultList>
+                }}
+                type='mentee'
+              />
             </Grid>
           </Grid>
         </CardsWrapper>

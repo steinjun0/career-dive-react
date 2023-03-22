@@ -1,28 +1,19 @@
-import { Grid, styled } from "@mui/material";
+import { styled } from "@mui/material";
 
 import {
-  CenterWidthWrapper,
   GrayBackground,
   MaxWidthDiv,
   Flex,
   EmptyHeight,
 } from "util/styledComponent";
 
-import MentorProfile from 'component/mentor/Profile'
+import MentorProfile from 'organism/mentor/Profile'
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import API from "API.js";
-import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
+import MenteeCalendar from "component/calendar/MenteeCalendar";
 import { getParsedLocalStorage } from "util/ts/util";
 import SelectContent from "component/mentor/apply/SelectContent2";
-
-const MetorProfileBanner = styled(CenterWidthWrapper)`
-  height: 200px;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 16px;
-  width: calc(100% - 32px);
-`;
 
 const CardsWrapper = styled(Flex)({
   justifyContent: 'space-between',
@@ -70,20 +61,17 @@ function MentoringReservation() {
   return (
     <GrayBackground>
       <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
-        {mentorData &&
-          <MetorProfileBanner>
-            <MentorProfile
-              name={nickName}
-              description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
-              id={mentorData.UserID}
-              inService={mentorData.InService}
-            />
-          </MetorProfileBanner>
-        }
+        <MaxWidthDiv>
+          {mentorData && <MentorProfile
+            name={nickName}
+            description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+            inService={mentorData.InService}
+            id={mentorData.UserID} />}
+        </MaxWidthDiv>
       </Flex>
       <MaxWidthDiv style={{ alignItems: 'center' }}>
         <CardsWrapper >
-          {initialData !== undefined && <MenteeCalendar2
+          {initialData !== undefined && <MenteeCalendar
             userId={+params.id}
             startDate={initialData.startTime}
             consultingTime={initialData.consultingTime}

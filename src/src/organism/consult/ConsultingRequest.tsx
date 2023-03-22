@@ -24,7 +24,7 @@ import API from "API";
 import React from "react";
 import { IConsult } from "interfaces/consult";
 import { getKoreanTimeString } from "util/ts/util";
-import { ExpandingIconButton } from "component/ExpandingIconButton";
+import { ExpandingIconButton } from "component/button/ExpandingIconButton";
 
 const ScheduleCardWrapper = styled(Flex)`
   width: 100%;

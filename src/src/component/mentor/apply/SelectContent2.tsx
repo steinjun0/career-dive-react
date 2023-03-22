@@ -25,18 +25,18 @@ const SelectContentWrapper = styled(VerticalFlex)({
   boxSizing: 'border-box',
   maxWidth: '582px',
   width: '100%'
-})
+});
 
 
 const consultContents = {
   '커리어 상담': ['직무 이야기', '업계 이야기', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '진로 상담', '사내 문화', '면접 팁', '기타'],
   '전형 준비': ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드 리뷰']
-}
+};
 
 const consultCategoryConverter = {
   '커리어 상담': 'careerConsult',
   '전형 준비': 'prepare'
-}
+};
 
 const priceTable: { [key in '20-커리어 상담-비희망' | '40-커리어 상담-비희망' | '20-커리어 상담-희망' | '40-커리어 상담-희망' | '20-전형 준비-희망' | '40-전형 준비-희망' | '20-전형 준비-비희망' | '40-전형 준비-비희망']: [number, number] } = {
   '20-커리어 상담-비희망': [13900, 9000],
@@ -47,10 +47,10 @@ const priceTable: { [key in '20-커리어 상담-비희망' | '40-커리어 상�
   '40-전형 준비-희망': [53900, 35000],
   '20-전형 준비-비희망': [0, 0],
   '40-전형 준비-비희망': [0, 0],
-}
+};
 
-function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Type: string, Name: string }[] }) {
-  const contentGuideObject: { [key: string]: string } = {
+function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Type: string, Name: string; }[]; }) {
+  const contentGuideObject: { [key: string]: string; } = {
     '면접 대비': `${localStorage.getItem('Nickname')}의 경력, 스펙 그리고 자소서를 토대로 한 예상 면접 질문을 제공해요.`,
     '자소서 구성': `${localStorage.getItem('Nickname')}님의 경력과 스펙을 토대로 자기소개서 구성을 도와줘요.`,
     '자소서 첨삭': `${localStorage.getItem('Nickname')}님이 작성한 초안을 토대로 흐름, 내용 그리고 문장력 등에 관한 피드백을 제공해요.`,
@@ -58,40 +58,40 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
     '이력서 첨삭': `${localStorage.getItem('Nickname')}님의 구성, 내용 그리고 단어 표현 등에 관한 구체적인 조언을 제공해요.`,
     'CV/CL 첨삭': `${localStorage.getItem('Nickname')}님의 CV/CL에 대한 구성, 내용 그리고 단어 표현 등에 관한 구체적인 조언을 제공해요.`,
     '코드 리뷰': `멘토가 작성된 코드를 토대로 피드백을 제공해요.`
-  }
-  const navigater = useNavigate()
-  const params = useParams()
+  };
+  const navigater = useNavigate();
+  const params = useParams();
 
-  const [consultingTime, setConsultingTime] = useState<20 | 40>()
-  const [consultCategory, setConsultCategory] = useState<'커리어 상담' | '전형 준비'>('커리어 상담')
-  const [consultContent, setConsultContent] = useState<string[] | string>([])
-  const [mentoringDate, setMentoringDate] = useState<Date>()
-  const [isFilePreOpen, setIsFilePreOpen] = useState<'희망' | '비희망'>()
+  const [consultingTime, setConsultingTime] = useState<20 | 40>();
+  const [consultCategory, setConsultCategory] = useState<'커리어 상담' | '전형 준비'>('커리어 상담');
+  const [consultContent, setConsultContent] = useState<string[] | string>([]);
+  const [mentoringDate, setMentoringDate] = useState<Date>();
+  const [isFilePreOpen, setIsFilePreOpen] = useState<'희망' | '비희망'>();
 
   const [contentGuide, setContentGuide] = useState<string>('');
 
   useEffect(() => {
-    const reservations = getParsedLocalStorage('reservations')
+    const reservations = getParsedLocalStorage('reservations');
     if (reservations !== null) {
-      const reservation = reservations[+params.id!]
+      const reservation = reservations[+params.id!];
       if (reservation !== undefined) {
-        reservation['consultingTime'] && setConsultingTime(reservation['consultingTime'])
-        reservation['consultCategory'] && setConsultCategory(reservation['consultCategory'])
-        reservation['consultContent'] && setConsultContent(reservation['consultContent'])
-        reservation['startTime'] && setMentoringDate(new Date(reservation['startTime']))
-        reservation['isFilePreOpen'] && setIsFilePreOpen(reservation['isFilePreOpen'])
+        reservation['consultingTime'] && setConsultingTime(reservation['consultingTime']);
+        reservation['consultCategory'] && setConsultCategory(reservation['consultCategory']);
+        reservation['consultContent'] && setConsultContent(reservation['consultContent']);
+        reservation['startTime'] && setMentoringDate(new Date(reservation['startTime']));
+        reservation['isFilePreOpen'] && setIsFilePreOpen(reservation['isFilePreOpen']);
       }
     }
     const element = document.getElementById("category");
     element && element.scrollIntoView({ behavior: 'smooth' });
-  }, [])
+  }, []);
 
 
   const addConsultContent = (contents: string[]) => {
     if (contents.length <= (consultCategory === '커리어 상담' ? 3 : 1)) {
-      setConsultContent(contents)
+      setConsultContent(contents);
     }
-  }
+  };
 
 
   return (
@@ -118,11 +118,11 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
             selectedColor={consultCategory === '전형 준비' ? colorCareerDivePink : null}
             backgroundColor={consultCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event: Event, value: '커리어 상담' | '전형 준비') => {
-              setConsultCategory(value)
+              setConsultCategory(value);
               if (value === '전형 준비') {
-                setIsFilePreOpen('희망')
+                setIsFilePreOpen('희망');
               }
-              setConsultContent([])
+              setConsultContent([]);
             }}></CustomToggleButtonGroup>
         </Flex>
         <EmptyHeight height='16px'></EmptyHeight>
@@ -141,9 +141,9 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
             valueArray={mentorConsultContents ? [
               ...mentorConsultContents.filter((e) => {
                 if (consultCategory === '커리어 상담') {
-                  return e.Type === '커리어 상담'
+                  return e.Type === '커리어 상담';
                 } else if (consultCategory === '전형 준비') {
-                  return e.Type === '전형 준비'
+                  return e.Type === '전형 준비';
                 }
               }).map((e) => e.Name)
             ] : []}
@@ -151,18 +151,18 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
             backgroundColor={consultCategory === '전형 준비' ? colorBackgroundCareerDivePink : null}
             onChange={(event: Event, value: string[] | string) => {
               if (consultCategory === '커리어 상담') {
-                addConsultContent(value as string[])
+                addConsultContent(value as string[]);
               }
               else if (consultCategory === '전형 준비') {
                 if (value.length === 2) {
-                  (value as string[]).splice(value.indexOf(consultContent[0]), 1)
+                  (value as string[]).splice(value.indexOf(consultContent[0]), 1);
                 }
                 if (value.length === 0) {
-                  setContentGuide('')
+                  setContentGuide('');
                 }
-                setConsultContent(value as string)
+                setConsultContent(value as string);
                 if ((value as string) in contentGuideObject) {
-                  setContentGuide(contentGuideObject[value as string])
+                  setContentGuide(contentGuideObject[value as string]);
                 }
               }
 
@@ -229,15 +229,15 @@ function SelectContent({ mentorConsultContents }: { mentorConsultContents: { Typ
               { name: 'consultContent', data: consultContent },
               { name: 'consultCategory', data: consultCategory },
               { name: 'isFilePreOpen', data: isFilePreOpen },
-            ]
+            ];
             if (consultContent.length === 0) {
-              alert('상담 내용을 선택하세요')
+              alert('상담 내용을 선택하세요');
             }
             else if (consultCategory === null) {
-              alert('상담 유형을 선택하세요')
+              alert('상담 유형을 선택하세요');
             } else {
-              updateReservation(params.id, updatingData)
-              navigater(`/mentee/request/form/${consultCategoryConverter[consultCategory]}/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
+              updateReservation(params.id, updatingData);
+              navigater(`/mentee/request/${params.id}/form/${consultCategoryConverter[consultCategory]}`); // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
             }
           }}
         >

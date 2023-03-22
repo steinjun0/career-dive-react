@@ -93,14 +93,13 @@ function Login() {
                 width: '100%',
                 height: 'calc(100vh - 80px - 32px)',
                 alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box',
-                [theme.breakpoints.down('sm')]: { alignItems: 'start' }
             }}
         >
             <VerticalFlex sx={{
                 width: '100%',
                 minWidth: '284px',
                 maxWidth: '378px',
-                [theme.breakpoints.down('sm')]: { justifyContent: 'space-between', height: '100%', margin: '16px' }
+                [theme.breakpoints.down('sm')]: { margin: '16px' }
             }}>
                 <VerticalFlex>
                     <TextHeading6>

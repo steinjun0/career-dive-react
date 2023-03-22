@@ -233,7 +233,7 @@ function Introduction({ mentorConsultContents }) {
               alert('상담 유형을 선택하세요')
             } else {
               updateReservation(params.id, updatingData)
-              navigater(`/mentee/request/form/${consultCategoryConverter[consultCategory]}/${params.id}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
+              navigater(`/mentee/request/${params.id}/form/${consultCategoryConverter[consultCategory]}`) // TODO: type변수 설정해야함, [generalType1,generalType2,premium]
             }
           }}
         >

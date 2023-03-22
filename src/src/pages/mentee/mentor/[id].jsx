@@ -7,24 +7,16 @@ import {
   Flex
 } from "util/styledComponent";
 
-import MentorProfile from 'component/mentor/Profile'
+import MentorProfile from 'organism/mentor/Profile'
 import HelpCategory from "component/mentor/HelpCategory";
 import Introduction from "component/mentor/Introduction";
 
 import React, { useEffect, useState } from "react";
 import API from 'API';
 import { useNavigate, useParams } from "react-router-dom";
-import MenteeCalendar2 from "component/calendar/MenteeCalendar2";
-import { CustomButton } from "util/Custom/CustomButton";
-import FavoriteButton from "component/mentor/FavoriteButton";
+import MenteeCalendar from "component/calendar/MenteeCalendar";
 import { getParsedLocalStorage } from "util/ts/util";
 
-
-const MetorProfileBanner = styled(CenterWidthWrapper)`
-  height: 200px;
-  flex-direction: row;
-  align-items: center;
-`;
 
 const CardsWrapper = styled(Flex)`
   justify-content: space-between;
@@ -61,13 +53,13 @@ function Mentor() {
   return (
     <GrayBackground>
       <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
-        <MetorProfileBanner>
+        <MaxWidthDiv>
           {mentorData && <MentorProfile
             name={nickName}
             description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
             inService={mentorData.InService}
             id={mentorData.UserID} />}
-        </MetorProfileBanner>
+        </MaxWidthDiv>
       </Flex>
       <MaxWidthDiv>
         <CardsWrapper>
@@ -93,7 +85,7 @@ function Mentor() {
             </Grid>
             <Grid item xs={12} md={6}>
 
-              <MenteeCalendar2
+              <MenteeCalendar
                 userId={+params.id}
                 consultingTime={
                   (getParsedLocalStorage('reservations') ?? null) &&
@@ -111,34 +103,6 @@ function Mentor() {
           </Grid>
         </CardsWrapper>
       </MaxWidthDiv>
-
-      {
-        isDownMd &&
-        <Flex
-          style={{
-            position: 'fixed',
-            zIndex: 10,
-            bottom: 0,
-            padding: '8px 16px',
-            heihgt: '84px',
-            backgroundColor: 'white',
-            width: '100vw',
-            filter: 'drop-shadow(0px -20px 40px rgba(130, 130, 130, 0.1))'
-          }}
-        >
-          <FavoriteButton
-            menteeId={+localStorage.getItem('UserID')}
-            mentorId={+params.id}
-          />
-          <CustomButton
-            style={{ width: '100%', marginLeft: '8px', marginRight: '32px' }}
-            onClick={() => { navigater(`/mentee/request/${+params.id}`) }}
-          >
-            상담 신청
-          </CustomButton>
-        </Flex>
-      }
-
     </GrayBackground >
   );
 }

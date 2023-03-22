@@ -21,7 +21,7 @@ import { getDateString, getKoreanTimeString } from "util/util";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { IConsult } from "interfaces/consult";
-import { ExpandingIconButton } from "component/ExpandingIconButton";
+import { ExpandingIconButton } from "component/button/ExpandingIconButton";
 import { onEnterSession } from "services/consult";
 
 const ScheduleCardWrapper = styled(Flex)`
@@ -78,24 +78,16 @@ function OnComingShedule({ consultList }: { consultList: IConsult[]; }) {
             .map((consult, index) => {
               return (
                 <ScheduleWrapper key={index} style={{ marginTop: '20px' }}>
-
                   <ScheduleDateAndTime>
                     <TextBody2>{getDateString(consult.date)}</TextBody2>
                     <TextSubtitle1>
                       {getKoreanTimeString(consult.startTime)}
-                      {/* {+consult.StartTime.slice(0, consult.StartTime.indexOf(':')) <= 12
-                        ?
-                        `${getAMOrPM(consult.StartTime)} ${getMinuteString(new Date('2023-01-01 ' + consult.StartTime))}`
-                        :
-                        `${getAMOrPM(consult.StartTime)} ${getMinuteString(addMinute(new Date('2023-01-01 ' + consult.StartTime), -720))}`} */}
                     </TextSubtitle1>
                   </ScheduleDateAndTime>
 
                   <ProfileWrapper>
                     <ProfileImg src={testImage}></ProfileImg>
                     <Flex>
-                      {consult.company !== '' && <TextSubtitle2>{`${consult.company} · `}</TextSubtitle2>}
-                      {consult.job !== '' && <TextSubtitle2>{`${consult.job} · `}</TextSubtitle2>}
                       <TextBody2>{consult.nickname}</TextBody2>
                     </Flex>
                   </ProfileWrapper>
@@ -134,8 +126,8 @@ function OnComingShedule({ consultList }: { consultList: IConsult[]; }) {
                       }}
                     />
                   </Buttons>
-
-                </ScheduleWrapper>);
+                </ScheduleWrapper>
+              );
             })}
 
       </Card>

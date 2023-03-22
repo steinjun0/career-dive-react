@@ -54,17 +54,19 @@ export function Card(props) {
   return (
     <CardWrapper style={props.style} max_width={props.max_width} min_width={props.min_width}>
       <TitleWrapper no_divider={props.no_divider}>
-        <RowAlignCenterFlex>
-          <TextHeading6>{props.title}</TextHeading6>
-          <TitleHead>
-            {props.titleHead}
-          </TitleHead>
+        <RowAlignCenterFlex sx={{ flexWrap: 'wrap', justifyContent: 'space-between' }}>
+          <Flex>
+            <TextHeading6>{props.title}</TextHeading6>
+            <TitleHead>
+              {props.titleHead}
+            </TitleHead>
+          </Flex>
           {
             !isDownMd
             &&
-            <TitleTail>
+            <Flex>
               {props.titleTail}
-            </TitleTail>
+            </Flex>
           }
         </RowAlignCenterFlex>
         <Flex>

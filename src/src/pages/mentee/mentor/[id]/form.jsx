@@ -1,36 +1,19 @@
-import { Grid, styled } from "@mui/material";
+import { Grid } from "@mui/material";
 
 import {
   CenterWidthWrapper,
   GrayBackground,
-  Flex
+  Flex,
+  MaxWidthDiv
 } from "util/styledComponent";
 
-import MentorProfile from 'component/mentor/Profile'
+import MentorProfile from 'organism/mentor/Profile'
 import Request from "component/mentor/apply/Request";
-import RequestBasic from "component/mentor/apply/RequestBasic";
-import RequestPremium from "component/mentor/apply/RequestPremium";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "API.js";
 
-const MetorProfileBanner = styled(CenterWidthWrapper)`
-  height: 200px;
-  flex-direction: row;
-  align-items: center;
-  background-color: white;
-  width: '100%';
-`;
-
-const CardsWrapper = styled(Flex)`
-  justify-content: space-between;
-  margin-top: 30px;
-  margin-bottom: 158px;
-  width: 582px;
-`;
-
-
-function MentoringReservation() {
+function MentoringForm() {
   const params = useParams()
   const [mentorData, setMentorData] = useState()
   useEffect(() => {
@@ -44,29 +27,28 @@ function MentoringReservation() {
   return (
     <GrayBackground sx={{ overflow: 'visible' }}>
       <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
-        <MetorProfileBanner>
+        <MaxWidthDiv>
           {mentorData && <MentorProfile
             name={mentorData.Nickname}
             description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
-            id={mentorData.UserID}
             inService={mentorData.InService}
-          />}
-        </MetorProfileBanner>
+            id={mentorData.UserID} />}
+        </MaxWidthDiv>
       </Flex>
-      <CenterWidthWrapper>
-        <Grid container spacing={'30px'} marginTop={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <CenterWidthWrapper sx={{ marginBottom: '158px' }}>
+        <MaxWidthDiv>
+          <Grid container spacing={'30px'} marginTop={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
-            <Request type={params.type} />
-            {/* {params.type === 'careerConsult' && <RequestBasic />}
+              <Request type={params.type} />
+              {/* {params.type === 'careerConsult' && <RequestBasic />}
                 {params.type === 'prepare' && <RequestPremium />} */}
+            </Grid>
           </Grid>
-        </Grid>
-        <CardsWrapper>
-        </CardsWrapper>
+        </MaxWidthDiv>
       </CenterWidthWrapper>
     </GrayBackground>
   );
 }
 
-export default MentoringReservation;
+export default MentoringForm;
