@@ -3,7 +3,8 @@ import { Grid, styled } from "@mui/material";
 import {
   CenterWidthWrapper,
   GrayBackground,
-  Flex
+  Flex,
+  MaxWidthDiv
 } from "util/styledComponent";
 
 import MentorProfile from 'organism/mentor/Profile'
@@ -42,14 +43,13 @@ function MentoringReservation() {
   return (
     <GrayBackground sx={{ overflow: 'visible' }}>
       <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
-        <MetorProfileBanner>
+        <MaxWidthDiv>
           {mentorData && <MentorProfile
             name={mentorData.Nickname}
             description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
-            id={mentorData.UserID}
             inService={mentorData.InService}
-          />}
-        </MetorProfileBanner>
+            id={mentorData.UserID} />}
+        </MaxWidthDiv>
       </Flex>
       <CenterWidthWrapper>
         <Grid container spacing={'30px'} marginTop={0}>

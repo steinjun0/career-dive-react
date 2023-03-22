@@ -61,13 +61,13 @@ function Mentor() {
   return (
     <GrayBackground>
       <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
-        <MetorProfileBanner>
+        <MaxWidthDiv>
           {mentorData && <MentorProfile
             name={nickName}
             description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
             inService={mentorData.InService}
             id={mentorData.UserID} />}
-        </MetorProfileBanner>
+        </MaxWidthDiv>
       </Flex>
       <MaxWidthDiv>
         <CardsWrapper>

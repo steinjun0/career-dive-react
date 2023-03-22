@@ -75,7 +75,12 @@ function MentorProfile({ name = '', description = '', inService = true, id = -1 
     const navigater = useNavigate();
     const location = useLocation();
     return (
-        <Flex sx={{ height: '200px', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+        <Flex sx={{
+            height: '200px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+        }}>
             <Flex sx={{ alignItems: 'center', gap: '30px' }}>
                 <CircleImg sx={{ width: '120px', height: '120px' }} src={testMentorImage} alt="profile-image" />
                 <VerticalFlex>

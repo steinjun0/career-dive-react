@@ -70,16 +70,13 @@ function MentoringReservation() {
   return (
     <GrayBackground>
       <Flex sx={{ minWidth: '100vw', backgroundColor: 'white', justifyContent: 'center' }}>
-        {mentorData &&
-          <MetorProfileBanner>
-            <MentorProfile
-              name={nickName}
-              description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
-              id={mentorData.UserID}
-              inService={mentorData.InService}
-            />
-          </MetorProfileBanner>
-        }
+        <MaxWidthDiv>
+          {mentorData && <MentorProfile
+            name={nickName}
+            description={`${mentorData.CompName} ${mentorData.DivisIsPub ? `| ${mentorData.DivisInComp}` : ''} | ${mentorData.JobInComp}`}
+            inService={mentorData.InService}
+            id={mentorData.UserID} />}
+        </MaxWidthDiv>
       </Flex>
       <MaxWidthDiv style={{ alignItems: 'center' }}>
         <CardsWrapper >
