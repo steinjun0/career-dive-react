@@ -27,7 +27,7 @@ import MentorCalendar from "pages/mentor/Calendar";
 import MentorRegister from "pages/mentor/register";
 import MentorMyPage from "./pages/mentor/myPage";
 
-import MentoringRequestFinish from 'pages/request/MentoringRequestFinish';
+import MentoringRequestFinish from 'pages/mentee/mentor/[id]/request/finish';
 import Search from 'pages/search';
 import Review from "pages/review/id";
 import Signup from 'pages/signup/Signup';

@@ -1,7 +1,5 @@
 import {
-  TextBody2,
   EmptyHeight,
-  TextHeading6,
   VerticalFlex,
   RowAlignCenterFlex,
   TextHeading4,
@@ -35,10 +33,7 @@ function MentoringRequestFinish() {
       </CustomButton>
       <EmptyHeight height='30px' />
     </VerticalFlex>
-
-
   </VerticalFlex>
-
 }
 
 export default MentoringRequestFinish;
