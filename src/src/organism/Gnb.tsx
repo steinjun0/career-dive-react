@@ -277,7 +277,7 @@ function MobileMenuList({ items, url, setIsOpenMobileMenu }: { items: { name: st
               }}>
               <TextHeading6
                 sx={{
-                  color: item.link === url ? colorTextTitle : colorTextDisabled
+                  color: item.link === url ? colorCareerDiveBlue : colorTextTitle,
                 }}
               >
                 {item.name}
@@ -329,7 +329,10 @@ function MobileGnb() {
     justifyContent: 'space-between', alignItems: 'center',
     padding: '0 16px'
   }}>
-    <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '18px' }} />
+    <LinkNoDeco to={isMentorMode ? '/mentor' : '/'}>
+      <img src={isMentorMode ? logoMentor : logoMentee} alt="커리어다이브" style={{ height: '18px' }} />
+    </LinkNoDeco>
+
     {
       isLogin ?
         <IconButton onClick={() => setIsOpenMobileMenu((prev) => !prev)}>
@@ -379,7 +382,6 @@ function MobileGnb() {
               <MobileMenu
                 items={
                   [
-                    { name: '홈', link: '/' },
                     { name: '내 상담', link: '/mentee/schedule' },
                     { name: '찜한 멘토', link: '' },
                     { name: '상담 후기', link: '' }
