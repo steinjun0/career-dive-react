@@ -29,8 +29,8 @@ const mentorProfileMenuItems: IProfileMenu = {
   mainItems:
     [
       { name: '멘토 프로필', link: 'mentor/mypage/profile' },
-      { name: '계정', link: '', },
-      { name: '대금 수령', link: '', },
+      { name: '계정', link: '', onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => { e.preventDefault(); alert('기능 준비중입니다!'); } },
+      { name: '대금 수령', link: '', onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => { e.preventDefault(); alert('기능 준비중입니다!'); } },
     ],
   subItems:
     [
@@ -374,11 +374,9 @@ function MobileProfileMenu({ items, url, onClick }: { items: IProfileMenu, url: 
               key={index}
               to={item.link}
               onClick={(e) => {
-                if (item.onClick) {
-                  item.onClick(e);
-                  onClick();
-                }
-                else if (item.link === '') { e.preventDefault(); alert('기능 준비중입니다!'); }
+                // TODO: 여기서 link로 판단하지 말아야함
+                if (item.link === '') { e.preventDefault(); alert('기능 준비중입니다!'); }
+                else { onClick(); }
               }}>
               <TextSubtitle2
                 sx={{
