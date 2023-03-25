@@ -18,8 +18,8 @@ interface IGetAccountMentorAPI {
     data: IMentor[];
 }
 
-export async function getAccountMentorList(): Promise<AxiosResponse & IGetAccountMentorAPI> {
-    const mentorListRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/list?PageSize=1000`);
+export async function getAccountMentorList({ pageSize = 1000, pageNum = 1 }: { pageSize?: number, pageNum?: number; }): Promise<AxiosResponse & IGetAccountMentorAPI> {
+    const mentorListRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/list?PageSize=${pageSize}&PageNum=${pageNum}`);
     return mentorListRes;
 }
 
