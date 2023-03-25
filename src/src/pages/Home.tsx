@@ -13,7 +13,7 @@ function Home() {
 
   useEffect(() => {
     let isCancel = false;
-    accountAPI.getAccountMentorList().then((res) => {
+    accountAPI.getAccountMentorList({ pageSize: 4, pageNum: Math.ceil(3 * (Math.random() + 1e-9)) }).then((res) => {
       if (!isCancel) {
         const mentors = res.data.Results.map((e: IMentorAPI): IMentor => {
           return {
