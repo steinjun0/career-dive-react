@@ -34,6 +34,7 @@ const ProfileImg = styled(CircleImg)`
   width: 120px;
   height: 120px;
   margin: 20px 0;
+  object-fit: contain;
 `;
 
 function Session() {
@@ -341,8 +342,8 @@ function Session() {
           </div>
         </ReflexElement>
         <ReflexSplitter style={{ margin: 'auto 0' }} />
-        <ReflexElement className="right-pane" maxSize={isScreenShowing ? undefined : 350}>
-          <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, height: isScreenShowing ? '100%' : 0, justifyContent: 'center' }}>
+        <ReflexElement className="right-pane" maxSize={isScreenShowing ? undefined : 350} minSize={350}>
+          <VerticalFlex style={{ width: 'calc(100% - 24px)', paddingLeft: 24, height: isScreenShowing ? '100%' : 0, justifyContent: 'center' }}>
             <Flex style={{ height: (isScreenShowing && isLocalScreenShowing) ? undefined : 0 }}>
               <video id="local_video_element_id" autoPlay muted width={'100%'} />
             </Flex>
@@ -353,18 +354,22 @@ function Session() {
           </VerticalFlex>
 
           {!isScreenShowing && !isLocalScreenShowing && !isRemoteScreenShowing &&
-            <VerticalFlex style={{ width: 'calc(100% - 96px)', paddingLeft: 24, paddingTop: 12, height: '90%', justifyContent: 'space-between' }}>
+            <VerticalFlex style={{ width: 'calc(100% - 24px)', paddingLeft: 24, paddingTop: 12, height: '90%', justifyContent: 'space-between' }}>
               {isMenteeInRef.current && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginBottom: '15px' }}>
                 <ColumnAlignCenterFlex >
                   <ProfileImg src={testMentorImage} alt="profile-image" />
-                  <TextSubtitle1>{menteeData && menteeData.User && menteeData.User.Nickname}</TextSubtitle1>
+                  <TextSubtitle1>{menteeData?.User?.Nickname}</TextSubtitle1>
                 </ColumnAlignCenterFlex>
               </Card>}
               {isMentorInRef.current && <Card no_divider={'true'} style={{ height: '50%', justifyContent: 'center', marginTop: '15px' }}>
                 <ColumnAlignCenterFlex>
                   <ProfileImg src={testMentorImage} alt="profile-image" />
-                  <TextSubtitle1>{mentorData && mentorData.Nickname}</TextSubtitle1>
-                  <TextBody1>{mentorData && mentorData.CompName} · {mentorData && mentorData.DivisIsPub && `${mentorData.DivisInComp} · `}{mentorData && mentorData.JobInComp}</TextBody1>
+                  <TextSubtitle1>{mentorData?.Nickname}</TextSubtitle1>
+                  <Flex sx={{ flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <TextBody1 sx={{ wordBreak: 'keep-all', whiteSpace: 'nowrap' }}>{mentorData?.CompName} · </TextBody1>
+                    <TextBody1 sx={{ wordBreak: 'keep-all', whiteSpace: 'nowrap' }}>{mentorData?.DivisInComp} · </TextBody1>
+                    <TextBody1 sx={{ wordBreak: 'keep-all', whiteSpace: 'nowrap' }}>{mentorData?.JobInComp}</TextBody1>
+                  </Flex>
                 </ColumnAlignCenterFlex>
               </Card>}
             </VerticalFlex>}
