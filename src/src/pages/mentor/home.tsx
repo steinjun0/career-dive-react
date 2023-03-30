@@ -9,9 +9,9 @@ import {
   colorCareerDivePink
 } from "util/styledComponent";
 
-import OnComingShedule from "organism/consult/OnComingSchedule";
-import ConsultList from "organism/consult/ConsultList";
-import ConsultingRequest from "organism/consult/ConsultingRequest";
+import OnComingShedule from "organisms/consult/OnComingSchedule";
+import ConsultList from "organisms/consult/ConsultList";
+import ConsultingRequest from "organisms/consult/ConsultingRequest";
 import React, { useEffect, useState } from "react";
 import GuideLineMentorBook from "assets/img/home/GuidelineMentorBook.svg";
 import { IConsult, TConsultStatus } from "interfaces/consult";

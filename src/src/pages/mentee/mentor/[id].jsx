@@ -7,7 +7,7 @@ import {
   Flex
 } from "util/styledComponent";
 
-import MentorProfile from 'organism/mentor/Profile'
+import MentorProfile from 'organisms/mentor/Profile'
 import HelpCategory from "component/mentor/HelpCategory";
 import Introduction from "component/mentor/Introduction";
 

@@ -1,6 +1,6 @@
-import HomeBanner from "organism/home/HomeBanner";
-import FamousMentorGroup from "organism/home/FamousMentorGroup";
-import BottomEventGroup from "organism/home/EventGroup";
+import HomeBanner from "organisms/home/HomeBanner";
+import FamousMentorGroup from "organisms/home/FamousMentorGroup";
+import BottomEventGroup from "organisms/home/EventGroup";
 import * as accountAPI from "apis/account";
 import { IMentorAPI } from "apis/account";
 

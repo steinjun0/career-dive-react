@@ -7,7 +7,7 @@ import {
   MaxWidthDiv
 } from "util/styledComponent";
 
-import MentorProfile from 'organism/mentor/Profile'
+import MentorProfile from 'organisms/mentor/Profile'
 import Request from "component/mentor/apply/Request";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
