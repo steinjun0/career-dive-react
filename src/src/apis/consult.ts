@@ -23,7 +23,14 @@ interface IGetConsultMenteeAPI {
 }
 
 export async function getConsultMenteeList(id: Number, status: TConsultStatus | ''): Promise<IGetConsultMenteeAPI> {
+    // get mentee list by mentee id
     const accountRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/consult/mentee/${id}/list?status=${status}`);
+    return accountRes;
+}
+
+export async function getConsultMentorList(id: Number, status: TConsultStatus | ''): Promise<IGetConsultMenteeAPI> {
+    // get mentee list by mentor id
+    const accountRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/consult/mentor/${id}/list?status=${status}`);
     return accountRes;
 }
 

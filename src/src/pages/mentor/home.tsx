@@ -30,7 +30,7 @@ function MentorHome() {
 
   useEffect(() => {
     if (localStorage.getItem('UserID') !== null) {
-      apiConsult.getConsultMenteeList(+localStorage.getItem('UserID')!, '')
+      apiConsult.getConsultMentorList(+localStorage.getItem('UserID')!, '')
         .then((res) => {
           const parsedConsultList: IConsult[] = res.data.map((apiRes) => {
             return apiConsult.convertIConsultAPI2IConsult(apiRes);
