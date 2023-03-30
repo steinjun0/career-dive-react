@@ -272,7 +272,7 @@ function Session() {
         );
         // 3. wait for receive a call listener can get Signal
         // 4. make a call
-        const makeACall = () => {
+        function makeACall() {
           if (callRef.current === null && !isQuitPageRef.current) {
             // there isn't a ringing
             console.log("there isn't a ringing", calleeIdRef.current);
@@ -298,9 +298,11 @@ function Session() {
                   setIsMicOn(false);
                 },
                 onEnded: () => {
-                  console.log('onEnd from onMakeACall');
                   callRef.current = null;
-                  makeACall();
+                  // makeACall();
+                  if (call === null) {
+                    makeACall();
+                  }
                   if (isMentorMode) {
                     isMenteeInRef.current = false;
                   }
@@ -318,6 +320,9 @@ function Session() {
       };
       createCall();
     }
+    return () => {
+      callRef.current && API.Sendbird.stopCalling(callRef.current);
+    };
   }, [isReadyToCall]);
 
 
