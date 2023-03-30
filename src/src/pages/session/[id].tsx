@@ -125,7 +125,6 @@ function Session() {
           API.postCallDone(callRef.current._callId).then(() => {
             intervalIdRef.current && clearInterval(intervalIdRef.current);
             if (callRef.current !== null) API.Sendbird.stopCalling(callRef.current);
-            alert('상담 종료시간이 지났습니다.');
             if (isMentorMode) {
               navigater(`/mentor`);
             } else {
@@ -134,7 +133,6 @@ function Session() {
           });
         } else {
           intervalIdRef.current && clearInterval(intervalIdRef.current);
-          alert('상담 종료시간이 지났습니다.');
           if (isMentorMode) {
             navigater(`/mentor`);
           } else {
