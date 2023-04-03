@@ -1,7 +1,7 @@
 # CareerDive
 <p align="center">
   <img src="src/src/assets/img/logo/careerDiveLogoBeta.svg" 
-  style="background-color:white;padding:32px;width:100%; max-width:300px;"/>
+  style="background-color:white;padding:32px;width:400px;"/>
 </p>
 
 # About
