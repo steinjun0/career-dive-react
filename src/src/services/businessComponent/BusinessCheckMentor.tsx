@@ -7,12 +7,12 @@ export default function BusinessCheckMentor() {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
-        if (JSON.parse(localStorage.getItem('IsMentor')!)) {
+        console.log(location.pathname.slice(0, 9));
+        if (JSON.parse(localStorage.getItem('IsMentor')!) && location.pathname.slice(0, 8) !== '/session') {
             updateAccountData('isMentorMode', true);
             localStorage.setItem('IsMentorMode', 'true');
             navigate('/mentor');
-        }
-        if (location.pathname.slice(0, 7) === '/mentor' && !location.pathname.includes('/mentor/register')) {
+        } else if (location.pathname.slice(0, 7) === '/mentor' && !location.pathname.includes('/mentor/register')) {
             if (!JSON.parse(localStorage.getItem('IsMentor')!)) {
                 updateAccountData('isMentorMode', false);
                 alert('멘토 등록을 진행해주세요');

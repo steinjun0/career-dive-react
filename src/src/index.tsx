@@ -12,8 +12,8 @@ import MentoringReservation from './pages/mentee/mentor/[id]/request';
 import MentoringForm from './pages/mentee/mentor/[id]/form';
 import MentoringApplyViewer from './pages/mentee/schedule/MentoringApplyViewer';
 
-import Gnb from "./organism/Gnb";
-import Footer from "./organism/Footer";
+import Gnb from "./organisms/Gnb";
+import Footer from "./organisms/Footer";
 import SessionList from "./pages/mentee/schedule";
 import MyPage from "./pages/mentee/myPage";
 import MentorHome from './pages/mentor/home';

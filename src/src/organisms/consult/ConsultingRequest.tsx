@@ -113,7 +113,7 @@ function ConsultingRequest({ reservationList }: { reservationList: IConsult[]; }
 
                     <ExpandingIconButton
                       Icon={CircleAccept}
-                      text={"상담 거절"}
+                      text={"상담 수락"}
                       color={colorSuccess}
                       textColor={'white'}
                       hoverColor={colorSuccess}

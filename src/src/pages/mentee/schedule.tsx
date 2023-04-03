@@ -6,8 +6,8 @@ import {
   Flex
 } from "util/styledComponent";
 
-import OnComingShedule from "organism/consult/OnComingSchedule";
-import ConsultList from "organism/consult/ConsultList";
+import OnComingShedule from "organisms/consult/OnComingSchedule";
+import ConsultList from "organisms/consult/ConsultList";
 import React, { useEffect, useState } from "react";
 import * as apiConsult from "apis/consult";
 import { IConsult, TConsultStatus } from "interfaces/consult";
