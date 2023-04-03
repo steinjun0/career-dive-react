@@ -4,6 +4,7 @@
   style="background-color:white;padding:32px;width:100%; max-width:300px;"/>
 </p>
 
+# About
 CareerDive is a service that connects current employees and job seekers through online voice and screen-sharing chats.  
 This repository is for CareerDive Frontend with React. Still in working.
 
@@ -32,7 +33,7 @@ Currently in the process of transitioning from JavaScript to TypeScript and maki
   커리어다이브는 커리어 정보 교환을 목적으로 만들어진 서비스예요. 취업 정보 수집에 어려움을 겪는 취업준비생들을 위해 개발되었어요. 재직을 희망하는 회사와 직무에 재직 중인 현직자와 만나, 궁금했던 점을 해소하거나 자소서와 포트폴리오 등을 첨삭 받을 수 있어요. 
 
   **평소 만나고 싶던 현직자를 만나, 어디서도 들을 수 없던 커리어 정보를 물어보세요!**
-<br/><br/>
+<br/>
 
 ## 서비스 종류
 
@@ -45,7 +46,7 @@ Currently in the process of transitioning from JavaScript to TypeScript and maki
 💡 이력서 사전 검토 ‘희망’을 선택하면, 멘토가 상담 전 멘티의 경력과 경험을 살펴 더욱 풍부하고 개인화된 이야기를 제공 받을 수 있어요.😉
 
 
-<br/><br/>
+<br/>
 
 ### **전형 준비**
 
