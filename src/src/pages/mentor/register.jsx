@@ -273,7 +273,7 @@ function MentorInfo({ signUpStep, setSignUpStep, mentorInfoState }) {
             <EmptyHeight height='30px' />
 
             <TextSubtitle2>
-                부서·팀
+                부서 or 팀
             </TextSubtitle2>
             <EmptyHeight height='4px' />
             <TextCaption>

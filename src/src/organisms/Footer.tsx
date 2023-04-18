@@ -35,7 +35,7 @@ const SpeechBubbleIcon = styled('img')({
   marginRight: '6px',
 });
 
-const footerDisableUrl = ['/login', '/signup', '/mentor/register', '/session', '/review'];
+const footerDisableUrl = ['/login', '/signup', '/mentor/register', '/session', '/review', '/cbt'];
 
 function SupportButton() {
   return (
