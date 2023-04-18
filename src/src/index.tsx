@@ -37,6 +37,8 @@ import BusinessRouteChangeTracker from 'services/businessComponent/BusinessRoute
 import BusinessCheckToken from "services/businessComponent/BusinessCheckToken";
 import BusinessCheckMentor from "services/businessComponent/BusinessCheckMentor";
 import { useMediaQuery } from "@mui/material";
+import BusinessBeforeEnter from "services/businessComponent/BusinessBeforeEnter";
+import Cbt from "pages/Cbt";
 
 
 const theme = createTheme({
@@ -119,12 +121,14 @@ root.render(
         <BusniessScrollToTop />
         <BusinessRouteChangeTracker />
         <BusinessCheckToken />
-        <BusinessCheckMentor />
+        {/* <BusinessCheckMentor /> */}
+        <BusinessBeforeEnter />
         <Gnb />
         <Page>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/cbt" element={<Cbt />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/signup/nickname" element={<SignupNickname />} />
             <Route path="/mentee/mentor/:id" element={<Mentor />} />

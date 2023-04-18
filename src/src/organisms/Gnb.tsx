@@ -123,6 +123,7 @@ const GnbLi = styled('li')((props: { highlight: 'true' | 'false'; }) => ({
 
 const onClickLogout = () => {
   localStorage.clear();
+  localStorage.setItem('CBTCode', 'cbt2023');
   window.location.href = '/';
 };
 
