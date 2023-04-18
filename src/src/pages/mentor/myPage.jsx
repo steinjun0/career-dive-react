@@ -126,15 +126,14 @@ function MyPage() {
                     <Flex style={{
                       backgroundColor: colorCareerDivePink,
                       justifyContent: 'space-between', alignItems: 'center',
-                      height: '64px', padding: '30px', marginTop: '38px',
+                      padding: '30px', marginTop: '38px',
                       borderRadius: '8px',
                       cursor: 'pointer',
                       width: '100%'
                     }}
                     >
-                      <VerticalFlex>
+                      <VerticalFlex sx={{gap:'8px'}}>
                         <TextHeading6 color="white">일정 등록하러 가기</TextHeading6>
-                        <EmptyHeight height="8px" />
                         <TextBody1 color="white">상담 일정을 등록해야만 상담을 진행할 수 있어요!</TextBody1>
                       </VerticalFlex>
                       <img src={ArrowCircleRightIcon} />
