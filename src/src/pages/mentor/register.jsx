@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import API from '../../API.js'
 import { Grid, styled } from "@mui/material";
@@ -33,6 +33,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import TagShowAndInput from 'component/TagShowAndInput.js';
 import { useNavigate } from 'react-router-dom';
 import React from 'react'
+import { AccountDataContext } from 'index';
 
 const LoginWrapper = styled(VerticalFlex)`
   min-width: 378px;
@@ -476,6 +477,7 @@ function CareerCertificate({ signUpStep, setSignUpStep, mentorInfoState }) {
 
 function Finish() {
     const navigate = useNavigate();
+    const { updateAccountData } = useContext(AccountDataContext);
     return (
         <VerticalFlex>
             <RowAlignCenterFlex style={{ justifyContent: 'space-between' }}>
@@ -493,8 +495,10 @@ function Finish() {
             <ButtonWrapper>
                 <CustomButton
                     onClick={() => {
-                        navigate('/mentor/mypage/profile', { replace: true })
+                        localStorage.setItem('IsMentor', true)
                         localStorage.setItem('IsMentorMode', true)
+                        updateAccountData('isMentorMode', true);
+                        navigate('/mentor/mypage/profile', { replace: true })
                     }}
                     height="50px">
                     완료
