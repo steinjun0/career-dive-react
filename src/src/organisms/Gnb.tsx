@@ -521,7 +521,7 @@ function MobileGnb() {
 
 // Integration
 
-const gnbDisableUrl = ['/session', '/review'];
+const gnbDisableUrl = ['/session', '/review', '/cbt'];
 
 function Gnb() {
   const location = useLocation();
