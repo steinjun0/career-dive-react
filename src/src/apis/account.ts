@@ -8,7 +8,7 @@ export interface IMentorAPI {
     DivisInComp: string,
     JobInComp: string,
     Nickname: string;
-    InService: string,
+    InService: boolean,
     TotEmpMonths: number,
     TagList: string[],
     UserID: number,

@@ -32,7 +32,7 @@ function MentoringForm() {
           {mentorData && <MentorProfile
             name={mentorData.nickname}
             description={`${mentorData.company} ${mentorData.divisIsPub ? `| ${mentorData.department}` : ''} | ${mentorData.job}`}
-            inService={mentorData.inJob==='현직자'}
+            inService={mentorData.inJob}
             id={mentorData.userId} />}
         </MaxWidthDiv>
       </Flex>

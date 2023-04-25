@@ -4,7 +4,7 @@ export interface IMentor {
     department?: string,
     job: string,
     nickname: string,
-    inJob: string,
+    inJob: boolean,
     duration: number,
     rating: number,
     tags: string[],

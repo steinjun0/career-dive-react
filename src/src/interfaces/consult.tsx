@@ -16,6 +16,6 @@ export interface IConsult {
     department?: string,
     job: string,
     nickname: string;
-    inJob: string,
+    inJob: boolean,
     duration: number,
 }

@@ -50,7 +50,7 @@ function FamousMentorGroup(props: { mentors: IMentor[]; }) {
                 department={mentorData.divisIsPub ? mentorData.department : ''}
                 job={mentorData.job}
                 nickname={mentorData.nickname}
-                inJob={mentorData.inJob ? "현직자" : "경력자"}
+                inJob={mentorData.inJob}
                 duration={mentorData.duration}
                 rating={4.5}
                 tags={mentorData.tags.slice(0, 3)}
@@ -69,7 +69,7 @@ function FamousMentorGroup(props: { mentors: IMentor[]; }) {
               department={mentorData.divisIsPub ? mentorData.department : ''}
               job={mentorData.job}
               nickname={mentorData.nickname}
-              inJob={mentorData.inJob ? "현직자" : "경력자"}
+              inJob={mentorData.inJob}
               duration={mentorData.duration}
               rating={4.5}
               tags={mentorData.tags.slice(0, 3)}

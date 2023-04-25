@@ -41,7 +41,7 @@ function MentorCard({
   company = "기업명",
   department,
   job = "직무",
-  inJob = "현직자",
+  inJob = true,
   duration = 0,
   nickname = "이름",
   rating = 4.5,
@@ -77,12 +77,11 @@ function MentorCard({
                 <CircleImg sx={{ width: '48px', marginBottom: '8px' }} src={testMentorImage} />
                 <TextSubtitle2 sx={{ marginBottom: '8px' }}>{nickname}</TextSubtitle2>
                 <TagSmall
-                  color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
-                  background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
+                  color={inJob ? colorCareerDiveBlue : colorCareerDivePink}
+                  background_color={inJob ? colorBackgroundCareerDiveBlue : colorBackgroundCareerDivePink}
                   sx={{ fontWeight: '500', padding: '4px 6px', marginBottom: '8px' }}>
-                  {inJob} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
+                  {inJob ? '현직자' : '경력자'} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
                 </TagSmall>
-
               </VerticalFlex>
             </VerticalFlex>
           </LinkNoDeco>
@@ -108,10 +107,10 @@ function MentorCard({
                 <CircleImg sx={{ width: '88px', marginBottom: '24px' }} src={testMentorImage} />
                 <TextSubtitle1 sx={{ marginBottom: '8px' }}>{nickname}</TextSubtitle1>
                 <TagMedium
-                  color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
-                  background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
+                  color={inJob ? colorCareerDiveBlue : colorCareerDivePink}
+                  background_color={inJob ? colorBackgroundCareerDiveBlue : colorBackgroundCareerDivePink}
                   sx={{ fontWeight: '500', padding: '4px 8px', boxSizing: 'border-box', marginBottom: '24px' }}>
-                  {inJob} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
+                  {inJob ? '현직자' : '경력자'} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
                 </TagMedium>
                 {isShowRating && <CustomRating value={rating}></CustomRating>}
                 {isShowTag && tags.length !== 0 ?
