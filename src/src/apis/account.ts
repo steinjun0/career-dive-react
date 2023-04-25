@@ -18,6 +18,24 @@ interface IGetAccountMentorAPI {
     data: IMentor[];
 }
 
+
+export async function getAccountMentor(id:number):Promise<AxiosResponse & IMentorAPI> {
+    const accountMentorRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/${id}`)
+    accountMentorRes.data = {
+        company: accountMentorRes.data.CompName,
+        divisIsPub: accountMentorRes.data.DivisIsPub,
+        department: accountMentorRes.data.DivisInComp,
+        job: accountMentorRes.data.JobInComp,
+        nickname: accountMentorRes.data.Nickname,
+        inJob: accountMentorRes.data.InService,
+        duration: accountMentorRes.data.TotEmpMonths,
+        rating: 0,
+        tags: accountMentorRes.data.TagList,
+        userId: accountMentorRes.data.UserID, 
+    } as IMentor
+    return accountMentorRes
+}
+
 export async function getAccountMentorList({ pageSize = 1000, pageNum = 1 }: { pageSize?: number, pageNum?: number; }): Promise<AxiosResponse & IGetAccountMentorAPI> {
     const mentorListRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/list?PageSize=${pageSize}&PageNum=${pageNum}`);
     return mentorListRes;
