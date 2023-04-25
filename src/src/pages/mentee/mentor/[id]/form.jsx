@@ -8,7 +8,7 @@ import {
 } from "util/styledComponent";
 
 import MentorProfile from 'organisms/mentor/Profile'
-import Request from "component/mentor/apply/Request";
+import Request from "organisms/mentee/mentor/Request";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "API.js";
