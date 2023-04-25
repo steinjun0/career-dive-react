@@ -72,32 +72,38 @@ const CategoryTag = styled(TagLarge) <{ category: '커리어 상담' | '전형 �
 
 const maxLength = 600;
 
-function Request(props: { type: 'careerConsult' | 'prepare'; }) {
+function Request({type}: { type: 'careerConsult' | 'prepare' }) {
   const navigate = useNavigate();
-
-  const consultCategory = props.type === 'careerConsult' ? '커리어 상담' : '전형 준비';
-
-  const [consultContents, setConsultContents] = useState<string[]>([]);
-  const [startTime, setStartTime] = useState<Date>();
-  const [consultingTime, setConsultingTime] = useState<number>(20);
-  const [requestText, setRequestText] = useState<string>('');
-  const [isFilePreOpen, setIsFilePreOpen] = useState<'희망' | '비희망'>();
-  const [uploadingFiles, setUploadingFiles] = useState<File[]>([]);
-
   const params = useParams();
+
+  const consultCategory = type === 'careerConsult' ? '커리어 상담' : '전형 준비';
+
+  const reservation = getParsedLocalStorage('reservations')[+params.id!];
+  const consultContents:string[] = reservation['consultContent'];
+  const startTime:Date = new Date(reservation['startTime']);
+  const consultingTime:number = reservation['consultingTime'];
+  const isFilePreOpen:'희망' | '비희망' = reservation['isFilePreOpen'];
+  
+  // const [consultContents, setConsultContents] = useState<string[]>([]);
+  // const [startTime, setStartTime] = useState<Date>();
+  // const [consultingTime, setConsultingTime] = useState<number>(20);
+  // const [isFilePreOpen, setIsFilePreOpen] = useState<'희망' | '비희망'>();
+
+  const [requestText, setRequestText] = useState<string>('');
+  const [uploadingFiles, setUploadingFiles] = useState<File[]>([]);
 
   useEffect(() => {
     try {
       if (params.id === undefined)
         throw Error;
-      const reservation = getParsedLocalStorage('reservations')[+params.id];
+      
 
-      setStartTime(new Date(reservation['startTime']));
-      setConsultContents(reservation['consultContent']);
-      setConsultingTime(reservation['consultingTime']);
+      // setStartTime(new Date(reservation['startTime']));
+      // setConsultContents(reservation['consultContent']);
+      // setConsultingTime(reservation['consultingTime']);
       reservation['requestText'] && setRequestText(reservation['requestText']);
 
-      setIsFilePreOpen(reservation['isFilePreOpen']);
+      // setIsFilePreOpen(reservation['isFilePreOpen']);
 
     } catch (error) {
       console.log(error);
@@ -165,130 +171,123 @@ function Request(props: { type: 'careerConsult' | 'prepare'; }) {
     }
   }
 
-  return (<VerticalFlex>
-    <RequestCardWrapper>
-      <Card
-        title={
-          startTime
-            ?
-            <Flex sx={{ flexWrap: 'wrap', columnGap: '8px' }}>
-              <span>{getDateString(startTime, 'long')}</span>
-              <span style={{ color: consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink }}>
-                {getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}
-              </span>
-            </Flex>
-            :
-            ''}
-        titleBottom={
-          <VerticalFlex>
-            <EmptyHeight height='16px' />
-            <Flex sx={{ flexWrap: 'wrap', gap: '8px' }}>
-              <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
-              {isFilePreOpen === '희망' && <CategoryTag category={consultCategory} style={{ marginLeft: 8 }}><TextBody2>이력서 검토</TextBody2></CategoryTag>}
-              {consultContents && consultContents.map((value, index) => (
-                <Flex key={index}>
-                  <TagLarge color={colorTextLight}
-                    background_color={colorBackgroundGrayLight}>
-                    <TextBody2>{value}</TextBody2>
-                  </TagLarge>
-                  <EmptyWidth width='8px'></EmptyWidth>
-                </Flex>
-              ))}
-            </Flex>
-          </VerticalFlex>
-        }>
-
-        <EmptyHeight height='16px' />
-        <TextSubtitle1>요청서</TextSubtitle1>
-        <EmptyHeight height='16px' />
-        <TextBody2 color={colorTextLight}>
-          • &nbsp;&nbsp;사내 규정상 공개가 어려운 정보를 요청할 수 없습니다.
-          <br></br>
-          • &nbsp;&nbsp;선택하신 희망 상담 내용 이외의 정보(섭외, 광고 등)를 요청할 수 없습니다.
-        </TextBody2>
-        <EmptyHeight height='16px' />
-        <CustomTextArea
-          defaultValue={requestText}
-          onFocus={(event) => {
-            event.target.placeholder = '';
-          }}
-          onBlur={(event) => {
-            event.target.placeholder = '희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다.';
-          }}
-          onChange={(event) => {
-            const updatingData: { name: 'requestText', data: string; }[] = [
-              { name: 'requestText', data: event.target.value },
-            ];
-            setRequestText(event.target.value);
-            updateReservation(+params.id!, updatingData);
-          }}
-          maxLength={maxLength}
-          placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
-          minRows={5}
-        />
-        <Flex style={{ justifyContent: 'end', marginTop: '4px' }}>
-          <TextCaption>{requestText ? requestText.length : 0}/{maxLength}</TextCaption>
-        </Flex>
-        <EmptyHeight height='16px' />
-
-
-        {isFilePreOpen === '희망' && <VerticalFlex>
-          <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
-          <TextBody2 color={consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink}>
-            이력서 및 포트폴리오를 업로드해 주세요.
-          </TextBody2>
-          <EmptyHeight height='8px' />
-          <Dropzone onDrop={(acceptedFiles: File[]) => {
-            if (uploadingFiles.length + acceptedFiles.length > 2) {
-              alert('업로드 파일은 최대 2개입니다.');
-              return;
-            }
-            const temp: File[] = [];
-            acceptedFiles.forEach(file => {
-              temp.push(file);
-            });
-            setUploadingFiles([...uploadingFiles, ...temp]);
-          }}>
-            {({ getRootProps, getInputProps }) => (
-              <section>
-                <FileDropzoneContent {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <UploadIcon color={colorTextLight} />
-                </FileDropzoneContent>
-              </section>
-            )}
-          </Dropzone>
-          <EmptyHeight height='16px' />
-          {uploadingFiles.map((items: FileWithPath, index) => {
-            return <Flex key={index}>
-              <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items.path}</TextBody2>
-              <TextBody2
-                style={{ cursor: 'pointer' }}
-                color={colorCareerDivePink}
-                onClick={() => {
-                  const temp = JSON.parse(JSON.stringify(uploadingFiles));
-                  temp.splice(temp.indexOf(items), 1);
-                  setUploadingFiles(temp);
-                }}>삭제</TextBody2>
-            </Flex>;
-          })}
-        </VerticalFlex>}
-
-        <ApplyButton
-          onClick={() => {
-            onClickApplyButton();
+  return (
+    <Card
+      title={
+          <Flex sx={{ flexWrap: 'wrap', columnGap: '8px' }}>
+            <span>{getDateString(startTime, 'long')}</span>
+            <span style={{ color: consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink }}>
+              {getKoreanTimeString(startTime)} ~ {getKoreanTimeString(addMinute(startTime, 20))}
+            </span>
+          </Flex>
           }
-          }>
-          <TextSubtitle1>
-            완료
-          </TextSubtitle1>
-        </ApplyButton>
+      titleBottom={
+        <VerticalFlex>
+          <EmptyHeight height='16px' />
+          <Flex sx={{ flexWrap: 'wrap', gap: '8px' }}>
+            <CategoryTag category={consultCategory}><TextBody2>{consultCategory}</TextBody2></CategoryTag>
+            {isFilePreOpen === '희망' && <CategoryTag category={consultCategory} style={{ marginLeft: 8 }}><TextBody2>이력서 검토</TextBody2></CategoryTag>}
+            {consultContents && consultContents.map((value, index) => (
+              <Flex key={index}>
+                <TagLarge color={colorTextLight}
+                  background_color={colorBackgroundGrayLight}>
+                  <TextBody2>{value}</TextBody2>
+                </TagLarge>
+                <EmptyWidth width='8px'></EmptyWidth>
+              </Flex>
+            ))}
+          </Flex>
+        </VerticalFlex>
+      }>
 
-      </Card>
-    </RequestCardWrapper >
+      <EmptyHeight height='16px' />
+      <TextSubtitle1>요청서</TextSubtitle1>
+      <EmptyHeight height='16px' />
+      <TextBody2 color={colorTextLight}>
+        • &nbsp;&nbsp;사내 규정상 공개가 어려운 정보를 요청할 수 없습니다.
+        <br></br>
+        • &nbsp;&nbsp;선택하신 희망 상담 내용 이외의 정보(섭외, 광고 등)를 요청할 수 없습니다.
+      </TextBody2>
+      <EmptyHeight height='16px' />
+      <CustomTextArea
+        defaultValue={requestText}
+        onFocus={(event) => {
+          event.target.placeholder = '';
+        }}
+        onBlur={(event) => {
+          event.target.placeholder = '희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다.';
+        }}
+        onChange={(event) => {
+          const updatingData: { name: 'requestText', data: string; }[] = [
+            { name: 'requestText', data: event.target.value },
+          ];
+          setRequestText(event.target.value);
+          updateReservation(+params.id!, updatingData);
+        }}
+        maxLength={maxLength}
+        placeholder="희망 상담 내용을 작성해 주세요. 프로필 소개 또한 함께 전달됩니다."
+        minRows={5}
+      />
+      <Flex style={{ justifyContent: 'end', marginTop: '4px' }}>
+        <TextCaption>{requestText ? requestText.length : 0}/{maxLength}</TextCaption>
+      </Flex>
+      <EmptyHeight height='16px' />
 
 
-  </VerticalFlex >);
+      {isFilePreOpen === '희망' && <VerticalFlex>
+        <TextSubtitle1>첨부 파일 업로드 (최대 2개)</TextSubtitle1>
+        <TextBody2 color={consultCategory === '커리어 상담' ? colorCareerDiveBlue : colorCareerDivePink}>
+          이력서 및 포트폴리오를 업로드해 주세요.
+        </TextBody2>
+        <EmptyHeight height='8px' />
+        <Dropzone onDrop={(acceptedFiles: File[]) => {
+          if (uploadingFiles.length + acceptedFiles.length > 2) {
+            alert('업로드 파일은 최대 2개입니다.');
+            return;
+          }
+          const temp: File[] = [];
+          acceptedFiles.forEach(file => {
+            temp.push(file);
+          });
+          setUploadingFiles([...uploadingFiles, ...temp]);
+        }}>
+          {({ getRootProps, getInputProps }) => (
+            <section>
+              <FileDropzoneContent {...getRootProps()}>
+                <input {...getInputProps()} />
+                <UploadIcon color={colorTextLight} />
+              </FileDropzoneContent>
+            </section>
+          )}
+        </Dropzone>
+        <EmptyHeight height='16px' />
+        {uploadingFiles.map((items: FileWithPath, index) => {
+          return <Flex key={index}>
+            <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{items.path}</TextBody2>
+            <TextBody2
+              style={{ cursor: 'pointer' }}
+              color={colorCareerDivePink}
+              onClick={() => {
+                const temp = JSON.parse(JSON.stringify(uploadingFiles));
+                temp.splice(temp.indexOf(items), 1);
+                setUploadingFiles(temp);
+              }}>삭제</TextBody2>
+          </Flex>;
+        })}
+      </VerticalFlex>}
+
+      <ApplyButton
+        onClick={() => {
+          onClickApplyButton();
+        }
+        }>
+        <TextSubtitle1>
+          완료
+        </TextSubtitle1>
+      </ApplyButton>
+
+    </Card>
+  );
 }
 
 export default Request;
