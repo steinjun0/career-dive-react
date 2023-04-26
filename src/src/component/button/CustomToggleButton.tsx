@@ -5,7 +5,6 @@ import { colorBackgroundGrayLight, colorBackgroundCareerDivePink, colorCareerDiv
 export default function CustomTogglebutton(props: ToggleButtonProps) {
     return <ToggleButton
         {...props}
-        value="check"
         sx={{
             borderRadius: '8px', backgroundColor: colorBackgroundGrayLight, border: 'none',
             '&.Mui-selected': {
