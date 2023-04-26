@@ -8,7 +8,6 @@ export default function CustomTogglebutton(props: ToggleButtonProps) {
         value="check"
         sx={{
             borderRadius: '8px', backgroundColor: colorBackgroundGrayLight, border: 'none',
-            width: '40px',
             '&.Mui-selected': {
                 backgroundColor: colorBackgroundCareerDivePink,
                 color: colorCareerDivePink
