@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import * as accountAPI from "apis/account";
 import React from 'react';
 import { IMentor } from "interfaces/mentor";
+import SearchBar from "organisms/search/SearchBar";
+import SearchTags from "organisms/search/SearchTags";
 function Search() {
 
-  const [mentorList, setMentorList] = useState<IMentor[]>();
+  const [mentorList, setMentorList] = useState<IMentor[]>([]);
   useEffect(() => {
     accountAPI.getAccountMentorList({}).then((res) => {
       if (res.status === 200) {
@@ -17,26 +19,25 @@ function Search() {
 
   return (
     <VerticalFlex>
-      <GrayBackground style={{}}>
-        <Flex style={{ flexWrap: 'wrap', justifyContent: 'space-around', marginBottom: 60, padding: 30 }}>
+      <VerticalFlex sx={{ alignItems: 'center', justifyContent: 'center', padding: '52px' }}>
+        <SearchBar />
+        <SearchTags />
+      </VerticalFlex>
+      <GrayBackground>
+        <Flex sx={{ flexWrap: 'wrap', justifyContent: 'space-between', maxWidth: '1194px', gap: '30px', margin: '76px 16px' }}>
           {
-            mentorList && [...mentorList].map(
+            mentorList.map(
               (mentorData, index) => {
-                return <Flex key={index} style={{ marginTop: 30, marginRight: 30 }}>
-                  <MentorCard
-                    mentorData={mentorData}
-                    isShowRating={false}
-                    isShowTag={true}
-                  />
-                </Flex>;
+                return <MentorCard
+                  key={index}
+                  mentorData={mentorData}
+                  isShowRating={false}
+                  isShowTag={true}
+                />;
               }
             )
           }
-
         </Flex>
-
-
-
       </GrayBackground>
     </VerticalFlex>
   );
