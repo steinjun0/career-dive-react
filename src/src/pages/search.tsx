@@ -1,5 +1,5 @@
 import { Flex, GrayBackground, MaxWidthDiv, VerticalFlex } from "util/styledComponent";
-import MentorCard from "component/mentor/MentorCard";
+import MentorCard from "organisms/common/MentorCard";
 import { useEffect, useState } from "react";
 import * as accountAPI from "apis/account";
 import React from 'react';

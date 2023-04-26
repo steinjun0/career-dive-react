@@ -1,5 +1,5 @@
 import { useMediaQuery, useTheme } from "@mui/material";
-import MentorCard from "component/mentor/MentorCard";
+import MentorCard from "organisms/common/MentorCard";
 import { IMentor } from "interfaces/mentor";
 import React, { useLayoutEffect } from "react";
 import { useState } from "react";
