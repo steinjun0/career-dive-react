@@ -1,19 +1,20 @@
 import { ToggleButton, ToggleButtonProps } from "@mui/material";
-import React, { ReactPropTypes } from "react";
-import { colorBackgroundGrayLight, colorBackgroundCareerDivePink, colorCareerDivePink } from "util/styledComponent";
+import React, { CSSProperties } from "react";
+import { colorBackgroundGrayLight } from "util/styledComponent";
 
-export default function CustomTogglebutton(props: ToggleButtonProps) {
+export default function CustomTogglebutton(props: ToggleButtonProps & { selectedColor?: CSSProperties['color'], selectedBackgroundColor?: CSSProperties['backgroundColor']; }) {
     return <ToggleButton
         {...props}
         sx={{
             borderRadius: '8px', backgroundColor: colorBackgroundGrayLight, border: 'none',
             '&.Mui-selected': {
-                backgroundColor: colorBackgroundCareerDivePink,
-                color: colorCareerDivePink
+                backgroundColor: props.selectedBackgroundColor,
+                color: props.selectedColor
             },
             '&:hover': {
-                backgroundColor: `${colorBackgroundCareerDivePink} !important`,
-            }
+                backgroundColor: `${props.selectedBackgroundColor} !important`,
+            },
+            ...props.sx
         }}
     >
         {props.children}
