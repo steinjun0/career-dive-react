@@ -15,21 +15,7 @@ function Home() {
     let isCancel = false;
     accountAPI.getAccountMentorList({ pageSize: 4, pageNum: Math.ceil(3 * (Math.random() + 1e-9)) }).then((res) => {
       if (!isCancel) {
-        const mentors = res.data.Results.map((e: IMentorAPI): IMentor => {
-          return {
-            company: e.CompName,
-            department: e.DivisInComp,
-            divisIsPub: e.DivisIsPub,
-            duration: e.TotEmpMonths,
-            inJob: e.InService,
-            job: e.JobInComp,
-            nickname: e.Nickname,
-            rating: 4.5,
-            tags: e.TagList,
-            userId: e.UserID
-          };
-        });
-        setMentors(mentors);
+        setMentors(res.data.Results);
       }
     });
     return () => {

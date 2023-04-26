@@ -46,17 +46,9 @@ function FamousMentorGroup(props: { mentors: IMentor[]; }) {
           {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
             return <Flex key={index} sx={{ gridColumn: (index + 1) % 2, gridRow: ~~(index / 2) + 1 }}>
               <MentorCard
-                company={mentorData.company}
-                department={mentorData.divisIsPub ? mentorData.department : ''}
-                job={mentorData.job}
-                nickname={mentorData.nickname}
-                inJob={mentorData.inJob}
-                duration={mentorData.duration}
-                rating={4.5}
-                tags={mentorData.tags.slice(0, 3)}
-                userId={mentorData.userId}
+                mentorData={mentorData}
                 isShowRating={false}
-                isShowTag={true} divisIsPub={false} />
+                isShowTag={true} />
             </Flex>;
           })}
         </Flex>
@@ -65,17 +57,9 @@ function FamousMentorGroup(props: { mentors: IMentor[]; }) {
           {props.mentors.slice(0, maxCardCount).map((mentorData: IMentor, index: number) => {
             return (<MentorCard
               key={index}
-              company={mentorData.company}
-              department={mentorData.divisIsPub ? mentorData.department : ''}
-              job={mentorData.job}
-              nickname={mentorData.nickname}
-              inJob={mentorData.inJob}
-              duration={mentorData.duration}
-              rating={4.5}
-              tags={mentorData.tags.slice(0, 3)}
-              userId={mentorData.userId}
+              mentorData={mentorData}
               isShowRating={false}
-              isShowTag={true} divisIsPub={false} />);
+              isShowTag={true} />);
           })}
         </Flex>}
     </VerticalFlex>

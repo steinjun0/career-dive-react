@@ -18,26 +18,30 @@ interface IGetAccountMentorAPI {
     data: IMentor[];
 }
 
-
-export async function getAccountMentor(id:number):Promise<AxiosResponse & IMentorAPI> {
-    const accountMentorRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/${id}`)
-    accountMentorRes.data = {
-        company: accountMentorRes.data.CompName,
-        divisIsPub: accountMentorRes.data.DivisIsPub,
-        department: accountMentorRes.data.DivisInComp,
-        job: accountMentorRes.data.JobInComp,
-        nickname: accountMentorRes.data.Nickname,
-        inJob: accountMentorRes.data.InService,
-        duration: accountMentorRes.data.TotEmpMonths,
+function convertMentorAPIToMentor(mentor: IMentorAPI) {
+    return {
+        company: mentor.CompName,
+        divisIsPub: mentor.DivisIsPub,
+        department: mentor.DivisInComp,
+        job: mentor.JobInComp,
+        nickname: mentor.Nickname,
+        inJob: mentor.InService,
+        duration: mentor.TotEmpMonths,
         rating: 0,
-        tags: accountMentorRes.data.TagList,
-        userId: accountMentorRes.data.UserID, 
-    } as IMentor
-    return accountMentorRes
+        tags: mentor.TagList,
+        userId: mentor.UserID,
+    } as IMentor;
 }
 
-export async function getAccountMentorList({ pageSize = 1000, pageNum = 1 }: { pageSize?: number, pageNum?: number; }): Promise<AxiosResponse & IGetAccountMentorAPI> {
+export async function getAccountMentor(id: number): Promise<AxiosResponse<IMentor>> {
+    const accountMentorRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/${id}`);
+    accountMentorRes.data = convertMentorAPIToMentor(accountMentorRes.data);
+    return accountMentorRes;
+}
+
+export async function getAccountMentorList({ pageSize = 1000, pageNum = 1 }: { pageSize?: number, pageNum?: number; }): Promise<AxiosResponse<{ Count: number, NextPage: string, PreviousPage: string, Results: IMentor[]; }>> {
     const mentorListRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/list?PageSize=${pageSize}&PageNum=${pageNum}`);
+    mentorListRes.data.Results = mentorListRes.data.Results.map(convertMentorAPIToMentor);
     return mentorListRes;
 }
 
