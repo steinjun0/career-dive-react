@@ -20,7 +20,7 @@ export default function RoundedGraySelect({ label = '', texts = [], handleChange
       displayEmpty
       renderValue={(value) => {
         if (value) {
-          return <TextBody1>{value}</TextBody1>;
+          return <TextBody1 sx={{ color: '#898989' }}>{value}</TextBody1>;
         }
         return <TextBody1 sx={{ color: '#898989' }}>{label}</TextBody1>;
       }}
