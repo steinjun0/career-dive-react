@@ -3,6 +3,7 @@ export interface IMentor {
     divisIsPub: boolean,
     department?: string,
     job: string,
+    jobInComp?: string,
     nickname: string,
     inJob: boolean,
     duration: number,
