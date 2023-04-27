@@ -29,8 +29,8 @@ export default function SearchBar() {
     <Flex sx={{ gap: '16px', width: '500px' }}>
       <CustomTogglebutton
         sx={{ height: '44px' }}
-        selectedBackgroundColor={colorBackgroundCareerDiveBlue}
-        selectedColor={colorCareerDiveBlue}
+        selected_background_color={colorBackgroundCareerDiveBlue}
+        selected_color={colorCareerDiveBlue}
         selected={!isPremium}
         onClick={() => { setIsPremium(false); }}
         value={0}
@@ -39,8 +39,8 @@ export default function SearchBar() {
       </CustomTogglebutton>
       <CustomTogglebutton
         sx={{ height: '44px' }}
-        selectedBackgroundColor={colorBackgroundCareerDivePink}
-        selectedColor={colorCareerDivePink}
+        selected_background_color={colorBackgroundCareerDivePink}
+        selected_color={colorCareerDivePink}
         selected={isPremium}
         onClick={() => { setIsPremium(true); }}
         value={0}
