@@ -6,8 +6,10 @@ import React from 'react';
 import { IMentor } from "interfaces/mentor";
 import SearchBar from "organisms/search/SearchBar";
 import SearchTags from "organisms/search/SearchTags";
+import { useMediaQuery, useTheme } from "@mui/material";
 function Search() {
-
+  const theme = useTheme();
+  const isDownSm = useMediaQuery(theme.breakpoints.down('sm'));
   const [mentorList, setMentorList] = useState<IMentor[]>([]);
   useEffect(() => {
     accountAPI.getAccountMentorList({}).then((res) => {
@@ -27,16 +29,22 @@ function Search() {
         <SearchTags />
       </VerticalFlex>
       <GrayBackground>
-        <Flex sx={{ flexWrap: 'wrap', justifyContent: 'space-between', maxWidth: '1194px', gap: '30px', margin: '76px 16px' }}>
+        <Flex sx={{
+          flexWrap: 'wrap', justifyContent: 'space-between', maxWidth: '1194px', gap: '30px',
+          margin: isDownSm ? '32px 16px' : '76px 16px'
+        }}>
           {
             mentorList.map(
               (mentorData, index) => {
-                return <MentorCard
-                  key={index}
-                  mentorData={mentorData}
-                  isShowRating={false}
-                  isShowTag={true}
-                />;
+                return <Flex sx={{ width: isDownSm ? 'calc(50% - 16px)' : undefined }}>
+                  <MentorCard
+                    key={index}
+                    mentorData={mentorData}
+                    isShowRating={false}
+                    isShowTag={true}
+                  />
+                </Flex>;
+
               }
             )
           }
