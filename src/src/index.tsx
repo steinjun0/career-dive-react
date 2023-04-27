@@ -41,6 +41,7 @@ import BusinessBeforeEnter from "services/businessComponent/BusinessBeforeEnter"
 import Cbt from "pages/Cbt";
 import MentorRegister2 from "pages/mentor/register2";
 import MentorRegisterCareer from 'pages/mentor/register/career';
+import MentorRegisterInfo from 'pages/mentor/register/info';
 
 const theme = createTheme({
   palette: {
@@ -146,6 +147,7 @@ root.render(
             <Route path="/mentor/register" element={<MentorRegister />} />
             <Route path="/mentor/register2" element={<MentorRegister2 />} />
             <Route path="/mentor/register2/career" element={<MentorRegisterCareer />} />
+            <Route path="/mentor/register2/info" element={<MentorRegisterInfo />} />
 
             <Route path="/mentor/mypage/:subPage" element={<MentorMyPage />} />
             <Route path="/mentor/mypage/account/change" element={<MentorMyPage />} />
