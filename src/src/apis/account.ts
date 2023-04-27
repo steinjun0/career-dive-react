@@ -39,8 +39,21 @@ export async function getAccountMentor(id: number): Promise<AxiosResponse<IMento
     return accountMentorRes;
 }
 
-export async function getAccountMentorList({ pageSize = 1000, pageNum = 1 }: { pageSize?: number, pageNum?: number; }): Promise<AxiosResponse<{ Count: number, NextPage: string, PreviousPage: string, Results: IMentor[]; }>> {
-    const mentorListRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/account/mentor/list?PageSize=${pageSize}&PageNum=${pageNum}`);
+export async function getAccountMentorList({ pageSize = 1000, pageNum = 1, job, company, tag, sector, compType, reviewScore, consultContent }:
+    { pageSize?: number, pageNum?: number, job?: string, company?: string, tag?: string, sector?: string, compType?: string, reviewScore?: number, consultContent?: string; }): Promise<AxiosResponse<{ Count: number, NextPage: string, PreviousPage: string, Results: IMentor[]; }>> {
+    function createQuery(pageSize: number, pageNum: number, job?: string, company?: string, tag?: string, sector?: string, compType?: string, reviewScore?: number, consultContent?: string) {
+        let query = `PageSize=${pageSize}&PageNum=${pageNum}`;
+        if (job) query += `&Job=${job}`;
+        if (company) query += `&CompName=${company}`;
+        if (tag) query += `&Tag=${tag}`;
+        if (sector) query += `&Sector=${sector}`;
+        if (compType) query += `&CompType=${compType}`;
+        if (reviewScore) query += `&ReviewScore=${reviewScore}`;
+        if (consultContent) query += `&ConsultContent=${consultContent}`;
+        return query;
+    }
+
+    const mentorListRes = await API.getAxios(`${API.CAREER_DIVE_API_URL}/v2/account/mentor/list?${createQuery(pageSize, pageNum, job, company, tag, sector, compType, reviewScore, consultContent)}`);
     mentorListRes.data.Results = mentorListRes.data.Results.map(convertMentorAPIToMentor);
     return mentorListRes;
 }
