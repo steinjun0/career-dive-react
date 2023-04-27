@@ -11,16 +11,19 @@ function Search() {
   const [mentorList, setMentorList] = useState<IMentor[]>([]);
   useEffect(() => {
     accountAPI.getAccountMentorList({}).then((res) => {
-      if (res.status === 200) {
-        setMentorList(res.data.Results);
-      }
+      setMentorList(res.data.Results);
     });
   }, []);
+  function onSearch({ company, tag, job }: { company?: string, tag?: string, job?: string; }) {
+    accountAPI.getAccountMentorList({ company, tag, job }).then((res) => {
+      setMentorList(res.data.Results);
+    });
+  }
 
   return (
     <VerticalFlex>
       <VerticalFlex sx={{ alignItems: 'center', justifyContent: 'center', padding: '52px' }}>
-        <SearchBar />
+        <SearchBar onSearch={onSearch} />
         <SearchTags />
       </VerticalFlex>
       <GrayBackground>
