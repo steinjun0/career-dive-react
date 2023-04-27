@@ -8,15 +8,18 @@ export default function RegisterTemplate(props: PropsWithChildren) {
     justifyContent: 'center',
     alignItems: 'center',
     margin: '16px',
-    height: isDownSm ? 'calc(100vh - 48px - 48px)' : 'calc(100vh - 80px - 80px)'
+    minHeight: isDownSm ? 'calc(100vh - 48px - 48px)' : 'calc(100vh - 80px - 80px)',
   }}>
     <VerticalFlex
       sx={{
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: '378px',
+        width: isDownSm ? '100%' : '378px',
         gap: '30px',
         height: isDownSm ? '100%' : undefined,
+        ":first-of-type": {
+          margin: '30px 16px'
+        }
       }}>
       {props.children}
     </VerticalFlex>
