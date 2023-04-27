@@ -2,9 +2,14 @@ import BasicButton from "component/button/BasicButton";
 import React from "react";
 import { Flex, TextHeading6, TextSubtitle1, VerticalFlex, colorCareerDivePink, colorTextLight } from "util/styledComponent";
 import paperFile from 'assets/img/paperFile.svg';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import issueStepModalObject from "organisms/mentor/register/IssueStepModal";
+
+const InfoModal = withReactContent(Swal);
 
 export default function MentorRegister2() {
-  return <Flex sx={{ justifyContent: 'center', alignItems: 'center' }}>
+  return <Flex sx={{ justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 80px - 80px)' }}>
     <VerticalFlex sx={{ alignItems: 'center', width: '378px' }}>
       <TextHeading6 sx={{ width: '100%' }}>
         멘토 등록을 위해<br />
@@ -13,7 +18,11 @@ export default function MentorRegister2() {
       </TextHeading6>
       <img src={paperFile} alt="서류뭉치" style={{ width: '120px', height: '120px', margin: '72px 0' }} />
       <Flex sx={{ gap: '16px', width: '100%' }}>
-        <BasicButton sx={{ width: '100%', height: '48px' }} type="gray">
+        <BasicButton sx={{ width: '100%', height: '48px' }} type="gray"
+          onClick={() => {
+            InfoModal.fire(issueStepModalObject);
+          }}
+        >
           <TextSubtitle1 sx={{ color: colorTextLight }}>
             서류 발급
           </TextSubtitle1>
