@@ -9,7 +9,9 @@ export default function CustomTogglebutton(props: ToggleButtonProps & { selected
             borderRadius: '8px', backgroundColor: colorBackgroundGrayLight, border: 'none',
             '&.Mui-selected': {
                 backgroundColor: props.selected_background_color,
-                color: props.selected_color
+                color: props.selected_color,
+                border: `1px solid ${props.selected_color}`
+
             },
             '&:hover': {
                 backgroundColor: `${props.selected_background_color} !important`,
