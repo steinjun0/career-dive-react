@@ -12,6 +12,7 @@ export default function BasicTextField(
     } & TextFieldProps
 ) {
   return <TextField
+    {...rest}
     variant="filled"
     fullWidth={true}
     size="small"
@@ -34,9 +35,9 @@ export default function BasicTextField(
       '.MuiFilledInput-input': {
         padding: '10px 20px',
         borderRadius: '8px',
-      }
+      },
+      ...rest.sx
     }}
-    {...rest}
   />;
 }
 
