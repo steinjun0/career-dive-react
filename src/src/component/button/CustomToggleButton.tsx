@@ -14,6 +14,7 @@ export default function CustomTogglebutton(props:
         value={props.value ?? 0}
         sx={{
             borderRadius: '8px', backgroundColor: colorBackgroundGrayLight, border: 'none',
+            wordBreak: 'keep-all',
             '&.Mui-selected': {
                 backgroundColor: props.selected_background_color,
                 color: props.selected_color,
