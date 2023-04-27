@@ -1,23 +1,35 @@
 import { Button, ButtonProps } from "@mui/material";
 import React from "react";
-import { colorCareerDiveBlue, colorCareerDivePink } from "util/styledComponent";
+import { colorBackgroundGrayMedium, colorCareerDiveBlue, colorCareerDivePink } from "util/styledComponent";
 
-interface ICustomButtonProps extends Omit<ButtonProps, 'type'> {
-  type: 'pink' | 'blue' | 'disabled';
-}
-
-export default function BasicButton(props: ICustomButtonProps) {
-
+export default function BasicButton(props: { type: 'pink' | 'blue' | 'gray' | 'disabled'; } & Omit<ButtonProps, 'type'>) {
+  let buttonProps = {
+    ...props,
+    type: undefined,
+    color: undefined
+  } as ButtonProps;
+  const color = (() => {
+    if (props.type === 'pink') {
+      return colorCareerDivePink;
+    } else if (props.type === 'gray') {
+      return colorBackgroundGrayMedium;
+    }
+    else {
+      return colorCareerDiveBlue;
+    }
+  })();
   return <Button
+    {...buttonProps}
     variant="contained"
     disableElevation
     disabled={props.type === 'disabled'}
     sx={{
+      ...props.sx,
       padding: '8px',
       borderRadius: '8px',
-      backgroundColor: props.type === 'pink' ? colorCareerDivePink : colorCareerDiveBlue,
+      backgroundColor: color,
       '&:hover': {
-        backgroundColor: props.type === 'pink' ? colorCareerDivePink : colorCareerDiveBlue
+        backgroundColor: color
       }
     }}
   >
