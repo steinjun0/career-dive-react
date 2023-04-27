@@ -33,7 +33,6 @@ export default function SearchBar() {
         selected_color={colorCareerDiveBlue}
         selected={!isPremium}
         onClick={() => { setIsPremium(false); }}
-        value={0}
       >
         <span style={{ fontWeight: '400', fontSize: '16px' }}>일반</span>
       </CustomTogglebutton>
@@ -43,7 +42,6 @@ export default function SearchBar() {
         selected_color={colorCareerDivePink}
         selected={isPremium}
         onClick={() => { setIsPremium(true); }}
-        value={0}
       >
         <span style={{ fontWeight: '400', fontSize: '16px' }}>프리미엄</span>
       </CustomTogglebutton>
