@@ -1,7 +1,7 @@
-import { SxProps, styled } from "@mui/material";
+import { SxProps } from "@mui/material";
 import React, { PropsWithChildren } from "react";
 import { CSSProperties } from "react";
-import { Flex, RowAlignCenterFlex, colorBackgroundGrayLight, colorTextLight } from "util/styledComponent";
+import { Flex } from "util/styledComponent";
 
 export default function Tag(props: { color: CSSProperties['color'], backgroundColor: CSSProperties['backgroundColor'], size: 'small' | 'medium' | 'large', sx?: SxProps, } & PropsWithChildren) {
   const padding = (() => {
