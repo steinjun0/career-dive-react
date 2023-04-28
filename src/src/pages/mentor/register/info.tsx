@@ -49,8 +49,8 @@ function StepTitle({ isDownSm }: { isDownSm: boolean; }) {
 function CheckInJob({ inJob, setInJob }: { inJob: boolean, setInJob: Dispatch<SetStateAction<boolean>>; }) {
   return <Flex sx={{ width: '100%', gap: '16px' }}>
     <CustomTogglebutton
-      selected_background_color={colorBackgroundCareerDivePink}
-      selected_color={colorCareerDivePink}
+      selectedBackgroundColor={colorBackgroundCareerDivePink}
+      selectedColor={colorCareerDivePink}
       sx={{ padding: '10px 20px' }}
       selected={inJob}
       onClick={() => {
@@ -63,8 +63,8 @@ function CheckInJob({ inJob, setInJob }: { inJob: boolean, setInJob: Dispatch<Se
     </CustomTogglebutton>
 
     <CustomTogglebutton
-      selected_background_color={colorBackgroundCareerDivePink}
-      selected_color={colorCareerDivePink}
+      selectedBackgroundColor={colorBackgroundCareerDivePink}
+      selectedColor={colorCareerDivePink}
       sx={{ padding: '10px 20px' }}
       selected={!inJob}
       onClick={() => {
@@ -115,8 +115,8 @@ function GetDepartment({ department, divisIsPub, setDepartment, setDivisIsPub }:
       />
       <Flex sx={{ width: '146px' }}>
         <CustomTogglebutton
-          selected_background_color={colorBackgroundCareerDivePink}
-          selected_color={colorCareerDivePink}
+          selectedBackgroundColor={colorBackgroundCareerDivePink}
+          selectedColor={colorCareerDivePink}
           sx={{ padding: '12px 20px', borderRadius: '8px 0px 0px 8px' }}
           selected={!divisIsPub}
           onClick={() => {
@@ -128,8 +128,8 @@ function GetDepartment({ department, divisIsPub, setDepartment, setDivisIsPub }:
           </TextBody2>
         </CustomTogglebutton>
         <CustomTogglebutton
-          selected_background_color={colorBackgroundCareerDivePink}
-          selected_color={colorCareerDivePink}
+          selectedBackgroundColor={colorBackgroundCareerDivePink}
+          selectedColor={colorCareerDivePink}
           sx={{ padding: '12px 20px', borderRadius: '0px 8px 8px 0px' }}
           selected={divisIsPub}
           onClick={() => {
