@@ -17,7 +17,7 @@ import Footer from "./organisms/Footer";
 import SessionList from "./pages/mentee/schedule";
 import MyPage from "./pages/mentee/myPage";
 import MentorHome from './pages/mentor/home';
-import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledComponent";
+import { colorCareerDiveBlue, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sendbird from "pages/Sendbird";
@@ -43,6 +43,7 @@ import MentorRegister2 from "pages/mentor/register2";
 import MentorRegisterCareer from 'pages/mentor/register/career';
 import MentorRegisterInfo from 'pages/mentor/register/info';
 import MentorRegisterType from 'pages/mentor/register/type';
+import MentorRegisterFinish from 'pages/mentor/register/finish';
 
 const theme = createTheme({
   palette: {
@@ -150,6 +151,7 @@ root.render(
             <Route path="/mentor/register2/career" element={<MentorRegisterCareer />} />
             <Route path="/mentor/register2/info" element={<MentorRegisterInfo />} />
             <Route path="/mentor/register2/type" element={<MentorRegisterType />} />
+            <Route path="/mentor/register2/finish" element={<MentorRegisterFinish />} />
 
             <Route path="/mentor/mypage/:subPage" element={<MentorMyPage />} />
             <Route path="/mentor/mypage/account/change" element={<MentorMyPage />} />
