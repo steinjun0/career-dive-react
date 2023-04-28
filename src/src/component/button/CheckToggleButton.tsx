@@ -5,8 +5,7 @@ import React, { CSSProperties } from "react";
 
 
 export function CheckToggleButton(propsInput: Omit<CheckboxProps, 'color'> & { color?: CSSProperties['color']; }) {
-  const props = { ...propsInput } as CheckboxProps;
-  delete props.color;
+  const { color, ...props } = { ...propsInput };
   return (
     <Checkbox
       {...props}
