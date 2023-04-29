@@ -1,5 +1,5 @@
 import BasicTextField from "component/input/BasicTextField";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import { VerticalFlex, TextSubtitle2, Flex, colorBackgroundGrayLight, colorTextLight, TextBody2, colorBackgroundGrayMedium, colorCareerDivePink, colorBackgroundCareerDivePink, colorBackgroundGrayDark } from "util/styledComponent";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -21,7 +21,20 @@ const jobInformation = {
   '기타': ['CEO']
 };
 
-export default function GetJobInfo({ sector, job, jobInComp, setSector, setJob, setJobInComp }: { sector: keyof typeof jobInformation | null, job: string, jobInComp: string, setSector: Dispatch<SetStateAction<keyof typeof jobInformation | null>>, setJob: Dispatch<SetStateAction<string>>, setJobInComp: Dispatch<SetStateAction<string>>; }) {
+export type Sector = keyof typeof jobInformation | null;
+export type Job = typeof jobInformation[keyof typeof jobInformation][number] | '';
+
+export default function GetJobInfo(
+  { sector, job, jobInComp, onClickSector, onClickJob, onChangeJobInComp }:
+    {
+      sector: Sector,
+      job: Job,
+      jobInComp: string,
+      onClickSector: (clickedSector: Sector) => void,
+      onClickJob: (clickedJob: Job) => void,
+      onChangeJobInComp: (jobInComp: string) => void;
+    }
+) {
   const [isShowCategoryDropDown, setIsShowCategoryDropDown] = useState(false);
 
   return <VerticalFlex sx={{ width: '100%', gap: '16px' }}>
@@ -43,37 +56,37 @@ export default function GetJobInfo({ sector, job, jobInComp, setSector, setJob, 
         <Flex style={{ backgroundColor: colorBackgroundGrayLight, borderRadius: '8px', marginTop: '16px', overflow: 'hidden' }}>
           <VerticalFlex
             style={{ borderRight: `1px solid ${colorBackgroundGrayMedium}` }}>
-            {Object.keys(jobInformation).map((e, i) => {
+            {(Object.keys(jobInformation) as Sector[]).map((elem, i) => {
               return <Flex
                 key={i}
                 style={{
                   padding: '4px 20px',
                   cursor: 'pointer',
-                  color: sector === e ? colorCareerDivePink : 'black',
-                  backgroundColor: sector === e ? colorBackgroundCareerDivePink : colorBackgroundGrayLight,
+                  color: sector === elem ? colorCareerDivePink : 'black',
+                  backgroundColor: sector === elem ? colorBackgroundCareerDivePink : colorBackgroundGrayLight,
                 }}
                 onClick={() => {
-                  setSector(e as keyof typeof jobInformation);
+                  onClickSector(elem);
                 }}>
-                <TextBody2 style={{ lineHeight: '28px' }}>{e}</TextBody2>
+                <TextBody2 style={{ lineHeight: '28px' }}>{elem}</TextBody2>
               </Flex>;
             })}
           </VerticalFlex>
           <VerticalFlex style={{ flex: 1 }}>
-            {sector !== null && jobInformation[sector].map((e, i) => {
+            {sector !== null && jobInformation[sector].map((elem, i) => {
               return <Flex
                 key={i}
                 style={{
                   padding: '4px 20px',
-                  color: job === e ? colorCareerDivePink : colorBackgroundGrayDark,
-                  backgroundColor: job === e ? colorBackgroundCareerDivePink : colorBackgroundGrayLight,
+                  color: job === elem ? colorCareerDivePink : colorBackgroundGrayDark,
+                  backgroundColor: job === elem ? colorBackgroundCareerDivePink : colorBackgroundGrayLight,
                   cursor: 'pointer'
                 }}
                 onClick={() => {
-                  setJob(e);
+                  onClickJob(elem);
                   setIsShowCategoryDropDown(false);
                 }}>
-                <TextBody2 style={{ lineHeight: '28px' }}>{e}</TextBody2>
+                <TextBody2 style={{ lineHeight: '28px' }}>{elem}</TextBody2>
               </Flex>;
             })}
           </VerticalFlex>
@@ -84,7 +97,7 @@ export default function GetJobInfo({ sector, job, jobInComp, setSector, setJob, 
       placeholder='사내 직무명(선택)'
       value={jobInComp}
       onChange={(e) => {
-        setJobInComp(e.target.value);
+        onChangeJobInComp(e.target.value);
       }}
     />
   </VerticalFlex>;
