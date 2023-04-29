@@ -14,7 +14,6 @@ export default function CustomTogglebutton(propsInput:
         {...props}
         value={props.value ?? 0}
         sx={{
-            ...props.sx,
             borderRadius: '8px', backgroundColor: colorBackgroundGrayLight, border: 'none',
             wordBreak: 'keep-all',
             '&.Mui-selected': {
@@ -25,7 +24,8 @@ export default function CustomTogglebutton(propsInput:
             },
             '&:hover': {
                 backgroundColor: `${selectedBackgroundColor} !important`,
-            }
+            },
+            ...props.sx,
         }}
     >
         {props.children}
