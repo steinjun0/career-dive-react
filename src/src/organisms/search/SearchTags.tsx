@@ -7,8 +7,8 @@ export default function SearchBar() {
   const [sector, setSector] = useState<string>();
   const [isPremium, setIsPremium] = useState<boolean>(false);
   return <Flex sx={{ gap: '16px', marginTop: '35px', justifyContent: 'center', alignItems: 'center' }}>
-    <Flex sx={{ gap: '16px', width: '500px', justifyContent: 'flex-end' }}>
-      <RoundedGraySelect
+    <Flex sx={{ gap: '16px', justifyContent: 'flex-end' }}>
+      {/* <RoundedGraySelect
         texts={['반도체', 'IT']}
         label="업종"
         handleChange={(value) => { setSector(value.target.value as string); }}
@@ -17,7 +17,7 @@ export default function SearchBar() {
         texts={['대기업', '중소기업']}
         label="기업형태"
         handleChange={(value) => { setSector(value.target.value as string); }}
-      />
+      /> */}
       <RoundedGraySelect
         texts={['좋음', '나쁨']}
         label="만족도"
@@ -25,8 +25,8 @@ export default function SearchBar() {
       />
     </Flex>
 
-    <div style={{ borderRight: `2px solid ${colorBackgroundGrayMedium}`, height: '20px' }} />
-    <Flex sx={{ gap: '16px', width: '500px' }}>
+    {/* <div style={{ borderRight: `2px solid ${colorBackgroundGrayMedium}`, height: '20px' }} /> */}
+    <Flex sx={{ gap: '16px', }}>
       <CustomTogglebutton
         sx={{ height: '44px' }}
         selectedBackgroundColor={colorBackgroundCareerDiveBlue}
