@@ -7,13 +7,9 @@ import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle, colorBackgroundCareerDivePink, TextHeading1, TextBody1 } from "util/styledComponent";
 import { IMentorRegisterData } from "interfaces/mentor";
-import * as accountAPI from 'apis/account';
 import { AccountDataContext } from "index";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import createMentor from "services/mentor/register";
 
-const LoadingModal = withReactContent(Swal);
 
 function Info() {
   return <VerticalFlex sx={{ gap: '8px', width: '100%', }}>
@@ -58,7 +54,7 @@ function MultipleToggleButtons({ list, value, onUpdate }: { list: string[], valu
 
 function CareerConsult({ consultList, value, onUpdate }: { consultList: string[], value: string[], onUpdate: (consultList: string[]) => void; }) {
 
-  const [isAllSelected, setisAllSelected] = useState<boolean>(false);
+  const [isAllSelected, setisAllSelected] = useState<boolean>(value.length === consultList.length);
   useEffect(() => {
     if (isAllSelected) {
       onUpdate(consultList);
@@ -98,7 +94,7 @@ function CareerConsult({ consultList, value, onUpdate }: { consultList: string[]
 }
 
 function PrepareType({ typeList, value, onUpdate }: { typeList: string[], value: string[], onUpdate: (typeList: string[]) => void; }) {
-  const [isAllSelected, setisAllSelected] = useState<boolean>(false);
+  const [isAllSelected, setisAllSelected] = useState<boolean>(value.length === typeList.length);
   useEffect(() => {
     if (isAllSelected) {
       onUpdate(typeList);
