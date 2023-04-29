@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle } from "util/styledComponent";
 import { colorBackgroundCareerDivePink } from "util/styledComponent-bak";
-import { IMentorRegisterData } from "./SubPage";
 import { Job, Sector } from "interfaces/job";
+import { IMentorRegisterData } from "interfaces/mentor";
 
 function StepTitle({ isDownSm }: { isDownSm: boolean; }) {
   return <VerticalFlex sx={{ width: '100%', }}>
@@ -184,7 +184,13 @@ export default function Info({ mentorRegisterData }: { mentorRegisterData: IMent
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
       disabled={company === '' || job === '' || department === ''}
       onClick={() => {
-
+        mentorRegisterData.company = company;
+        mentorRegisterData.divisIsPub = divisIsPub;
+        mentorRegisterData.sector = sector;
+        mentorRegisterData.job = job;
+        mentorRegisterData.jobInComp = jobInComp;
+        mentorRegisterData.department = department;
+        mentorRegisterData.tags = tags;
         navigate('/mentor/register/type');
       }}
     >

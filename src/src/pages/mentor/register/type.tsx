@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle, colorBackgroundCareerDivePink } from "util/styledComponent";
+import { IMentorRegisterData } from "interfaces/mentor";
 
 
 function Info() {
@@ -113,7 +114,7 @@ function PrepareType({ typeList, value, onUpdate }: { typeList: string[], value:
 const TOTAL_CONSULT_LIST = ['직무 이야기', '업계 이야기', '진로 상담', '필요 역량', '기술 스택', '내 역량 진단', '이직 준비', '사내 문화', '면접 팁'];
 const TOTAL_TYPE_LIST = ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드리뷰'];
 
-export default function Type() {
+export default function Type({ mentorRegisterData }: { mentorRegisterData: IMentorRegisterData; }) {
   const navigate = useNavigate();
   const isDownSm = useBreakpoint('sm');
   const [consultList, setConsultList] = useState<string[]>([]);
@@ -138,6 +139,8 @@ export default function Type() {
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
       onClick={() => {
+        mentorRegisterData.consultList = consultList;
+        mentorRegisterData.typeList = typeList;
         navigate('/mentor/register/finish');
       }}
     >

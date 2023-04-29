@@ -40,10 +40,7 @@ import { useMediaQuery } from "@mui/material";
 import BusinessBeforeEnter from "services/businessComponent/BusinessBeforeEnter";
 import Cbt from "pages/Cbt";
 import MentorRegister from "pages/mentor/register";
-import MentorRegisterCareer from 'pages/mentor/register/career';
-import MentorRegisterInfo from 'pages/mentor/register/info';
-import MentorRegisterType from 'pages/mentor/register/type';
-import MentorRegisterFinish from 'pages/mentor/register/finish';
+import MentorSubPage from "pages/mentor/register/SubPage";
 
 const theme = createTheme({
   palette: {
@@ -148,10 +145,7 @@ root.render(
 
             {/* <Route path="/mentor/register" element={<MentorRegister />} /> */}
             <Route path="/mentor/register" element={<MentorRegister />} />
-            <Route path="/mentor/register/career" element={<MentorRegisterCareer />} />
-            <Route path="/mentor/register/info" element={<MentorRegisterInfo />} />
-            <Route path="/mentor/register/type" element={<MentorRegisterType />} />
-            <Route path="/mentor/register/finish" element={<MentorRegisterFinish />} />
+            <Route path="/mentor/register/:subPage" element={<MentorSubPage />} />
 
             <Route path="/mentor/mypage/:subPage" element={<MentorMyPage />} />
             <Route path="/mentor/mypage/account/change" element={<MentorMyPage />} />

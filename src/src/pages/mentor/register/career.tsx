@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle } from "util/styledComponent";
 import FileInputBox from "component/input/FileInputBox";
+import { IMentorRegisterData } from "interfaces/mentor";
 
 function StepTitle() {
   return <Flex sx={{ width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -60,12 +61,11 @@ function checkValidDate(dateString: string) {
   return true;
 }
 
-export default function Career() {
+export default function Career({ mentorRegisterData }: { mentorRegisterData: IMentorRegisterData; }) {
   const navigate = useNavigate();
   const [uploadingFiles, setUploadingFiles] = useState<FileWithPath[]>([]);
   const [birth, setBirth] = useState<string>('');
   const isDownSm = useBreakpoint('sm');
-
   return <RegisterTemplate>
     {!isDownSm && <StepTitle />}
     <Info />
@@ -96,7 +96,9 @@ export default function Career() {
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
       disabled={uploadingFiles.length !== 1 || !checkValidDate(birth)}
       onClick={() => {
-        navigate('/mentor/register/info', { state: { birth, file: uploadingFiles[0] } });
+        mentorRegisterData.birth = birth;
+        mentorRegisterData.careerFile = uploadingFiles[0];
+        navigate('/mentor/register/info');
       }}
     >
       <TextSubtitle1>
