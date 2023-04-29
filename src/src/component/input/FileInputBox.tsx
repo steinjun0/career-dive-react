@@ -34,7 +34,6 @@ export default function FileInputBox({ onDrop, onDelete, files, maxFileNumber = 
       )}
     </Dropzone>
     {files && files.map((item, index) => {
-      console.log('files', files);
       return <Flex key={index}>
         <TextBody2 color={colorTextLight} style={{ textDecoration: 'underline', marginRight: 10 }}>{item.path}</TextBody2>
         <TextBody2
