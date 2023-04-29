@@ -2,7 +2,7 @@ import { Button, ButtonProps } from "@mui/material";
 import React from "react";
 import { colorBackgroundGrayMedium, colorCareerDiveBlue, colorCareerDivePink } from "util/styledComponent";
 
-export default function BasicButton(props: { type: 'pink' | 'blue' | 'gray' | 'disabled'; } & Omit<ButtonProps, 'type'>) {
+function BasicButton(props: { type: 'pink' | 'blue' | 'gray' | 'disabled'; } & Omit<ButtonProps, 'type'>) {
   let buttonProps = {
     ...props,
     type: undefined,
@@ -36,3 +36,11 @@ export default function BasicButton(props: { type: 'pink' | 'blue' | 'gray' | 'd
     {props.children}
   </Button>;
 }
+
+const memoizedBasicButton = React.memo(BasicButton, (prev, current) => {
+  return (
+    prev.type === current.type &&
+    prev.disabled === current.disabled
+  );
+});
+export default memoizedBasicButton;
