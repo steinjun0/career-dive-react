@@ -1,7 +1,7 @@
 import { Flex, TextBody1, colorBackgroundCareerDiveBlue, colorBackgroundCareerDivePink, colorBackgroundGrayMedium, colorCareerDiveBlue, colorCareerDivePink } from "util/styledComponent";
 import React, { useState } from "react";
 import RoundedGraySelect from "component/select/RoundedGraySelect";
-import CustomTogglebutton from "component/button/CustomToggleButton";
+import CustomTogglebutton from "component/button/BasicToggleButton";
 
 export default function SearchBar() {
   const [sector, setSector] = useState<string>();

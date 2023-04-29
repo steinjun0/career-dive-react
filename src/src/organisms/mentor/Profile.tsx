@@ -21,7 +21,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { TagMedium } from "util/Custom/CustomTag";
 import React from "react";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import CustomTogglebutton from "component/button/CustomToggleButton";
+import CustomTogglebutton from "component/button/BasicToggleButton";
 
 function MobileBottomBar({ isFavorite, setIsFavorite, id }: { isFavorite: boolean, setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>, id: number; }) {
     const navigater = useNavigate();

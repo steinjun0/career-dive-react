@@ -1,6 +1,6 @@
 import BasicButton from "component/button/BasicButton";
 import { CheckToggleButton } from "component/button/CheckToggleButton";
-import CustomTogglebutton from "component/button/CustomToggleButton";
+import CustomTogglebutton from "component/button/BasicToggleButton";
 import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
