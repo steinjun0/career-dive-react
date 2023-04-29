@@ -1,6 +1,6 @@
 import API from "API";
 import { AxiosResponse } from "axios";
-import { IMentor } from "interfaces/mentor";
+import { IMentor, IMentorRegisterData } from "interfaces/mentor";
 
 export interface IMentorAPI {
     CompName: string,
@@ -82,4 +82,29 @@ export async function postAccountValid(accessToken: string): Promise<AxiosRespon
 export async function postAccountRenew(refreshToken: string): Promise<AxiosResponse & { data: boolean; }> {
     const res = await API.postAxios(`${API.CAREER_DIVE_API_URL}/account/renew`, { 'RefreshToken': refreshToken });
     return res;
+}
+
+export async function postAccountMentor(registerData: IMentorRegisterData): Promise<AxiosResponse> {
+    const convertedTags = registerData.tags!.map((tag) => {
+        return { Name: tag };
+    });
+    const scheduleRes = await API.postAxios(`${API.CAREER_DIVE_API_URL}/account/mentor`,
+        {
+            Mentor: {
+                Inservice: registerData.inJob,
+                Sector: registerData.sector,
+                Job: registerData.job,
+                JobInComp: registerData.jobInComp,
+                DivisInComp: registerData.department,
+                DivisIsPub: registerData.divisIsPub,
+                CompName: registerData.company
+            },
+            Tags: convertedTags
+        });
+    return scheduleRes;
+}
+
+export async function postAccountMentorFile({ id, file }: { id: number, file: FormData; }): Promise<AxiosResponse> {
+    const scheduleRes = await API.postAxiosFormData(`${API.CAREER_DIVE_API_URL}/account/mentor/${id}/file`, file);
+    return scheduleRes;
 }
