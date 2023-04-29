@@ -1,13 +1,13 @@
 import { TextFieldProps } from "@mui/material";
-import UploadIcon from "assets/icon/UploadIcon";
 import BasicButton from "component/button/BasicButton";
 import BasicTextField from "component/input/BasicTextField";
 import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
 import React, { useState } from "react";
-import Dropzone from "react-dropzone";
+import { FileWithPath } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle } from "util/styledComponent";
+import FileInputBox from "component/input/FileInputBox";
 
 function StepTitle() {
   return <Flex sx={{ width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -31,31 +31,6 @@ function Info() {
   </VerticalFlex>;
 }
 
-function FileUploadBox({ onDrop }: { onDrop: (acceptedFiles: File[]) => void; }) {
-  return <Dropzone
-    onDrop={onDrop}
-  >
-    {({ getRootProps, getInputProps }) => (
-      <Flex
-        sx={{
-          backgroundColor: colorBackgroundGrayLight,
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '90px',
-          borderRadius: '8px',
-          width: '100%'
-        }}
-        {...getRootProps()}
-      >
-        <input {...getInputProps()} />
-        <Flex sx={{ '&>svg': { width: '28px', height: '28px' } }}>
-          <UploadIcon color={colorTextLight} />
-        </Flex>
-      </Flex>
-    )}
-  </Dropzone>;
-}
-
 function BirthInput(props: TextFieldProps) {
   return <VerticalFlex sx={{ width: '100%', gap: '16px' }}>
     <VerticalFlex>
@@ -64,29 +39,51 @@ function BirthInput(props: TextFieldProps) {
     </VerticalFlex>
     <BasicTextField
       placeholder="YYMMDD"
+      inputMode="numeric"
       {...props}
     />
   </VerticalFlex>;
 }
 
+function checkValidDate(dateString: string) {
+  if (dateString.length !== 6) return false;
+  const YY = dateString.slice(0, 2);
+  const MM = dateString.slice(2, 4);
+  const DD = dateString.slice(4, 6);
+  let date = null;
+  if (+YY < 50) {
+    date = new Date(`20${YY}-${MM}-${DD}`);
+  } else {
+    date = new Date(`19${YY}-${MM}-${DD}`);
+  }
+  if (date.toString() === 'Invalid Date') return false;
+  return true;
+}
+
 export default function Career() {
   const navigate = useNavigate();
-  const [uploadingFile, setUploadingFile] = useState<File | null>(null);
+  const [uploadingFiles, setUploadingFiles] = useState<FileWithPath[]>([]);
   const [birth, setBirth] = useState<string>('');
   const isDownSm = useBreakpoint('sm');
 
   return <RegisterTemplate>
     {!isDownSm && <StepTitle />}
     <Info />
-    <FileUploadBox
-      onDrop={(acceptedFiles: File[]) => {
-        if (acceptedFiles.length > 1) {
-          return alert('파일은 한 개만 첨부할 수 있습니다.');
-        }
-        setUploadingFile(acceptedFiles[0]);
-      }} />
+    <FileInputBox
+      sx={{ height: '90px', width: '100%' }}
+      files={uploadingFiles}
+      maxFileNumber={1}
+      onDrop={(acceptedFiles: FileWithPath[]) => {
+        setUploadingFiles(acceptedFiles);
+      }}
+      onDelete={(deleteFile: FileWithPath) => {
+        setUploadingFiles(uploadingFiles.filter(file => file !== deleteFile));
+      }}
+    />
     <BirthInput
       value={birth}
+      type="number"
+
       onChange={(e) => {
         setBirth(e.target.value);
       }} />
@@ -94,7 +91,7 @@ export default function Career() {
     <BasicButton
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
-      disabled={!uploadingFile || birth === ''}
+      disabled={!uploadingFiles || !checkValidDate(birth)}
       onClick={() => {
         navigate('/mentor/register/info');
       }}
