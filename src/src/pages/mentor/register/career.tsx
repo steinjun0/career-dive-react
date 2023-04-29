@@ -44,7 +44,7 @@ const BirthInput = memo((props: TextFieldProps) => {
       {...props}
     />
   </VerticalFlex>;
-}, () => true);
+});
 
 function checkValidDate(dateString: string) {
   if (dateString.length !== 6) return false;
@@ -63,9 +63,10 @@ function checkValidDate(dateString: string) {
 
 export default function Career({ mentorRegisterData }: { mentorRegisterData: IMentorRegisterData; }) {
   const navigate = useNavigate();
-  const [uploadingFiles, setUploadingFiles] = useState<FileWithPath[]>([]);
-  const [birth, setBirth] = useState<string>('');
+  const [uploadingFiles, setUploadingFiles] = useState<FileWithPath[]>(mentorRegisterData.careerFile ? [mentorRegisterData.careerFile] : []);
+  const [birth, setBirth] = useState<string>(mentorRegisterData.birth ?? '');
   const isDownSm = useBreakpoint('sm');
+
   return <RegisterTemplate>
     {!isDownSm && <StepTitle />}
     <Info />
@@ -85,7 +86,7 @@ export default function Career({ mentorRegisterData }: { mentorRegisterData: IMe
       }}
     />
     <BirthInput
-      type="number"
+      value={birth}
       onChange={(e) => {
         setBirth(e.target.value);
       }} />
