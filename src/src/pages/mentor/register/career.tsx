@@ -1,16 +1,16 @@
 import { TextFieldProps } from "@mui/material";
 import BasicButton from "component/button/BasicButton";
 import BasicTextField from "component/input/BasicTextField";
-import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
-import React, { useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { FileWithPath } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle } from "util/styledComponent";
 import FileInputBox from "component/input/FileInputBox";
 import { IMentorRegisterData } from "interfaces/mentor";
+import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
 
-function StepTitle() {
+const StepTitle = memo(() => {
   return <Flex sx={{ width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
     <TextHeading6>
       멘토 등록
@@ -19,9 +19,9 @@ function StepTitle() {
       1/2
     </TextCaption>
   </Flex>;
-}
+});
 
-function Info() {
+const Info = memo(() => {
   return <VerticalFlex sx={{ gap: '8px' }}>
     <TextHeading6 sx={{ width: '100%', marginTop: '24px' }}>
       경력 인증
@@ -30,9 +30,9 @@ function Info() {
       <span style={{ color: colorCareerDivePink, fontWeight: 'bold' }}>자격득실확인서</span>(PDF)를 첨부해 주세요. 재직 기간과 회사가 인증되며, 한 개의 회사만 인증이 가능합니다.
     </TextBody2>
   </VerticalFlex>;
-}
+});
 
-function BirthInput(props: TextFieldProps) {
+const BirthInput = memo((props: TextFieldProps) => {
   return <VerticalFlex sx={{ width: '100%', gap: '16px' }}>
     <VerticalFlex>
       <TextSubtitle2 sx={{ color: colorTextTitle }}>생년월일</TextSubtitle2>
@@ -44,7 +44,7 @@ function BirthInput(props: TextFieldProps) {
       {...props}
     />
   </VerticalFlex>;
-}
+}, () => true);
 
 function checkValidDate(dateString: string) {
   if (dateString.length !== 6) return false;
@@ -85,7 +85,6 @@ export default function Career({ mentorRegisterData }: { mentorRegisterData: IMe
       }}
     />
     <BirthInput
-      value={birth}
       type="number"
       onChange={(e) => {
         setBirth(e.target.value);
