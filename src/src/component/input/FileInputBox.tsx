@@ -49,6 +49,12 @@ function FileInputBox({ onDrop, onDelete, files, maxFileNumber = Infinity, sx }:
 }
 
 const MemoizedFileInputBox = React.memo(FileInputBox, (prevProps, nextProps) => {
-  return prevProps.files.map((e) => e.path).join('') === nextProps.files.map((e) => e.path).join('');
+  if (prevProps.files.length !== nextProps.files.length) return false;
+  for (let i = 0; i < prevProps.files.length; i++) {
+    if (prevProps.files[i].path !== nextProps.files[i].path) {
+      return false;
+    }
+  }
+  return true;
 });
 export default MemoizedFileInputBox;
