@@ -1,7 +1,7 @@
 import BasicButton from "component/button/BasicButton";
 import CustomTogglebutton from "component/button/BasicToggleButton";
 import BasicTextField from "component/input/BasicTextField";
-import GetJobInfo, { Job, Sector } from "organisms/mentor/register/GetJobInfo";
+import GetJobInfo from "organisms/mentor/register/GetJobInfo";
 import GetTags from "organisms/mentor/register/GetTags";
 import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
 import React, { Dispatch, SetStateAction, useState } from "react";
@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle } from "util/styledComponent";
 import { colorBackgroundCareerDivePink } from "util/styledComponent-bak";
+import { IMentorRegisterData } from "./SubPage";
+import { Job, Sector } from "interfaces/job";
 
 function StepTitle({ isDownSm }: { isDownSm: boolean; }) {
   return <VerticalFlex sx={{ width: '100%', }}>
@@ -128,7 +130,7 @@ function GetDepartment({ department, divisIsPub, setDepartment, setDivisIsPub }:
   </VerticalFlex>;
 }
 
-export default function Info() {
+export default function Info({ mentorRegisterData }: { mentorRegisterData: IMentorRegisterData; }) {
   const navigate = useNavigate();
   const isDownSm = useBreakpoint('sm');
 
@@ -176,11 +178,13 @@ export default function Info() {
         setTags(tags.filter((tag) => tag !== deletedTag));
       }}
     />
+
     <BasicButton
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
       disabled={company === '' || job === '' || department === ''}
       onClick={() => {
+
         navigate('/mentor/register/type');
       }}
     >
