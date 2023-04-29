@@ -67,6 +67,14 @@ function CareerConsult({ consultList, value, onUpdate }: { consultList: string[]
     }
   }, [isAllSelected]);
 
+  useEffect(() => {
+    if (value.length === consultList.length) {
+      setisAllSelected(true);
+    } else {
+      setisAllSelected(false);
+    }
+  }, [value]);
+
   return <VerticalFlex sx={{ width: '100%', gap: '30px' }}>
     <VerticalFlex sx={{ gap: '4px' }}>
       <TextSubtitle1 sx={{ color: colorTextTitle }}>
@@ -98,6 +106,14 @@ function PrepareType({ typeList, value, onUpdate }: { typeList: string[], value:
       onUpdate([]);
     }
   }, [isAllSelected]);
+
+  useEffect(() => {
+    if (value.length === typeList.length) {
+      setisAllSelected(true);
+    } else {
+      setisAllSelected(false);
+    }
+  }, [value]);
 
 
   return <VerticalFlex sx={{ width: '100%', gap: '30px' }}>
@@ -171,6 +187,7 @@ export default function Type({ mentorRegisterData }: { mentorRegisterData: IMent
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
       onClick={onClickRegister}
+      disabled={consultList.length < 3}
     >
       <TextSubtitle1>
         등록 신청
