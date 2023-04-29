@@ -1,5 +1,5 @@
 import BasicButton from "component/button/BasicButton";
-import CustomTogglebutton from "component/button/CustomToggleButton";
+import CustomTogglebutton from "component/button/BasicToggleButton";
 import BasicTextField from "component/input/BasicTextField";
 import GetJobInfo, { Job, Sector } from "organisms/mentor/register/GetJobInfo";
 import GetTags from "organisms/mentor/register/GetTags";
@@ -152,6 +152,7 @@ export default function Info() {
       jobInComp={jobInComp}
       onClickSector={(clickedSector) => {
         setSector(clickedSector);
+        setJob('');
       }}
       onClickJob={(clickedJob) => {
         setJob(clickedJob);
@@ -175,10 +176,10 @@ export default function Info() {
         setTags(tags.filter((tag) => tag !== deletedTag));
       }}
     />
-
     <BasicButton
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
+      disabled={company === '' || job === '' || department === ''}
       onClick={() => {
         navigate('/mentor/register/type');
       }}
