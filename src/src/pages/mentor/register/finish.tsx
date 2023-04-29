@@ -3,9 +3,10 @@ import React from "react";
 import { Flex, TextBody2, TextHeading6, TextSubtitle1, VerticalFlex } from "util/styledComponent";
 import paperFileComplete from 'assets/img/paperFileComplete.svg';
 import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
+import { useNavigate } from "react-router-dom";
 
 export default function Finish() {
-
+  const navigate = useNavigate();
   return <RegisterTemplate>
     <VerticalFlex sx={{ alignItems: 'center' }}>
       <VerticalFlex sx={{ gap: '16px' }}>
@@ -19,7 +20,11 @@ export default function Finish() {
 
       <img src={paperFileComplete} alt="서류뭉치" style={{ width: '120px', height: '120px', margin: '72px 0' }} />
       <Flex sx={{ gap: '16px', width: '100%' }}>
-        <BasicButton sx={{ width: '100%', height: '48px' }} type="pink">
+        <BasicButton sx={{ width: '100%', height: '48px' }} type="pink"
+          onClick={() => {
+            navigate('/mentor');
+          }}
+        >
           <TextSubtitle1>
             완료
           </TextSubtitle1>
