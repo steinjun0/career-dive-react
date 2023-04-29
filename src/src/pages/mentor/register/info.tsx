@@ -5,6 +5,7 @@ import GetJobInfo from "organisms/mentor/register/GetJobInfo";
 import GetTags from "organisms/mentor/register/GetTags";
 import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
 import React, { Dispatch, SetStateAction, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle } from "util/styledComponent";
 import { colorBackgroundCareerDivePink } from "util/styledComponent-bak";
@@ -146,6 +147,7 @@ function GetDepartment({ department, divisIsPub, setDepartment, setDivisIsPub }:
 }
 
 export default function Info() {
+  const navigate = useNavigate();
   const isDownSm = useBreakpoint('sm');
 
   const [company, setCompany] = useState<string>('');
@@ -184,9 +186,12 @@ export default function Info() {
     <BasicButton
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
+      onClick={() => {
+        navigate('/mentor/register/type');
+      }}
     >
       <TextSubtitle1>
-        인증 요청
+        다음
       </TextSubtitle1>
     </BasicButton>
   </RegisterTemplate>;

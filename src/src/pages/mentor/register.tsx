@@ -6,11 +6,12 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import issueStepModalObject from "organisms/mentor/register/IssueStepModal";
 import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
+import { useNavigate } from "react-router-dom";
 
 const InfoModal = withReactContent(Swal);
 
-export default function MentorRegister2() {
-
+export default function MentorRegister() {
+  const navigate = useNavigate();
   return <RegisterTemplate>
     <TextHeading6 sx={{ width: '100%' }}>
       멘토 등록을 위해<br />
@@ -28,7 +29,11 @@ export default function MentorRegister2() {
           서류 발급
         </TextSubtitle1>
       </BasicButton>
-      <BasicButton sx={{ width: '100%', height: '48px' }} type="pink">
+      <BasicButton sx={{ width: '100%', height: '48px' }} type="pink"
+        onClick={() => {
+          navigate('/mentor/register/career');
+        }}
+      >
         <TextSubtitle1>
           등록 시작
         </TextSubtitle1>

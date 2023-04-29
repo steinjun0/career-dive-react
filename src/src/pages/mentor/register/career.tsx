@@ -5,6 +5,7 @@ import BasicTextField from "component/input/BasicTextField";
 import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
+import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle } from "util/styledComponent";
 
@@ -69,6 +70,7 @@ function BirthInput(props: TextFieldProps) {
 }
 
 export default function Career() {
+  const navigate = useNavigate();
   const [uploadingFile, setUploadingFile] = useState<File | null>(null);
   const [birth, setBirth] = useState<string>('');
   const isDownSm = useBreakpoint('sm');
@@ -92,6 +94,10 @@ export default function Career() {
     <BasicButton
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
+      disabled={!uploadingFile || birth === ''}
+      onClick={() => {
+        navigate('/mentor/register/info');
+      }}
     >
       <TextSubtitle1>
         인증 요청

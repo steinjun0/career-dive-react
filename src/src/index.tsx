@@ -24,7 +24,7 @@ import Sendbird from "pages/Sendbird";
 // import Session from "./pages/session/id";
 import SessionTs from "./pages/session/[id]";
 import MentorCalendar from "pages/mentor/Calendar";
-import MentorRegister from "pages/mentor/register";
+// import MentorRegister from "pages/mentor/register";
 import MentorMyPage from "./pages/mentor/myPage";
 
 import MentoringRequestFinish from 'pages/mentee/mentor/[id]/request/finish';
@@ -39,7 +39,7 @@ import BusinessCheckMentor from "services/businessComponent/BusinessCheckMentor"
 import { useMediaQuery } from "@mui/material";
 import BusinessBeforeEnter from "services/businessComponent/BusinessBeforeEnter";
 import Cbt from "pages/Cbt";
-import MentorRegister2 from "pages/mentor/register2";
+import MentorRegister from "pages/mentor/register";
 import MentorRegisterCareer from 'pages/mentor/register/career';
 import MentorRegisterInfo from 'pages/mentor/register/info';
 import MentorRegisterType from 'pages/mentor/register/type';
@@ -146,12 +146,12 @@ root.render(
             <Route path="/mentee/mypage/account/change" element={<MyPage />} />
             <Route path="/mentee/mypage" element={<Navigate replace to="/mentee/mypage/profile" />} />
 
+            {/* <Route path="/mentor/register" element={<MentorRegister />} /> */}
             <Route path="/mentor/register" element={<MentorRegister />} />
-            <Route path="/mentor/register2" element={<MentorRegister2 />} />
-            <Route path="/mentor/register2/career" element={<MentorRegisterCareer />} />
-            <Route path="/mentor/register2/info" element={<MentorRegisterInfo />} />
-            <Route path="/mentor/register2/type" element={<MentorRegisterType />} />
-            <Route path="/mentor/register2/finish" element={<MentorRegisterFinish />} />
+            <Route path="/mentor/register/career" element={<MentorRegisterCareer />} />
+            <Route path="/mentor/register/info" element={<MentorRegisterInfo />} />
+            <Route path="/mentor/register/type" element={<MentorRegisterType />} />
+            <Route path="/mentor/register/finish" element={<MentorRegisterFinish />} />
 
             <Route path="/mentor/mypage/:subPage" element={<MentorMyPage />} />
             <Route path="/mentor/mypage/account/change" element={<MentorMyPage />} />

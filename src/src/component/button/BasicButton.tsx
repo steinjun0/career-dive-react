@@ -22,7 +22,7 @@ export default function BasicButton(props: { type: 'pink' | 'blue' | 'gray' | 'd
     {...buttonProps}
     variant="contained"
     disableElevation
-    disabled={props.type === 'disabled'}
+    disabled={props.type === 'disabled' || props.disabled}
     sx={{
       ...props.sx,
       padding: '8px',

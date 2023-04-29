@@ -3,6 +3,7 @@ import { CheckToggleButton } from "component/button/CheckToggleButton";
 import CustomTogglebutton from "component/button/CustomToggleButton";
 import RegisterTemplate from "organisms/mentor/register/RegisterTemplate";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useBreakpoint from "util/hooks/useBreakpoint";
 import { Flex, VerticalFlex, TextHeading6, colorCareerDivePink, TextSubtitle1, colorTextLight, TextCaption, TextBody2, colorBackgroundGrayLight, TextSubtitle2, colorTextTitle, colorBackgroundCareerDivePink } from "util/styledComponent";
 
@@ -113,10 +114,10 @@ const TOTAL_CONSULT_LIST = ['직무 이야기', '업계 이야기', '진로 상�
 const TOTAL_TYPE_LIST = ['면접 대비', '자소서 구성', '자소서 첨삭', '포트폴리오 첨삭', '이력서 첨삭', 'CV/CL 첨삭', '코드리뷰'];
 
 export default function Type() {
-
+  const navigate = useNavigate();
   const isDownSm = useBreakpoint('sm');
-  const [consultList, setConsultList] = useState<string[]>(TOTAL_CONSULT_LIST);
-  const [typeList, setTypeList] = useState<string[]>(TOTAL_TYPE_LIST);
+  const [consultList, setConsultList] = useState<string[]>([]);
+  const [typeList, setTypeList] = useState<string[]>([]);
 
   return <RegisterTemplate>
     <Info />
@@ -136,6 +137,9 @@ export default function Type() {
     <BasicButton
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
+      onClick={() => {
+        navigate('/mentor/register/finish');
+      }}
     >
       <TextSubtitle1>
         등록 신청
