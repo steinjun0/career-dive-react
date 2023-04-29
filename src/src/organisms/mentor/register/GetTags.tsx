@@ -1,23 +1,16 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import React from "react";
 import Tag from "component/Tag";
-import { VerticalFlex, Flex, colorCareerDiveBlue, colorBackgroundCareerDiveBlue, EmptyWidth, EmptyHeight, TextCaption, TextSubtitle2, colorTextTitle, colorCareerDivePink, colorBackgroundCareerDivePink } from "util/styledComponent";
+import { VerticalFlex, Flex, EmptyWidth, TextCaption, TextSubtitle2, colorTextTitle, colorCareerDivePink, colorBackgroundCareerDivePink } from "util/styledComponent";
 import BasicTextField from "component/input/BasicTextField";
 
 
-export default function GetTags({ tags, setTags }: { tags: string[], setTags: Dispatch<SetStateAction<string[]>>; }) {
+export default function GetTags({ tags, onEnter, onDelete }: { tags: string[], onEnter: (tag: string) => void, onDelete: (tag: string) => void; }) {
   const [tag, setTag] = useState<string>('');
 
   function deleteTag(deletedTag: string) {
-    const newTags = tags.filter((e) => {
-      if (e !== deletedTag) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-    setTags(newTags);
+    onDelete(deletedTag);
   };
 
 
@@ -37,7 +30,7 @@ export default function GetTags({ tags, setTags }: { tags: string[], setTags: Di
         }}
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
-            setTags(Array.from(new Set([...tags, tag])));
+            onEnter(tag);
             setTag('');
           }
         }}

@@ -168,7 +168,12 @@ export default function Info() {
     />
     <GetTags
       tags={tags}
-      setTags={setTags}
+      onEnter={(newTag) => {
+        setTags(Array.from(new Set([...tags, newTag])));
+      }}
+      onDelete={(deletedTag) => {
+        setTags(tags.filter((tag) => tag !== deletedTag));
+      }}
     />
 
     <BasicButton
