@@ -11,6 +11,7 @@ import * as accountAPI from 'apis/account';
 import { AccountDataContext } from "index";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import createMentor from "services/mentor/register";
 
 const LoadingModal = withReactContent(Swal);
 
@@ -126,79 +127,27 @@ export default function Type({ mentorRegisterData }: { mentorRegisterData: IMent
 
   const [consultList, setConsultList] = useState<string[]>(mentorRegisterData.consultList ?? []);
   const [typeList, setTypeList] = useState<string[]>(mentorRegisterData.typeList ?? []);
-  async function createMentor(registerData: IMentorRegisterData) {
-    if (Object.values(registerData).includes(null)) {
-      alert('필수 정보가 누락되었습니다. 다시 진행해 주세요');
-      navigate('/mentor/register');
-      return;
-    }
-    LoadingModal.fire({
-      title: '멘토 정보 등록중',
-      text: '잠시만 기다려주세요',
-      icon: 'info',
-      allowOutsideClick: false,
-      didOpen: async () => {
-        LoadingModal.showLoading();
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const mentorRes = await accountAPI.postAccountMentor(registerData);
-        if (mentorRes.status === 200) {
-          LoadingModal.update({
-            title: '자격득실확인서 등록중',
-            text: '잠시만 기다려주세요',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-          });
-          LoadingModal.showLoading();
-        } else {
-          LoadingModal.update({
-            title: '멘토 정보 등록에 실패했습니다',
-            html: <Flex sx={{ justifyContent: 'center' }}>
-              <TextBody1>
-                잠시후 다시 시도해주세요.<br />계속해서 되지 않는다면 카카오톡 채널로 문의해주세요
-              </TextBody1>
-            </Flex>,
-            icon: 'error',
-            allowOutsideClick: true,
-            showConfirmButton: true,
-          });
-          LoadingModal.hideLoading();
-          throw Error;
-        }
-        const formData = new FormData();
-        formData.append('file', registerData.careerFile!);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const fileRes = await accountAPI.postAccountMentorFile({ id: +localStorage.getItem('UserID')!, file: formData });
-        if (fileRes.status === 200) {
-          LoadingModal.update({
-            title: '멘토 등록이 완료되었습니다!',
-            text: '🎉',
-            icon: 'success',
-            allowOutsideClick: true,
-            showConfirmButton: true,
-            didClose() {
-              navigate('/mentor/register/finish');
-            },
-          });
-          LoadingModal.hideLoading();
-          updateAccountData('isMentorMode', true);
 
-        } else {
-          LoadingModal.update({
-            title: '자격득실확인서 등록에 실패했습니다',
-            html: <Flex sx={{ justifyContent: 'center' }}>
-              <TextBody1>
-                잠시후 다시 시도해주세요.<br />계속해서 되지 않는다면 카카오톡 채널로 문의해주세요
-              </TextBody1>
-            </Flex>,
-            icon: 'error',
-            allowOutsideClick: true,
-            showConfirmButton: true,
-          });
-          LoadingModal.hideLoading();
-          throw Error;
-        }
-      },
+  async function onClickRegister() {
+    mentorRegisterData.consultList = [...consultList];
+    mentorRegisterData.typeList = [...typeList];
+    const res = await createMentor({
+      registerData: mentorRegisterData,
+      onSuccessClose: () => {
+        updateAccountData('isMentorMode', true);
+        navigate('/mentor/register/finish');
+      }
     });
+    // switch (res) {
+    //   case 'success':
+    //     break;
+    //   case 'missing info':
+    //     break;
+    //   case 'fail mentor':
+    //     break;
+    //   case 'fail file':
+    //     break;
+    // }
   }
 
   return <RegisterTemplate>
@@ -221,11 +170,7 @@ export default function Type({ mentorRegisterData }: { mentorRegisterData: IMent
     <BasicButton
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
-      onClick={() => {
-        mentorRegisterData.consultList = [...consultList];
-        mentorRegisterData.typeList = [...typeList];
-        createMentor(mentorRegisterData);
-      }}
+      onClick={onClickRegister}
     >
       <TextSubtitle1>
         등록 신청
