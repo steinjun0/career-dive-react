@@ -16,15 +16,16 @@ export interface IMentor {
 }
 
 export interface IMentorRegisterData {
-    birth: string,
+    birth: string | null,
     careerFile: FileWithPath | null,
-    company: string,
-    divisIsPub: boolean,
-    sector: Sector,
-    job: Job,
-    jobInComp: string,
-    department: string,
-    tags: string[],
-    consultList: string[],
-    typeList: string[],
+    inJob: boolean | null,
+    company: string | null,
+    divisIsPub: boolean | null,
+    sector: Sector | null,
+    job: Job | null,
+    jobInComp: string | null,
+    department: string | null,
+    tags: string[] | null,
+    consultList: string[] | null,
+    typeList: string[] | null,
 }
