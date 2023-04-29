@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import MentorRegister from "pages/mentor/register";
 import MentorRegisterCareer from 'pages/mentor/register/career';
@@ -7,17 +7,18 @@ import MentorRegisterType from 'pages/mentor/register/type';
 import MentorRegisterFinish from 'pages/mentor/register/finish';
 
 const mentorRegisterData = {
-  birth: '',
+  birth: null,
   careerFile: null,
-  company: '',
-  divisIsPub: true,
+  company: null,
+  inJob: null,
+  divisIsPub: null,
   sector: null,
-  job: '',
+  job: null,
   jobInComp: '',
-  department: '',
-  tags: [],
-  consultList: [],
-  typeList: [],
+  department: null,
+  tags: null,
+  consultList: null,
+  typeList: null,
 };
 
 function GetComponent({ subPage }:
@@ -40,7 +41,6 @@ function GetComponent({ subPage }:
 
 export default function SubPage() {
   const { subPage } = useParams();
-
   return <GetComponent subPage={subPage!} />;
 
 };

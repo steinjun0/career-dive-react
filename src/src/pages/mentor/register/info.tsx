@@ -134,14 +134,14 @@ export default function Info({ mentorRegisterData }: { mentorRegisterData: IMent
   const navigate = useNavigate();
   const isDownSm = useBreakpoint('sm');
 
-  const [company, setCompany] = useState<string>('');
-  const [divisIsPub, setDivisIsPub] = useState<boolean>(true);
-  const [sector, setSector] = useState<Sector>(null);
-  const [job, setJob] = useState<Job>('');
-  const [jobInComp, setJobInComp] = useState<string>('');
-  const [department, setDepartment] = useState<string>('');
-  const [inJob, setInJob] = useState<boolean>(true);
-  const [tags, setTags] = useState<string[]>([]);
+  const [company, setCompany] = useState<string>(mentorRegisterData.company ?? '');
+  const [divisIsPub, setDivisIsPub] = useState<boolean>(mentorRegisterData.divisIsPub ?? true);
+  const [sector, setSector] = useState<Sector>(mentorRegisterData.sector);
+  const [job, setJob] = useState<Job>(mentorRegisterData.job ?? '');
+  const [jobInComp, setJobInComp] = useState<string>(mentorRegisterData.jobInComp ?? '');
+  const [department, setDepartment] = useState<string>(mentorRegisterData.department ?? '');
+  const [inJob, setInJob] = useState<boolean>(mentorRegisterData.inJob ?? true);
+  const [tags, setTags] = useState<string[]>(mentorRegisterData.tags ?? []);
 
 
   return <RegisterTemplate>
@@ -187,10 +187,11 @@ export default function Info({ mentorRegisterData }: { mentorRegisterData: IMent
         mentorRegisterData.company = company;
         mentorRegisterData.divisIsPub = divisIsPub;
         mentorRegisterData.sector = sector;
+        mentorRegisterData.inJob = inJob;
         mentorRegisterData.job = job;
         mentorRegisterData.jobInComp = jobInComp;
         mentorRegisterData.department = department;
-        mentorRegisterData.tags = tags;
+        mentorRegisterData.tags = [...tags];
         navigate('/mentor/register/type');
       }}
     >
