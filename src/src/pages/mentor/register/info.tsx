@@ -96,7 +96,6 @@ function GetDepartment({ department, divisIsPub, setDepartment, setDivisIsPub }:
         onChange={(e) => {
           setDepartment(e.target.value);
         }}
-        sx={{ width: '217px' }}
       />
       <Flex sx={{ width: '146px' }}>
         <CustomTogglebutton

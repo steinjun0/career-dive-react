@@ -7,7 +7,6 @@ export default function RegisterTemplate(props: PropsWithChildren) {
   return <Flex sx={{
     justifyContent: 'center',
     alignItems: 'center',
-    margin: '16px',
     minHeight: isDownSm ? 'calc(100vh - 48px - 48px)' : 'calc(100vh - 80px - 80px)',
   }}>
     <VerticalFlex
