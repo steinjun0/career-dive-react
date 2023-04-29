@@ -4,7 +4,7 @@ import React from "react";
 import Dropzone, { FileWithPath } from "react-dropzone";
 import { Flex, TextBody2, VerticalFlex, colorBackgroundGrayLight, colorCareerDivePink, colorTextLight } from "util/styledComponent";
 
-export default function FileInputBox({ onDrop, onDelete, files, maxFileNumber = Infinity, sx }: { onDrop: (acceptedFiles: FileWithPath[]) => void, onDelete: (deleteFile: FileWithPath) => void, files: FileWithPath[], maxFileNumber?: number, sx?: SxProps; }) {
+function FileInputBox({ onDrop, onDelete, files, maxFileNumber = Infinity, sx }: { onDrop: (acceptedFiles: FileWithPath[]) => void, onDelete: (deleteFile: FileWithPath) => void, files: FileWithPath[], maxFileNumber?: number, sx?: SxProps; }) {
   return <VerticalFlex sx={{ width: '100%', height: '100%' }}>
     <Dropzone
       onDrop={(files) => {
@@ -46,5 +46,9 @@ export default function FileInputBox({ onDrop, onDelete, files, maxFileNumber = 
       </Flex>;
     })}
   </VerticalFlex>;
-
 }
+
+const MemoizedFileInputBox = React.memo(FileInputBox, (prevProps, nextProps) => {
+  return prevProps.files.map((e) => e.path).join('') === nextProps.files.map((e) => e.path).join('');
+});
+export default MemoizedFileInputBox;
