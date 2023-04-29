@@ -74,7 +74,11 @@ export default function Career() {
       files={uploadingFiles}
       maxFileNumber={1}
       onDrop={(acceptedFiles: FileWithPath[]) => {
-        setUploadingFiles(acceptedFiles);
+        if (acceptedFiles[0].name.slice(acceptedFiles[0].name.lastIndexOf('.') + 1) !== 'pdf') {
+          alert('pdf 파일만 업로드 가능합니다.');
+        } else {
+          setUploadingFiles(acceptedFiles);
+        }
       }}
       onDelete={(deleteFile: FileWithPath) => {
         setUploadingFiles(uploadingFiles.filter(file => file !== deleteFile));
@@ -83,7 +87,6 @@ export default function Career() {
     <BirthInput
       value={birth}
       type="number"
-
       onChange={(e) => {
         setBirth(e.target.value);
       }} />
@@ -91,13 +94,13 @@ export default function Career() {
     <BasicButton
       type="pink"
       sx={{ width: '100%', height: '48px', marginTop: isDownSm ? 'auto' : undefined }}
-      disabled={!uploadingFiles || !checkValidDate(birth)}
+      disabled={uploadingFiles.length !== 1 || !checkValidDate(birth)}
       onClick={() => {
-        navigate('/mentor/register/info');
+        navigate('/mentor/register/info', { state: { birth, file: uploadingFiles[0] } });
       }}
     >
       <TextSubtitle1>
-        인증 요청
+        다음
       </TextSubtitle1>
     </BasicButton>
   </RegisterTemplate>;
