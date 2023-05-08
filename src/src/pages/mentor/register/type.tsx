@@ -140,9 +140,11 @@ export default function Type({ mentorRegisterData }: { mentorRegisterData: IMent
   const [consultList, setConsultList] = useState<string[]>(mentorRegisterData.consultList ?? []);
   const [typeList, setTypeList] = useState<string[]>(mentorRegisterData.typeList ?? []);
 
+
   async function onClickRegister() {
     mentorRegisterData.consultList = [...consultList];
     mentorRegisterData.typeList = [...typeList];
+
     const res = await createMentor({
       registerData: mentorRegisterData,
       onSuccessClose: () => {
@@ -150,16 +152,24 @@ export default function Type({ mentorRegisterData }: { mentorRegisterData: IMent
         navigate('/mentor/register/finish');
       }
     });
-    // switch (res) {
-    //   case 'success':
-    //     break;
-    //   case 'missing info':
-    //     break;
-    //   case 'fail mentor':
-    //     break;
-    //   case 'fail file':
-    //     break;
-    // }
+
+
+    switch (res) {
+      case 'success':
+        break;
+      case 'missing info':
+        navigate('/mentor/register/info');
+        break;
+      case 'fail mentor':
+        navigate('/mentor/register');
+        break;
+      case 'fail file':
+        navigate('/mentor/register/career');
+        break;
+      case 'fail type':
+        navigate('/mentor/register/type');
+        break;
+    }
   }
 
   return <RegisterTemplate>
