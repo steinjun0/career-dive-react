@@ -108,3 +108,16 @@ export async function postAccountMentorFile({ id, file }: { id: number, file: Fo
     const scheduleRes = await API.postAxiosFormData(`${API.CAREER_DIVE_API_URL}/account/mentor/${id}/file`, file);
     return scheduleRes;
 }
+
+export async function postAccountConsultContent({ id, consultList, typeList }: { id: number, consultList: string[], typeList: string[]; }): Promise<AxiosResponse> {
+    const consultContents = [
+        ...consultList.map((consult) => {
+            return { Name: consult, Type: '커리어 상담' };
+        }),
+        ...typeList.map((type) => {
+            return { Name: type, Type: '전형 준비' };
+        })
+    ];
+    const scheduleRes = await API.postAxios(`${API.CAREER_DIVE_API_URL}/account/consultContent`, { ConsultContents: consultContents, MentorID: id });
+    return scheduleRes;
+}
