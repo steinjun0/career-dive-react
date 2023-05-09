@@ -17,14 +17,14 @@ import Footer from "./organisms/Footer";
 import SessionList from "./pages/mentee/schedule";
 import MyPage from "./pages/mentee/myPage";
 import MentorHome from './pages/mentor/home';
-import { colorCareerDiveBlue, EmptyHeight, VerticalFlex } from "util/styledComponent";
+import { colorCareerDiveBlue, VerticalFlex } from "util/styledComponent";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sendbird from "pages/Sendbird";
 // import Session from "./pages/session/id";
 import SessionTs from "./pages/session/[id]";
 import MentorCalendar from "pages/mentor/Calendar";
-import MentorRegister from "pages/mentor/register";
+// import MentorRegister from "pages/mentor/register";
 import MentorMyPage from "./pages/mentor/myPage";
 
 import MentoringRequestFinish from 'pages/mentee/mentor/[id]/request/finish';
@@ -39,7 +39,8 @@ import BusinessCheckMentor from "services/businessComponent/BusinessCheckMentor"
 import { useMediaQuery } from "@mui/material";
 import BusinessBeforeEnter from "services/businessComponent/BusinessBeforeEnter";
 import Cbt from "pages/Cbt";
-
+import MentorRegister from "pages/mentor/register";
+import MentorSubPage from "pages/mentor/register/SubPage";
 
 const theme = createTheme({
   palette: {
@@ -142,7 +143,9 @@ root.render(
             <Route path="/mentee/mypage/account/change" element={<MyPage />} />
             <Route path="/mentee/mypage" element={<Navigate replace to="/mentee/mypage/profile" />} />
 
+            {/* <Route path="/mentor/register" element={<MentorRegister />} /> */}
             <Route path="/mentor/register" element={<MentorRegister />} />
+            <Route path="/mentor/register/:subPage" element={<MentorSubPage />} />
 
             <Route path="/mentor/mypage/:subPage" element={<MentorMyPage />} />
             <Route path="/mentor/mypage/account/change" element={<MentorMyPage />} />

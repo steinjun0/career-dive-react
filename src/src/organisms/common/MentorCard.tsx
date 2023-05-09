@@ -38,18 +38,10 @@ function getJobDurationFormat(year: number) {
 }
 
 function MentorCard({
-  company = "기업명",
-  department,
-  job = "직무",
-  inJob = "현직자",
-  duration = 0,
-  nickname = "이름",
-  rating = 4.5,
-  userId = 0,
-  tags = ['태그1', '태그2', '태그3'],
+  mentorData,
   isShowRating = true,
   isShowTag = false
-}: IMentor & { isShowRating: boolean, isShowTag: boolean; }) {
+}: { mentorData: IMentor, isShowRating: boolean, isShowTag: boolean; }) {
   const theme = useTheme();
   const isDownSm = useMediaQuery(theme.breakpoints.down(614));
 
@@ -57,7 +49,7 @@ function MentorCard({
     <>
       {
         isDownSm ?
-          <LinkNoDeco to={"/mentee/mentor/" + userId} sx={{ width: '100%', cursor: 'pointer' }}>
+          <LinkNoDeco to={"/mentee/mentor/" + mentorData.userId} sx={{ width: '100%', cursor: 'pointer' }}>
             <VerticalFlex
               sx={{
                 minHeight: '224px',
@@ -68,26 +60,25 @@ function MentorCard({
                 padding: '16px',
               }}
             >
-              <TextSubtitle2 sx={{ marginBottom: '2px' }}>{company}</TextSubtitle2>
-              {department && <TextCaption sx={{ marginBottom: '4px', color: colorTextLight }}>{department}</TextCaption>}
-              <TextCaption sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: '16px', color: colorTextLight }}>{job}</TextCaption>
-              {!department && <EmptyHeight height={'15px'} />}
+              <TextSubtitle2 sx={{ marginBottom: '2px' }}>{mentorData.company}</TextSubtitle2>
+              {mentorData.department && <TextCaption sx={{ marginBottom: '4px', color: colorTextLight }}>{mentorData.department}</TextCaption>}
+              <TextCaption sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: '16px', color: colorTextLight }}>{mentorData.job}</TextCaption>
+              {!mentorData.department && <EmptyHeight height={'15px'} />}
 
               <VerticalFlex style={{ alignItems: 'center' }}>
                 <CircleImg sx={{ width: '48px', marginBottom: '8px' }} src={testMentorImage} />
-                <TextSubtitle2 sx={{ marginBottom: '8px' }}>{nickname}</TextSubtitle2>
+                <TextSubtitle2 sx={{ marginBottom: '8px' }}>{mentorData.nickname}</TextSubtitle2>
                 <TagSmall
-                  color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
-                  background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
+                  color={mentorData.inJob ? colorCareerDiveBlue : colorCareerDivePink}
+                  background_color={mentorData.inJob ? colorBackgroundCareerDiveBlue : colorBackgroundCareerDivePink}
                   sx={{ fontWeight: '500', padding: '4px 6px', marginBottom: '8px' }}>
-                  {inJob} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
+                  {mentorData.inJob ? '현직자' : '경력자'} {mentorData.duration ? `· ${getJobDurationFormat(mentorData.duration)}` : ''}
                 </TagSmall>
-
               </VerticalFlex>
             </VerticalFlex>
           </LinkNoDeco>
           :
-          <LinkNoDeco to={"/mentee/mentor/" + userId}>
+          <LinkNoDeco to={"/mentee/mentor/" + mentorData.userId}>
             <VerticalFlex
               sx={{
                 minHeight: '346px',
@@ -99,27 +90,27 @@ function MentorCard({
                 boxShadow: defaultBoxShadow
               }}
             >
-              <TextHeading6 sx={{ marginBottom: '6px' }}>{company}</TextHeading6>
-              {department && <TextBody2 sx={{ marginBottom: '6px' }}>{department}</TextBody2>}
-              <TextBody2 sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: '28px' }}>{job}</TextBody2>
-              {!department && <EmptyHeight height={'30px'} />}
+              <TextHeading6 sx={{ marginBottom: '6px' }}>{mentorData.company}</TextHeading6>
+              {mentorData.department && <TextBody2 sx={{ marginBottom: '6px' }}>{mentorData.department}</TextBody2>}
+              <TextBody2 sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', marginBottom: '28px' }}>{mentorData.job}</TextBody2>
+              {!mentorData.department && <EmptyHeight height={'30px'} />}
 
               <VerticalFlex style={{ alignItems: 'center', paddingBottom: '12px' }}>
                 <CircleImg sx={{ width: '88px', marginBottom: '24px' }} src={testMentorImage} />
-                <TextSubtitle1 sx={{ marginBottom: '8px' }}>{nickname}</TextSubtitle1>
+                <TextSubtitle1 sx={{ marginBottom: '8px' }}>{mentorData.nickname}</TextSubtitle1>
                 <TagMedium
-                  color={inJob === '경력자' ? colorCareerDivePink : colorCareerDiveBlue}
-                  background_color={inJob === '경력자' ? colorBackgroundCareerDivePink : colorBackgroundCareerDiveBlue}
+                  color={mentorData.inJob ? colorCareerDiveBlue : colorCareerDivePink}
+                  background_color={mentorData.inJob ? colorBackgroundCareerDiveBlue : colorBackgroundCareerDivePink}
                   sx={{ fontWeight: '500', padding: '4px 8px', boxSizing: 'border-box', marginBottom: '24px' }}>
-                  {inJob} {duration ? `· ${getJobDurationFormat(duration)}` : ''}
+                  {mentorData.inJob ? '현직자' : '경력자'} {mentorData.duration ? `· ${getJobDurationFormat(mentorData.duration)}` : ''}
                 </TagMedium>
-                {isShowRating && <CustomRating value={rating}></CustomRating>}
-                {isShowTag && tags.length !== 0 ?
+                {isShowRating && <CustomRating value={mentorData.rating}></CustomRating>}
+                {isShowTag && mentorData.tags.length !== 0 ?
                   <Flex style={{ justifyContent: 'center', maxWidth: '100%' }}>
-                    {tags.slice(0, 3).map((e, i) =>
+                    {mentorData.tags.slice(0, 3).map((e, i) =>
                       <TextBody2
                         key={i}
-                        style={{ marginRight: i !== (tags.length - 1) ? '8px' : '', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
+                        style={{ marginRight: i !== (mentorData.tags.length - 1) ? '8px' : '', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
                         line_height={'18px'}
                         color={colorTextLight}>
                         #{e}
