@@ -35,7 +35,7 @@ const Info = memo(() => {
 const BirthInput = memo((props: TextFieldProps) => {
   return <VerticalFlex sx={{ width: '100%', gap: '16px' }}>
     <VerticalFlex>
-      <TextSubtitle2 sx={{ color: colorTextTitle }}>생년월일</TextSubtitle2>
+      <TextSubtitle2 sx={{ color: colorTextTitle }}>생년월일*</TextSubtitle2>
       <TextCaption>본인 확인용 생년월일 6자리를 입력해주세요</TextCaption>
     </VerticalFlex>
     <BasicTextField

@@ -3,7 +3,7 @@ import { IMentorRegisterData } from "interfaces/mentor";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import * as accountAPI from 'apis/account';
-import { Flex, TextBody1, TextBody2, TextHeading6, TextSubtitle1, VerticalFlex, colorCareerDivePink } from "util/styledComponent";
+import { TextBody2, TextHeading6, TextSubtitle1, VerticalFlex, colorCareerDivePink } from "util/styledComponent";
 import loader from 'assets/icon/modal/loader.svg';
 import loaderDone from 'assets/icon/modal/loader-done.svg';
 import loaderFail from 'assets/icon/modal/loader-fail.svg';
@@ -79,11 +79,11 @@ export default async function createMentor({ registerData, onSuccessClose }:
     alert('필수 정보가 누락되었습니다. 다시 진행해 주세요');
     return 'missing info';
   }
-  LoadingModal.fire(getLoadingModalOptions({ title: '멘토 정보 등록중' }));
+  LoadingModal.fire(getLoadingModalOptions({ title: '멘토 정보 등록 중' }));
   await new Promise((resolve) => setTimeout(resolve, 1000));
   const mentorRes = await accountAPI.postAccountMentor(registerData);
   if (mentorRes.status === 200) {
-    LoadingModal.update(getLoadingModalOptions({ title: '자격득실확인서 등록중' }));
+    LoadingModal.update(getLoadingModalOptions({ title: '자격득실확인서 등록 중' }));
   } else {
     LoadingModal.update(getFailModalOptions({ title: '신청 실패', subtitle: <>기입 정보 확인 후 다시 시도해주세요.<br />오류 지속 시 카카오톡 채널로 문의해주세요.</> }));
     return 'fail mentor';
@@ -94,7 +94,7 @@ export default async function createMentor({ registerData, onSuccessClose }:
   await new Promise((resolve) => setTimeout(resolve, 1000));
   const fileRes = await accountAPI.postAccountMentorFile({ id: +localStorage.getItem('UserID')!, file: formData });
   if (fileRes.status === 200) {
-    LoadingModal.update(getLoadingModalOptions({ title: '상담 유형 설정중' }));
+    LoadingModal.update(getLoadingModalOptions({ title: '상담 유형 설정 중' }));
   } else {
     LoadingModal.update(getFailModalOptions({ title: '자격득실확인서 등록에 실패했습니다', subtitle: <>기입 정보 확인 후 다시 시도해주세요.<br />오류 지속 시 카카오톡 채널로 문의해주세요.</> }));
     return 'fail file';
