@@ -26,7 +26,7 @@ function Search() {
     <VerticalFlex>
       <VerticalFlex sx={{ alignItems: 'center', justifyContent: 'center', padding: '52px' }}>
         <SearchBar onSearch={onSearch} />
-        <SearchTags />
+        {/* <SearchTags /> */}
       </VerticalFlex>
       <GrayBackground>
         <Flex sx={{
