@@ -149,6 +149,7 @@ export default function Type({ mentorRegisterData }: { mentorRegisterData: IMent
       registerData: mentorRegisterData,
       onSuccessClose: () => {
         updateAccountData('isMentorMode', true);
+        localStorage.setItem('IsMentor', 'true');
         navigate('/mentor/register/finish');
       }
     });
