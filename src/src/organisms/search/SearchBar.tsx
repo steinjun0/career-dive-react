@@ -6,7 +6,8 @@ import { styled } from "@mui/material";
 const ColoredInput = styled('input')({
   '::placeholder': {
     color: '#BDBDBD'
-  }
+  },
+  outline: 'none'
 });
 
 export default function SearchBar({ onSearch }: { onSearch: ({ company, tag, job }: { company?: string, tag?: string, job?: string; }) => void; }) {
